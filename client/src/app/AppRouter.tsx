@@ -2,6 +2,8 @@ import { Link, Navigate, createBrowserRouter } from 'react-router-dom'; //라우
 import CategoryView from '../entities/CategoryView/CategoryView';
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeView';
 
+import RegisterPage from '../pages/Register/page';
+
 export const AppRouter = () =>
   createBrowserRouter([
     {
@@ -29,7 +31,7 @@ export const AppRouter = () =>
           path: '/register',
           element: (
             <>
-              <div>회원가입페이진디요 ?</div>
+              <RegisterPage />
             </>
           ),
         },
