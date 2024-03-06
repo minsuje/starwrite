@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
+	// querydsl 관련 명령어를 gradle 탭에 생성해준다.
+//	id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" // QueryDSL 플로그 사용 X
 }
 
 group = 'starwrite'
@@ -20,40 +22,58 @@ configurations {
 repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
-}
-
-ext {
-	set('springAiVersion', "0.8.0")
+	maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+	implementation platform("org.springframework.ai:spring-ai-bom:0.8.0")
+	implementation 'org.springframework.ai:spring-ai-neo4j-store-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-openai'
+
+	// DSL spring upper 3.0 ver
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	//
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+	implementation 'org.springframework.ai:spring-ai-neo4j-store'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.ai:spring-ai-neo4j-store-spring-boot-starter'
-	implementation 'org.springframework.session:spring-session-data-redis'
+//	implementation 'org.springframework.session:spring-session-data-redis'
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-}
+//	testImplementation 'org.springframework.security:spring-security-test'
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
-	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+// dsl 옵션
+// querydsDir 옵션은 Q클래스들을 빌드 폴더 안으로 빌드되게 해준다.
+def querydslDir = "src/generated/querydsl"
+
+sourceSets {
+	main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+	options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+	file(querydslDir).deleteDir()
+}
+
