@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("Category")
+@Node("category")
 public class Category {
     @Id
     @GeneratedValue

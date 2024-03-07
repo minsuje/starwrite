@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("Post")
+@Node("post")
 public class Post {
     @Id
     @GeneratedValue
