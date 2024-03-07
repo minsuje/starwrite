@@ -21,7 +21,7 @@ public class Neo4jService {
 
 
 
-    public void createEmbeddings(String filePath) {
+    public void createEmbeddings() {
         // Example of creating 10 random documents
         List<Document> documents = new ArrayList<>();
         Random random = new Random();
@@ -37,8 +37,6 @@ public class Neo4jService {
 
         // Example of using the documents list
         vectorStore.add(documents);
-        // vectorStore.add("string");
-        // vectorStore.similaritySearch();
 
 
         // Just for debugging
