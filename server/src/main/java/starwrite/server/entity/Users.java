@@ -13,28 +13,29 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(AuditingEntityListener.class) // 엔티티를 DB에 적용하기 전, 이후에 커스텀 콜백을 요청할 수 있는 어노테이션
 public class Users {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
 
-  private String login_type;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-  private String email;
+    private String login_type;
 
-  private String password;
+    private String email;
 
-  private String profile_img;
+    private String password;
 
-  private String nickname;
+    private String profile_img;
 
-  private String role;
+    private String nickname;
 
-  private String access_token;
+    private String role;
 
-  private String refresh_token;
+    private String access_token;
 
-  @CreatedDate
-  private LocalDateTime created_at;
-  @LastModifiedDate
-  private LocalDateTime updated_at;
+    private String refresh_token;
+
+    @CreatedDate
+    private LocalDateTime created_at;
+    @LastModifiedDate
+    private LocalDateTime updated_at;
 }

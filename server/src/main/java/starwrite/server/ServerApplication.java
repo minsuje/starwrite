@@ -11,8 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-// @EnableNeo4jAuditing
-// @EnableNeo4jRepositories(basePackages = {"com.spring.neo4j.repository"})
 public class ServerApplication {
 	private final static Logger log = LoggerFactory.getLogger(ServerApplication.class);
 
