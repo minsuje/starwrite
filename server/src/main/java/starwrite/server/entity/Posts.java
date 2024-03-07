@@ -23,7 +23,7 @@ public class Posts {
     @GeneratedValue
     private Long id;
     @Relationship(type = "myPost", direction = Relationship.Direction.INCOMING)
-    private Long category_id;
+    private int category_id;
     @Column(nullable = false)
     private Long writer;
 
