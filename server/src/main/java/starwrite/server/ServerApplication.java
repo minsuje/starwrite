@@ -1,11 +1,16 @@
 package starwrite.server;
 
+import org.neo4j.cypherdsl.core.renderer.Configuration;
+import org.neo4j.cypherdsl.core.renderer.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 // @EnableNeo4jAuditing
 // @EnableNeo4jRepositories(basePackages = {"com.spring.neo4j.repository"})
 public class ServerApplication {
@@ -14,6 +19,19 @@ public class ServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
+
+	@Bean
+	Configuration cypherDslConfiguration() {
+		return Configuration.newConfig()
+				.withDialect(Dialect.NEO4J_5).build();
+	}
+
+	// @Bean(ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+	// public ReactiveTransactionManager reactiveTransactionManager(
+	// 		Driver driver,
+	// 		ReactiveDatabaseSelectionProvider databaseNameProvider) {
+	// 	return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
+	// }
 
 
 
