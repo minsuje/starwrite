@@ -2,15 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { nodes, links } from '../api/NodeViewApi';
 import { SmallCircleData, CustomNode, Link } from '../model/Types';
+import './NodeView.css';
 
 // links;
 // nodes;
-export const NodeView = () => {
+export const NodeView = ({ searchTerm }) => {
   const svgRef = useRef(null);
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  //
+  console.log('이곳은 NodeView searchTerm', searchTerm);
+  //
+
   useEffect(() => {
     function handleResize() {
       setDimensions({
@@ -46,32 +52,6 @@ export const NodeView = () => {
         d.fy = null;
       });
   }
-
-  // 드래그 핸들러2
-  // function drag(simulation: Node) {
-  //   function dragstarted(event: Node) {
-  //     if (!event.active) simulation.alphaTarget(0.3).restart(); // restart 형식을 찾아 볼 것
-  //     event.subject.fx = event.subject.x;
-  //     event.subject.fy = event.subject.y;
-  //   }
-
-  //   function dragged(event: Node) {
-  //     event.subject.fx = event.x;
-  //     event.subject.fy = event.y;
-  //   }
-
-  //   function dragended(event: Node) {
-  //     if (!event.active) simulation.alphaTarget(0);
-  //     event.subject.fx = null;
-  //     event.subject.fy = null;
-  //   }
-
-  //   return d3
-  //     .drag()
-  //     .on('start', dragstarted)
-  //     .on('drag', dragged)
-  //     .on('end', dragended);
-  // }
 
   useEffect(() => {
     const findAllConnectedNodes = (nodeId, nodes) => {
@@ -150,19 +130,34 @@ export const NodeView = () => {
     (svg as any).call(zoomHandler);
 
     // 시뮬레이션 설정
+    // const simulation = d3
+    //   .forceSimulation(nodes)
+    //   .force(
+    //     'link',
+    //     d3
+    //       .forceLink<CustomNode, Link>(links)
+    //       .id((d) => d.id)
+    //       // 링크 선의 길이
+    //       .distance(100),
+    //   )
+    //   .force('charge', d3.forceManyBody().strength(-50))
+    //   .force('center', d3.forceCenter(width / 2, height / 2));
+
     const simulation = d3
       .forceSimulation(nodes)
       .force(
         'link',
+
         d3
           .forceLink<CustomNode, Link>(links)
           .id((d) => d.id)
-          // 링크 선의 길이
+          // 링크 선 길이 조절
           .distance(100),
-      )
-      .force('charge', d3.forceManyBody().strength(-50))
-      .force('center', d3.forceCenter(width / 2, height / 2));
-
+      ) // 링크 거리 조절
+      .force('charge', d3.forceManyBody().strength(-5)) // 노드 간 반발력 조절
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .alphaDecay(0.0228); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
+    // .on('tick', ticked);
     // 링크 그리기
     const link = svg
       .append('g')
@@ -175,24 +170,6 @@ export const NodeView = () => {
       .attr('stroke', '#fff')
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
-    // .on('mouseover', function (event, d) {
-    //   // 해당 링크를 강조하기 위해 opacity를 높입니다.
-    //   d3.select(this).style('opacity', 1); // 현재 선택된 링크의 opacity를 조절합니다.
-
-    //   // 연결된 노드를 찾아서 강조할 수 있습니다.
-    //   const connectedNodes = [d.source, d.target];
-    //   node.filter((n) => connectedNodes.includes(n.id)).style('opacity', 1); // 연결된 노드를 찾아 opacity를 조절합니다.
-
-    //   // 나머지 요소들의 투명도를 낮춥니다.2
-    //   node
-    //     .filter((n) => !connectedNodes.includes(n.id))
-    //     .style('opacity', 0.5); // 연결되지 않은 다른 노드의 투명도를 낮춥니다.
-    // })
-    // .on('mouseout', function (event, d) {
-    //   // 마우스가 링크에서 벗어났을 때 모든 요소들의 투명도를 다시 돌려놓습니다.
-    //   svg.selectAll('.links line').style('opacity', 1); // 모든 링크의 opacity를 원래대로 돌려놓습니다.
-    //   node.style('opacity', 1); // 모든 노드의 opacity를 원래대로 돌려놓습니다.
-    // });
 
     const node = svg
       .append('g') //  호출하여 SVG 내에 새로운 <g> 요소(그룹)를 추가 이 그룹은 별 모양 이미지를 포함할 노드들의 컨테이너 역할
@@ -213,17 +190,15 @@ export const NodeView = () => {
       .style('cursor', 'pointer') // 커서 포인트 변경
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
-
-    // // 작은 원 추가;
-    // const sharedCircles = svg.append('g')
-    //   .attr('class', 'shared-nodes')
-    //   .selectAll('circle')
-    //   .data(sharedNodes)
-    //   .enter().append('circle')
-    //   .attr('r', 4) // 작은 원의 반지름
-    //   .attr('fill', 'blue') // 작은 원의 색상
-    //   .attr('stroke', '#fff')
-    //   .attr('stroke-width', 1.5);
+    if (searchTerm.trim()) {
+      node
+        .filter((d) => d.label.toLowerCase().includes(searchTerm.toLowerCase()))
+        .classed('blink-animation', true);
+    } else {
+      node.classed('blink-animation', false); // 검색어가 비어 있으면 애니메이션 클래스 제거
+    }
+    // 검색어와 일치할 때 깜빡이는 애니메이션을 적용합니다.
+    // node.filter((d) => d.label === searchTerm).classed('blink-animation', true); // 조건에 따라 애니메이션 클래스 추가
 
     // 텍스트 요소 추가
     const text = svg
@@ -254,7 +229,6 @@ export const NodeView = () => {
 
     // 시뮬레이션의 tick 이벤트에 리스너를 추가하여 노드와 링크의 위치를 업데이트
     simulation.on('tick', () => {
-      link;
       link
         .attr('x1', (d) => {
           if (typeof d.source !== 'string' && d.source.x !== undefined) {
@@ -316,7 +290,7 @@ export const NodeView = () => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-  }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
+  }, [nodes, links, searchTerm]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
   return (
     <svg

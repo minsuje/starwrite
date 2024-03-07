@@ -1,7 +1,7 @@
 export function Profile() {
   return (
     <>
-      <div>dd</div>
+      <div>프로필인디요</div>
     </>
   );
 }
