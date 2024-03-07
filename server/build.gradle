@@ -30,18 +30,6 @@ dependencies {
 	implementation platform("org.springframework.ai:spring-ai-bom:0.8.0")
 	implementation 'org.springframework.ai:spring-ai-neo4j-store-spring-boot-starter'
 	implementation 'org.springframework.ai:spring-ai-openai'
-	// 테스트 환경
-//	testCompileOnly 'org.projectlombok:lombok:1.18.12' // 테스트 의존성 추가
-//	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12' // 테스트 의존성 추가
-//	testImplementation platform("org.springframework.ai:spring-ai-bom:0.8.0")
-//	testImplementation 'org.springframework.ai:spring-ai-neo4j-store-spring-boot-starter'
-//	testImplementation 'org.springframework.ai:spring-ai-openai'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
-//	testImplementation 'org.springframework.ai:spring-ai-neo4j-store'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-mail'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-web'
-	//
 
 	// Query DSL spring upper 3.0 ver
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -75,14 +63,17 @@ tasks.named('test') {
 // querydsDir 옵션은 Q클래스들을 빌드 폴더 안으로 빌드되게 해준다.
 def querydslDir = "build/generated/querydsl"
 
+// java source set 에 querydsl QClass 위치 추가
 sourceSets {
 	main.java.srcDirs += [ querydslDir ]
 }
 
+// querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile) {
 	options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 }
 
+// gradle clean 시에 QClass 디렉토리 삭제
 clean.doLast {
 	file(querydslDir).deleteDir()
 }
