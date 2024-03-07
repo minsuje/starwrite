@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 // @EnableNeo4jAuditing
 // @EnableNeo4jRepositories(basePackages = {"com.spring.neo4j.repository"})
 public class ServerApplication {
