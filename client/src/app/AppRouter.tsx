@@ -1,8 +1,7 @@
 import { Link, Navigate, createBrowserRouter } from 'react-router-dom'; //라우터
-import CategoryView from '../entities/CategoryView/CategoryView';
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
-
 import RegisterPage from '../pages/Register/page';
+import { CategoryViewWid } from '../widgets/CategoryView';
 
 export const AppRouter = () =>
   createBrowserRouter([
@@ -49,7 +48,9 @@ export const AppRouter = () =>
           path: '/categoryview/:userid_num',
           element: (
             <>
-              <div>카테고리 뷰인디요 ?</div>
+              <div>
+                <CategoryViewWid></CategoryViewWid>
+              </div>
             </>
           ),
         },
