@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
 	// querydsl 관련 명령어를 gradle 탭에 생성해준다.
-//	id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" // QueryDSL 플로그 사용 X
+//	id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" // QueryDSL 플러그 사용 X
 }
 
 group = 'starwrite'
@@ -63,7 +63,7 @@ tasks.named('test') {
 }
 // dsl 옵션
 // querydsDir 옵션은 Q클래스들을 빌드 폴더 안으로 빌드되게 해준다.
-def querydslDir = "src/generated/querydsl"
+def querydslDir = "build/generated/querydsl"
 
 sourceSets {
 	main.java.srcDirs += [ querydslDir ]
