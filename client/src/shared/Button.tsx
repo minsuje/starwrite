@@ -3,11 +3,11 @@ import styled from 'styled-components';
 const SmallButton = styled.button`
   width: 100px;
   height: 40px;
-  background-color: #1361d7;
+  background-color: ${(props) => props.color || '#222527'};
   color: white;
   border: none;
   &:hover {
-    background-color: #0353cb;
+    background-color: ${(props: any) => props.hoverColor || '#343537'};
   }
 `;
 

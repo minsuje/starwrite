@@ -1,6 +1,6 @@
 import { Link, Navigate, createBrowserRouter } from 'react-router-dom'; //라우터
 import CategoryView from '../entities/CategoryView/CategoryView';
-import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeView';
+import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 
 import RegisterPage from '../pages/Register/page';
 
