@@ -14,8 +14,11 @@ import org.springframework.data.neo4j.core.transaction.ReactiveNeo4jTransactionM
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
 
 @SpringBootApplication
+@EnableJpaAuditing
 // @EnableNeo4jAuditing
 // @EnableNeo4jRepositories(basePackages = {"com.spring.neo4j.repository"})
 public class ServerApplication {
