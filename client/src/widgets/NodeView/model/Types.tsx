@@ -1,4 +1,4 @@
-import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
+import { SimulationLinkDatum } from 'd3';
 
 export interface Node {
   id: string;
