@@ -28,7 +28,7 @@ public class Neo4jService {
 
         for (int i = 0; i < 10; i++) {
             // Assuming Document has a constructor that takes an ID and some content
-            String documentId = "doc" + i;
+            // String documentId = "doc" + i;
             String documentContent = "Random content " + random.nextInt(1000); // Replace with actual document content
             Document document = new Document(documentContent);
 
@@ -37,6 +37,9 @@ public class Neo4jService {
 
         // Example of using the documents list
         vectorStore.add(documents);
+        // vectorStore.add("string");
+        // vectorStore.similaritySearch();
+
 
         // Just for debugging
         System.out.println("Documents: " + documents);
