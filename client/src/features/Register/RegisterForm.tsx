@@ -1,30 +1,40 @@
-import InputLabel from '../../entities/register/ui/InputLabel';
+import { Input, InputBox, Label, LargeButton } from '../../shared/CommonStyle';
 import styled from 'styled-components';
-import Button from '../../shared/Button';
-import { useState } from 'react';
 
-const Form = styled.form`
+const RegisterBox = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 20px;
 `;
 
 function RegisterForm() {
-  const [name, setName] = useState<string>();
-  const [id, setId] = useState<string>();
-
-  const [email, setEmail] = useState<string>();
-
-  const [password, setPassword] = useState<string>();
-
   return (
     <>
-      <Form>
-        <InputLabel name="이름"></InputLabel>
-        <InputLabel name="ID"></InputLabel>
-        <InputLabel name="E-MAIL"></InputLabel>
-        <InputLabel name="비밀번호"></InputLabel>
-        <Button size="l" name="회원가입"></Button>
-      </Form>
+      <form>
+        <RegisterBox>
+          <InputBox>
+            <Label>E-MAIL</Label>
+            <Input></Input>
+          </InputBox>
+
+          <InputBox>
+            <Label>닉네임</Label>
+            <Input></Input>
+          </InputBox>
+
+          <InputBox>
+            <Label>비밀번호</Label>
+            <Input></Input>
+          </InputBox>
+
+          <InputBox>
+            <Label>비밀번호 확인</Label>
+            <Input></Input>
+          </InputBox>
+
+          <LargeButton type="submit">회원가입</LargeButton>
+        </RegisterBox>
+      </form>
     </>
   );
 }
