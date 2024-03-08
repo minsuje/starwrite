@@ -4,13 +4,17 @@ import java.util.List;
 
 import org.neo4j.cypherdsl.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import static org.neo4j.cypherdsl.core.Cypher.*;
 import starwrite.server.entity.Posts;
 import starwrite.server.service.PostsService;
 import org.neo4j.cypherdsl.core.renderer.Renderer;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("posts")
@@ -22,6 +26,7 @@ public class PostsController {
     public List<Posts> getAllPosts(){
         return postsService.getAllPosts();
     }
+
 
     @PostMapping("")
     @ResponseBody
@@ -38,5 +43,12 @@ public class PostsController {
 //        statement.getCypher();
         //        assertThat(cypherRenderer.render(statement))
         return postid;
+
+    }
+
+    @GetMapping("/{categoryId}")
+    public List<Posts> getPosts(@PathVariable Long categoryId){
+        System.out.println("postId >>>>>>>>>>>>>>" + categoryId);
+        return postsService.getPosts(categoryId);
     }
 }

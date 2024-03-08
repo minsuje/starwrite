@@ -34,7 +34,10 @@ public class PostsService {
         return postsRepository.relation(categoryId, postId);
     }
 
-
+    public List<Posts> getPosts(Long categoryId) {
+        System.out.println("service post id>>>>>>>>>>>>> " + categoryId);
+        return postsRepository.findPostsById(categoryId);
+    }
 
 
 }

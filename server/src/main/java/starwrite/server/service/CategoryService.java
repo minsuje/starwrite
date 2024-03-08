@@ -3,6 +3,7 @@ package starwrite.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Category;
+import starwrite.server.entity.Posts;
 import starwrite.server.repository.CategoryRepository;
 
 import java.util.List;
@@ -15,6 +16,14 @@ public class CategoryService {
    @Autowired
    public CategoryService(CategoryRepository categoryRepository) {
        this.categoryRepository = categoryRepository;
+   }
+
+
+   public List<Posts> getPosts(Long id){
+     System.out.println("category getPosts id >>>>>>>> " + id);
+     System.out.println("category getPost type id >>>>>>>>>>>>>>>>>>>>" + id.getClass().getTypeName());
+     System.out.println("category getposts result >>>>>>> " + categoryRepository.findCategoryById(id));
+       return categoryRepository.findCategoryById(id);
    }
 
    public List<Category> getAllCategories(){
