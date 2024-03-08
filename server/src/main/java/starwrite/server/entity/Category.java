@@ -1,7 +1,9 @@
 package starwrite.server.entity;
 
+import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -15,11 +17,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("category")
+@Node("Category")
 public class Category {
     @Id
     @GeneratedValue
-    Long categoryId;
+    private Long categoryId;
+
     String name;
     String owner;
     int postCnt;

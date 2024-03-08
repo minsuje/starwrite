@@ -16,15 +16,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("posts")
+@Node("Posts")
 public class Posts {
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private Long postId;
 
     @Relationship(type = "POSTED", direction = Relationship.Direction.INCOMING)
     private List<Category> category = new ArrayList<>();
-
 
     private Long writer;
 
