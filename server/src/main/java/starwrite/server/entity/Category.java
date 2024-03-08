@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDateTime;
@@ -15,19 +16,23 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("category")
+@Node("Category")
 public class Category {
     @Id
-    @GeneratedValue
     Long categoryId;
+
     String name;
+
     String owner;
+
     int postCnt;
+
     LocalDateTime createdAt = LocalDateTime.now();
+
     LocalDateTime updatedAt = createdAt;
 
 //    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
-    private List<Post> posts = new ArrayList<>();
+    private List<Posts> posts = new ArrayList<>();
 
 
 }

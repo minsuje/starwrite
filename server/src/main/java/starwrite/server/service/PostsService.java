@@ -18,11 +18,8 @@ public class PostsService {
         return postsRepository.findAll();
 
     }
-
-
-
-
     public String createPost(Posts post){
+        System.out.println("post >>>>>>> " + post);
         Posts newPost = postsRepository.save(post);
         String msg;
         if(newPost != null){
@@ -33,7 +30,10 @@ public class PostsService {
         return msg;
     }
 
-
+    public List<Posts> getPosts(Long categoryId) {
+        System.out.println("service post id>>>>>>>>>>>>> " + categoryId);
+        return postsRepository.findPostsById(categoryId);
+    }
 
 
 }
