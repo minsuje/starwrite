@@ -27,6 +27,8 @@ export interface CustomNode {
   url?: string;
   isShared?: number;
   connectedNodes?: string[];
+  userid?: number; // 사용자 ID 필드 추가
+  category?: string; // 카테고리 필드 추가
 }
 export interface Link extends SimulationLinkDatum<CustomNode> {
   source: string | CustomNode;

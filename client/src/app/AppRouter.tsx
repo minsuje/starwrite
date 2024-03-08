@@ -3,8 +3,6 @@ import { Outlet, createBrowserRouter } from 'react-router-dom';
 import RegisterPage from '../pages/Register/RegisterPage';
 
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
-import ListView from '../pages/ListView/ListViewPage';
-
 
 export const AppRouter = createBrowserRouter([
   {
