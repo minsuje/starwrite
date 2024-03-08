@@ -16,21 +16,22 @@ public class PostsService {
 
     public List<Posts> getAllPosts() {
         return postsRepository.findAll();
-
     }
 
-
-
-
-    public String createPost(Posts post){
+    public Long createPost(Posts post){
         Posts newPost = postsRepository.save(post);
-        String msg;
+        Long postid;
         if(newPost != null){
-            msg = "success";
-        } else{
-            msg = "false";
+            postid = newPost.getPostId();
+        } else {
+            postid = 0L;
         }
-        return msg;
+
+        return postid;
+    }
+
+    public Posts relation (Long categoryId, Long postId){
+        return postsRepository.relation(categoryId, postId);
     }
 
 
