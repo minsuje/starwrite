@@ -26,7 +26,8 @@ public class Category {
     LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime updatedAt = createdAt;
 
-    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
-    @GeneratedValue
-    List<Post> posts = new ArrayList<>();
+//    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
+    private List<Post> posts = new ArrayList<>();
+
+
 }
