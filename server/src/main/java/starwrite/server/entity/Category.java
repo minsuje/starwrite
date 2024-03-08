@@ -8,17 +8,26 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("Author")
-public class Author {
+@Node("category")
+public class Category {
     @Id
     @GeneratedValue
-    Long id;
+    Long categoryId;
     String name;
-    @Relationship(type = "AUTHORED")
-    List<Book> books;
+    String owner;
+    int postCnt;
+    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime updatedAt = createdAt;
+
+//    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
+    private List<Post> posts = new ArrayList<>();
+
+
 }

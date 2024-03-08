@@ -18,9 +18,9 @@ private final Neo4jService neo4jService;
 
 
     @GetMapping("/create")
-    public String createDocuments(@RequestParam("filePath") String filePath) {
+    public String createDocuments() {
         System.out.println("여기에요");
-        this.neo4jService.createEmbeddings(filePath);
+        this.neo4jService.createEmbeddings();
         return "done";
     }
 }
