@@ -19,7 +19,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue
-    Long id;
+    Long categoryId;
     String name;
     String owner;
     int postCnt;

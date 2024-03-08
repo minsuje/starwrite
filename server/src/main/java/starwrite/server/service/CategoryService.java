@@ -26,7 +26,7 @@ public class CategoryService {
    }
 
    public Category updateCategory(Category category)  {
-       Optional<Category> categoryFromDB=  categoryRepository.findById(category.getId());
+       Optional<Category> categoryFromDB=  categoryRepository.findById(category.getCategoryId());
        if(categoryFromDB.isPresent()){
            Category categoryFromDBVal = categoryFromDB.get();
            // categoryFromDBVal.setPosts(category.getBooks());
