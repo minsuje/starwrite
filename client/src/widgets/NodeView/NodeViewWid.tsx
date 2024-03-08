@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { nodes, links } from '../api/NodeViewApi';
-import { SmallCircleData, CustomNode, Link } from '../model/Types';
+import { nodes, links } from './api/NodeViewApi';
+import { SmallCircleData, CustomNode, Link } from './model/Types';
 import './NodeView.css';
 
-// links;
-// nodes;
-export const NodeView = ({ searchTerm }) => {
+export type SearchType = {
+  searchTerm: string;
+};
+
+export const NodeView = ({ searchTerm }: SearchType) => {
   const svgRef = useRef(null);
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
