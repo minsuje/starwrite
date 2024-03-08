@@ -20,7 +20,7 @@ import java.util.List;
 @Node("Posts")
 public class Posts {
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private Long postId;
 
 

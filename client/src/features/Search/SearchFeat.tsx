@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { SearchTypes } from '../../pages/NodeView/index';
 
-export const SearchFeat = ({ onSearch }: SearchTypes) => {
-  const [inputVisible, setInputVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+export type SearchTypes = {
+  onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
+};
 
-  function handleClick() {
-    setInputVisible(!inputVisible);
-  }
+export const SearchFeat = ({ onSearch }: SearchTypes) => {
+  // const [searchTerm, setSearchTerm] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm); // 입력된 검색어 상태 업데이트
+    // setSearchTerm(newSearchTerm); // 입력된 검색어 상태 업데이트
     onSearch(newSearchTerm); // 입력된 검색어로 검색 수행
   };
 
@@ -28,7 +27,7 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
         <div style={{ position: 'relative' }}>
           <input
             type="text"
-            value={searchTerm}
+            // value={searchTerm}
             onChange={handleChange}
             style={{
               paddingRight: '30px',
