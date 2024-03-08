@@ -5,11 +5,7 @@ import { SmallButton } from '../../shared/CommonStyle';
 import { SearchTypes } from '../../pages/NodeView/index';
 import { TitleFeat } from '../../features/index';
 
-interface HeaderProps {
-  onSearch: SearchTypes['onSearch'];
-}
-
-export function Header({}: HeaderProps) {
+export function Header() {
   return (
     <div
       style={{

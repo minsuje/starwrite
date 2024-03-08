@@ -3,10 +3,6 @@ import { Header } from '../../../../widgets/header/HeaderWid';
 import { useState } from 'react';
 import { SearchFeat } from '../../../../features';
 
-export type SearchTypes = {
-  onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
-};
-
 function NodeViewPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -17,7 +13,7 @@ function NodeViewPage() {
 
   return (
     <>
-      <Header onSearch={onSearch} />
+      <Header />
       <SearchFeat onSearch={onSearch} />
       <NodeView searchTerm={searchTerm} />
     </>

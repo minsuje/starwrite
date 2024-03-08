@@ -2,6 +2,7 @@ import { Link, Navigate, createBrowserRouter } from 'react-router-dom'; //라우
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import RegisterPage from '../pages/Register/page';
 import { CategoryViewWid } from '../widgets/CategoryView';
+import CategoryViewPage from '../pages/CartegoryView/CategoryViewPage';
 
 export const AppRouter = () =>
   createBrowserRouter([
@@ -45,11 +46,11 @@ export const AppRouter = () =>
         },
         // 카테고리 페이지
         {
-          path: '/categoryview/:userid_num',
+          path: `/categoryview/:userid_num`,
           element: (
             <>
               <div>
-                <CategoryViewWid></CategoryViewWid>
+                <CategoryViewPage></CategoryViewPage>
               </div>
             </>
           ),
