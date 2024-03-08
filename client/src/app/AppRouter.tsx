@@ -1,8 +1,10 @@
-
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import RegisterPage from '../pages/Register/RegisterPage';
 
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import ListView from '../pages/ListView/ListViewPage';
+import { Header } from '../widgets/header/HeaderWid';
+import { ListViewMainEnt } from '../entities/ListView';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -38,7 +40,7 @@ export const AppRouter = createBrowserRouter([
         path: '/starwrite',
         element: (
           <>
-            <div> 헤더</div>
+            <Header />
             <Outlet />
           </>
         ),
@@ -72,7 +74,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 글쓰기 페이지
           {
-            path: 'wirtenewpost/',
+            path: 'writenewpost',
             element: (
               <>
                 <div>글쓰기페이진디유? ?</div>
@@ -81,21 +83,30 @@ export const AppRouter = createBrowserRouter([
           },
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/:userid_num',
+            path: 'listview',
             element: (
               <>
                 <ListView content="main" />
               </>
             ),
-          },
-          // 하나의 글 페이지
-          {
-            path: 'listviewdetail/:post_id',
-            element: (
-              <>
-                <div>하나의 글 페이진디유?</div>
-              </>
-            ),
+            children: [
+              {
+                path: 'main/:category',
+                element: (
+                  <>
+                    <ListViewMainEnt></ListViewMainEnt>
+                  </>
+                ),
+              },
+              {
+                path: 'detail/:postId',
+                element: (
+                  <>
+                    <div>글 하나 상세 조회</div>
+                  </>
+                ),
+              },
+            ],
           },
         ],
       },
