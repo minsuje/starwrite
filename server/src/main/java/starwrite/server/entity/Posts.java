@@ -13,6 +13,8 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +25,8 @@ public class Posts {
     @GeneratedValue
     private Long id;
     @Relationship(type = "myPost", direction = Relationship.Direction.INCOMING)
-    private int category_id;
+    List<Category> category = new ArrayList<>();
+
     @Column(nullable = false)
     private Long writer;
 
