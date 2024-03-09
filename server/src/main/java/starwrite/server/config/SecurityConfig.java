@@ -1,77 +1,52 @@
 package starwrite.server.config;
 
-import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity //스프링 시큐리티 필터가 스프링 필터체인에 등록 됩니다.
-@EnableMethodSecurity
+@EnableWebSecurity // 전체 보안이 활성화되어야 한다는 것을 의미
 public class SecurityConfig {
+
+    @Bean // securityFilterChain 통해서 HTTP 보안에 엑세스 할 수 있음
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+            .authorizeHttpRequests(registry -> {
+                registry.requestMatchers("/home").permitAll(); // 홈은 누구나 접근할 수 있다는 의미
+                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
+                registry.requestMatchers("/user/**").hasRole("USER");
+                registry.anyRequest().authenticated(); // 위에 언급하지 않은 3가지 요청 외에는 허용되지 않는다는 의미.
+            })
+            .formLogin(formLogin -> formLogin.permitAll()) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
+            .build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails normalUser = User.builder()
+            .username("user")
+            .password("$2a$12$H4jHiCkH.IfjbhPuNZjOxOZRWyj3lPdysMCPGj4ede2UdOH.3sYx6") // 1234
+            .roles("USER")
+            .build();
+
+        UserDetails adminUser = User.builder()
+            .username("admin")
+            .password("$2a$12$Kb5yrb2UnHoib3hfi2VnmuvHlBSNm1qBes5n6W9meR4xAXrK/1L2O") // 5678
+            .roles("ADMIN", "USER")
+            .build();
+        return new InMemoryUserDetailsManager(normalUser, adminUser);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().disable()
-            .authorizeHttpRequests(request -> request
-                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .anyRequest().authenticated()	// 어떠한 요청이라도 인증필요
-            )
-            .formLogin(login -> login	// form 방식 로그인 사용
-                .loginPage("loginForm")	// [A] 커스텀 로그인 페이지 지정
-                .loginProcessingUrl("/login")	// [B] submit 받을 url
-                .usernameParameter("userid")	// [C] submit할 아이디
-                .passwordParameter("pw")	// [D] submit할 비밀번호
-                .defaultSuccessUrl("/main", true)
-                .permitAll() // 대시보드 이동이 막히면 안되므로 얘는 허용
-            )
-            .logout(Customizer.withDefaults());	// 로그아웃은 기본설정으로 (/logout으로 인증해제)
-
-        return http.build();
-    }
-
-//        http
-//            .csrf((csrfConfig) ->
-//                csrfConfig.disable()
-//            )
-//            .headers((headerConfig) ->
-//                headerConfig.frameOptions(frameOptionsConfig ->
-//                    frameOptionsConfig.disable()
-//                )
-//            )
-//            .authorizeHttpRequests((authorizeRequests) ->
-//                authorizeRequests
-//                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-//                    .requestMatchers("/", "/login/**").permitAll()
-//                    .requestMatchers("/user/**").hasRole(Role.USER.name())
-//                    .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-//                    .anyRequest().authenticated()
-//            )
-//            .exceptionHandling((exceptionConfig) ->
-//                exceptionConfig.authenticationEntryPoint(unauthorizedEntryPoint).accessDeniedHandler(accessDeniedHandler)
-//            )
-//            .formLogin((formLogin) ->
-//                formLogin
-//                    .loginPage("/login/login")
-//                    .usernameParameter("username")
-//                    .passwordParameter("password")
-//                    .loginProcessingUrl("/login/login-proc")
-//                    .defaultSuccessUrl("/", true)
-//            )
-//            .logout((logoutConfig) ->
-//                logoutConfig.logoutSuccessUrl("/")
-//            )
-//            .userDetailsService();
-//        return http.build();
-//    }
 }
