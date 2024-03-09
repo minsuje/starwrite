@@ -5,11 +5,11 @@ const _ListViewPage = styled.div`
   margin-top: 5%;
 `;
 
-function ListView({ content }: { content: string }) {
+function ListView() {
   return (
     <>
       <_ListViewPage>
-        <ListViewWid content={content}></ListViewWid>
+        <ListViewWid></ListViewWid>
       </_ListViewPage>
     </>
   );

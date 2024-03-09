@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { ListCategory } from '../../entities/ListView';
+import { ListCategory } from '../../features/ListView';
 // import ListViewContentWid from './ListViewContentWid';
 import { Outlet } from 'react-router';
 
-import { OneCategory } from '../../entities/ListView/ui/style';
+import { OneCategory } from '../../features/NewPost/ui/style';
 
 //sidebar + contentBox
 const _ListViewBox = styled.div`
@@ -29,22 +29,20 @@ const _AddCategoryButton = styled(OneCategory)`
   background-color: #3c3c3cb9;
 `;
 
-function ListViewWid({ content }: { content: string }) {
-  if (content === 'main') {
-    return (
-      <_ListViewBox>
-        <_CategoryBar>
-          <ListCategory></ListCategory>
-          <_AddCategoryButton>추가</_AddCategoryButton>
-        </_CategoryBar>
+function ListViewWid() {
+  return (
+    <_ListViewBox>
+      <_CategoryBar>
+        <ListCategory></ListCategory>
+        <_AddCategoryButton>추가</_AddCategoryButton>
+      </_CategoryBar>
 
-        <_CategoryContent>
-          {/* <ListViewContentWid selected={selected} /> */}
-          <Outlet />
-        </_CategoryContent>
-      </_ListViewBox>
-    );
-  }
+      <_CategoryContent>
+        {/* <ListViewContentWid selected={selected} /> */}
+        <Outlet />
+      </_CategoryContent>
+    </_ListViewBox>
+  );
 }
 
 export default ListViewWid;

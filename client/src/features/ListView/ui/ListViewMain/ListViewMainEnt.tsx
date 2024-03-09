@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { ListHeaderEnt } from '..';
+import { ListHeaderEnt } from '../..';
 
 function ListViewMainEnt() {
   // 여기에 글 리스트 불러오면 됨
