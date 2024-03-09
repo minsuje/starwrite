@@ -4,7 +4,8 @@ import RegisterPage from '../pages/Register/RegisterPage';
 import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import ListView from '../pages/ListView/ListViewPage';
 import { Header } from '../widgets/header/HeaderWid';
-import { ListViewMainEnt } from '../entities/ListView';
+import { ListViewMainEnt } from '../features/ListView';
+import NewPostPage from '../pages/NewPost/NewPostPage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -77,7 +78,7 @@ export const AppRouter = createBrowserRouter([
             path: 'writenewpost',
             element: (
               <>
-                <div>글쓰기페이진디유? ?</div>
+                <NewPostPage />
               </>
             ),
           },
@@ -86,7 +87,7 @@ export const AppRouter = createBrowserRouter([
             path: 'listview',
             element: (
               <>
-                <ListView content="main" />
+                <ListView />
               </>
             ),
             children: [

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { OneCategory, ListCategories } from '../ui/style';
+import { OneCategory, ListCategories } from '../NewPost/ui/style';
 
 // 타입
 type Categories = string[];
@@ -16,7 +16,7 @@ function ListCategory() {
   const selected = (category: string) => {
     navigate(`/starwrite/listview/main/${category}`);
   };
-  const [categories, setCategories] = useState<Categories>([]);
+  const [categories, setCategories] = useState<Categories>(['전체']);
   return (
     <>
       <ListCategories>
