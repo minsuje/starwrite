@@ -30,9 +30,8 @@ public class PostsController {
 
     @PostMapping("")
     @ResponseBody
-    public String createPost(@RequestBody Posts post, @RequestParam(value = "categoryId", required = false) String categoryId){
-        String postid = postsService.createPost(post);
-        Posts relationship = postsService.relation(categoryId, postid);
+    public Long createPost(@RequestBody Posts post){
+        Long postId = postsService.createPost(post);
 
 //        Parameter categoryIdParam = parameter(String.valueOf(categoryId));
 //        Node posts = Cypher.node("Posts").named("p");
@@ -42,13 +41,13 @@ public class PostsController {
 //        Renderer rend = Renderer.getDefaultRenderer();
 //        statement.getCypher();
         //        assertThat(cypherRenderer.render(statement))
-        return postid;
+        return postId;
 
     }
 
-    @GetMapping("/{categoryId}")
-    public List<Posts> getPosts(@PathVariable String categoryId){
-        System.out.println("postId >>>>>>>>>>>>>>" + categoryId);
-        return postsService.getPosts(categoryId);
-    }
+//    @GetMapping("/{categoryId}")
+//    public List<Posts> getPosts(@PathVariable String categoryId){
+//        System.out.println("postId >>>>>>>>>>>>>>" + categoryId);
+//        return postsService.getPosts(categoryId);
+//    }
 }

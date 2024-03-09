@@ -24,7 +24,6 @@ public class Category {
     @GeneratedValue
     private String categoryId;
 
-
     String name;
 
     String owner;
