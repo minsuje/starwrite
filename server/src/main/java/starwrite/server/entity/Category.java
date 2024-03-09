@@ -22,7 +22,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue
-    private Long categoryId;
+    private String categoryId;
 
 
     String name;

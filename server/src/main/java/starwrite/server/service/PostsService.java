@@ -18,23 +18,23 @@ public class PostsService {
         return postsRepository.findAll();
     }
 
-    public Long createPost(Posts post){
+    public String createPost(Posts post){
         Posts newPost = postsRepository.save(post);
-        Long postid;
+        String postid;
         if(newPost != null){
             postid = newPost.getPostId();
         } else {
-            postid = 0L;
+            postid = "exists";
         }
 
         return postid;
     }
 
-    public Posts relation (Long categoryId, Long postId){
+    public Posts relation (String categoryId, String postId){
         return postsRepository.relation(categoryId, postId);
     }
 
-    public List<Posts> getPosts(Long categoryId) {
+    public List<Posts> getPosts(String categoryId) {
         System.out.println("service post id>>>>>>>>>>>>> " + categoryId);
         return postsRepository.findPostsById(categoryId);
     }

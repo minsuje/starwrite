@@ -9,14 +9,15 @@ import starwrite.server.entity.Category;
 import starwrite.server.entity.Posts;
 
 @Repository
-public interface PostsRepository extends Neo4jRepository<Posts, Long> {
+public interface PostsRepository extends Neo4jRepository<Posts, String> {
   @Query("MATCH (n:posts{elementId: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
-  List<Posts> findPostsById(Long categoryId);
+  List<Posts> findPostsById(String categoryId);
 
 
 
-    @Query("Match (n:Category)-[r:POSTED]->(p:Posts) where ID(r)=1 return p;")
-    Posts relation(@Param("categoryId") Long categoryId,@Param("postId") Long postId);
+    @Query("match (n:Category{id:$categoryId})" + "match (p:Posts)" +
+        "MERGE (n)-[:POSTED]->(p)")
+    Posts relation(@Param("categoryId") String categoryId,@Param("postId") String postId);
 
 
 }

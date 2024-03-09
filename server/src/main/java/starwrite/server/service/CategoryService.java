@@ -19,7 +19,7 @@ public class CategoryService {
    }
 
 
-   public List<Posts> getPosts(Long id){
+   public List<Posts> getPosts(String id){
      System.out.println("category getPosts id >>>>>>>> " + id);
      System.out.println("category getPost type id >>>>>>>>>>>>>>>>>>>>" + id.getClass().getTypeName());
      System.out.println("category getposts result >>>>>>> " + categoryRepository.findCategoryById(id));
@@ -47,7 +47,7 @@ public class CategoryService {
        return category;
    }
 
-   public void deleteCategory(Long id) {
+   public void deleteCategory(String id) {
        categoryRepository.deleteById(id);
    }
 }
