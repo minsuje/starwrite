@@ -20,10 +20,8 @@ import java.util.List;
 @Node("Posts")
 public class Posts {
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     private String postId;
-
-
 
     @Relationship(type = "POSTED", direction = Relationship.Direction.INCOMING)
     private List<Category> category = new ArrayList<>();

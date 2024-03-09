@@ -18,26 +18,26 @@ public class PostsService {
         return postsRepository.findAll();
     }
 
-    public String createPost(Posts post){
+    public Long createPost(Posts post){
         Posts newPost = postsRepository.save(post);
-        String postid;
+        Long postid;
         if(newPost != null){
-            postid = newPost.getPostId();
+            postid = Long.valueOf(newPost.getPostId());
         } else {
-            postid = "exists";
+            postid = 0L;
         }
 
         return postid;
     }
 
-    public Posts relation (String categoryId, String postId){
-        return postsRepository.relation(categoryId, postId);
-    }
+//    public Posts relation (Long categoryId, Long postId){
+//        return postsRepository.relation(categoryId, postId);
+//    }
 
-    public List<Posts> getPosts(String categoryId) {
-        System.out.println("service post id>>>>>>>>>>>>> " + categoryId);
-        return postsRepository.findPostsById(categoryId);
-    }
+//    public List<Posts> getPosts(String categoryId) {
+//        System.out.println("service post id>>>>>>>>>>>>> " + categoryId);
+//        return postsRepository.findPostsById(categoryId);
+//    }
 
 
 }
