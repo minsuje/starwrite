@@ -30,8 +30,8 @@ public class PostsController {
 
     @PostMapping("")
     @ResponseBody
-    public Long createPost(@RequestBody Posts post, @RequestParam(value = "categoryId", required = false) Long categoryId){
-        Long postid = postsService.createPost(post);
+    public String createPost(@RequestBody Posts post, @RequestParam(value = "categoryId", required = false) String categoryId){
+        String postid = postsService.createPost(post);
         Posts relationship = postsService.relation(categoryId, postid);
 
 //        Parameter categoryIdParam = parameter(String.valueOf(categoryId));
@@ -47,7 +47,7 @@ public class PostsController {
     }
 
     @GetMapping("/{categoryId}")
-    public List<Posts> getPosts(@PathVariable Long categoryId){
+    public List<Posts> getPosts(@PathVariable String categoryId){
         System.out.println("postId >>>>>>>>>>>>>>" + categoryId);
         return postsService.getPosts(categoryId);
     }

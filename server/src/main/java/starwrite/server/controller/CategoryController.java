@@ -25,7 +25,7 @@ public class CategoryController {
 
 
    @GetMapping("/{categoryId}")
-   public List<Posts> getCategory(@PathVariable Long categoryId){
+   public List<Posts> getCategory(@PathVariable String categoryId){
      System.out.println("category controller categoryid" + categoryId);
        return categoryService.getPosts(categoryId);
    }
@@ -41,7 +41,7 @@ public class CategoryController {
    }
 
    @DeleteMapping("/category/{categoryId}")
-   public void deleteCategory(@PathVariable Long categoryId){
+   public void deleteCategory(@PathVariable String categoryId){
        categoryService.deleteCategory(categoryId);
    }
 

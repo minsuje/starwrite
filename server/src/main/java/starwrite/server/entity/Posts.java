@@ -21,7 +21,7 @@ import java.util.List;
 public class Posts {
     @Id
     @GeneratedValue()
-    private Long postId;
+    private String postId;
 
 
 
