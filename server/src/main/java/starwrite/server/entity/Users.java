@@ -75,7 +75,7 @@ public class Users {
         this.refresh_token = refresh_token;
     }
 
-    public String getRoleKey(){
-        return this.role.getKey();
-    }
+//    public String getRoleKey(){
+//        return this.role.getKey();
+//    }
 }

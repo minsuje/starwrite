@@ -20,5 +20,8 @@ public class IndexController {
         return "home_user";
     }
 
-
+    @GetMapping("/login")
+    public String handleLogin() {
+        return "custom_login";
+    }
 }
