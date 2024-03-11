@@ -34,7 +34,7 @@ public class Users {
     private String login_type;
 
     @Column(unique=true)
-    private String email;
+    private String mail;
 
     @Column(unique=true)
     private String socialId;
@@ -63,12 +63,12 @@ public class Users {
 
     @Builder
     public Users(
-        String login_type, String nickname, String socialId, String password, String email, String profile_img, Role role, String access_token, String refresh_token){
+        String login_type, String nickname, String socialId, String password, String mail, String profile_img, Role role, String access_token, String refresh_token){
         this.login_type = login_type;
         this.nickname = nickname;
         this.socialId = socialId;
         this.password = password;
-        this.email = email;
+        this.mail = mail;
         this.profile_img = profile_img;
         this.role = role;
         this.access_token = access_token;
