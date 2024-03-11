@@ -1,31 +1,31 @@
 package starwrite.server.entity;
 
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Node("Category")
-public class Category {
-
+@Node("Comment")
+public class Comment {
     @Id
     @GeneratedValue
-    private Long categoryId;
+    private Long id;
 
-    private String name;
+    private String content;
 
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
+    @Relationship(type = "COMMENT", direction = Direction.INCOMING)
+    private Post post;
+
+    @Relationship(type = "COMMENT", direction = Direction.INCOMING)
+    private GraphUser user;
+
+    @Relationship(type = "REPLY", direction = Direction.INCOMING)
+    private Comment parent;
 }
