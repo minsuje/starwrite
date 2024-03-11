@@ -2,12 +2,14 @@ package starwrite.server.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
+import starwrite.server.response.PostResponse;
 
 @Service
 public class PostService {
@@ -29,9 +31,6 @@ public class PostService {
     Category foundCategory = categoryRepository.findCategoryById(
         post.getCategory().getCategoryId());
 
-//      if (foundCategory.getPostList() == null) {
-//        foundCategory.setPostList(new ArrayList<>());
-//      }
 
     Post newPost = new Post();
     newPost.setTitle(post.getTitle());
@@ -40,11 +39,12 @@ public class PostService {
     newPost.setUpdatedAt(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
 
-    foundCategory.setUpdatedAt(LocalDateTime.now());
-//      foundCategory.getPostList().add(newPost);
-    categoryRepository.save(foundCategory);
-
     return postRepository.save(newPost);
+  }
+
+
+  public PostResponse findPost() {
+    return postRepository.findPost();
   }
 
 
