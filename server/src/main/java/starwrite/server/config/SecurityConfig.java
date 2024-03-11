@@ -26,9 +26,10 @@ public class SecurityConfig {
         return httpSecurity
             .csrf(AbstractHttpConfigurer::disable) // cross-site request forgery : 사이트 간 재위조 방지 기술
             .authorizeHttpRequests(registry -> {
-                registry.requestMatchers("/home", "/register/**").permitAll(); // 홈은 누구나 접근할 수 있다는 의미
-                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
-                registry.requestMatchers("/user/**").hasRole("USER");
+                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경
+//                registry.requestMatchers("/home", "/register/**").permitAll(); // 홈은 누구나 접근할 수 있다는 의미
+//                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
+//                registry.requestMatchers("/user/**").hasRole("USER");
                 registry.anyRequest().authenticated(); // 위에 언급하지 않은 3가지 요청 외에는 허용되지 않는다는 의미.
             })
             .formLogin(httpSecurityFormLoginConfigurer -> {
