@@ -27,6 +27,7 @@ public class CategoryController {
        return categoryService.addCategory(category);
    }
 
+
    @PutMapping
    public Category updateCategory(@RequestBody Category category)  {
        return categoryService.updateCategory(category);

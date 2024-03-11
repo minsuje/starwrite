@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
+interface SmallButtonProps {
+  bgcolor?: string; // bgColor 속성 추가
+}
 // 버튼 스타일
-export const SmallButton = styled.button`
+export const SmallButton = styled.button<SmallButtonProps>`
   width: 100px;
   height: 40px;
-  background-color: #1361d7;
+  background-color: ${(props) => props.bgcolor || 'blue'};
   color: white;
   border: none;
   &:hover {
@@ -15,7 +18,7 @@ export const SmallButton = styled.button`
 export const MediumButton = styled.button`
   width: 200px;
   height: 40px;
-  background-color: #1361d7;
+  background-color: ${(props) => props.bgcolor || 'blue'};
   color: white;
   border: none;
   &:hover {
@@ -55,4 +58,10 @@ export const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+`;
+
+// 메인 뷰 Title
+export const Title = styled.div`
+  display: flex;
+  color: red;
 `;

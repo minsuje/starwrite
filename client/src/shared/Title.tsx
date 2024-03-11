@@ -1,7 +1,7 @@
-export function Title() {
-  return (
-    <>
-      <h2>StarWrite</h2>
-    </>
-  );
-}
+// export function Title() {
+//   return (
+//     <>
+//       <h2>StarWrite</h2>
+//     </>
+//   );
+// }

@@ -9,24 +9,23 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("category")
+@Node("Category")
 public class Category {
+
     @Id
     @GeneratedValue
-    Long id;
-    String name;
-    String owner;
-    int postCnt;
-    LocalDateTime createdAt = LocalDateTime.now();
-    LocalDateTime updatedAt = createdAt;
+    private Long categoryId;
 
-    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
-    @GeneratedValue
-    List<Post> posts = new ArrayList<>();
+    private String name;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
 }
