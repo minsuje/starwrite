@@ -35,7 +35,6 @@ public class CategoryService {
 
 
   public Category addCategory(Category category) {
-
     return categoryRepository.createCategory(category.getName());
   }
 

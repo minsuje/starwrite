@@ -15,7 +15,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, Long> {
   List<Post> findPostsByCategory(Long categoryId);
 
   @Query("MATCH (c:Category) WHERE ID(c) = $id RETURN c LIMIT 1")
-  Category findCategoryById(Long id);
+  Category findCategoryById(@Param(value = "id") Long id);
 
   @Query("MATCH (c:Category)" +
       "RETURN c")

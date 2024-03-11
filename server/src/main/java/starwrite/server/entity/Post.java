@@ -28,12 +28,14 @@ public class Post {
 
     private String img;
 
+    private boolean state;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @Relationship(type = "RELATED", direction = Direction.OUTGOING)
     private List<Post> relatedPost;
 
-    @Relationship(type = "IS_CHILD", direction = Direction.OUTGOING)
+    @Relationship(type = "IS_CHILD", direction = Direction.INCOMING)
     private Category category;
 }
