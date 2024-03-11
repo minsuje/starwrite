@@ -1,34 +1,26 @@
 package starwrite.server.entity;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("Posts")
-public class Posts {
+@Node("Post")
+public class Post {
     @Id
     @GeneratedValue
-    private String postId;
-
-    @Relationship(type = "POSTED", direction = Relationship.Direction.INCOMING)
-    private List<Category> category = new ArrayList<>();
-
-    private Long writer;
-
-    private Long holder;
+    private Long postId;
 
     private String title;
 
@@ -36,7 +28,12 @@ public class Posts {
 
     private String img;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = createdAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
+    @Relationship(type = "RELATED", direction = Direction.OUTGOING)
+    private List<Post> relatedPost;
+
+    @Relationship(type = "IS_CHILD", direction = Direction.OUTGOING)
+    private Category category;
 }
