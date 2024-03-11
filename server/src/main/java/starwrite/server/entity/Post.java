@@ -26,6 +26,8 @@ public class Post {
 
     private String content;
 
+    private String visible;
+
     private String img;
 
     private boolean state;
