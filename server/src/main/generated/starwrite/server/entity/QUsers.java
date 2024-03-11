@@ -37,7 +37,9 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final StringPath refresh_token = createString("refresh_token");
 
-    public final StringPath role = createString("role");
+    public final EnumPath<starwrite.server.enums.Role> role = createEnum("role", starwrite.server.enums.Role.class);
+
+    public final StringPath socialId = createString("socialId");
 
     public final DateTimePath<java.time.LocalDateTime> updated_at = createDateTime("updated_at", java.time.LocalDateTime.class);
 

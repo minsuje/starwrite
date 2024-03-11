@@ -26,10 +26,12 @@ repositories {
 }
 
 dependencies {
-
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // @Notnull 어노테이션 사용하기 위함
 	implementation platform("org.springframework.ai:spring-ai-bom:0.8.0")
 	implementation 'org.springframework.ai:spring-ai-neo4j-store-spring-boot-starter'
 	implementation 'org.springframework.ai:spring-ai-openai'
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	// Query DSL spring upper 3.0 ver
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -38,6 +40,7 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
 	implementation 'org.springframework.ai:spring-ai-neo4j-store'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
@@ -45,7 +48,7 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.springframework.session:spring-session-data-redis'
 	compileOnly 'org.projectlombok:lombok'
@@ -61,21 +64,20 @@ tasks.named('test') {
 }
 
 // dsl 옵션
-// querydsDir 옵션은 Q클래스들을 빌드 폴더 안으로 빌드되게 해준다.
+// java source set 에 querydsl QClass 위치 추가
+
 def querydslDir = "build/generated/querydsl"
 
-// java source set 에 querydsl QClass 위치 추가
 sourceSets {
 	main.java.srcDirs += [ querydslDir ]
 }
 
-// querydsl QClass 파일 생성 위치를 지정
+
 tasks.withType(JavaCompile) {
-	options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+	options.generatedSourceOutputDirectory = file(querydslDir)
 }
 
-// gradle clean 시에 QClass 디렉토리 삭제
-clean.doLast {
-	file(querydslDir).deleteDir()
+clean {
+	delete file(querydslDir)
 }
 
