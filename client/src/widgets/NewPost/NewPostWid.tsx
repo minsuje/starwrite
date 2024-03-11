@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Editor } from '../../features/NewPost';
+import { Editor, NewPostHeadFeat } from '../../features/NewPost';
 
 const _EditorBox = styled.div`
   display: flex;
@@ -16,22 +16,10 @@ const _EditorDiv = styled.div`
   overflow-y: auto;
 `;
 
-const _EditorHead = styled.div`
-  width: 90%;
-  background-color: #202020;
-  padding: 3% 5%;
-`;
 function NewPostWid() {
   return (
     <_EditorBox>
-      <_EditorHead>
-        {/* 컴포넌트 생성 */}
-        <h1> 제목 </h1>
-      </_EditorHead>
-      <_EditorHead>
-        {/* 컴포넌트 생성 */}
-        <h1> 카테고리 선택 </h1>
-      </_EditorHead>
+      <NewPostHeadFeat />
       <_EditorDiv>
         <Editor />
       </_EditorDiv>
