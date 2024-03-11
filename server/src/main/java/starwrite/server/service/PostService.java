@@ -22,9 +22,9 @@ public class PostService {
   }
 
   // 모든 글 찾기 ( find All Posts)
-  public List<Post> getAllPosts() {
-    return postRepository.findAllPosts();
-  }
+//  public List<Post> getAllPosts() {
+//    return postRepository.findAllPosts();
+//  }
 
   // 글 작성 ( write Post )
   public Post createPost(Post post) {
@@ -33,6 +33,7 @@ public class PostService {
     Post newPost = new Post();
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
     newPost.setState(true);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
@@ -49,6 +50,7 @@ public class PostService {
     Post newPost = new Post();
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
     newPost.setState(false);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
@@ -56,6 +58,11 @@ public class PostService {
 
     return postRepository.save(newPost);
   }
+
+  // 임시 저장 글 불러오기 ( save Posts Pull )
+//  public Post savePostPull(Post post){
+//
+//  }
 
 
 }

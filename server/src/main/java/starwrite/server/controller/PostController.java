@@ -17,11 +17,11 @@ public class                                                                    
   public PostController(PostService postService) {
     this.postService = postService;
   }
-
-  @GetMapping
-  public List<Post> getAllPosts() {
-    return postService.getAllPosts();
-  }
+//
+//  @GetMapping
+//  public List<Post> getAllPosts() {
+//    return postService.getAllPosts();
+//  }
 
   @PostMapping
   public Post createPost(@RequestBody Post post) {

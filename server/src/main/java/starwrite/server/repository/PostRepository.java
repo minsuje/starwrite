@@ -11,10 +11,25 @@ import starwrite.server.entity.Post;
 public interface PostRepository extends Neo4jRepository<Post, Long> {
 
   @Query("MATCH (p:Post) " +
+          "MATCH (u : User) " +
           "MATCH (c:Category)-[]->(p) " +
-          "WHERE p.state = true " +
+          "WHERE p.state = true AND ID(u) = $userid AND p.public = true " +
           "RETURN p")
-  List<Post> findAllPosts();
+  List<Post> findAllPosts(@Param(value = "userid") Long userid);
+
+  @Query("MATCH (p:Post) " +
+          "MATCH (u : User) " +
+          "MATCH (c:Category)-[]->(p) " +
+          "WHERE p.state = true AND ID(u) = $userid AND u.public = part " +
+          "RETURN p")
+  List<Post> findPartPosts(@Param(value = "userid") Long userid);
+
+
+//  @Query("MATCH (p:Post) " +
+//          "MATCH (u : User) " +
+//          "MATCH (c:Category)-[]->(p) " +
+//          "WHERE p.state = true AND ID(u) = $userid AND u.visible = partPub " +
+//          "RETURN p")
 
 //  @Query("MATCH (c:Category) WHERE ID(c) = $categoryId " +
 //      "CREATE (p:Post{title: $title,content:$content,category:c,createdAt: localdatetime(), updatedAt: localdatetime()}) " +
@@ -24,5 +39,11 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
 
   @Query("MATCH (p:Post) WHERE ID(p) = $id RETURN p")
   Post findPostById(@Param(value = "id") Long id);
+
+  // 모든 임시 저장 post( All save Post pull )
+  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
+          "WHERE p.state = false AND ID(p) = $id " +
+          "RETURN p")
+  List<Post> findSavePost(@Param(value = "id") Long id);
 }
 
