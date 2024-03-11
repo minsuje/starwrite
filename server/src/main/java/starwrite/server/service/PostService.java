@@ -21,28 +21,38 @@ public class PostService {
     this.categoryRepository = categoryRepository;
   }
 
+  // 모든 글 찾기 ( find All Posts)
   public List<Post> getAllPosts() {
     return postRepository.findAllPosts();
   }
 
+  // 글 작성 ( write Post )
   public Post createPost(Post post) {
-    Category foundCategory = categoryRepository.findCategoryById(
-        post.getCategory().getCategoryId());
-
-//      if (foundCategory.getPostList() == null) {
-//        foundCategory.setPostList(new ArrayList<>());
-//      }
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
 
     Post newPost = new Post();
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
+    newPost.setState(true);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
 
-    foundCategory.setUpdatedAt(LocalDateTime.now());
-//      foundCategory.getPostList().add(newPost);
-    categoryRepository.save(foundCategory);
+    return postRepository.save(newPost);
+  }
+
+
+  // 글 임시 저장 ( save Posts )
+  public Post savePost(Post post){
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+
+    Post newPost = new Post();
+    newPost.setTitle(post.getTitle());
+    newPost.setContent(post.getContent());
+    newPost.setState(false);
+    newPost.setCreatedAt(LocalDateTime.now());
+    newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setCategory(foundCategory);
 
     return postRepository.save(newPost);
   }
