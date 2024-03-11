@@ -1,29 +1,29 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { OneCategory, ListCategories } from '../NewPost/ui/style';
-
-// 타입
-type Categories = string[];
+import { list } from './model/CategoryData';
 
 function ListCategory() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setCategories(['전체', '스크랩', '임시저장', '과학', '사회', '국어']);
-    console.log('category 바 마운트');
-  }, []);
-
+  const [categories, setCategories] = useState<string[]>(['전체']);
   const selected = (category: string) => {
     navigate(`/starwrite/listview/main/${category}`);
   };
-  const [categories, setCategories] = useState<Categories>(['전체']);
+
+  useEffect(() => {
+    setCategories(list);
+
+    console.log('category 바 마운트');
+  }, []);
+
   return (
     <>
       <ListCategories>
         {!(categories.length === 0) &&
-          categories.map((category) => {
+          categories.map((category, idx) => {
             return (
               <OneCategory
+                key={idx}
                 onClick={() => {
                   selected(category);
                 }}

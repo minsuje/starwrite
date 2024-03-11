@@ -3,12 +3,10 @@ import { ListCategory } from '../../features/ListView';
 // import ListViewContentWid from './ListViewContentWid';
 import { Outlet } from 'react-router';
 
-import { OneCategory } from '../../features/NewPost/ui/style';
-
 //sidebar + contentBox
 const _ListViewBox = styled.div`
   display: flex;
-  height: 100vh;
+  height: 85vh;
 `;
 
 const _CategoryBar = styled.div`
@@ -22,11 +20,20 @@ const _CategoryBar = styled.div`
 const _CategoryContent = styled.div`
   width: 100%;
   background-color: #1f1f1f;
-  height: 85vh;
+  padding: 20px 30px;
 `;
 
-const _AddCategoryButton = styled(OneCategory)`
+const _AddCategoryButton = styled.div`
+  width: 80%;
+  text-align: center;
+  padding: 15px 0px;
+
+  &:hover {
+    background-color: #3c3c3c;
+    cursor: pointer;
+  }
   background-color: #3c3c3cb9;
+  margin: 0;
 `;
 
 function ListViewWid() {
