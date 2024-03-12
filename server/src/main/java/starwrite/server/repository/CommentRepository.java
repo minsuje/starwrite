@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import starwrite.server.entity.Comment;
 
 @Repository
-public interface CommentRepository extends Neo4jRepository<Comment, Long> {
+public interface CommentRepository extends Neo4jRepository<Comment, String> {
   @Query("MATCH (c:Comment) WHERE ID(c) = $id RETURN c")
-  Comment findCommentById(Long id);
+  Comment findCommentById(String commentId);
 }

@@ -1,6 +1,5 @@
 package starwrite.server.service;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,25 +15,16 @@ public class UsersDetailService implements UserDetailsService {
     UsersRepository usersRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Users> user = usersRepository.findByEmail(email);
-        if(user.isPresent()) {
-            var userObj = user.get();
+    public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
+        Users user = usersRepository.findUserByEmail(mail);
+        if(user != null) {
             return User.builder()
-                .username(userObj.getEmail())
-                .password(userObj.getPassword()) // 5678
-                .roles(String.valueOf(userObj.getRole()))
-//                .roles(getRoles(userObj))
+                .username(user.getMail())
+                .password(user.getPassword())
+                .roles(String.valueOf(user.getRole()))
                 .build();
         } else {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(mail);
         }
     }
-
-//    private String[] getRoles(Users user) {
-//         if(user.getRole() == null) {
-//             return new String[]{"USER"};
-//         }
-//         return user.getRole().split(",");
-//    }
 }
