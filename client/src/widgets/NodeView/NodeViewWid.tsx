@@ -11,19 +11,19 @@ export type SearchType = {
 export const NodeView = ({ searchTerm }: SearchType) => {
   const svgRef = useRef(null);
   const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: window.innerWidth - 1,
+    height: window.innerHeight - 1,
   });
 
   //
-  console.log('이곳은 NodeView searchTerm', searchTerm);
+
   //
 
   useEffect(() => {
     function handleResize() {
       setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: window.innerWidth - 1,
+        height: window.innerHeight - 1,
       });
     }
 
@@ -116,7 +116,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       }
     });
 
-    console.log('smallCirclesData>>', smallCirclesData);
+    // console.log('smallCirclesData>>', smallCirclesData);
 
     // SVG 요소 선택 및 초기화
     const svg = d3.select(svgRef.current);
@@ -192,13 +192,6 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .style('cursor', 'pointer') // 커서 포인트 변경
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
-    if (searchTerm.trim()) {
-      node
-        .filter((d) => d.label.toLowerCase().includes(searchTerm.toLowerCase()))
-        .classed('blink-animation', true);
-    } else {
-      node.classed('blink-animation', false); // 검색어가 비어 있으면 애니메이션 클래스 제거
-    }
     // 검색어와 일치할 때 깜빡이는 애니메이션을 적용합니다.
     // node.filter((d) => d.label === searchTerm).classed('blink-animation', true); // 조건에 따라 애니메이션 클래스 추가
 
@@ -292,7 +285,43 @@ export const NodeView = ({ searchTerm }: SearchType) => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-  }, [nodes, links, searchTerm]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
+  }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
+
+  // useEffect(() => {
+  //   // searchTerm이 변경될 때 실행되는 로직
+  //   // 예: 노드를 필터링하거나, 특정 노드를 강조 표시
+  //   if (searchTerm.trim()) {
+  //     // 예: searchTerm에 따라 노드의 display 속성을 'none'으로 설정하거나,
+  //     // 특정 노드를 강조하는 등의 로직
+  //     if (searchTerm.trim()) {
+  //       node
+  //         .filter((d) =>
+  //           d.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  //         )
+  //         .classed('blink-animation', true);
+  //     } else {
+  //       node.classed('blink-animation', false); // 검색어가 비어 있으면 애니메이션 클래스 제거
+  //     }
+  //   }
+  // }, [searchTerm]); // searchTerm이 변경될 때만 이 useEffect가 실행됩니다.
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    const nodeSelection = svg.selectAll('.nodes image');
+
+    // 검색어가 비어 있지 않은 경우, 검색어를 포함하는 라벨을 가진 노드만 강조 표시합니다.
+    if (searchTerm.trim()) {
+      nodeSelection
+        .classed('blink-animation', (d) =>
+          d.label.toLowerCase().includes(searchTerm.toLowerCase()),
+        )
+        .style('opacity', (d) =>
+          d.label.toLowerCase().includes(searchTerm.toLowerCase()) ? 1 : 0.2,
+        ); // 강조되지 않는 노드의 투명도를 낮춥니다.
+    } else {
+      // 검색어가 비어 있는 경우, 모든 노드의 투명도를 원래대로 복원합니다.
+      nodeSelection.classed('blink-animation', false).style('opacity', 1);
+    }
+  }, [searchTerm]);
 
   return (
     <svg

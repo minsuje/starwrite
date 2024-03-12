@@ -1,8 +1,9 @@
-
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import RegisterPage from '../pages/Register/RegisterPage';
-
-import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import ListView from '../pages/ListView/ListViewPage';
+import { NodeViewPage } from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import { HeaderWid } from '../widgets/header/index';
+import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -38,7 +39,7 @@ export const AppRouter = createBrowserRouter([
         path: '/starwrite',
         element: (
           <>
-            <div> 헤더</div>
+            <HeaderWid />
             <Outlet />
           </>
         ),
@@ -56,7 +57,7 @@ export const AppRouter = createBrowserRouter([
             path: 'categoryview/:userid_num',
             element: (
               <>
-                <div>카테고리 뷰인디요 ?</div>
+                <CategoryViewPage></CategoryViewPage>
               </>
             ),
           },
@@ -66,7 +67,6 @@ export const AppRouter = createBrowserRouter([
             element: (
               <>
                 <NodeViewPage></NodeViewPage>
-                <div></div>
               </>
             ),
           },
