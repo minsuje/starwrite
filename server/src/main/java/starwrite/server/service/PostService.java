@@ -23,24 +23,52 @@ public class PostService {
     this.categoryRepository = categoryRepository;
   }
 
-  public List<Post> getAllPosts() {
-    return postRepository.findAllPosts();
-  }
+  // 모든 글 찾기 ( find All Posts)
+//  public List<Post> getAllPosts() {
+//    return postRepository.findAllPosts();
+//  }
 
+  // 글 작성 ( write Post )
   public Post createPost(Post post) {
-    Category foundCategory = categoryRepository.findCategoryById(
-        post.getCategory().getCategoryId());
+
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
 
 
     Post newPost = new Post();
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
+    newPost.setState(true);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
 
+
     return postRepository.save(newPost);
   }
+
+
+  // 글 임시 저장 ( save Posts )
+  public Post savePost(Post post){
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+
+    Post newPost = new Post();
+    newPost.setTitle(post.getTitle());
+    newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
+    newPost.setState(false);
+    newPost.setCreatedAt(LocalDateTime.now());
+    newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setCategory(foundCategory);
+
+
+    return postRepository.save(newPost);
+  }
+
+  // 임시 저장 글 불러오기 ( save Posts Pull )
+//  public Post savePostPull(Post post){
+//
+//  }
 
 
   public PostResponse findPost() {

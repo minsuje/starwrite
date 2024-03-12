@@ -26,7 +26,11 @@ public class Post {
 
     private String content;
 
+    private String visible;
+
     private String img;
+
+    private boolean state;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -34,6 +38,6 @@ public class Post {
     @Relationship(type = "RELATED", direction = Direction.OUTGOING)
     private List<Post> relatedPost;
 
-    @Relationship(type = "IS_CHILD", direction = Direction.OUTGOING)
+    @Relationship(type = "IS_CHILD", direction = Direction.INCOMING)
     private Category category;
 }
