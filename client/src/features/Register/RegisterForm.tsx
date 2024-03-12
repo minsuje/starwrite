@@ -40,6 +40,7 @@ const schema = z
     message: '비밀번호가 일치하지 않습니다.',
   });
 
+// RegisterForm
 function RegisterForm() {
   // react-hook-form
   const {

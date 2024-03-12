@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Editor, NewPostHeadFeat } from '../../features/NewPost';
+import { useState } from 'react';
 
 const _EditorBox = styled.div`
   display: flex;
@@ -17,9 +18,11 @@ const _EditorDiv = styled.div`
 `;
 
 function NewPostWid() {
+  const [openSaving, setOpenSaving] = useState<boolean>(false);
   return (
     <_EditorBox>
-      <NewPostHeadFeat />
+      {openSaving && <>안녕</>}
+      <NewPostHeadFeat openSaving={() => setOpenSaving(!openSaving)} />
       <_EditorDiv>
         <Editor />
       </_EditorDiv>
