@@ -1,26 +1,28 @@
 package starwrite.server.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Category;
-import starwrite.server.entity.Post;
 import starwrite.server.repository.CategoryRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
 
-  private final CategoryRepository categoryRepository;
-
   @Autowired
-  public CategoryService(CategoryRepository categoryRepository) {
-    this.categoryRepository = categoryRepository;
-  }
+  CategoryRepository categoryRepository;
+
+//  private final CategoryRepository categoryRepository;
+//
+//  @Autowired
+//  public CategoryService(CategoryRepository categoryRepository) {
+//    this.categoryRepository = categoryRepository;
+//  }
 
 
-  public Category getPosts(Long id) {
+  public Category getPosts(String id) {
     System.out.println("category getPosts id >>>>>>>> " + id);
     System.out.println(
         "category getPost type id >>>>>>>>>>>>>>>>>>>>" + id.getClass().getTypeName());
@@ -35,11 +37,10 @@ public class CategoryService {
 
 
   public Category addCategory(Category category) {
+    category.setCreatedAt(LocalDateTime.now());
+    category.setUpdatedAt(category.getCreatedAt());
 
-    String name = category.getName();
-    System.out.println(name);
-    return categoryRepository.createCategory(name);
-
+    return categoryRepository.save(category);
   }
 
   public Category updateCategory(Category category) {
@@ -54,7 +55,7 @@ public class CategoryService {
     return category;
   }
 
-  public void deleteCategory(Long id) {
+  public void deleteCategory(String id) {
     categoryRepository.deleteById(id);
   }
 }

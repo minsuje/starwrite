@@ -6,17 +6,16 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import starwrite.server.entity.Post;
-import starwrite.server.response.PostResponse;
 
 @Repository
-public interface PostRepository extends Neo4jRepository<Post, Long> {
+public interface PostRepository extends Neo4jRepository<Post, String> {
 
   @Query("MATCH (p:Post) " +
           "MATCH (u : User) " +
           "MATCH (c:Category)-[]->(p) " +
           "WHERE p.state = true AND ID(u) = $userid AND p.public = true " +
           "RETURN p")
-  List<Post> findAllPosts(@Param(value = "userid") Long userid);
+  List<Post> findAllPosts(@Param(value = "userid") String userid);
 
 
   @Query("MATCH (p:Post) " +
@@ -24,7 +23,7 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
           "MATCH (c:Category)-[]->(p) " +
           "WHERE p.state = true AND ID(u) = $userid AND u.public = part " +
           "RETURN p")
-  List<Post> findPartPosts(@Param(value = "userid") Long userid);
+  List<Post> findPartPosts(@Param(value = "userid") String userid);
 
 
 //  @Query("MATCH (p:Post) " +
@@ -40,13 +39,13 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
 //  Post createPost(String title, String content, Long categoryId);
 
   @Query("MATCH (p:Post) WHERE ID(p) = $id RETURN p")
-  Post findPostById(@Param(value = "id") Long id);
+  Post findPostById(@Param(value = "id") String id);
 
   // 모든 임시 저장 post( All save Post pull )
   @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
           "WHERE p.state = false AND ID(p) = $id " +
           "RETURN p")
-  List<Post> findSavePost(@Param(value = "id") Long id);
+  List<Post> findSavePost(@Param(value = "id") String id);
 
 }
 

@@ -1,5 +1,6 @@
 package starwrite.server.controller;
 
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,9 @@ public class UsersController {
     public Users createUser(@RequestBody Users user) {
         // db에 넣기 전에 비밀번화 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(user.getCreatedAt());
         return usersRepository.save(user);
     }
 

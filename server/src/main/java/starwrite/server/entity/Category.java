@@ -1,16 +1,13 @@
 package starwrite.server.entity;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import org.springframework.data.neo4j.core.schema.Relationship.Direction;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +16,8 @@ import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 public class Category {
 
     @Id
-    @GeneratedValue
-    private Long categoryId;
+    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    private String categoryId;
 
     private String name;
 

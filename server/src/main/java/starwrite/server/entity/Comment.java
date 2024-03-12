@@ -7,13 +7,14 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Data
 @Node("Comment")
 public class Comment {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    private String id;
 
     private String content;
 
@@ -24,7 +25,7 @@ public class Comment {
     private Post post;
 
     @Relationship(type = "COMMENT", direction = Direction.INCOMING)
-    private GraphUser user;
+    private Users user;
 
     @Relationship(type = "REPLY", direction = Direction.INCOMING)
     private Comment parent;
