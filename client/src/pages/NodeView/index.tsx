@@ -1,2 +1,1 @@
-export type { SearchTypes } from './ui/NodeViewPage/NodeViewPage';
-
+// export type { SearchTypes } from './ui/NodeViewPage/NodeViewPage';

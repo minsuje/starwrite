@@ -4,7 +4,7 @@ interface SmallButtonProps {
   bgcolor?: string; // bgColor 속성 추가
 }
 // 버튼 스타일
-export const SmallButton = styled.button<SmallButtonProps>`
+export const _SmallButton = styled.button<SmallButtonProps>`
   width: 100px;
   height: 40px;
   background-color: ${(props) => props.bgcolor || 'blue'};
@@ -61,7 +61,7 @@ export const InputBox = styled.div`
 `;
 
 // 메인 뷰 Title
-export const Title = styled.div`
+export const _Title = styled.div`
   display: flex;
   color: red;
 `;
