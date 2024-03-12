@@ -18,7 +18,7 @@ export const _SmallButton = styled.button<SmallButtonProps>`
 export const MediumButton = styled.button`
   width: 200px;
   height: 40px;
-  background-color: #1361d7;
+  background-color: ${(props) => props.bgcolor || 'blue'};
   color: white;
   border: none;
   &:hover {

@@ -1,26 +1,30 @@
 package starwrite.server.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+import starwrite.server.enums.Role;
 
-@Entity
-@EntityListeners(AuditingEntityListener.class) // 엔티티를 DB에 적용하기 전, 이후에 커스텀 콜백을 요청할 수 있는 어노테이션
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Node("Users")
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    private String userId;
 
     private String login_type;
 
-    private String email;
+    private String mail;
+
+    private String socialId;
 
     private String password;
 
@@ -28,14 +32,13 @@ public class Users {
 
     private String nickname;
 
-    private String role;
+    private Role role;
 
     private String access_token;
 
     private String refresh_token;
 
-    @CreatedDate
-    private LocalDateTime created_at;
-    @LastModifiedDate
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

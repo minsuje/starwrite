@@ -1,33 +1,28 @@
 package starwrite.server.entity;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("category")
+@Node("Category")
 public class Category {
+
     @Id
-    @GeneratedValue
-    Long categoryId;
-    String name;
-    String owner;
-    int postCnt;
-    LocalDateTime createdAt = LocalDateTime.now();
-    LocalDateTime updatedAt = createdAt;
+    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    private String categoryId;
 
-//    @Relationship (type = "POSTED", direction = Relationship.Direction.INCOMING)
-    private List<Post> posts = new ArrayList<>();
+    private String name;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

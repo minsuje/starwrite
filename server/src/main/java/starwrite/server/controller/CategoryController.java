@@ -27,13 +27,14 @@ public class CategoryController {
        return categoryService.addCategory(category);
    }
 
+
    @PutMapping
    public Category updateCategory(@RequestBody Category category)  {
        return categoryService.updateCategory(category);
    }
 
    @DeleteMapping("/category/{categoryId}")
-   public void deleteCategory(@PathVariable Long categoryId){
+   public void deleteCategory(@PathVariable String categoryId){
        categoryService.deleteCategory(categoryId);
    }
 

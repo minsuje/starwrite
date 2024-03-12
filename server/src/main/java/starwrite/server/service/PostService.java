@@ -1,44 +1,76 @@
 package starwrite.server.service;
 
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
+import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
-    private final PostRepository postRepository;
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+  private final PostRepository postRepository;
+  private final CategoryRepository categoryRepository;
 
-    public List<Post> getAllPosts(){
-        return postRepository.findAll();
-    }
+  @Autowired
+  public PostService(PostRepository postRepository, CategoryRepository categoryRepository) {
+    this.postRepository = postRepository;
+    this.categoryRepository = categoryRepository;
+  }
 
-    public Post addPost(Post post){
-        return postRepository.save(post);
-    }
+  // 모든 글 찾기 ( find All Posts)
+//  public List<Post> getAllPosts() {
+//    return postRepository.findAllPosts();
+//  }
 
-    public Post updatePost(Post post)  {
-        Optional<Post> postFromDB=  postRepository.findById(post.getId());
-        if(postFromDB.isPresent()){
-            Post postFromDBVal = postFromDB.get();
-            // postFromDBVal.setPosts(post.getBooks());
-            // postFromDBVal.setName(post.getName());
-            postRepository.save(postFromDBVal);
-        }else{
-            return null;
-        }
-        return post;
-    }
+  // 글 작성 ( write Post )
+  public Post createPost(Post post) {
 
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
-    }
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+
+
+    Post newPost = new Post();
+    newPost.setTitle(post.getTitle());
+    newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
+    newPost.setState(true);
+    newPost.setCreatedAt(LocalDateTime.now());
+    newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setCategory(foundCategory);
+
+
+    return postRepository.save(newPost);
+  }
+
+
+  // 글 임시 저장 ( save Posts )
+  public Post savePost(Post post){
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+
+    Post newPost = new Post();
+    newPost.setTitle(post.getTitle());
+    newPost.setContent(post.getContent());
+    newPost.setVisible(post.getVisible());
+    newPost.setState(false);
+    newPost.setCreatedAt(LocalDateTime.now());
+    newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setCategory(foundCategory);
+
+
+    return postRepository.save(newPost);
+  }
+
+  // 임시 저장 글 불러오기 ( save Posts Pull )
+//  public Post savePostPull(Post post){
+//
+//  }
+
+
+//  public PostResponse findPost() {
+//    return postRepository.findPost();
+//  }
+
+
 }

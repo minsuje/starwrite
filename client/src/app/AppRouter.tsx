@@ -5,6 +5,10 @@ import { NodeViewPage } from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import { HeaderWid } from '../widgets/header/index';
 import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
 
+import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import { ListViewMainEnt } from '../features/ListView';
+import NewPostPage from '../pages/NewPost/NewPostPage';
+
 export const AppRouter = createBrowserRouter([
   {
     children: [
@@ -72,30 +76,39 @@ export const AppRouter = createBrowserRouter([
           },
           // 글쓰기 페이지
           {
-            path: 'wirtenewpost/',
+            path: 'writenewpost',
             element: (
               <>
-                <div>글쓰기페이진디유? ?</div>
+                <NewPostPage />
               </>
             ),
           },
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/:userid_num',
+            path: 'listview',
             element: (
               <>
-                <ListView content="main" />
+                <ListView />
               </>
             ),
-          },
-          // 하나의 글 페이지
-          {
-            path: 'listviewdetail/:post_id',
-            element: (
-              <>
-                <div>하나의 글 페이진디유?</div>
-              </>
-            ),
+            children: [
+              {
+                path: 'main/:category',
+                element: (
+                  <>
+                    <ListViewMainEnt></ListViewMainEnt>
+                  </>
+                ),
+              },
+              {
+                path: 'detail/:postId',
+                element: (
+                  <>
+                    <div>글 하나 상세 조회</div>
+                  </>
+                ),
+              },
+            ],
           },
         ],
       },
