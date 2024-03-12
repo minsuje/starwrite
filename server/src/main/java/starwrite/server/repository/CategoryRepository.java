@@ -10,7 +10,6 @@ import starwrite.server.entity.Post;
 
 @Repository
 public interface CategoryRepository extends Neo4jRepository<Category, Long> {
-
   @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
   List<Post> findPostsByCategory(Long categoryId);
 
@@ -21,7 +20,8 @@ public interface CategoryRepository extends Neo4jRepository<Category, Long> {
       "RETURN c")
   List<Category> getAllCategory();
 
-  @Query("CREATE (c:Category{name:$name,createdAt: localdatetime(), updatedAt: localdateTime()}) " +
+  @Query("CREATE (c:Category{ name: $name, createdAt: localdatetime(), updatedAt: localdateTime()}) " +
       "RETURN c")
-  Category createCategory(String name);
+  Category createCategory(@Param(value = "name") String name);
+
 }

@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import starwrite.server.entity.Post;
+import starwrite.server.response.PostResponse;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, Long> {
@@ -16,6 +17,7 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
           "WHERE p.state = true AND ID(u) = $userid AND p.public = true " +
           "RETURN p")
   List<Post> findAllPosts(@Param(value = "userid") Long userid);
+
 
   @Query("MATCH (p:Post) " +
           "MATCH (u : User) " +
@@ -45,5 +47,6 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
           "WHERE p.state = false AND ID(p) = $id " +
           "RETURN p")
   List<Post> findSavePost(@Param(value = "id") Long id);
+
 }
 

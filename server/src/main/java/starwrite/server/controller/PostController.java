@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import starwrite.server.entity.Post;
+import starwrite.server.response.PostResponse;
 import starwrite.server.service.PostService;
 
 @RestController
@@ -28,6 +29,13 @@ public class                                                                    
     return postService.createPost(post);
   }
 
+
+  @GetMapping("test")
+  public PostResponse findPost() {
+    return postService.findPost();
+  }
+
   @PostMapping("save")
   public Post savePost(@RequestBody Post post) { return postService.savePost(post);}
+
 }

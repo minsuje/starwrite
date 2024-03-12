@@ -35,7 +35,11 @@ public class CategoryService {
 
 
   public Category addCategory(Category category) {
-    return categoryRepository.createCategory(category.getName());
+
+    String name = category.getName();
+    System.out.println(name);
+    return categoryRepository.createCategory(name);
+
   }
 
   public Category updateCategory(Category category) {
