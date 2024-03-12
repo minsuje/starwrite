@@ -1,4 +1,5 @@
 // 카테고리 데이터
-const list: string[] = ['전체', '임시저장', '스크랩'];
-list.push('과학');
-export { list };
+const initalList: string[] = ['전체', '스크랩'];
+const categories: string[] = ['과학', '수학'];
+const list: string[] = [...initalList, ...categories];
+export { list, categories };
