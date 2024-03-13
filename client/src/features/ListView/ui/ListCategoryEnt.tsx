@@ -6,8 +6,10 @@ import { list } from '../model/CategoryData';
 function ListCategory() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<string[]>(['전체']);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
   const selected = (category: string) => {
     navigate(`/starwrite/listview/main/${category}`);
+    setSelectedCategory(category);
   };
 
   useEffect(() => {
@@ -19,16 +21,30 @@ function ListCategory() {
       <ListCategories>
         {!(categories.length === 0) &&
           categories.map((category, idx) => {
-            return (
-              <OneCategory
-                key={idx}
-                onClick={() => {
-                  selected(category);
-                }}
-              >
-                {category}
-              </OneCategory>
-            );
+            if (category !== selectedCategory) {
+              return (
+                <OneCategory
+                  key={idx}
+                  onClick={() => {
+                    selected(category);
+                  }}
+                >
+                  {category}
+                </OneCategory>
+              );
+            } else {
+              return (
+                <OneCategory
+                  color={'0.9'}
+                  key={idx}
+                  onClick={() => {
+                    selected(category);
+                  }}
+                >
+                  {category}
+                </OneCategory>
+              );
+            }
           })}
       </ListCategories>
     </>

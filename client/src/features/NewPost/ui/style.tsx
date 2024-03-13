@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import { Input } from '../../../shared/CommonStyle';
 // 스타일
-export const OneCategory = styled.div`
+const OneCategory = styled.div`
   width: 80%;
   margin: 0px auto;
   text-align: center;
   padding: 15px 0px;
   background-color: var(--color-zinc-700);
-  opacity: 0.7;
+
+  opacity: ${(props) => props.color || '0.5'};
 
   &:hover {
     opacity: 0.9;
@@ -14,20 +16,7 @@ export const OneCategory = styled.div`
   }
 `;
 
-export const _SelectedCategory = styled.div`
-  width: 80%;
-  margin: 0px auto;
-  text-align: center;
-  padding: 15px 0px;
-  background-color: #3c3c3c;
-
-  &:hover {
-    background-color: #3c3c3c;
-    cursor: pointer;
-  }
-`;
-
-export const ListCategories = styled.div`
+const ListCategories = styled.div`
   width: 90%;
   height: 100%;
   margin: auto;
@@ -36,3 +25,23 @@ export const ListCategories = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
+
+const _EditorHead = styled.div`
+  width: 90%;
+  background-color: #202020;
+  padding: 2% 5%;
+  display: flex;
+  justify-content: ${(props) => props.content || 'space-between'};
+  align-items: center;
+  gap: 15px;
+  p {
+    font-size: 15px;
+  }
+`;
+
+const _TitleInput = styled(Input)`
+  background-color: #202020;
+  font-size: 20px;
+`;
+
+export { _TitleInput, _EditorHead, ListCategories, OneCategory };
