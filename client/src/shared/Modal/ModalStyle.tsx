@@ -10,7 +10,7 @@ export const _ModalBg = styled.div`
 `;
 
 export const _Modal = styled.div`
-  background-color: #303236f6;
+  background-color: var(--color-zinc-800);
   padding-bottom: 10px;
   display: flex;
   align-items: center;
@@ -24,5 +24,4 @@ export const _Modal = styled.div`
   left: 50%;
   border-radius: 10px;
   transform: translateX(-50%);
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
 `;

@@ -15,7 +15,7 @@ const _listBox = styled.div`
 
 const _postBox = styled.div`
   padding: 25px 20px;
-  background-color: #242424;
+  background-color: var(--color-zinc-800);
   border-radius: 3px;
   display: flex;
   flex-direction: column;
@@ -24,11 +24,11 @@ const _postBox = styled.div`
   text-decoration-line: none;
   h1 {
     font-size: 20px;
-    color: #dfdfdf;
+    color: var(--color-zinc-300);
   }
   p {
     font-size: 13px;
-    color: #9f9d9d;
+    color: var(--color-zinc-500);
   }
   &:hover {
     opacity: 0.8;

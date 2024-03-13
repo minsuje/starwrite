@@ -1,24 +1,6 @@
-import styled from 'styled-components';
 import savePost from '../lib/savePost';
 import { categories } from '../../ListView/model/CategoryData';
-import { Input } from '../../../shared/CommonStyle';
-
-const _EditorHead = styled.div`
-  width: 90%;
-  background-color: #202020;
-  padding: 2% 5%;
-  display: flex;
-  justify-content: ${(props) => props.content || 'space-between'};
-  align-items: center;
-  gap: 15px;
-  p {
-    font-size: 15px;
-  }
-`;
-const _TitleInput = styled(Input)`
-  background-color: #202020;
-  font-size: 20px;
-`;
+import { _EditorHead, _TitleInput } from './style';
 
 type openSaving = () => void;
 function NewPostHeadFeat({ openSaving }: { openSaving: openSaving }) {
