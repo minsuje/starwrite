@@ -8,16 +8,16 @@ export function CategoryViewWid({ searchTerm }: any) {
   const { userid_num } = useParams();
   const svgRef = useRef<SVGSVGElement>(null);
   const [viewportSize, setViewportSize] = useState({
-    width: window.innerWidth - 100,
-    height: window.innerHeight - 100,
+    width: window.innerWidth,
+    height: window.innerHeight,
   });
 
   useEffect(() => {
     // 화면 크기 변화 감지를 위한 resize 이벤트 리스너 등록
     const handleResize = () => {
       setViewportSize({
-        width: window.innerWidth - 100,
-        height: window.innerHeight - 100,
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
     };
 
@@ -42,10 +42,33 @@ export function CategoryViewWid({ searchTerm }: any) {
     (svg as any).call(zoomHandler); // 줌 핸들러를 SVG 요소에 적용
 
     // 초기 줌 스케일 설정 (예: 0.8로 줌 아웃)
-    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.7));
+    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.6));
+
+    // 드래그 이벤트 핸들러 생성
+    // 노드에 드래그 기능 적용
+    const dragHandler = d3
+      .drag<SVGImageElement, any>()
+      .on('start', function (event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', function (event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', function (event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      });
+
+    // 요소에 드래그 기능 연결
 
     const node = group
-      .selectAll('g')
+
+      .selectAll('.node')
+      .attr('class', 'node')
       .data(nodes)
       .enter()
       .append('g')
@@ -53,9 +76,10 @@ export function CategoryViewWid({ searchTerm }: any) {
       .style('cursor', 'pointer')
       .on('click', (_, d) => {
         if (d.url) {
-          navigate('/starwrite/nodeview/:userid_num/:category');
+          navigate('/user/starwrite/nodeview/:userid_num/:category');
         }
-      });
+      })
+      .call(dragHandler);
 
     node.append('circle').attr('r', 26).attr('fill', 'skyblue');
 
@@ -70,6 +94,7 @@ export function CategoryViewWid({ searchTerm }: any) {
       .forceSimulation(nodes)
       .force('charge', d3.forceManyBody().strength(-20));
 
+    // 각각 노드들 중앙 정렬
     simulation.force(
       'center',
       d3.forceCenter(viewportSize.width / 1.2, viewportSize.height / 1.5),

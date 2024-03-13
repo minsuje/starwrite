@@ -11,8 +11,8 @@ export type SearchType = {
 export const NodeView = ({ searchTerm }: SearchType) => {
   const svgRef = useRef(null);
   const [dimensions, setDimensions] = useState({
-    width: window.innerWidth - 1,
-    height: window.innerHeight - 1,
+    width: window.innerWidth,
+    height: window.innerHeight,
   });
 
   //
@@ -22,8 +22,8 @@ export const NodeView = ({ searchTerm }: SearchType) => {
   useEffect(() => {
     function handleResize() {
       setDimensions({
-        width: window.innerWidth - 1,
-        height: window.innerHeight - 1,
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
     }
 
@@ -35,7 +35,6 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     };
   }, []);
 
-  //드래그 핸들러
   function drag(simulation: d3.Simulation<CustomNode, undefined>) {
     return d3
       .drag<SVGImageElement, CustomNode>()
@@ -122,14 +121,15 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove(); // 기존의 모든 SVG 요소 제거
 
-    const width = +svg.attr('width');
-    const height = +svg.attr('height');
+    const ZommGroup = svg.append('g').attr('class', 'zoom-group');
 
     const zoomHandler = d3.zoom().on('zoom', (event) => {
-      svg.selectAll('g').attr('transform', event.transform);
+      ZommGroup.attr('transform', event.transform);
     });
     // 확대/축소 기능을 SVG에 적용
     (svg as any).call(zoomHandler);
+
+    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.7));
 
     // 시뮬레이션 설정
     // const simulation = d3
@@ -149,15 +149,17 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .forceSimulation(nodes)
       .force(
         'link',
-
         d3
           .forceLink<CustomNode, Link>(links)
           .id((d) => d.id)
           // 링크 선 길이 조절
           .distance(100),
       ) // 링크 거리 조절
-      .force('charge', d3.forceManyBody().strength(-5)) // 노드 간 반발력 조절
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('charge', d3.forceManyBody().strength(-20)) // 노드 간 반발력 조절
+      .force(
+        'center',
+        d3.forceCenter(window.innerWidth / 2, window.innerHeight / 4),
+      )
       .alphaDecay(0.0228); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
     // .on('tick', ticked);
     // 링크 그리기
@@ -168,7 +170,8 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .data(links)
       .enter()
       .append('line')
-      .attr('stroke-width', (d) => Math.sqrt(d.value ?? 1))
+      // 선의 굵기 조절
+      .attr('stroke-width', (d) => Math.sqrt(d.value ?? 3))
       .attr('stroke', '#fff')
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
@@ -304,6 +307,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
   //     }
   //   }
   // }, [searchTerm]); // searchTerm이 변경될 때만 이 useEffect가 실행됩니다.
+
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const nodeSelection = svg.selectAll('.nodes image');
@@ -323,12 +327,18 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     }
   }, [searchTerm]);
 
+  console.log('svgref', svgRef);
   return (
     <svg
       ref={svgRef}
       width={dimensions.width}
       height={dimensions.height}
-      style={{ border: '1px solid black', background: 'black' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        position: 'fixed',
+        width: '100%',
+      }}
     ></svg>
   );
 };

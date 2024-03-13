@@ -13,6 +13,7 @@
     "@blocknote/core": "^0.12.0",
     "@blocknote/react": "^0.12.0",
     "@hookform/resolvers": "^3.3.4",
+    "axios": "^1.6.7",
     "d3": "^7.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
