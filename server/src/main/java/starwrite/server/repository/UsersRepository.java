@@ -20,12 +20,10 @@ public interface UsersRepository extends
     @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u.userId")
     String findUserById(@Param(value = "userId") String userId);
 
-  @Query("MATCH (u:Users) WHERE u.mail = $mail RETURN u LIMIT 1")
-  Users findUserByEmail(@Param(value = "mail") String mail);
+    @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u LIMIT 1")
+    Users findUserByUserId(@Param(value = "userId") String userId);
 
-  @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u LIMIT 1")
-  Users findUserByUserId(@Param(value = "userId") String userId);
-
-
+    @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.userId")
+    String findUserByNickname(@Param(value = "nickname") String nickname);
 }
 
