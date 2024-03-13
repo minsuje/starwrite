@@ -5,8 +5,9 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import starwrite.server.dto.PostRelationDTO;
+import org.stringtemplate.v4.ST;
 import starwrite.server.entity.Post;
+import starwrite.server.response.GetPosts;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, String> {
@@ -16,35 +17,39 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           "MATCH (u : Users) " +
           "MATCH (c:Category)-[r]->(p) " +
           "WHERE p.tmpSave = false AND u.userId = $userId " +
-          "RETURN p")
-  List<Post> findAllPosts(@Param(value = "userId") String userId);
+          "RETURN collect(p) AS post, type(r) as relationType")
+  GetPosts findAllPosts(@Param(value = "userId") String userId);
 
-  @Query("MATCH (c:Category)-[r]->(p:Post) " +
-      "MATCH (u: Users) " +
-      "WHERE p.tmpSave = false AND u.userId = $userId " +
-      "RETURN type(r)"
-  )
-  List<PostRelationDTO> findRelation(@Param(value = "userId") String userId);
+  // 해당 카테고리의 모든 포스트 조회
+  @Query("MATCH (p:Post) " +
+      "MATCH (u : Users) " +
+      "MATCH (c:Category)-[r]->(p) " +
+      "WHERE p.tmpSave = false AND u.userId = $userId AND c.categoryId = $categoryId " +
+      "RETURN collect(p) AS post, type(r) as relationType")
+  GetPosts findAllPostsByCategory(@Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
 
-
+  // 특정 유저의 해당 카테고리의 모든 글 조회
 
 
   // 비공개 글을 제외하고 표시 (without pub post)
   @Query("MATCH (p:Post) " +
           "MATCH (u : User) " +
-          "MATCH (c:Category)-[]->(p) " +
+          "MATCH (c:Category)-[r]->(p) " +
           "WHERE p.tmpSave = false AND u.userId = $userId AND p.visible = pub " +
-          "RETURN p")
-  List<Post> findPubPosts(@Param(value = "userId") String userId);
+          "RETURN collect(p) AS Post, type(r) as relationType")
+  GetPosts findPubPosts(@Param(value = "userId") String userId);
 
+  // 상대방 카테고리에 해당하는 모든 포스트 표시
+//  @Query("MATCH (")
 
-
-  // 모든 포스트 중에서 해당 카테고리의 해당 이름의 특정 포스트만 리턴
+  // 내 모든 포스트 중에서 해당 카테고리의 해당 이름의 특정 포스트만 리턴
 //  @Query("MATCH (p:Post) " +
 //      "MATCH (u : Users) " +
 //      "MATCH (c:Category)-[r]->(p) " +
-//      "WHERE p.tmpSave = false AND u.userId = $userId AND c.name = $name " +
+//      "WHERE p.tmpSave = false AND u.userid = $userid AND c.name = $name " +
 //      "RETURN p")
+//  Post findDetailPost(@Param(value = "userid") String userid, @Param(value = "name") String name);
+
 
 //  @Query("MATCH (p:Post) " +
 //          "MATCH (u : User) " +
