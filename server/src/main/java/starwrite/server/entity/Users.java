@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -16,6 +17,7 @@ import starwrite.server.enums.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 @Node("Users")
+@EqualsAndHashCode(of = "userId")
 public class Users {
 
     @Id
@@ -46,4 +48,5 @@ public class Users {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
 }
