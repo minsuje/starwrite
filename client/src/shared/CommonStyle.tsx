@@ -65,3 +65,10 @@ export const _Title = styled.div`
   display: flex;
   color: red;
 `;
+
+// 메인 뷰 Profile
+// export const _Profile = styled.div`
+//   width: 50px;
+//   color: red;
+//   border-radius: 50%;
+// `;

@@ -1,11 +1,9 @@
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import RegisterPage from '../pages/Register/RegisterPage';
 import ListView from '../pages/ListView/ListViewPage';
-import { NodeViewPage } from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import { NodeViewPage } from '../pages/NodeView/NodeViewPage';
 import { HeaderWid } from '../widgets/header/index';
 import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
-
-import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import { ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 
@@ -40,7 +38,7 @@ export const AppRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/starwrite',
+        path: '/user/starwrite',
         element: (
           <>
             <HeaderWid />
