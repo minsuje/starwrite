@@ -24,8 +24,8 @@ const _Box = styled.form`
 
 const _ErrorMsg = styled.p`
   color: #ffafaf;
-  font-size: 10px;
-  padding-top: 0px;
+  font-size: 12px;
+  padding-top: 2px;
 `;
 
 const _ButtonBox = styled.div`
@@ -53,7 +53,7 @@ const schema = z.object({
   category: z.string().min(1, { message: '입력해주세요' }),
 });
 
-function AddCategory({ onclick }: { onclick: closeModal }) {
+function GetSavings({ onclick }: { onclick: closeModal }) {
   // react-hook-form
   const {
     register, // input 할당, value 변경 감지
@@ -75,10 +75,8 @@ function AddCategory({ onclick }: { onclick: closeModal }) {
           <_Box onSubmit={handleSubmit(onValid)}>
             <label htmlFor="newCategory">카테고리 추가</label>
             <input placeholder="카테고리 명" {...register('category')}></input>
-            {errors.category && typeof errors.category.message === 'string' ? (
+            {errors.category && typeof errors.category.message === 'string' && (
               <_ErrorMsg>{errors.category.message}</_ErrorMsg>
-            ) : (
-              <_ErrorMsg></_ErrorMsg>
             )}
 
             <_ButtonBox>
@@ -100,4 +98,4 @@ function AddCategory({ onclick }: { onclick: closeModal }) {
   );
 }
 
-export default AddCategory;
+export default GetSavings;
