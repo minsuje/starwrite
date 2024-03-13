@@ -1,25 +1,26 @@
 import { Profile } from '../../shared/Profile';
 // import { Title } from '../../shared/Title';
-import { SmallButton } from '../../shared/CommonStyle';
+import { _SmallButton } from '../../shared/CommonStyle';
 // import { SearchFeat } from '../../features/index';
-import { SearchTypes } from '../../pages/NodeView/index';
+// import { SearchTypes } from '../../pages/NodeView/index';
 import { TitleFeat } from '../../features/index';
 
-export function Header() {
+export function HeaderWid() {
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        marginBottom: '50px',
       }}
     >
       <div>
         <TitleFeat />
       </div>
       <div>
-        <SmallButton bgcolor="#212121">카테고리뷰</SmallButton>
-        <SmallButton bgcolor="#212121">노드 뷰</SmallButton>
+        <_SmallButton bgcolor="#212121">리스트 뷰</_SmallButton>
+        <_SmallButton bgcolor="#212121">노드 뷰</_SmallButton>
       </div>
       <div style={{ display: 'flex' }}>
         <Profile />

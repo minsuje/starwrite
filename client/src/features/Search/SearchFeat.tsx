@@ -1,57 +1,127 @@
-import React, { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { IoIosSearch } from 'react-icons/io';
-import { SearchTypes } from '../../pages/NodeView/index';
-
+import { nodes } from '../../widgets/CategoryView/index';
+import './SearchFeat.css';
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
 };
 
 export const SearchFeat = ({ onSearch }: SearchTypes) => {
-  // const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
+  const searchRef = useRef(null);
+
+  // useEffect(() => {
+  //   function handleClickOutside(event: any) {
+  //     if (searchRef.current && !searchRef.current.contains(event.target)) {
+  //       setToggleSearch(false);
+  //     }
+  //   }
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [searchRef]);
+
+  // console.log(searchRef);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
-    // setSearchTerm(newSearchTerm); // 입력된 검색어 상태 업데이트
-    onSearch(newSearchTerm); // 입력된 검색어로 검색 수행
+    setSearchTerm(newSearchTerm);
+    onSearch(newSearchTerm);
+
+    // 검색어가 있고, 필터링된 결과가 있을 때만 목록을 표시
+    if (
+      newSearchTerm.trim() &&
+      nodes.filter((node) =>
+        node.label.toLowerCase().includes(newSearchTerm.toLowerCase()),
+      ).length
+    ) {
+      setToggleSearch(true);
+    } else {
+      return (
+        <li style={{ padding: '15px', color: '#ffff' }}>
+          검색 결과가 없습니다.
+        </li>
+      );
+    }
   };
 
+  const handleItemClick = (label: string) => {
+    setSearchTerm(label);
+    setToggleSearch(false);
+  };
+
+  const handleInputClick = () => {
+    setToggleSearch(true);
+  };
+
+  const filterSearch = nodes.filter((node) =>
+    node.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
-    <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '50px',
-        }}
-      >
-        <div style={{ position: 'relative' }}>
-          <input
-            type="text"
-            // value={searchTerm}
-            onChange={handleChange}
-            style={{
-              paddingRight: '30px',
-              position: 'relative',
-              height: '40px',
-              width: '500px',
-              paddingLeft: '10px',
-              background: '#212121',
-              color: '#ffff',
-            }}
-            placeholder="노드를 입력해주세요"
-          />
-          <IoIosSearch
+    <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
+      <div style={{ position: 'relative' }}>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleChange}
+          onFocus={handleInputClick}
+          style={{
+            paddingRight: '30px',
+            position: 'relative',
+            height: '40px',
+            width: '500px',
+            paddingLeft: '10px',
+            background: '#212121',
+            color: '#ffff',
+          }}
+          placeholder="노드를 입력해주세요"
+        />
+        <IoIosSearch
+          style={{
+            position: 'absolute',
+            right: '10px',
+            top: '22px',
+            transform: 'translateY(-50%)',
+            color: '#ffff',
+          }}
+        ></IoIosSearch>
+        {toggleSearch && (
+          <ul
             style={{
               position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#ffff',
+              left: 0,
+              right: 0,
+              overflow: 'auto',
+              height: 'fit-content',
+              maxHeight: '250px',
+              zIndex: 1000,
+              backgroundColor: `rgba(0, 0, 0, 0.8)`,
             }}
-          ></IoIosSearch>
-        </div>
+          >
+            {filterSearch.length > 0 ? (
+              filterSearch.map((item, index) => (
+                <li
+                  key={index}
+                  style={{ padding: '15px', cursor: 'pointer', color: '#ffff' }}
+                  onClick={() => handleItemClick(item.label)}
+                  className="searchItem"
+                >
+                  {item.label}
+                </li>
+              ))
+            ) : (
+              <li style={{ padding: '15px', color: '#ffff' }}>
+                검색 결과가 없습니다.
+              </li>
+            )}
+          </ul>
+        )}
       </div>
-    </>
+    </div>
   );
 };
-export default SearchFeat;

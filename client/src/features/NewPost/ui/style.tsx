@@ -5,10 +5,11 @@ export const OneCategory = styled.div`
   margin: 0px auto;
   text-align: center;
   padding: 15px 0px;
-  background-color: #2c2c2c64;
+  background-color: #3c3c3c;
+  opacity: 0.7;
 
   &:hover {
-    background-color: #3c3c3c;
+    opacity: 0.9;
     cursor: pointer;
   }
 `;
