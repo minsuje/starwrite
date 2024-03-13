@@ -12,7 +12,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
   List<Post> findPostsByCategory(String categoryId);
 
-  @Query("MATCH (c:Category) WHERE ID(c) = $id RETURN c LIMIT 1")
+  @Query("MATCH (c:Category) WHERE c.categoryId = $id RETURN c LIMIT 1")
   Category findCategoryById(@Param(value = "id") String id);
 
   @Query("MATCH (c:Category)" +

@@ -19,7 +19,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 public class Post {
     @Id
     @GeneratedValue(generatorClass = UUIDStringGenerator.class)
-    private String id;
+    private String postId;
 
     private String title;
 
@@ -29,7 +29,7 @@ public class Post {
 
     private String img;
 
-    private boolean state;
+    private boolean tmpSave;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -39,4 +39,7 @@ public class Post {
 
     @Relationship(type = "IS_CHILD", direction = Direction.INCOMING)
     private Category category;
+
+    @Relationship(type = "POSTED", direction = Direction.INCOMING)
+    private Users users;
 }

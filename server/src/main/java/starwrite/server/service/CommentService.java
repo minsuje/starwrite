@@ -27,7 +27,7 @@ public class CommentService {
 
   public Comment createPostComment(Comment comment) {
     System.out.println("comment postid >>>>>>>>>>>>>>>>>>>>>>>>>" + comment.getPost());
-    Post foundPost = postRepository.findPostById(comment.getPost().getId());
+    Post foundPost = postRepository.findPostById(comment.getPost().getPostId());
     System.out.println("foundPost >>>>>>>>>>" + foundPost);
 
     Comment newComment = new Comment();
