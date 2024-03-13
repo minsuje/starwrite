@@ -14,7 +14,7 @@ const _CategoryBar = styled.div`
   align-items: center;
 `;
 const _CategoryContent = styled.div`
-  width: 100%;
+  width: 60%;
   background-color: #42424266;
   padding: 20px 30px;
 `;

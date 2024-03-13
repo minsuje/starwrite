@@ -5,7 +5,7 @@ export const OneCategory = styled.div`
   margin: 0px auto;
   text-align: center;
   padding: 15px 0px;
-  background-color: #3c3c3c;
+  background-color: var(--color-zinc-700);
   opacity: 0.7;
 
   &:hover {

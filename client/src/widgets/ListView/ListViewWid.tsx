@@ -22,7 +22,6 @@ function ListViewWid() {
           <AddCategory
             onclick={() => {
               setCategoryModal(false);
-              console.log(categoryModal);
             }}
           ></AddCategory>
         )}

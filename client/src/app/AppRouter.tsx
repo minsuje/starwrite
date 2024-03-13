@@ -4,8 +4,6 @@ import ListView from '../pages/ListView/ListViewPage';
 import { NodeViewPage } from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import { HeaderWid } from '../widgets/header/index';
 import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
-
-import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
 import { ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 
