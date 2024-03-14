@@ -7,7 +7,9 @@ import starwrite.server.entity.Post;
 import starwrite.server.entity.Users;
 
 @Data
+// post 정보와 relationShip 타입만 가져오기
 public class GetPosts {
   private List<Post> post;
-  private String relationType;
+  private String categoryRelationType;
+  private String usersRelationType;
 }
