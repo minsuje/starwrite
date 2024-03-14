@@ -56,14 +56,12 @@ export default function Editor() {
 
   // Renders the editor instance.
   return (
-    <div style={{ pointerEvents: 'none' }}>
-      <BlockNoteView
-        editor={editor}
-        theme={darkDefaultTheme}
-        onChange={() => {
-          saveToStorage(editor.document);
-        }}
-      />
-    </div>
+    <BlockNoteView
+      editor={editor}
+      theme={darkDefaultTheme}
+      onChange={() => {
+        saveToStorage(editor.document);
+      }}
+    />
   );
 }

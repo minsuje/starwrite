@@ -1,51 +1,40 @@
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
+import { _headBox, _buttonBox } from '../style';
 import { IoIosTrash } from 'react-icons/io';
 import { LuPencilLine } from 'react-icons/lu';
 
-const _headBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 10px 40px 10px;
-
-  h1 {
-    font-size: 20px;
-    font-weight: 700;
-  }
-`;
-
-const _buttonBox = styled.div`
-  display: flex;
-  justify-content: end;
-  gap: 10px;
-
-  button {
-    background-color: #3f3f3f;
-    color: white;
-    box-shadow: none;
-  }
-`;
 function ListHeaderEnt({ category }: { category: string | undefined }) {
   const navigate = useNavigate();
+
+  function editCategoryName() {
+    const inputName = document.querySelector<HTMLInputElement>('#categoryName');
+    if (inputName !== null) {
+      inputName.focus;
+      inputName.readOnly = !inputName.readOnly;
+      if (inputName.readOnly) {
+        category && (inputName.value = category);
+      } else {
+        inputName.style.backgroundColor = 'var(--color-zinc-700)';
+      }
+    }
+  }
 
   return (
     <>
       <_headBox>
-        <h1>{category} </h1>
+        <input id="categoryName" placeholder={category} readOnly={true}></input>
 
         <_buttonBox>
-          {category != '전체' &&
-            category != '임시저장' &&
-            category != '스크랩' && (
-              <>
-                <button>
-                  <LuPencilLine />
-                </button>
-                <button>
-                  <IoIosTrash />
-                </button>
-              </>
-            )}
+          {category != '전체' && category != '스크랩' && (
+            <>
+              <button onClick={editCategoryName}>
+                <LuPencilLine />
+              </button>
+              <button>
+                <IoIosTrash />
+              </button>
+            </>
+          )}
 
           <button
             onClick={() => {

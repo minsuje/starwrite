@@ -18,7 +18,8 @@ async function uploadFile(file: File) {
     'tmpfiles.org/dl/',
   );
 }
-// 나중에 분리하기 // 불러오기 get
+// 나중에 분리하기
+// 불러오기 get
 async function loadFromStorage() {
   const storageString = localStorage.getItem('editorContent');
   return storageString
@@ -47,13 +48,12 @@ export default function ListDetailFeat() {
   if (editor === undefined) {
     return 'Loading content...';
   }
-
+  console.log('initialContent', loadFromStorage());
   // Renders the editor instance.
+
   return (
     <>
-      <div style={{ pointerEvents: 'none' }}>
-        <BlockNoteView editor={editor} theme={darkDefaultTheme} />
-      </div>
+      <BlockNoteView editor={editor} theme={darkDefaultTheme} />
     </>
   );
 }
