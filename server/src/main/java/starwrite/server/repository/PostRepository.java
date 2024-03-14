@@ -1,5 +1,6 @@
 package starwrite.server.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
@@ -64,16 +65,38 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   GetPosts findPubPosts(@Param(value = "userId") String userId);
 
   // 하나의 글 불러오기
-//  @Query("MATCH (p:Post) " +
-//      "MATCH (u: Users) " +
-//      "MATCH (c:Category) " +
-//      "MATCH (c)-[r]->(p) " +
-//      "WHERE p.tmpSave = false AND p.postId = $postId " +
-//      "SET p.recentView = $recentView " +
-//      "RETURN collect(p)"
-//  )
-//  GetPosts findOnePost(@Param(value = "postId") String postId, @Param(value = "recentView") DATETime)
+  /*@Query("MATCH (p:Post) " +
+      "MATCH (u: Users) " +
+      "MATCH (c:Category) " +
+      "MATCH (c)-[r]->(p) " +
+      "WHERE p.tmpSave = false AND p.postId = $postId " +
+      "SET p.recentView = $recentView " +
+      "RETURN collect(p)"
+  )
+  GetPosts findOnePost(@Param(value = "postId") String postId, @Param(value = "recentView")
+      LocalDateTime recentView);*/
 
+  @Query("MERGE (p:Post) " +
+      "WHERE p.tmpSave = false AND p.postId = $postId " +
+      "SET p.recentView = $recentView " +
+      "RETURN collect(p) AS Post"
+  )
+  GetPosts findOnePost(@Param(value = "postId") String postId, @Param(value = "recentView") LocalDateTime recentView);
+
+  @Query("MATCH (p:Post) " +
+      "WHERE p.postId = $postId " +
+      "SET p.recentView = $recentView " +
+      "RETURN p.recentView"
+  )
+  LocalDateTime setRecentView(@Param(value = "postId") String postId, @Param(value = "recentView") LocalDateTime recentView);
+
+
+
+  @Query("MATCH (p:Post) " +
+      "WHERE p.postId = $postId " +
+      "RETURN p"
+  )
+  Post findPostByPostId(@Param(value = "postId") String postId);
   // 내 모든 포스트 중에서 해당 카테고리의 해당 이름의 특정 포스트만 리턴
 //  @Query("MATCH (p:Post) " +
 //      "MATCH (u : Users) " +
