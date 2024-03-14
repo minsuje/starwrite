@@ -24,24 +24,20 @@ public class PostService {
   @Autowired
   UsersRepository usersRepository;
 
-  // 모든 글 찾기 ( find All Posts)
-//  public List<Post> getAllPosts() {
-//    return postRepository.findAllPosts();
-//  }
 
   // 현재 접속한 유저 아이디 ( current user id )
-  public String findUserid(String users){
-    return usersRepository.findUserById(users);
+  public String findUserid(String userid){
+    return usersRepository.findUserById(userid);
   }
 
-  // 모든 글 조회 ( find All Posts )
-  public GetPosts getAllPost(String userId){
-    return postRepository.findAllPosts(userId);
-  }
+//  // (로그인 유저) 카테고리의 모든 글 조회 ( find All Posts )
+//  public GetPosts getAllPost(String userId){
+//    return postRepository.findAllPosts(userId);
+//  }
 
-  // 상대방 특정 카테고리 모든 글 조회
-  public GetPosts getOtherUserPosts(String userId, String categoryId){
-    return postRepository.findAllPostsByCategory(userId, categoryId);
+  // (유저의) 카테고리의 모든 글 조회
+  public GetPosts getCategoryPosts(String nickname, String categoryId){
+    return postRepository.findAllPostsByCategory(nickname, categoryId);
   }
 
   // 공개 글 조회 ( without Pub Posts )
@@ -49,7 +45,15 @@ public class PostService {
     return postRepository.findPubPosts(userId);
   }
 
-  // 글 관계 리턴
+  // (해당 유저) 모든 글 조회
+  public GetPosts getAllPosts(String nickname){
+    return postRepository.findAllPostsByUserNickname(nickname);
+  }
+
+//  // ( 로그인한 유저) 모든 글 조회
+//  public GetPosts getAllPostsMine(String nickname){
+//    return postRepository.findAllPostsByUserNicknameMine(nickname);
+//  }
 
   // 글 작성 ( write Post )
   public Post createPost(Post post) {
@@ -58,7 +62,7 @@ public class PostService {
 
     Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
     System.out.println(foundCategory);
-    Users foundUser = usersRepository.findUserByUser(post.getUsers().getUserId());
+    Users foundUser = usersRepository.findUserByUserId(post.getUsers().getUserId());
     System.out.println(foundUser);
 
     newPost.setTitle(post.getTitle());
@@ -100,11 +104,6 @@ public class PostService {
   // 임시 저장 글 불러오기 ( save Posts Pull )
 //  public Post savePostPull(Post post){
 //
-//  }
-
-
-//  public PostResponse findPost() {
-//    return postRepository.findPost();
 //  }
 
 

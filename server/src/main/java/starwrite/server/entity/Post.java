@@ -33,6 +33,8 @@ public class Post {
 
     private boolean tmpSave;
 
+    private LocalDateTime recentView;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
