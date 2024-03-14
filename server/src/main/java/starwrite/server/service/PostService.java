@@ -1,5 +1,6 @@
 package starwrite.server.service;
 
+import jakarta.transaction.Transactional;
 import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,12 +54,13 @@ public class PostService {
   // 글 작성 ( write Post )
   public Post createPost(Post post) {
 
+    Post newPost = new Post();
+
     Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
     System.out.println(foundCategory);
     Users foundUser = usersRepository.findUserByUser(post.getUsers().getUserId());
     System.out.println(foundUser);
 
-    Post newPost = new Post();
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
     newPost.setVisible(post.getVisible());
@@ -68,10 +70,12 @@ public class PostService {
     newPost.setCategory(foundCategory);
     newPost.setUsers(foundUser);
 
+    // 중요!!
+    // 이런 관계가 있다는걸 알려줌
+    // 이게 있어야 기존 관계가 지워지지 않음
+    foundCategory.setUsers(foundUser);
 
-//    return postRepository.save(newPost);
-    return postRepository.createPost(newPost.getTitle(), newPost.getContent(), newPost.getVisible(),
-        newPost.isTmpSave(), foundUser.getUserId(), foundCategory.getCategoryId());
+    return postRepository.save(newPost);
   }
 
 
