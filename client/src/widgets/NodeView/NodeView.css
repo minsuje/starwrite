@@ -10,12 +10,14 @@
 .blink-animation {
   animation: blink 1.5s linear infinite;
 }
-
-.fullScreenSvg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
+/* 
+.nodes {
+  opacity: 1;
 }
+.nodes:hover {
+  opacity: 1;
+}
+
+.links {
+  opacity: 0;
+} */

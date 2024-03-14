@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { nodes } from './api/CategoryViewWidAPI';
+import { nodes } from '../../features/CategoryViewFeat/index';
 
 const _SyledContainer = styled.div`
   display: 'flex';

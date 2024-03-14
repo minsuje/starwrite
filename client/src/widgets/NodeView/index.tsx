@@ -1,2 +1,2 @@
 export { NodeView } from './NodeViewWid';
-export { nodes } from './api/NodeViewApi';
+export { nodes } from '../../features/NodeViewFeat/index';
