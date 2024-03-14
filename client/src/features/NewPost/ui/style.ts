@@ -8,10 +8,10 @@ const OneCategory = styled.div`
   padding: 15px 0px;
   background-color: var(--color-zinc-700);
 
-  opacity: ${(props) => props.color || '0.5'};
+  opacity: ${(props) => props.color || '0.6'};
 
   &:hover {
-    opacity: 0.9;
+    opacity: 1;
     cursor: pointer;
   }
 `;

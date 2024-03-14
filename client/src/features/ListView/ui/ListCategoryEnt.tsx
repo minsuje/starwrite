@@ -39,7 +39,7 @@ function ListCategory() {
             } else {
               return (
                 <OneCategory
-                  color={'0.9'}
+                  color={'1'}
                   key={idx}
                   onClick={() => {
                     selected(category);
