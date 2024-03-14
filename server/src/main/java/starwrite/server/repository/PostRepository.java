@@ -12,12 +12,22 @@ import starwrite.server.response.GetPosts;
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, String> {
 
+  // 글 생성
+  @Query("MATCH (u:Users {userId: $userId}), (c:Category {categoryId: $categoryId})" +
+      "CREATE (p:Post {title: $title, content: $content, visible: $visible, tmpSave: $tmpSave, createdAt: localDateTime(), updatedAt: localDateTime()}) " +
+      "CREATE (u)-[:POSTED]->(p) " +
+      "CREATE (p)-[:IS_CHILD]->(c) " +
+      "RETURN p")
+  Post createPost(@Param(value = "title") String title, @Param(value = "content") String content,
+      @Param(value = "visible") String visible, @Param(value = "tmpSave") boolean tmpSave,
+      @Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+
   // 해당 유저의 공개 비공개글 모두 표시 (All post)
   @Query("MATCH (p:Post) " +
-          "MATCH (u : Users) " +
-          "MATCH (c:Category)-[r]->(p) " +
-          "WHERE p.tmpSave = false AND u.userId = $userId " +
-          "RETURN collect(p) AS post, type(r) as relationType")
+      "MATCH (u : Users) " +
+      "MATCH (c:Category)-[r]->(p) " +
+      "WHERE p.tmpSave = false AND u.userId = $userId " +
+      "RETURN collect(p) AS post, type(r) as relationType")
   GetPosts findAllPosts(@Param(value = "userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
@@ -26,17 +36,18 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MATCH (c:Category)-[r]->(p) " +
       "WHERE p.tmpSave = false AND u.userId = $userId AND c.categoryId = $categoryId " +
       "RETURN collect(p) AS post, type(r) as relationType")
-  GetPosts findAllPostsByCategory(@Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+  GetPosts findAllPostsByCategory(@Param(value = "userId") String userId,
+      @Param(value = "categoryId") String categoryId);
 
   // 특정 유저의 해당 카테고리의 모든 글 조회
 
 
   // 비공개 글을 제외하고 표시 (without pub post)
   @Query("MATCH (p:Post) " +
-          "MATCH (u : User) " +
-          "MATCH (c:Category)-[r]->(p) " +
-          "WHERE p.tmpSave = false AND u.userId = $userId AND p.visible = pub " +
-          "RETURN collect(p) AS Post, type(r) as relationType")
+      "MATCH (u : User) " +
+      "MATCH (c:Category)-[r]->(p) " +
+      "WHERE p.tmpSave = false AND u.userId = $userId AND p.visible = pub " +
+      "RETURN collect(p) AS Post, type(r) as relationType")
   GetPosts findPubPosts(@Param(value = "userId") String userId);
 
   // 상대방 카테고리에 해당하는 모든 포스트 표시
@@ -49,7 +60,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //      "WHERE p.tmpSave = false AND u.userid = $userid AND c.name = $name " +
 //      "RETURN p")
 //  Post findDetailPost(@Param(value = "userid") String userid, @Param(value = "name") String name);
-
 
 //  @Query("MATCH (p:Post) " +
 //          "MATCH (u : User) " +
@@ -68,8 +78,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
   // 모든 임시 저장 post( All save Post pull )
   @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
-          "WHERE p.state = false AND ID(p) = $id " +
-          "RETURN p")
+      "WHERE p.state = false AND ID(p) = $id " +
+      "RETURN p")
   List<Post> findSavePost(@Param(value = "id") String id);
 }
 
