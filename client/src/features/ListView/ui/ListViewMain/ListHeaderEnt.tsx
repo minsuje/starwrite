@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { IoIosTrash } from 'react-icons/io';
 import { LuPencilLine } from 'react-icons/lu';
@@ -25,9 +25,8 @@ const _buttonBox = styled.div`
     box-shadow: none;
   }
 `;
-function ListHeaderEnt() {
+function ListHeaderEnt({ category }: { category: string | undefined }) {
   const navigate = useNavigate();
-  const { category } = useParams();
 
   return (
     <>
@@ -50,7 +49,7 @@ function ListHeaderEnt() {
 
           <button
             onClick={() => {
-              navigate('/starwrite/writenewpost');
+              navigate('/user/starwrite/writenewpost');
             }}
           >
             글 추가하기

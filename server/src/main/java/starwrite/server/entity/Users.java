@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import starwrite.server.enums.Role;
 
@@ -40,8 +41,8 @@ public class Users {
 
     private String refresh_token;
 
-    @Relationship(type = "OWNS")
-    private List<Category> category;
+//    @Relationship(type = "OWNS", direction = Direction.OUTGOING)
+//    private List<Category> category;
 
     private LocalDateTime createdAt;
 
