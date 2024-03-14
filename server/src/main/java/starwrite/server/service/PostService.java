@@ -1,9 +1,6 @@
 package starwrite.server.service;
 
-import jakarta.transaction.Transactional;
-import java.security.PublicKey;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Category;
@@ -50,10 +47,18 @@ public class PostService {
     return postRepository.findAllPostsByUserNickname(nickname);
   }
 
-//  // ( 로그인한 유저) 모든 글 조회
-//  public GetPosts getAllPostsMine(String nickname){
-//    return postRepository.findAllPostsByUserNicknameMine(nickname);
-//  }
+  // 상세 글 조회
+  public GetPosts getDetailPost(String postId){
+    System.out.println(">>>>>>>>>>>>>>");
+    LocalDateTime recentView = LocalDateTime.now();
+//    postRepository.setRecentView(postId, recentView);
+    System.out.println(">>>>>>>>>>>>>>" +  postRepository.setRecentView(postId, recentView).getClass().getName());
+    return postRepository.findOnePost(postId, recentView);
+//    System.out.println(recentView);
+//    Post foundPost = postRepository.findPostByPostId(postId);
+//    foundPost.setRecentView(recentView);
+//    postRepository.save(foundPost);
+  }
 
   // 글 작성 ( write Post )
   public Post createPost(Post post) {

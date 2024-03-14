@@ -1,7 +1,6 @@
 package starwrite.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,49 +49,48 @@ public class PostController {
     return postService.getCategoryPosts(nickname, categoryId);
   }
 
-//  @GetMapping("/{nickname}/{categoryId}/{title}")
-//  public GetPosts getDetailPost(@PathVariable(value = "nickname") String nickname,
-//      @PathVariable(value = "categoryId") String categoryId, @PathVariable(value = "title") String title) {
-//    return postService.
-//  }
+  @GetMapping("/{postId}")
+  public GetPosts getDetailPost(@PathVariable(value = "postId") String postId) {
+    return postService.getDetailPost(postId);
+  }
 
 /*
 
-  // ( 로그인 유저 ) 해당 유저의 모든 글 가져오기
-  @GetMapping("/All")
-  public Map<String, Object> getAllPostsMine(){
-    // 유저 nickname 은 헤더에서 가져올거다.
-    String nickname = "minsuop";
-
-    Map<String, Object> result = new HashMap<>();
-    result.put("nickname", nickname);
-    result.put("posts", postService.getAllPostsMine(nickname));
-
-    return result;
-
-    // 결과
-    {
-      "nickname": "minsuop",
-        "posts": {
-      "post": [
-      {
-        "postId": "c28a7c61-5edf-433a-8494-7e5cfcc36d67",
-          "title": "4",
-          "content": "4",
-          "visible": "pub",
-          "img": null,
-          "tmpSave": false,
-          "createdAt": "2024-03-14T17:03:53.872551",
-          "updatedAt": "2024-03-14T17:03:53.872551",
-          "category": null,
-          "users": null
-      }
-        ],
-      "categoryRelationType": null,
-          "usersRelationType": "POSTED"
-    }
-    }
-  }
+//  // ( 로그인 유저 ) 해당 유저의 모든 글 가져오기
+//  @GetMapping("/All")
+//  public Map<String, Object> getAllPostsMine(){
+//    // 유저 nickname 은 헤더에서 가져올거다.
+//    String nickname = "minsuop";
+//
+//    Map<String, Object> result = new HashMap<>();
+//    result.put("nickname", nickname);
+//    result.put("posts", postService.getAllPostsMine(nickname));
+//
+//    return result;
+//
+//    // 결과
+//    {
+//      "nickname": "minsuop",
+//        "posts": {
+//      "post": [
+//      {
+//        "postId": "c28a7c61-5edf-433a-8494-7e5cfcc36d67",
+//          "title": "4",
+//          "content": "4",
+//          "visible": "pub",
+//          "img": null,
+//          "tmpSave": false,
+//          "createdAt": "2024-03-14T17:03:53.872551",
+//          "updatedAt": "2024-03-14T17:03:53.872551",
+//          "category": null,
+//          "users": null
+//      }
+//        ],
+//      "categoryRelationType": null,
+//          "usersRelationType": "POSTED"
+//    }
+//    }
+//  }
 */
 
   @PostMapping
