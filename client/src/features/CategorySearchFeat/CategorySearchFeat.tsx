@@ -29,7 +29,7 @@ export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
 
   // console.log(searchRef);
 
-  console.log('baseApi', baseApi);
+  // console.log('baseApi', baseApi);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;

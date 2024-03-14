@@ -1,7 +1,13 @@
 import * as d3 from 'd3';
+import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nodes } from '../../widgets/CategoryView/index';
+
+const _SyledContainer = styled.div`
+  display: 'flex';
+  width: '100%';
+`;
 
 export function CategoryViewWid({ searchTerm }: any) {
   const navigate = useNavigate();
@@ -11,7 +17,12 @@ export function CategoryViewWid({ searchTerm }: any) {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const simulationRef = useRef<d3.Simulation<
+    d3.SimulationNodeDatum,
+    undefined
+  > | null>(null);
 
+  // console.log(searchTerm);
   useEffect(() => {
     // 화면 크기 변화 감지를 위한 resize 이벤트 리스너 등록
     const handleResize = () => {
@@ -66,7 +77,6 @@ export function CategoryViewWid({ searchTerm }: any) {
     // 요소에 드래그 기능 연결
 
     const node = group
-
       .selectAll('.node')
       .attr('class', 'node')
       .data(nodes)
@@ -76,13 +86,13 @@ export function CategoryViewWid({ searchTerm }: any) {
       .style('cursor', 'pointer')
       .on('click', (_, d) => {
         if (d.url) {
-          navigate('/user/starwrite/nodeview/:userid_num/:category');
+          navigate(`/user/starwrite/nodeview/${d.userid_num}/${d.category}`);
         }
       })
       .call(dragHandler);
 
     node.append('circle').attr('r', 26).attr('fill', 'skyblue');
-
+    console.log('nodes', nodes);
     node
       .append('text')
       .attr('text-anchor', 'middle')
@@ -92,7 +102,7 @@ export function CategoryViewWid({ searchTerm }: any) {
 
     const simulation = d3
       .forceSimulation(nodes)
-      .force('charge', d3.forceManyBody().strength(-20));
+      .force('charge', d3.forceManyBody().strength(-50));
 
     // 각각 노드들 중앙 정렬
     simulation.force(
@@ -106,15 +116,9 @@ export function CategoryViewWid({ searchTerm }: any) {
   }, []);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '100%',
-      }}
-    >
+    <_SyledContainer>
       <svg
         ref={svgRef}
-        width="100%"
         height={viewportSize.height}
         style={{
           display: 'flex',
@@ -123,6 +127,6 @@ export function CategoryViewWid({ searchTerm }: any) {
           width: '100%',
         }}
       ></svg>
-    </div>
+    </_SyledContainer>
   );
 }
