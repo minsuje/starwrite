@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { nodes, links } from './api/NodeViewApi';
-import { SmallCircleData, CustomNode, Link } from './model/Types';
+import { nodes, links } from '../../features/NodeViewFeat/index';
+import {
+  SmallCircleData,
+  CustomNode,
+  Link,
+} from '../../features/NodeViewFeat/index';
 import './NodeView.css';
 
 export type SearchType = {
@@ -34,52 +38,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       });
   }
 
-  const findAllConnectedNodes = (nodeId, nodes) => {
-    let visited = new Set(); // 방문한 노드를 추적합니다.
-    let stack = [nodeId]; // DFS를 위한 스택
-
-    while (stack.length) {
-      let currentId = stack.pop();
-      if (!visited.has(currentId)) {
-        visited.add(currentId);
-        let currentNode = nodes.find((n) => n.id === currentId);
-        if (currentNode && currentNode.connectedNodes) {
-          currentNode.connectedNodes.forEach((nId) => {
-            if (!visited.has(nId)) {
-              stack.push(nId);
-            }
-          });
-        }
-      }
-    }
-
-    return visited; // 방문한 모든 노드의 ID를 반환합니다.
-  };
-
   useEffect(() => {
-    // 마우스 호버 시
-    const handleMouseOver = (event, d) => {
-      // 연결된 모든 노드의 ID를 찾습니다.
-      const connectedNodes = findAllConnectedNodes(d.id, nodes);
-
-      // 연결된 노드 및 해당 노드들을 연결하는 링크를 밝게 표시합니다.
-      node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
-      link.style('opacity', (l) =>
-        connectedNodes.has(l.source.id) && connectedNodes.has(l.target.id)
-          ? 1
-          : 0.1,
-      );
-
-      // 현재 호버된 노드의 투명도를 높입니다.
-      d3.select(event.currentTarget).style('opacity', 1);
-    };
-    // 마우스 호버 제거 시
-    const handleMouseOut = () => {
-      // 모든 노드와 링크의 opacity를 원래대로 복원합니다.
-      node.style('opacity', 1);
-      link.style('opacity', 1);
-    };
-
     // 작은 원의 데이터를 준비합니다.
     let smallCirclesData: SmallCircleData[] = [];
     nodes.forEach((node) => {
@@ -132,11 +91,10 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       )
 
       .alphaDecay(0.0228); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
-    // .on('tick', ticked);
     // 링크 그리기
     const link = group
       .append('g')
-      .attr('class', 'links')
+      .attr('g', 'links')
       .selectAll('line')
       .data(links)
       .enter()
@@ -144,12 +102,12 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       // 선의 굵기 조절
       .attr('stroke-width', (d) => Math.sqrt(d.value ?? 3))
       .attr('stroke', '#fff')
-      .on('mouseover', handleMouseOver)
-      .on('mouseout', handleMouseOut);
+      .attr('opacity', 0.1);
 
     const node = group
       .append('g') //  호출하여 SVG 내에 새로운 <g> 요소(그룹)를 추가 이 그룹은 별 모양 이미지를 포함할 노드들의 컨테이너 역할
       .attr('class', 'nodes') // classname nodes설정
+      .attr('opacity', 1)
       .selectAll('image') // 데이터 배열을 각 이미지 요소에 바인딩
       .data(nodes) // 데이터 배열을 각 이미지 요소에 바인딩
       .enter() // 데이터 배열을 각 이미지 요소에 바인딩합니다.
@@ -157,17 +115,16 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .attr('href', '/star.svg') // 별모양으로 변경함 pulic 폴더 내부의 svg 파일 사용
       .attr('width', 35) // svg 넓이
       .attr('height', 35) // svg 높이
+      .on('mouseover', (d) => setOpacityForConnectedNodes(d))
+      .on('mouseout', resetOpacity)
+
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정
       .attr('pointer-events', 'all')
       .call(drag(simulation as any)) //  D3.js의 드래그 기능을 이용하여 해당 이미지(노드)를 드래그 앤 드롭으로 이동할 수 있도록 함
       .on('click', (_, d) => {
         if (d.url) window.location.href = d.url; // URL이 있으면 해당 URL로 이동
       })
-      .style('cursor', 'pointer') // 커서 포인트 변경
-      .on('mouseover', handleMouseOver)
-      .on('mouseout', handleMouseOut);
-    // 검색어와 일치할 때 깜빡이는 애니메이션을 적용합니다.
-    // node.filter((d) => d.label === searchTerm).classed('blink-animation', true); // 조건에 따라 애니메이션 클래스 추가
+      .style('cursor', 'pointer'); // 커서 포인트 변경
 
     // 텍스트 요소 추가
     const text = group
@@ -239,11 +196,6 @@ export const NodeView = ({ searchTerm }: SearchType) => {
         .attr('y', (d) => (d.y ?? 0) - 30); // 노드 위에 위치하도록 y 좌표 조정
 
       // 작은 원 위치 업데이트
-      // sharedCircles
-      //   .attr('cx', d => d.x - 30) // 작은 원(위성) 위치 조절
-      //   .attr('cy', d => d.y - 30);  // 작은 원(위성) 위치 조절
-
-      // 작은 원 위치 업데이트
       svg
         .selectAll<SVGElement, SmallCircleData>('.small-circle')
         .attr(
@@ -259,25 +211,36 @@ export const NodeView = ({ searchTerm }: SearchType) => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-  }, []); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
-  // useEffect(() => {
-  //   // searchTerm이 변경될 때 실행되는 로직
-  //   // 예: 노드를 필터링하거나, 특정 노드를 강조 표시
-  //   if (searchTerm.trim()) {
-  //     // 예: searchTerm에 따라 노드의 display 속성을 'none'으로 설정하거나,
-  //     // 특정 노드를 강조하는 등의 로직
-  //     if (searchTerm.trim()) {
-  //       node
-  //         .filter((d) =>
-  //           d.label.toLowerCase().includes(searchTerm.toLowerCase()),
-  //         )
-  //         .classed('blink-animation', true);
-  //     } else {
-  //       node.classed('blink-animation', false); // 검색어가 비어 있으면 애니메이션 클래스 제거
-  //     }
-  //   }
-  // }, [searchTerm]); // searchTerm이 변경될 때만 이 useEffect가 실행됩니다.
+    // 연결된 노드들의 정보를 저장할 객체 생성
+    const linkedByIndex = {};
+    links.forEach((link) => {
+      linkedByIndex[`${link.source},${link.target}`] = true;
+    });
+
+    // 두 노드가 연결되어 있는지 확인하는 함수
+    function isConnected(a, b) {
+      return (
+        linkedByIndex[`${a.id},${b.id}`] ||
+        linkedByIndex[`${b.id},${a.id}`] ||
+        a.id === b.id
+      );
+    }
+
+    // 노드와 연결된 노드들의 투명도를 조정하는 함수
+    function setOpacityForConnectedNodes(nodeId) {
+      node.style('opacity', (d) => (isConnected(d, nodeId) ? 1 : 0.2));
+      link.style('opacity', (d) =>
+        d.source === nodeId || d.target === nodeId ? 1 : 0.2,
+      );
+    }
+
+    // 모든 노드와 링크의 투명도를 원래대로 복원하는 함수
+    function resetOpacity() {
+      node.style('opacity', 1);
+      link.style('opacity', 1);
+    }
+  }, []); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
