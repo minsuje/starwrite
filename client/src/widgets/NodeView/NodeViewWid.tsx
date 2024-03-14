@@ -10,30 +10,10 @@ export type SearchType = {
 
 export const NodeView = ({ searchTerm }: SearchType) => {
   const svgRef = useRef(null);
-  const [dimensions, setDimensions] = useState({
+  const [viewportSize, setViewportSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-
-  //
-
-  //
-
-  useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너를 정리합니다.
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   function drag(simulation: d3.Simulation<CustomNode, undefined>) {
     return d3
@@ -54,29 +34,29 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       });
   }
 
-  useEffect(() => {
-    const findAllConnectedNodes = (nodeId, nodes) => {
-      let visited = new Set(); // 방문한 노드를 추적합니다.
-      let stack = [nodeId]; // DFS를 위한 스택
+  const findAllConnectedNodes = (nodeId, nodes) => {
+    let visited = new Set(); // 방문한 노드를 추적합니다.
+    let stack = [nodeId]; // DFS를 위한 스택
 
-      while (stack.length) {
-        let currentId = stack.pop();
-        if (!visited.has(currentId)) {
-          visited.add(currentId);
-          let currentNode = nodes.find((n) => n.id === currentId);
-          if (currentNode && currentNode.connectedNodes) {
-            currentNode.connectedNodes.forEach((nId) => {
-              if (!visited.has(nId)) {
-                stack.push(nId);
-              }
-            });
-          }
+    while (stack.length) {
+      let currentId = stack.pop();
+      if (!visited.has(currentId)) {
+        visited.add(currentId);
+        let currentNode = nodes.find((n) => n.id === currentId);
+        if (currentNode && currentNode.connectedNodes) {
+          currentNode.connectedNodes.forEach((nId) => {
+            if (!visited.has(nId)) {
+              stack.push(nId);
+            }
+          });
         }
       }
+    }
 
-      return visited; // 방문한 모든 노드의 ID를 반환합니다.
-    };
+    return visited; // 방문한 모든 노드의 ID를 반환합니다.
+  };
 
+  useEffect(() => {
     // 마우스 호버 시
     const handleMouseOver = (event, d) => {
       // 연결된 모든 노드의 ID를 찾습니다.
@@ -115,35 +95,20 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       }
     });
 
-    // console.log('smallCirclesData>>', smallCirclesData);
-
     // SVG 요소 선택 및 초기화
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove(); // 기존의 모든 SVG 요소 제거
+    svg.attr('width', '100%').attr('height', viewportSize.height);
 
-    const ZommGroup = svg.append('g').attr('class', 'zoom-group');
+    const group = svg.append('g');
 
     const zoomHandler = d3.zoom().on('zoom', (event) => {
-      ZommGroup.attr('transform', event.transform);
+      group.attr('transform', event.transform);
     });
-    // 확대/축소 기능을 SVG에 적용
-    (svg as any).call(zoomHandler);
 
-    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.7));
-
-    // 시뮬레이션 설정
-    // const simulation = d3
-    //   .forceSimulation(nodes)
-    //   .force(
-    //     'link',
-    //     d3
-    //       .forceLink<CustomNode, Link>(links)
-    //       .id((d) => d.id)
-    //       // 링크 선의 길이
-    //       .distance(100),
-    //   )
-    //   .force('charge', d3.forceManyBody().strength(-50))
-    //   .force('center', d3.forceCenter(width / 2, height / 2));
+    (svg as any).call(zoomHandler); // 줌 핸들러를 SVG 요소에 적용
+    // 초기 줌 스케일 설정 (예: 0.8로 줌 아웃)
+    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.6));
 
     const simulation = d3
       .forceSimulation(nodes)
@@ -155,15 +120,21 @@ export const NodeView = ({ searchTerm }: SearchType) => {
           // 링크 선 길이 조절
           .distance(100),
       ) // 링크 거리 조절
-      .force('charge', d3.forceManyBody().strength(-20)) // 노드 간 반발력 조절
+      .force('charge', d3.forceManyBody().strength(-55))
+      .force('collide', d3.forceCollide().radius(90))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 2, window.innerHeight / 4),
+        d3.forceCenter(window.innerWidth / 1.3, window.innerHeight / 2),
       )
+      .force(
+        'radial',
+        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 2),
+      )
+
       .alphaDecay(0.0228); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
     // .on('tick', ticked);
     // 링크 그리기
-    const link = svg
+    const link = group
       .append('g')
       .attr('class', 'links')
       .selectAll('line')
@@ -176,7 +147,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
 
-    const node = svg
+    const node = group
       .append('g') //  호출하여 SVG 내에 새로운 <g> 요소(그룹)를 추가 이 그룹은 별 모양 이미지를 포함할 노드들의 컨테이너 역할
       .attr('class', 'nodes') // classname nodes설정
       .selectAll('image') // 데이터 배열을 각 이미지 요소에 바인딩
@@ -199,7 +170,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     // node.filter((d) => d.label === searchTerm).classed('blink-animation', true); // 조건에 따라 애니메이션 클래스 추가
 
     // 텍스트 요소 추가
-    const text = svg
+    const text = group
       .append('g')
       .attr('class', 'texts')
       .selectAll('text')
@@ -213,7 +184,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .text((d) => d.label); // 각 노드의 라벨을 텍스트로 설정
 
     // 작은 원 그리기 위한 'g' 태그 추가
-    const smallCircleGroups = svg
+    const smallCircleGroups = group
       .selectAll('.small-circle-group')
       .data(smallCirclesData)
       .enter()
@@ -288,7 +259,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-  }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
+  }, []); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
   // useEffect(() => {
   //   // searchTerm이 변경될 때 실행되는 로직
@@ -327,12 +298,10 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     }
   }, [searchTerm]);
 
-  console.log('svgref', svgRef);
   return (
     <svg
       ref={svgRef}
-      width={dimensions.width}
-      height={dimensions.height}
+      height={viewportSize.height}
       style={{
         display: 'flex',
         justifyContent: 'center',

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { IoIosSearch } from 'react-icons/io';
-import { nodes } from '../../widgets/CategoryView/index';
+import { nodes } from '../../widgets/CategoryView/api/CategoryViewWidAPI';
 import './CategorySearchFeat.css';
 import { baseApi } from '../../shared/api/BaseApi';
 

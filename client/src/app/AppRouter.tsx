@@ -38,7 +38,7 @@ export const AppRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/user/starwrite',
+        path: '/:user/starwrite',
         element: (
           <>
             <HeaderWid />
