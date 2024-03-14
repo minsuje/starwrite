@@ -52,7 +52,7 @@ public class CategoryService {
 
   public Category addCategory(Category category) {
 
-    Users foundUser = usersRepository.findUserByUserId("d5e14876-d768-4ccd-822c-5e6973513762");
+    Users foundUser = usersRepository.findUserByUserId("0a24686d-c249-4469-8a61-b2f4a2b33e2c");
     System.out.println("foundUSer >>>>>>>>>>>>>>>" + foundUser);
     category.setUsers(foundUser);
 

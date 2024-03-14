@@ -15,7 +15,7 @@ const _CategoryBar = styled.div`
 `;
 const _CategoryContent = styled.div`
   width: 60%;
-  background-color: #42424266;
+  background-color: var(--color-zinc-900);
   padding: 20px 30px;
 `;
 
@@ -25,10 +25,10 @@ const _AddCategoryButton = styled.div`
   padding: 15px 0px;
 
   &:hover {
-    background-color: #3c3c3c;
+    background-color: var(--color-zinc-800);
     cursor: pointer;
   }
-  background-color: #42424266;
+  background-color: var(--color-zinc-900);
   margin: 0;
 `;
 
