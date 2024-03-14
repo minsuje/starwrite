@@ -55,7 +55,7 @@ public class PostService {
 
     Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
     System.out.println(foundCategory);
-    Users foundUser = usersRepository.findUserByUser(post.getUser().getUserId());
+    Users foundUser = usersRepository.findUserByUser(post.getUsers().getUserId());
     System.out.println(foundUser);
 
     Post newPost = new Post();
@@ -66,10 +66,12 @@ public class PostService {
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
-    newPost.setUser(foundUser);
+    newPost.setUsers(foundUser);
 
 
-    return postRepository.save(newPost);
+//    return postRepository.save(newPost);
+    return postRepository.createPost(newPost.getTitle(), newPost.getContent(), newPost.getVisible(),
+        newPost.isTmpSave(), foundUser.getUserId(), foundCategory.getCategoryId());
   }
 
 

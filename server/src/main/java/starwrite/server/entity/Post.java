@@ -40,6 +40,6 @@ public class Post {
     private Category category;
 
     @Relationship(type = "POSTED", direction = Direction.INCOMING)
-    private Users user;
+    private Users users;
 
 }
