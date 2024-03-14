@@ -31,12 +31,14 @@ public class JwtTokenProvider {
 
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+        System.out.println("jwtTokenProvider");
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
+        System.out.println("JwtTokenProvider generateToken");
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
@@ -69,6 +71,7 @@ public class JwtTokenProvider {
 
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
+        System.out.println("jwtTokenProvider getAuthentication");
         // jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
         // Claim 이란? 사용자에 대한 프로퍼티나 속성. 토큰 자체가 정보를 가지고 있는 방식
@@ -94,6 +97,7 @@ public class JwtTokenProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+            System.out.println("jwtTokenProvider validateToken");
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {

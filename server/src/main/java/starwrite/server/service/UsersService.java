@@ -1,6 +1,6 @@
 package starwrite.server.service;
 
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.transaction.Transactional;
 import starwrite.server.dto.JwtDTO;
 
 public interface UsersService {

@@ -2,6 +2,8 @@ package starwrite.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,13 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.dto.JwtDTO;
 import starwrite.server.dto.LogInDTO;
 import starwrite.server.service.UsersService;
+import starwrite.server.service.UsersServiceImpl;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class IndexController {
+    private final Logger Logger = LoggerFactory.getLogger(IndexController.class.getName());
+
     @Autowired
     UsersService usersService;
+
+    @Autowired
+    UsersServiceImpl usersServiceimpl;
 
     @GetMapping("/home")
     public String handleWelcome() {
@@ -40,10 +48,11 @@ public class IndexController {
 
     @PostMapping("/log-in")
     public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
-        System.out.println("sigin" + logInDTO);
+        System.out.println("signin" + logInDTO);
         String username = logInDTO.getMail();
         String password = logInDTO.getPassword();
-        JwtDTO jwtDTO = usersService.signIn(username, password);
+        JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
+        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
         log.info("request username = {}, password = {}", username, password);
         log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(), jwtDTO.getRefreshToken());
 
