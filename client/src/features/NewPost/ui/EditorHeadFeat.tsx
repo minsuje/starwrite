@@ -3,11 +3,22 @@ import { categories } from '../../ListView/model/CategoryData';
 import { _EditorHead, _TitleInput } from './style';
 
 type openSaving = () => void;
-function NewPostHeadFeat({ openSaving }: { openSaving: openSaving }) {
+function NewPostHeadFeat({
+  openSaving,
+  setTitle,
+  setCategory,
+}: {
+  openSaving: openSaving;
+  setTitle: () => void;
+  setCategory: () => void;
+}) {
   return (
     <>
       <_EditorHead>
-        <_TitleInput placeholder="제목을 입력하세요" />
+        <_TitleInput
+          placeholder="제목을 입력하세요"
+          onChange={() => setTitle}
+        />
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={openSaving}>임시저장</button>
           <button onClick={savePost}>저장</button>
@@ -16,6 +27,7 @@ function NewPostHeadFeat({ openSaving }: { openSaving: openSaving }) {
       <_EditorHead content={'start'}>
         <p>카테고리 </p>
         <select
+          onChange={setCategory}
           style={{
             padding: '0px 10%',
             backgroundColor: 'rgba(0,0,0,0.3)',

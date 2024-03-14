@@ -19,10 +19,24 @@ const _EditorDiv = styled.div`
 
 function NewPostWid() {
   const [openSaving, setOpenSaving] = useState<boolean>(false);
+  // const [data, setData] = useState();
+  const [title, setTitle] = useState<string>();
+  const [category, setCategory] = useState<string>();
+
   return (
     <_EditorBox>
       {openSaving && <GetSavings onclick={() => setOpenSaving(false)} />}
-      <NewPostHeadFeat openSaving={() => setOpenSaving(!openSaving)} />
+      <NewPostHeadFeat
+        openSaving={() => setOpenSaving(!openSaving)}
+        setTitle={() => {
+          setTitle('하하');
+          console.log(title, category);
+        }}
+        setCategory={() => {
+          setCategory('하하');
+          console.log(title, category);
+        }}
+      />
       <_EditorDiv>
         <Editor />
       </_EditorDiv>
