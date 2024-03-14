@@ -6,6 +6,7 @@ import { HeaderWid } from '../widgets/header/index';
 import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
 import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
+import LoginPage from '../pages/Login/LoginPage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ export const AppRouter = createBrowserRouter([
         path: '/login',
         element: (
           <>
-            <div>로그인페이지인디요 ?</div>
+            <LoginPage />
           </>
         ),
       },

@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 // 나중에 분리하기  + 배열에 저장하는 함수로 수정 -> post 함수는 추가
 async function saveToStorage(jsonBlocks: Block[]) {
   localStorage.setItem('editorContent', JSON.stringify(jsonBlocks));
-  console.log(jsonBlocks); //Array
+  console.log(JSON.stringify(jsonBlocks)); //Array // string으로 보내기
 }
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
@@ -53,6 +53,7 @@ export default function Editor() {
   if (editor === undefined) {
     return 'Loading content...';
   }
+  console.log('this', editor.document);
 
   // Renders the editor instance.
   return (

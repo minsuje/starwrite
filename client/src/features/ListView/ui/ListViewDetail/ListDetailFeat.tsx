@@ -52,8 +52,8 @@ export default function ListDetailFeat() {
   // Renders the editor instance.
 
   return (
-    <>
+    <div onKeyDown={(e) => e.preventDefault()}>
       <BlockNoteView editor={editor} theme={darkDefaultTheme} />
-    </>
+    </div>
   );
 }
