@@ -31,7 +31,6 @@ public class JwtTokenProvider {
 
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-        System.out.println("jwtTokenProvider");
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -97,7 +96,7 @@ public class JwtTokenProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-            System.out.println("jwtTokenProvider validateToken");
+            return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {

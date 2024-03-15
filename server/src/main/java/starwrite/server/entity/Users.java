@@ -1,9 +1,13 @@
 package starwrite.server.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,9 +17,11 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import starwrite.server.enums.Role;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,9 +58,15 @@ public class Users implements UserDetails {
 
     private LocalDateTime updatedAt;
 
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.roles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -80,5 +92,9 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
-    }s
+    }
+
+    public Optional<Object> map(Object createUserDetails) {
+        return null;
+    }
 }

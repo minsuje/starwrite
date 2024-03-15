@@ -95,19 +95,25 @@ public class SecurityConfig {
 //        return new BCryptPasswordEncoder();
 //    }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-        UsersDetailService usersDetailService,
-        PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(usersDetailService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-
-//        ProviderManager providerManager = new ProviderManager(authenticationProvider);
-//        providerManager.setEraseCredentialsAfterAuthentication(false);
+//    @Bean
+//    public AuthenticationManager authenticationManager(
+//        UsersDetailService usersDetailService,
+//        PasswordEncoder passwordEncoder) {
+//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsService(usersDetailService);
+//        authenticationProvider.setPasswordEncoder(passwordEncoder);
 //
-//        return providerManager;
+////        ProviderManager providerManager = new ProviderManager(authenticationProvider);
+////        providerManager.setEraseCredentialsAfterAuthentication(false);
+////
+////        return providerManager;
+//
+//        return new ProviderManager(authenticationProvider);
+//    }
 
-        return new ProviderManager(authenticationProvider);
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return new ProviderManager(authenticationProvider()); // ProviderManager를 사용하여 인증 매니저 빈 등록
     }
 }
+
