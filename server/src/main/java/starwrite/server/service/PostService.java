@@ -48,16 +48,9 @@ public class PostService {
   }
 
   // 상세 글 조회
-  public GetPosts getDetailPost(String postId){
-    System.out.println(">>>>>>>>>>>>>>");
+  public Post getDetailPost(String postId){
     LocalDateTime recentView = LocalDateTime.now();
-//    postRepository.setRecentView(postId, recentView);
-    System.out.println(">>>>>>>>>>>>>>" +  postRepository.setRecentView(postId, recentView).getClass().getName());
-    return postRepository.findOnePost(postId, recentView);
-//    System.out.println(recentView);
-//    Post foundPost = postRepository.findPostByPostId(postId);
-//    foundPost.setRecentView(recentView);
-//    postRepository.save(foundPost);
+    return postRepository.setRecentView(postId, recentView);
   }
 
   // 글 작성 ( write Post )
@@ -76,6 +69,7 @@ public class PostService {
     newPost.setTmpSave(false);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setRecentView(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
     newPost.setUsers(foundUser);
 
@@ -89,27 +83,35 @@ public class PostService {
 
 
   // 글 임시 저장 ( save Posts )
-//  public Post savePost(Post post){
-//    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
-//    Users foundUser = usersRepository.findUserByUser(post.getUser().getUserId());
-//
-//    Post newPost = new Post();
-//    newPost.setTitle(post.getTitle());
-//    newPost.setContent(post.getContent());
-//    newPost.setVisible(post.getVisible());
-//    newPost.setTmpSave(true);
-//    newPost.setCreatedAt(LocalDateTime.now());
-//    newPost.setUpdatedAt(newPost.getCreatedAt());
-//    newPost.setCategory(foundCategory);
-//    newPost.setUser(foundUser);
-//
-//    return postRepository.save(newPost);
-//  }
+  public Post savePost(Post post){
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+    Users foundUser = usersRepository.findUserByUserId(post.getUsers().getUserId());
 
-  // 임시 저장 글 불러오기 ( save Posts Pull )
-//  public Post savePostPull(Post post){
-//
-//  }
+    Post savePost = new Post();
+    savePost.setTitle(post.getTitle());
+    savePost.setContent(post.getContent());
+    savePost.setVisible(post.getVisible());
+    savePost.setTmpSave(true);
+    savePost.setCreatedAt(LocalDateTime.now());
+    savePost.setUpdatedAt(savePost.getCreatedAt());
+    savePost.setRecentView(savePost .getRecentView());
+    savePost.setCategory(foundCategory);
+    savePost.setUsers(foundUser);
+
+    foundCategory.setUsers(foundUser);
+
+    return postRepository.save(savePost);
+  }
+
+  // 임시 저장 글 모두 불러오기 ( load All Save Posts )
+  public GetPosts getSavePosts(String nickname){
+      return postRepository.findAllSavePosts(nickname);
+  }
+
+  // 임시 저장 하나 불러오기 ( Load One Save Post)
+  public Post getSavePost(String nickname, String postId){
+    return postRepository.findSavePost(nickname, postId);
+  }
 
 
 }
