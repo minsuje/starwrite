@@ -36,6 +36,8 @@ const _EditorHead = styled.div`
   gap: 15px;
   p {
     font-size: 15px;
+    width: 50%;
+    text-align: center;
   }
 `;
 
@@ -44,4 +46,36 @@ const _TitleInput = styled(Input)`
   font-size: 20px;
 `;
 
-export { _TitleInput, _EditorHead, ListCategories, OneCategory };
+const _EditorBox = styled.div`
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  margin: 5vh auto;
+  gap: 20px;
+`;
+const _EditorDiv = styled.div`
+  width: 100%;
+  height: 70vh;
+  background-color: 'var(--color-zinc-800)';
+  padding: 25px 0;
+  overflow-y: auto;
+`;
+
+const _PublcButton = styled.div<{ color: boolean }>`
+  border: 1px solid var(--color-zinc-600);
+  border-radius: 4px;
+  width: 50%;
+  text-align: center;
+  padding: 4px 0;
+  background-color: ${(props) => props.color && ' var(--color-zinc-600)'};
+`;
+
+export {
+  _TitleInput,
+  _EditorHead,
+  ListCategories,
+  OneCategory,
+  _EditorBox,
+  _EditorDiv,
+  _PublcButton,
+};
