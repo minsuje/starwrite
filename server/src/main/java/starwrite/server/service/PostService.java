@@ -5,41 +5,78 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
+import starwrite.server.entity.Users;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
+import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.GetPosts;
 
 @Service
 public class PostService {
 
-  private final PostRepository postRepository;
-  private final CategoryRepository categoryRepository;
-
   @Autowired
-  public PostService(PostRepository postRepository, CategoryRepository categoryRepository) {
-    this.postRepository = postRepository;
-    this.categoryRepository = categoryRepository;
+  PostRepository postRepository;
+  @Autowired
+  CategoryRepository categoryRepository;
+  @Autowired
+  UsersRepository usersRepository;
+
+
+  // 현재 접속한 유저 아이디 ( current user id )
+  public String findUserid(String userid){
+    return usersRepository.findUserById(userid);
   }
 
-  // 모든 글 찾기 ( find All Posts)
-//  public List<Post> getAllPosts() {
-//    return postRepository.findAllPosts();
+//  // (로그인 유저) 카테고리의 모든 글 조회 ( find All Posts )
+//  public GetPosts getAllPost(String userId){
+//    return postRepository.findAllPosts(userId);
 //  }
+
+  // (유저의) 카테고리의 모든 글 조회
+  public GetPosts getCategoryPosts(String nickname, String categoryId){
+    return postRepository.findAllPostsByCategory(nickname, categoryId);
+  }
+
+  // 공개 글 조회 ( without Pub Posts )
+  public GetPosts getPubPost(String userId){
+    return postRepository.findPubPosts(userId);
+  }
+
+  // (해당 유저) 모든 글 조회
+  public GetPosts getAllPosts(String nickname){
+    return postRepository.findAllPostsByUserNickname(nickname);
+  }
+
+  // 상세 글 조회
+  public Post getDetailPost(String postId){
+    LocalDateTime recentView = LocalDateTime.now();
+    return postRepository.setRecentView(postId, recentView);
+  }
 
   // 글 작성 ( write Post )
   public Post createPost(Post post) {
 
-    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
-
-
     Post newPost = new Post();
+
+    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+    System.out.println(foundCategory);
+    Users foundUser = usersRepository.findUserByUserId(post.getUsers().getUserId());
+    System.out.println(foundUser);
+
     newPost.setTitle(post.getTitle());
     newPost.setContent(post.getContent());
     newPost.setVisible(post.getVisible());
-    newPost.setState(true);
+    newPost.setTmpSave(false);
     newPost.setCreatedAt(LocalDateTime.now());
     newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setRecentView(newPost.getCreatedAt());
     newPost.setCategory(foundCategory);
+    newPost.setUsers(foundUser);
 
+    // 중요!!
+    // 이런 관계가 있다는걸 알려줌
+    // 이게 있어야 기존 관계가 지워지지 않음
+    foundCategory.setUsers(foundUser);
 
     return postRepository.save(newPost);
   }
@@ -48,29 +85,33 @@ public class PostService {
   // 글 임시 저장 ( save Posts )
   public Post savePost(Post post){
     Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
+    Users foundUser = usersRepository.findUserByUserId(post.getUsers().getUserId());
 
-    Post newPost = new Post();
-    newPost.setTitle(post.getTitle());
-    newPost.setContent(post.getContent());
-    newPost.setVisible(post.getVisible());
-    newPost.setState(false);
-    newPost.setCreatedAt(LocalDateTime.now());
-    newPost.setUpdatedAt(newPost.getCreatedAt());
-    newPost.setCategory(foundCategory);
+    Post savePost = new Post();
+    savePost.setTitle(post.getTitle());
+    savePost.setContent(post.getContent());
+    savePost.setVisible(post.getVisible());
+    savePost.setTmpSave(true);
+    savePost.setCreatedAt(LocalDateTime.now());
+    savePost.setUpdatedAt(savePost.getCreatedAt());
+    savePost.setRecentView(savePost .getRecentView());
+    savePost.setCategory(foundCategory);
+    savePost.setUsers(foundUser);
 
+    foundCategory.setUsers(foundUser);
 
-    return postRepository.save(newPost);
+    return postRepository.save(savePost);
   }
 
-  // 임시 저장 글 불러오기 ( save Posts Pull )
-//  public Post savePostPull(Post post){
-//
-//  }
+  // 임시 저장 글 모두 불러오기 ( load All Save Posts )
+  public GetPosts getSavePosts(String nickname){
+      return postRepository.findAllSavePosts(nickname);
+  }
 
-
-//  public PostResponse findPost() {
-//    return postRepository.findPost();
-//  }
+  // 임시 저장 하나 불러오기 ( Load One Save Post)
+  public Post getSavePost(String nickname, String postId){
+    return postRepository.findSavePost(nickname, postId);
+  }
 
 
 }

@@ -44,22 +44,30 @@ public class CategoryService {
 
   public PostResponse getCategoryByUserId(String userId) {
     System.out.println("cat service >>>>>>>>> userid >>>>>>>>" + userId);
-    System.out.println("cat service foundUser >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + categoryRepository.findCategoryByUserId("d5e14876-d768-4ccd-822c-5e6973513762"));
+    System.out.println("cat service foundUser >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + categoryRepository.findCategoryByUserId(userId));
 //    List<PostResponse> postlist = categoryRepository.findCategoryByUserId("0d74dd82-0513-4925-80b9-7c6b4ff9c282");
 //    System.out.println("postlist >>>>>>>>>>>>>>>" + postlist.get(0));
-    return categoryRepository.findCategoryByUserId("d5e14876-d768-4ccd-822c-5e6973513762");
+    return categoryRepository.findCategoryByUserId(userId);
   };
 
   public Category addCategory(Category category) {
 
-    Users foundUser = usersRepository.findUserByUserId("d5e14876-d768-4ccd-822c-5e6973513762");
+    Category newCategory = new Category();
+
+    Users foundUser = usersRepository.findUserByUserId(category.getUsers().getUserId());
     System.out.println("foundUSer >>>>>>>>>>>>>>>" + foundUser);
-    category.setUsers(foundUser);
 
-    category.setCreatedAt(LocalDateTime.now());
-    category.setUpdatedAt(category.getCreatedAt());
+    newCategory.setName(category.getName());
+    newCategory.setUsers(foundUser);
+    newCategory.setCreatedAt(LocalDateTime.now());
+    newCategory.setUpdatedAt(newCategory.getCreatedAt());
 
-    return categoryRepository.save(category);
+//    category.setUsers(foundUser);
+//    category.setCreatedAt(LocalDateTime.now());
+//    category.setUpdatedAt(category.getCreatedAt());
+    System.out.println("newCategory >>>>>>>>>" +newCategory);
+
+    return categoryRepository.save(newCategory);
   }
 
   public Category updateCategory(Category category) {

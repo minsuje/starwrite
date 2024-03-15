@@ -3,7 +3,7 @@ import { ListHeaderEnt } from '../..';
 import styled from 'styled-components';
 import { Posts } from '../../../../shared/types/app';
 import { PostList } from '../../model/listViewData';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const _listBox = styled.div`
   overflow: auto;
@@ -15,7 +15,7 @@ const _listBox = styled.div`
 
 const _postBox = styled.div`
   padding: 25px 20px;
-  background-color: #242424;
+  background-color: var(--color-zinc-800);
   border-radius: 3px;
   display: flex;
   flex-direction: column;
@@ -24,11 +24,11 @@ const _postBox = styled.div`
   text-decoration-line: none;
   h1 {
     font-size: 20px;
-    color: #dfdfdf;
+    color: var(--color-zinc-300);
   }
   p {
     font-size: 13px;
-    color: #9f9d9d;
+    color: var(--color-zinc-500);
   }
   &:hover {
     opacity: 0.8;
@@ -36,6 +36,7 @@ const _postBox = styled.div`
 `;
 
 function ListViewMainEnt() {
+  const { category } = useParams();
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>();
   useEffect(() => {
@@ -44,14 +45,14 @@ function ListViewMainEnt() {
 
   return (
     <>
-      <ListHeaderEnt />
+      <ListHeaderEnt category={category} />
       <_listBox>
         {!(postsList?.length === 0) &&
           postsList?.map((post, idx) => {
             return (
               <div key={idx}>
                 <Link
-                  to={`/starwrite/listview/detail/${post.id}`}
+                  to={`/user/starwrite/listview/main/${category}/${post.id}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <_postBox>

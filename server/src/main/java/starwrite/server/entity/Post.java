@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -17,9 +18,10 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 @NoArgsConstructor
 @Node("Post")
 public class Post {
+
     @Id
     @GeneratedValue(generatorClass = UUIDStringGenerator.class)
-    private String id;
+    private String postId;
 
     private String title;
 
@@ -29,14 +31,17 @@ public class Post {
 
     private String img;
 
-    private boolean state;
+    private boolean tmpSave;
+
+    private LocalDateTime recentView;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @Relationship(type = "RELATED", direction = Direction.OUTGOING)
-    private List<Post> relatedPost;
-
     @Relationship(type = "IS_CHILD", direction = Direction.INCOMING)
     private Category category;
+
+    @Relationship(type = "POSTED", direction = Direction.INCOMING)
+    private Users users;
+
 }

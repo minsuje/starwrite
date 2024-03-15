@@ -1,7 +1,6 @@
 import { CategoryViewWid } from '../../widgets/CategoryView';
-import { SearchFeat } from '../../features/index';
+import { CategorySearchFeat } from '../../features/CategorySearchFeat/index';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 export function CategoryViewPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +11,7 @@ export function CategoryViewPage() {
   };
   return (
     <>
-      <SearchFeat onSearch={onSearch} />
+      <CategorySearchFeat onSearch={onSearch} />
       <CategoryViewWid searchTerm={searchTerm}></CategoryViewWid>
     </>
   );

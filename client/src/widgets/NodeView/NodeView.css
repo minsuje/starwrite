@@ -10,3 +10,14 @@
 .blink-animation {
   animation: blink 1.5s linear infinite;
 }
+/* 
+.nodes {
+  opacity: 1;
+}
+.nodes:hover {
+  opacity: 1;
+}
+
+.links {
+  opacity: 0;
+} */

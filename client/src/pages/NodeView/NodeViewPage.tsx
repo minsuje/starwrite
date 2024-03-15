@@ -1,6 +1,6 @@
-import { NodeView } from '../../../../widgets/index';
+import { NodeView } from '../../widgets/NodeView/index';
 import { useState } from 'react';
-import { SearchFeat } from '../../../../features/index';
+import { NodeSearchFeat } from '../../features/NodeSearchFeat/index';
 
 export function NodeViewPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +12,7 @@ export function NodeViewPage() {
 
   return (
     <>
-      <SearchFeat onSearch={onSearch} />
+      <NodeSearchFeat onSearch={onSearch} />
       <NodeView searchTerm={searchTerm} />
     </>
   );

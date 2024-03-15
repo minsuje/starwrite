@@ -1,13 +1,12 @@
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import RegisterPage from '../pages/Register/RegisterPage';
 import ListView from '../pages/ListView/ListViewPage';
-import { NodeViewPage } from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
+import { NodeViewPage } from '../pages/NodeView/NodeViewPage';
 import { HeaderWid } from '../widgets/header/index';
 import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
-
-import NodeViewPage from '../pages/NodeView/ui/NodeViewPage/NodeViewPage';
-import { ListViewMainEnt } from '../features/ListView';
+import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
+import LoginPage from '../pages/Login/LoginPage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -26,7 +25,7 @@ export const AppRouter = createBrowserRouter([
         path: '/login',
         element: (
           <>
-            <div>로그인페이지인디요 ?</div>
+            <LoginPage />
           </>
         ),
       },
@@ -40,7 +39,7 @@ export const AppRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/starwrite',
+        path: '/:user/starwrite',
         element: (
           <>
             <HeaderWid />
@@ -85,7 +84,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 리스트뷰 메인 페이지
           {
-            path: 'listview',
+            path: 'listview/main/:category',
             element: (
               <>
                 <ListView />
@@ -93,7 +92,7 @@ export const AppRouter = createBrowserRouter([
             ),
             children: [
               {
-                path: 'main/:category',
+                path: '',
                 element: (
                   <>
                     <ListViewMainEnt></ListViewMainEnt>
@@ -101,10 +100,10 @@ export const AppRouter = createBrowserRouter([
                 ),
               },
               {
-                path: 'detail/:postId',
+                path: ':postId',
                 element: (
                   <>
-                    <div>글 하나 상세 조회</div>
+                    <ListDetailFeat />
                   </>
                 ),
               },

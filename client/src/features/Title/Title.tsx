@@ -4,7 +4,7 @@ export function TitleFeat() {
   return (
     <>
       <_Title>
-        <Link to="/starwrite/categoryview/:userid_num">StarWrite</Link>
+        <Link to="/user/starwrite/categoryview/:userid_num">StarWrite</Link>
       </_Title>
     </>
   );

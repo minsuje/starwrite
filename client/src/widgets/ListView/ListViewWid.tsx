@@ -11,6 +11,7 @@ import { useState } from 'react';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
+
   return (
     <_ListViewBox>
       <_CategoryBar>
@@ -22,7 +23,6 @@ function ListViewWid() {
           <AddCategory
             onclick={() => {
               setCategoryModal(false);
-              console.log(categoryModal);
             }}
           ></AddCategory>
         )}

@@ -1,2 +1,2 @@
 export { CategoryViewWid } from './CategoryViewWid';
-export { nodes } from './api/CategoryViewWidAPI';
+export { nodes } from '../../features/CategoryViewFeat/index';

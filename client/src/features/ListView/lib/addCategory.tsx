@@ -24,8 +24,8 @@ const _Box = styled.form`
 
 const _ErrorMsg = styled.p`
   color: #ffafaf;
-  font-size: 12px;
-  padding-top: 2px;
+  font-size: 10px;
+  padding-top: 0px;
 `;
 
 const _ButtonBox = styled.div`
@@ -75,8 +75,10 @@ function AddCategory({ onclick }: { onclick: closeModal }) {
           <_Box onSubmit={handleSubmit(onValid)}>
             <label htmlFor="newCategory">카테고리 추가</label>
             <input placeholder="카테고리 명" {...register('category')}></input>
-            {errors.category && typeof errors.category.message === 'string' && (
+            {errors.category && typeof errors.category.message === 'string' ? (
               <_ErrorMsg>{errors.category.message}</_ErrorMsg>
+            ) : (
+              <_ErrorMsg></_ErrorMsg>
             )}
 
             <_ButtonBox>

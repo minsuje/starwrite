@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { IoIosSearch } from 'react-icons/io';
-import { nodes } from '../../widgets/CategoryView/index';
-import './SearchFeat.css';
+import { nodes } from '../CategoryViewFeat/index';
+import './CategorySearchFeat.css';
+import { baseApi } from '../../shared/api/BaseApi';
+
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
 };
 
-export const SearchFeat = ({ onSearch }: SearchTypes) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
+  const [searchTerm, setSearchTerm] = useState(''); // api 데이터 담을 예정
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
 
@@ -27,6 +29,8 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
 
   // console.log(searchRef);
 
+  // console.log('baseApi', baseApi);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
@@ -40,12 +44,6 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
       ).length
     ) {
       setToggleSearch(true);
-    } else {
-      return (
-        <li style={{ padding: '15px', color: '#ffff' }}>
-          검색 결과가 없습니다.
-        </li>
-      );
     }
   };
 
@@ -56,6 +54,9 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
 
   const handleInputClick = () => {
     setToggleSearch(true);
+  };
+  const handleoutClick = () => {
+    setToggleSearch(false);
   };
 
   const filterSearch = nodes.filter((node) =>
@@ -70,6 +71,7 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
           value={searchTerm}
           onChange={handleChange}
           onFocus={handleInputClick}
+          onBlur={() => setTimeout(() => setToggleSearch(false), 100)}
           style={{
             paddingRight: '30px',
             position: 'relative',
@@ -90,7 +92,7 @@ export const SearchFeat = ({ onSearch }: SearchTypes) => {
             color: '#ffff',
           }}
         ></IoIosSearch>
-        {toggleSearch && (
+        {toggleSearch && searchTerm.length != 0 && (
           <ul
             style={{
               position: 'absolute',
