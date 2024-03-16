@@ -9,18 +9,27 @@ public interface UsersRepository extends
     Neo4jRepository<Users, String> { // pk가 long 타입이므로 long 도 추가
 //    Optional<Users> findByEmail(String email);
 
-    @Query("MATCH (u:Users) WHERE u.mail = $mail RETURN u LIMIT 1")
-    Users findUserByEmail(@Param(value = "mail") String mail);
+  @Query("CREATE CONSTRAINT user_nickname IF NOT EXISTS FOR (newUser:Users) REQUIRE newUser.nickname IS UNIQUE; ")
+  void createUserNicknameConstraint();
+
+  @Query("CREATE CONSTRAINT user_mail IF NOT EXISTS FOR (newUser:Users) REQUIRE newUser.mail IS UNIQUE; ")
+  void createUserMailConstraint();
+
+  @Query("CREATE CONSTRAINT post_title IF NOT EXISTS FOR (newPost:Post) REQUIRE newPost.title IS UNIQUE; ")
+  void createPostTitleConstraint();
+
+  @Query("MATCH (u:Users) WHERE u.mail = $mail RETURN u LIMIT 1")
+  Users findUserByEmail(@Param(value = "mail") String mail);
 
 
-    // 해당 유저 아이디에 대한 유저 아이디 반환
-    @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u.userId")
-    String findUserById(@Param(value = "userId") String userId);
+  // 해당 유저 아이디에 대한 유저 아이디 반환
+  @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u.userId")
+  String findUserById(@Param(value = "userId") String userId);
 
-    @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u LIMIT 1")
-    Users findUserByUserId(@Param(value = "userId") String userId);
+  @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u LIMIT 1")
+  Users findUserByUserId(@Param(value = "userId") String userId);
 
-    @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.userId")
-    String findUserByNickname(@Param(value = "nickname") String nickname);
+  @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.userId")
+  String findUserByNickname(@Param(value = "nickname") String nickname);
 }
 
