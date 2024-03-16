@@ -9,6 +9,7 @@ import starwrite.server.entity.Category;
 import starwrite.server.entity.Users;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 
 @Service
@@ -20,20 +21,7 @@ public class CategoryService {
   @Autowired
   UsersRepository usersRepository;
 
-//  private final CategoryRepository categoryRepository;
-//
-//  @Autowired
-//  public CategoryService(CategoryRepository categoryRepository) {
-//    this.categoryRepository = categoryRepository;
-//  }
-
-
   public Category getPosts(String id) {
-    System.out.println("category getPosts id >>>>>>>> " + id);
-    System.out.println(
-        "category getPost type id >>>>>>>>>>>>>>>>>>>>" + id.getClass().getTypeName());
-    System.out.println(
-        "category getposts result >>>>>>> " + categoryRepository.findCategoryById(id));
     return categoryRepository.findCategoryById(id);
   }
 
@@ -41,12 +29,13 @@ public class CategoryService {
     return categoryRepository.getAllCategory();
   }
 
+  public List<GetCategoryPosts> getCategoryPosts(String categoryId, String userId) {
+
+    return categoryRepository.getCategoryPosts(categoryId, userId);
+  }
+
 
   public PostResponse getCategoryByUserId(String userId) {
-    System.out.println("cat service >>>>>>>>> userid >>>>>>>>" + userId);
-    System.out.println("cat service foundUser >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + categoryRepository.findCategoryByUserId(userId));
-//    List<PostResponse> postlist = categoryRepository.findCategoryByUserId("0d74dd82-0513-4925-80b9-7c6b4ff9c282");
-//    System.out.println("postlist >>>>>>>>>>>>>>>" + postlist.get(0));
     return categoryRepository.findCategoryByUserId(userId);
   };
 
@@ -55,17 +44,11 @@ public class CategoryService {
     Category newCategory = new Category();
 
     Users foundUser = usersRepository.findUserByUserId(category.getUsers().getUserId());
-    System.out.println("foundUSer >>>>>>>>>>>>>>>" + foundUser);
 
     newCategory.setName(category.getName());
     newCategory.setUsers(foundUser);
     newCategory.setCreatedAt(LocalDateTime.now());
     newCategory.setUpdatedAt(newCategory.getCreatedAt());
-
-//    category.setUsers(foundUser);
-//    category.setCreatedAt(LocalDateTime.now());
-//    category.setUpdatedAt(category.getCreatedAt());
-    System.out.println("newCategory >>>>>>>>>" +newCategory);
 
     return categoryRepository.save(newCategory);
   }
