@@ -24,7 +24,11 @@ public class Related {
 
   private String postId;
 
+  private String postTitle;
+
   private String relatedPostId;
+
+  private String relatedPostTitle;
 
   private Boolean relatedBack;
 }
