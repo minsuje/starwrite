@@ -17,12 +17,6 @@ import { redTheme } from './style';
 
 import { Mention } from './Mention';
 
-// 나중에 분리하기  + 배열에 저장하는 함수로 수정 -> post 함수는 추가
-// async function saveToStorage(jsonBlocks: Block[]) {
-//   localStorage.setItem('editorContent', JSON.stringify(jsonBlocks));
-//   // console.log(JSON.stringify(jsonBlocks)); //Array // string으로 보내기
-// }
-
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -105,7 +99,6 @@ export default function Editor({
   }
   // console.log('this', editor.document);
 
-  // Renders the editor instance.
   return (
     <BlockNoteView
       editor={editor}
