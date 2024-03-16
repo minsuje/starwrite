@@ -119,6 +119,7 @@ public class PostController {
   public CreatedPost createPost(@RequestBody CreatePost post) {
     System.out.println("post >>>>>>>>>>>>>>" + post);
     return postService.createPost(post);
+  }
 
   // 새 포스트 만들기 ( create new Post )
 //  @PostMapping
@@ -135,16 +136,16 @@ public class PostController {
   }
 
 
-  @PostMapping("/createRelationship")
-//  public void createRelationship(@RequestBody String postId, @RequestBody List<String> relatedPostId) {
-  public void createRelationship(@RequestBody PostRelationDTO postRelationDTO) {
-    postService.createRelationship(postRelationDTO.getPostId(), postRelationDTO.getRelatedPostId());
-  }
-
-
-  @GetMapping("/{postId}/related")
-  public RelatedPosts getRelatedPosts(@PathVariable String postId) {
-    RelatedPosts relatedPosts = postService.getRelatedPosts(postId);
-    return relatedPosts;
-  }
+//  @PostMapping("/createRelationship")
+////  public void createRelationship(@RequestBody String postId, @RequestBody List<String> relatedPostId) {
+//  public void createRelationship(@RequestBody PostRelationDTO postRelationDTO) {
+//    postService.createRelationship(postRelationDTO.getPostId(), postRelationDTO.getRelatedPostId());
+//  }
+//
+//
+//  @GetMapping("/{postId}/related")
+//  public RelatedPosts getRelatedPosts(@PathVariable String postId) {
+//    RelatedPosts relatedPosts = postService.getRelatedPosts(postId);
+//    return relatedPosts;
+//  }
 }
