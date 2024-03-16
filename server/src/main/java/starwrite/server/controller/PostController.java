@@ -51,11 +51,11 @@ public class PostController {
   }
 
   // (유저의) 카테고리의 모든 포스트 조회 (All Post Get)
-  @GetMapping("/{nickname}/{categoryId}")
+ /* @GetMapping("/{nickname}/{categoryId}")
   public GetPosts getAllPosts(@PathVariable(value = "nickname") String nickname,
       @PathVariable(value = "categoryId") String categoryId) {
     return postService.getCategoryPosts(nickname, categoryId);
-  }
+  }*/
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
   @GetMapping("/Detail/{postId}")
