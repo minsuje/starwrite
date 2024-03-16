@@ -7,31 +7,17 @@ import {
   Label,
   LargeButton,
   _emoji,
+  _RegisterBox,
+  _ErrorMsg,
 } from '../../shared/CommonStyle';
-import styled from 'styled-components';
 
 // 타입 지정
-interface RegisteringUser {
+export interface RegisteringUser {
   email?: string;
   nickname?: string;
   password?: string;
   checkPW?: string;
 }
-
-// 스타일 지정
-const RegisterBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  position: relative;
-  transform: translateY(50%);
-`;
-
-const ErrorMsg = styled.p`
-  color: #ffafaf;
-  font-size: 12px;
-  padding-top: 2px;
-`;
 
 // 유효성 검사 schema
 const schema = z
@@ -85,7 +71,7 @@ function RegisterForm() {
   return (
     <>
       <form onSubmit={handleSubmit(onValid)}>
-        <RegisterBox>
+        <_RegisterBox>
           <InputBox>
             <Label>E-MAIL</Label>
             <Input
@@ -96,7 +82,7 @@ function RegisterForm() {
             <_emoji>{Emoji('email')}</_emoji>
 
             {errors.email && typeof errors.email.message === 'string' && (
-              <ErrorMsg>{errors.email.message}</ErrorMsg>
+              <_ErrorMsg>{errors.email.message}</_ErrorMsg>
             )}
           </InputBox>
 
@@ -109,7 +95,7 @@ function RegisterForm() {
             ></Input>
             <_emoji>{Emoji('nickname')}</_emoji>
             {errors.nickname && typeof errors.nickname.message === 'string' && (
-              <ErrorMsg>{errors.nickname.message}</ErrorMsg>
+              <_ErrorMsg>{errors.nickname.message}</_ErrorMsg>
             )}
           </InputBox>
 
@@ -122,7 +108,7 @@ function RegisterForm() {
             ></Input>
             <_emoji>{Emoji('password')}</_emoji>
             {errors.password && typeof errors.password.message === 'string' && (
-              <ErrorMsg>{errors.password.message}</ErrorMsg>
+              <_ErrorMsg>{errors.password.message}</_ErrorMsg>
             )}
           </InputBox>
 
@@ -135,12 +121,12 @@ function RegisterForm() {
             ></Input>
             <_emoji>{Emoji('checkPW')}</_emoji>
             {errors.checkPW && typeof errors.checkPW.message === 'string' && (
-              <ErrorMsg>{errors.checkPW.message}</ErrorMsg>
+              <_ErrorMsg>{errors.checkPW.message}</_ErrorMsg>
             )}
           </InputBox>
 
           <LargeButton type="submit">회원가입</LargeButton>
-        </RegisterBox>
+        </_RegisterBox>
       </form>
     </>
   );

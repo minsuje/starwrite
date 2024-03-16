@@ -7,6 +7,7 @@ import { CategoryViewPage } from '../pages/CartegoryView/CategoryViewPage';
 import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
+import { MyPage } from '../pages/MyPage/MyPage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -51,7 +52,7 @@ export const AppRouter = createBrowserRouter([
             path: 'mypage/:userid_num',
             element: (
               <>
-                <div>마이페이지인디요 ?</div>
+                <MyPage></MyPage>
               </>
             ),
           },

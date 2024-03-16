@@ -74,7 +74,22 @@ export const _emoji = styled.span`
   margin-left: 15px;
 `;
 
-// 메인 뷰 Profile
+// 스타일 지정
+export const _RegisterBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  transform: translateY(50%);
+`;
+
+export const _ErrorMsg = styled.p`
+  color: #ffafaf;
+  font-size: 12px;
+  padding-top: 2px;
+`;
+
+// // 메인 뷰 Profile
 // export const _Profile = styled.div`
 //   width: 50px;
 //   color: red;

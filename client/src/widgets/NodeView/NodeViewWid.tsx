@@ -141,7 +141,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .attr('height', 35) // svg 높이
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정
       .attr('pointer-events', 'all')
-      .call(drag(simulation as any)) //  D3.js의 드래그 기능을 이용하여 해당 이미지(노드)를 드래그 앤 드롭으로 이동할 수 있도록 함
+      .call(drag(simulation)) //  D3.js의 드래그 기능을 이용하여 해당 이미지(노드)를 드래그 앤 드롭으로 이동할 수 있도록 함
       .on('click', (_, d) => {
         if (d.url) window.location.href = d.url; // URL이 있으면 해당 URL로 이동
       })
@@ -162,7 +162,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
         });
       })
       .on('mouseout', function () {
-        node.style('opacity', 0.1);
+        node.style('opacity', 1);
         link.style('opacity', 0.1); // 기본 opacity 값을 사용
       });
     // 텍스트 요소 추가
