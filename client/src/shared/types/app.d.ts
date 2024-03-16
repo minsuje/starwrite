@@ -3,10 +3,8 @@
 export type Search = string;
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
-  owner: string;
-  post_cnt: number;
   created_at?: Date;
   updated_at?: Date;
 }
