@@ -1,6 +1,8 @@
 package starwrite.server.entity;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,5 +45,11 @@ public class Post {
 
     @Relationship(type = "POSTED", direction = Direction.INCOMING)
     private Users users;
+
+    @Relationship(type = "MENTION", direction = Direction.OUTGOING)
+    private List<Post> mention;
+
+    @Relationship(type = "MENTIONED", direction = Direction.INCOMING)
+    private List<Post> mentioned;
 
 }
