@@ -1,14 +1,18 @@
 package starwrite.server.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.entity.Users;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 
 @Service
@@ -27,10 +31,10 @@ public class PostService {
     return usersRepository.findUserById(userid);
   }
 
-//  // (로그인 유저) 카테고리의 모든 글 조회 ( find All Posts )
-//  public GetPosts getAllPost(String userId){
-//    return postRepository.findAllPosts(userId);
-//  }
+  // BackLink Info (postId , title)
+public List<BackLink> backLink(String userId){
+    return postRepository.backLink(userId);
+}
 
   // (유저의) 카테고리의 모든 글 조회
   public GetPosts getCategoryPosts(String nickname, String categoryId){
@@ -54,32 +58,40 @@ public class PostService {
   }
 
   // 글 작성 ( write Post )
-  public Post createPost(Post post) {
-
-    Post newPost = new Post();
-
-    Category foundCategory = categoryRepository.findCategoryById(post.getCategory().getCategoryId());
-    System.out.println(foundCategory);
-    Users foundUser = usersRepository.findUserByUserId(post.getUsers().getUserId());
-    System.out.println(foundUser);
-
-    newPost.setTitle(post.getTitle());
-    newPost.setContent(post.getContent());
-    newPost.setVisible(post.getVisible());
-    newPost.setTmpSave(false);
-    newPost.setCreatedAt(LocalDateTime.now());
-    newPost.setUpdatedAt(newPost.getCreatedAt());
-    newPost.setRecentView(newPost.getCreatedAt());
-    newPost.setCategory(foundCategory);
-    newPost.setUsers(foundUser);
-
-    // 중요!!
-    // 이런 관계가 있다는걸 알려줌
-    // 이게 있어야 기존 관계가 지워지지 않음
-    foundCategory.setUsers(foundUser);
-
-    return postRepository.save(newPost);
-  }
+//  public Post createPost(PostDTO postDTO) {
+//
+//    System.out.println(">>>>>>>>>>>>>>>>>>>>>>" + postDTO);
+//    Post newPost = new Post();
+//
+//    Category foundCategory = categoryRepository.findCategoryById(postDTO.getCategory().getCategoryId());
+//    System.out.println(foundCategory);
+//    Users foundUser = usersRepository.findUserByUserId(postDTO.getUsers().getUserId());
+//    System.out.println(foundUser);
+//    List<PostDTO> foundPosts = new ArrayList<>();
+//
+//    for (int i = 0; i < postDTO.getPostRelate().size(); i++) {
+//      postRepository.findPostByPostId(postDTO.getPostRelate().get(i));
+//    }
+//
+//    for(List<Post> postMention )
+//
+//    newPost.setTitle(postDTO.getTitle());
+//    newPost.setContent(postDTO.getContent());
+//    newPost.setVisible(postDTO.getVisible());
+//    newPost.setTmpSave(false);
+//    newPost.setCreatedAt(LocalDateTime.now());
+//    newPost.setUpdatedAt(newPost.getCreatedAt());
+//    newPost.setRecentView(newPost.getCreatedAt());
+//    newPost.setCategory(foundCategory);
+//    newPost.setUsers(foundUser);
+//    newPost.setMention();
+//    // 중요!!
+//    // 이런 관계가 있다는걸 알려줌
+//    // 이게 있어야 기존 관계가 지워지지 않음
+//    foundCategory.setUsers(foundUser);
+//
+//    return postRepository.save(newPost);
+//  }
 
 
   // 글 임시 저장 ( save Posts )

@@ -1,5 +1,8 @@
 package starwrite.server.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 import starwrite.server.service.PostService;
 
@@ -27,15 +32,13 @@ public class PostController {
   @Autowired
   UsersRepository usersRepository;
 
-//  // 내 모든 글 조회
-//  @GetMapping
-//  // (로그인 유저)카테고리의 속한 포스트 모두 가져오기
-//  public GetPosts getPosts(){
-//    // 헤더에서 user id 정보를 가져왔다고 가정
-//    String userid = "f0bdaf55-34cf-41ca-a248-1a462f5027b7";
-//    System.out.println(">>>>>>>> " + postService.findUserid(userid));
-//    return postService.getAllPost(userid);
-//  }
+  // 글 작성 BackLink info 전달
+  @GetMapping("/write")
+  public List<BackLink> getIdAndTitle(){
+    // 임시
+    String userId = "ca04fd1f-3f4b-4c94-929d-c39efac871a4";
+    return postService.backLink(userId);
+  }
 
   // 유저의 모든 글 조회
   @GetMapping("/{nickname}/All")
@@ -108,10 +111,11 @@ public class PostController {
 */
 
   // 새 포스트 만들기 ( create new Post )
-  @PostMapping
-  public Post createPost(@RequestBody Post post) {
-    return postService.createPost(post);
-  }
+//  @PostMapping
+//  public Post createPost(@RequestBody PostDTO postDTO) {
+//    System.out.println(postDTO);
+//    return postService.createPost(postDTO);
+//  }
 
   // 임지 서장 글 만들기 ( Create Save Post )
   @PostMapping("/Save")

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.stringtemplate.v4.ST;
 import starwrite.server.entity.Post;
+import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 
 @Repository
@@ -31,6 +32,13 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //      "WHERE p.tmpSave = false AND u.userId = $userId " +
 //      "RETURN collect(p) AS post, type(r) as relationType")
 //  GetPosts findAllPosts(@Param(value = "userId") String userId);
+
+  // 백링크 정보 보내기 (send back link info )
+  @Query("MATCH (p: Post) " +
+      "MATCH (u:Users) " +
+      "WHERE u.userId = $userId AND p.tmpSave = false " +
+      "RETURN p.postId AS postId, p.title AS title")
+  List<BackLink> backLink(@Param(value = "userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
   @Query("MATCH (p:Post) " +
