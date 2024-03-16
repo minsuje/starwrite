@@ -11,6 +11,7 @@ import starwrite.server.repository.UsersRepository;
 
 @RestController
 public class UsersController {
+
     @Autowired
     UsersRepository usersRepository;
 
@@ -25,6 +26,9 @@ public class UsersController {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(user.getCreatedAt());
         return usersRepository.save(user);
+//        return usersRepository.createUser(user.getLogin_type(), user.getMail(), user.getSocialId(),
+//            user.getPassword(), user.getProfile_img(), user.getNickname(), user.getRole(),
+//            user.getCreatedAt(), user.getUpdatedAt());
     }
 
 }

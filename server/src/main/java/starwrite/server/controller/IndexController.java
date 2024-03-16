@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.dto.JwtDTO;
 import starwrite.server.dto.LogInDTO;
 import starwrite.server.service.UsersService;
@@ -38,15 +39,17 @@ public class IndexController {
 
     @GetMapping("/user/home")
     public String handleUserHome() {
+        System.out.println("controller");
+        System.out.println("controller >>> " + SecurityUtil.getCurrentUsername());
         return "home_user";
     }
 
-    @GetMapping("/login")
-    public String handleLogin() {
-        return "custom_login";
-    }
+//    @GetMapping("/login")
+//    public String handleLogin() {
+//        return "custom_login";
+//    }
 
-    @PostMapping("/log-in")
+    @PostMapping("/login/post")
     public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
         System.out.println("signin" + logInDTO);
         String username = logInDTO.getMail();
@@ -57,10 +60,5 @@ public class IndexController {
         log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(), jwtDTO.getRefreshToken());
 
         return jwtDTO;
-    }
-
-    @PostMapping("/test")
-    public String test() {
-        return "success";
     }
 }

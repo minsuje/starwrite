@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import starwrite.server.AuthenticationSuccessHandler;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
 import starwrite.server.service.UsersDetailService;
@@ -44,17 +43,17 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
             SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
-                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경
-//                registry.requestMatchers("/home", "/register/**").permitAll(); // 홈은 누구나 접근할 수 있다는 의미
+//                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
+                registry.requestMatchers("/home", "/register/**", "/login/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
 //                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
-//                registry.requestMatchers("/user/**").hasRole("USER");
+                registry.requestMatchers("/user/**").hasRole("USER");
                 registry.anyRequest().authenticated(); // 위에 언급하지 않은 3가지 요청 외에는 허용되지 않는다는 의미.
             })
             .formLogin(httpSecurityFormLoginConfigurer -> {
                 httpSecurityFormLoginConfigurer
                     .loginPage("/login")
                     // 인증이 성공하면 다음에 수행할 작업을 사용자 정의할 수 있음
-                    .successHandler(new AuthenticationSuccessHandler())
+//                    .successHandler(new AuthenticationSuccessHandler())
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

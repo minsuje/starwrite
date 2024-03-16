@@ -12,10 +12,11 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import starwrite.server.dto.JwtDTO;
+import starwrite.server.dto.UserTokenDTO;
 
 @Slf4j
 @Component
@@ -38,20 +40,21 @@ public class JwtTokenProvider {
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
         System.out.println("JwtTokenProvider generateToken");
+
+        UserTokenDTO userDetails = (UserTokenDTO) authentication.getPrincipal();
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-        System.out.println("JwtTokenProvider generateToken authorities >>> " + authorities);
-
         long now = (new Date()).getTime();
-        System.out.println("now >>>>>> " + now);
 
         // AccessToken 생성
         Date accessTokenExpiresIn = new Date(now + 86400000);
         String accessToken = Jwts.builder()
             .setSubject(authentication.getName())
             .claim("auth", authorities)
+            .claim("nickname", userDetails.getNickname()) // nickname을 claim으로 추가
+            .claim("userId", userDetails.getUserId()) // userId를 claim으로 추가
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256).compact();
 
@@ -75,6 +78,8 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
         // Claim 이란? 사용자에 대한 프로퍼티나 속성. 토큰 자체가 정보를 가지고 있는 방식
 
+        System.out.println("getAuthentication claims >>" + claims);
+
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
@@ -86,7 +91,19 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: intercae, User: UserDetails를 구현한 class
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        System.out.println("getAuthentication authorities > " + authorities);
+
+//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+
+//        // Additional information
+        Map<String, Object> additionalInfo = new HashMap<>();
+        additionalInfo.put("nickname", claims.get("nickname")); // 닉네임 추가
+        additionalInfo.put("userId", claims.get("userId")); // 유저 아이디 추가
+        additionalInfo.put("auth", claims.get("auth"));
+//
+//
+//        // JwtAuthenticationToken에 추가 정보를 포함하여 반환
+        return new JwtAuthenticationToken(principal, "", authorities, additionalInfo);
     }
 
     // 토큰 정보를 검증하는 메서드
