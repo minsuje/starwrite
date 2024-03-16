@@ -51,10 +51,4 @@ public class Post {
     @Relationship(type = "POSTED", direction = Direction.INCOMING)
     private Users users;
 
-    @Relationship(type = "MENTION", direction = Direction.OUTGOING)
-    private List<Post> mention;
-
-    @Relationship(type = "MENTIONED", direction = Direction.INCOMING)
-    private List<Post> mentioned;
-
 }

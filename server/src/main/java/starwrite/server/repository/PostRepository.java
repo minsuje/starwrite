@@ -41,13 +41,15 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   List<BackLink> backLink(@Param(value = "userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
-  @Query("MATCH (p:Post) " +
+/*
+@Query("MATCH (p:Post) " +
       "MATCH (u : Users) " +
       "MATCH (c:Category)-[r]->(p) " +
       "WHERE p.tmpSave = false AND u.nickname = $nickname AND c.categoryId = $categoryId " +
       "RETURN collect(p) AS post, type(r) as categoryRelationType")
   GetPosts findAllPostsByCategory(@Param(value = "nickname") String nickname,
       @Param(value = "categoryId") String categoryId);
+      */
 
   // 특정 유저의 모든 글 조회
   @Query("MATCH (p:Post) " +
@@ -103,31 +105,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   //  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
 //      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) " +
 //      "RETURN p")
-  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
-      "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
-      "WITH p, r, rel " +
-      "WHERE rel IS NULL " +
-      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) "
-      +
-      "RETURN p")
-  Post createAndLinkRelatedPost(@Param("postId") String postId,
-      @Param("relatedPostId") String relatedPostId);
-
-
-  @Query("MATCH (p:Post)-[r:RELATED]->(relatedPost) WHERE p.postId = $postId " +
-      "RETURN p, collect(relatedPost) as relatedPosts")
-  Post findPostWithRelatedPosts(@Param("postId") String postId);
-
-
-  @Query("MATCH (p:Post)-[:RELATED]->(r:Post) WHERE p.postId = $postId RETURN r")
-  List<Post> findRelatedPosts(@Param("postId") String postId);
-
-  @Query("UNWIND $relatedPostIds AS relatedPostId " +
-      "MATCH (p:Post) WHERE p.postId = $postId " +
-      "MATCH (r:Post) WHERE r.postId = relatedPostId " +
-      "MERGE (p)-[:RELATED]->(r)")
-  void createMultipleRelationships(@Param("postId") String postId,
-      @Param("relatedPostIds") List<String> relatedPostIds);
 
   /*@Query("UNWIND $relatedPosts AS relatedPostId " +
       "MATCH (relatedPost:Post) WHERE relatedPost.postId = relatedPostId " +
@@ -164,5 +141,31 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param("relatedPosts") List<Long> relatedPosts);
   // 기존에는 Array가 String 타입으로 들어가서 에러가 났었다
   // Cypher 에는 List<Long> 타입으로 변환해서 넣어주자
+
+/*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
+      "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
+      "WITH p, r, rel " +
+      "WHERE rel IS NULL " +
+      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) "
+      +
+      "RETURN p")
+  Post createAndLinkRelatedPost(@Param("postId") String postId,
+      @Param("relatedPostId") String relatedPostId);*/
+
+
+/*  @Query("MATCH (p:Post)-[r:RELATED]->(relatedPost) WHERE p.postId = $postId " +
+      "RETURN p, collect(relatedPost) as relatedPosts")
+  Post findPostWithRelatedPosts(@Param("postId") String postId);*/
+
+
+/*  @Query("MATCH (p:Post)-[:RELATED]->(r:Post) WHERE p.postId = $postId RETURN r")
+  List<Post> findRelatedPosts(@Param("postId") String postId);*/
+
+  /*@Query("UNWIND $relatedPostIds AS relatedPostId " +
+      "MATCH (p:Post) WHERE p.postId = $postId " +
+      "MATCH (r:Post) WHERE r.postId = relatedPostId " +
+      "MERGE (p)-[:RELATED]->(r)")
+  void createMultipleRelationships(@Param("postId") String postId,
+      @Param("relatedPostIds") List<String> relatedPostIds);*/
 }
 

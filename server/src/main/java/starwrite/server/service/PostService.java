@@ -42,9 +42,9 @@ public List<BackLink> backLink(String userId){
 }
 
   // (유저의) 카테고리의 모든 글 조회
-  public GetPosts getCategoryPosts(String nickname, String categoryId){
+  /*public GetPosts getCategoryPosts(String nickname, String categoryId){
     return postRepository.findAllPostsByCategory(nickname, categoryId);
-  }
+  }*/
 
   // 공개 글 조회 ( without Pub Posts )
   public GetPosts getPubPost(String userId){
@@ -65,6 +65,7 @@ public List<BackLink> backLink(String userId){
   
   // 글 작성 ( write Post )
   public CreatedPost createPost(CreatePost post) {
+    System.out.println(">>>>>>>>>>>>>>>>>>><><><><><><>" + post);
 
     /*Post newPost = new Post();
 
@@ -102,11 +103,7 @@ public List<BackLink> backLink(String userId){
       related.forEach(item -> newRelated.add(Long.parseLong(item)));
     }
 
-
-
-
-
-    CreatedPost createdPost = postRepository.createPostLink(newPost.getUsers().getUserId(), post.getCategory(),
+    CreatedPost createdPost = postRepository.createPostLink(post.getUserid(), post.getCategory(),
         newPost.getTitle(), newPost.getContent(),
         newPost.getVisible(), img, newPost.isTmpSave(), timeNow, false,
         newRelated);
