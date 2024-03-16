@@ -149,7 +149,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
       "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
       "        MERGE (newPost)-[r:RELATED]->(p) " +
-      "        ON CREATE SET r.relatedBack = $relatedBack) " +
+      "        ON CREATE SET r.relatedBack = $relatedBack, r.postId = ID(newPost), r.relatedPostId = ID(p)) " +
       "WITH newPost " +
       "MATCH (category:Category) WHERE category.categoryId = $categoryId " +
       "MERGE (newPost)-[:IS_CHILD]->(category) " +
