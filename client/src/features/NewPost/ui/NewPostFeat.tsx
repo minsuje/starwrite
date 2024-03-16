@@ -4,11 +4,9 @@ import { Editor, GetSavings, NewPostHeadFeat } from '..';
 
 function NewPostFeat() {
   const [openSaving, setOpenSaving] = useState<boolean>(false);
-
   const [title, setTitle] = useState<string>();
   const [category, setCategory] = useState<string>();
-  const [isPublic, setIsPublic] = useState<boolean>(true);
-
+  const [isPublic, setIsPublic] = useState<string>('true');
   const [content, setContent] = useState<string | undefined>();
 
   return (
@@ -24,8 +22,10 @@ function NewPostFeat() {
           setCategory(value);
           console.log(category);
         }}
-        setIsPublic={(value: boolean) => setIsPublic(value)}
-        isPublic={isPublic}
+        setIsPublic={(value: string) => {
+          setIsPublic(value);
+          console.log(isPublic);
+        }}
       />
       <_EditorDiv>
         <Editor
