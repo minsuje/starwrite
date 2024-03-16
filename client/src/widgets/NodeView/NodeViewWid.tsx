@@ -14,7 +14,7 @@ export type SearchType = {
 
 export const NodeView = ({ searchTerm }: SearchType) => {
   const svgRef = useRef(null);
-  const [viewportSize, setViewportSize] = useState({
+  const [viewportSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
@@ -36,6 +36,31 @@ export const NodeView = ({ searchTerm }: SearchType) => {
         d.fx = null;
         d.fy = null;
       });
+  }
+
+  function findAllConnectedNodes(nodeId, links) {
+    let visited = new Set(); // 방문한 노드를 추적합니다.
+    let queue = [nodeId]; // BFS를 위한 큐
+
+    while (queue.length > 0) {
+      let currentId = queue.shift();
+      if (!visited.has(currentId)) {
+        visited.add(currentId);
+        links.forEach((link) => {
+          let sourceId =
+            typeof link.source === 'object' ? link.source.id : link.source;
+          let targetId =
+            typeof link.target === 'object' ? link.target.id : link.target;
+          if (sourceId === currentId && !visited.has(targetId)) {
+            queue.push(targetId);
+          } else if (targetId === currentId && !visited.has(sourceId)) {
+            queue.push(sourceId);
+          }
+        });
+      }
+    }
+
+    return visited;
   }
 
   useEffect(() => {
@@ -67,7 +92,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
 
     (svg as any).call(zoomHandler); // 줌 핸들러를 SVG 요소에 적용
     // 초기 줌 스케일 설정 (예: 0.8로 줌 아웃)
-    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.6));
+    (svg as any).call(zoomHandler.transform, d3.zoomIdentity.scale(0.8));
 
     const simulation = d3
       .forceSimulation(nodes)
@@ -79,11 +104,11 @@ export const NodeView = ({ searchTerm }: SearchType) => {
           // 링크 선 길이 조절
           .distance(100),
       ) // 링크 거리 조절
-      .force('charge', d3.forceManyBody().strength(-55))
-      .force('collide', d3.forceCollide().radius(90))
+      .force('charge', d3.forceManyBody().strength(-500))
+      .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.3, window.innerHeight / 2),
+        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2),
       )
       .force(
         'radial',
@@ -102,12 +127,11 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       // 선의 굵기 조절
       .attr('stroke-width', (d) => Math.sqrt(d.value ?? 3))
       .attr('stroke', '#fff')
-      .attr('opacity', 0.1);
+      .style('opacity', 0.2);
 
     const node = group
       .append('g') //  호출하여 SVG 내에 새로운 <g> 요소(그룹)를 추가 이 그룹은 별 모양 이미지를 포함할 노드들의 컨테이너 역할
       .attr('class', 'nodes') // classname nodes설정
-      .attr('opacity', 1)
       .selectAll('image') // 데이터 배열을 각 이미지 요소에 바인딩
       .data(nodes) // 데이터 배열을 각 이미지 요소에 바인딩
       .enter() // 데이터 배열을 각 이미지 요소에 바인딩합니다.
@@ -115,17 +139,32 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .attr('href', '/star.svg') // 별모양으로 변경함 pulic 폴더 내부의 svg 파일 사용
       .attr('width', 35) // svg 넓이
       .attr('height', 35) // svg 높이
-      .on('mouseover', (d) => setOpacityForConnectedNodes(d))
-      .on('mouseout', resetOpacity)
-
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정
       .attr('pointer-events', 'all')
       .call(drag(simulation as any)) //  D3.js의 드래그 기능을 이용하여 해당 이미지(노드)를 드래그 앤 드롭으로 이동할 수 있도록 함
       .on('click', (_, d) => {
         if (d.url) window.location.href = d.url; // URL이 있으면 해당 URL로 이동
       })
-      .style('cursor', 'pointer'); // 커서 포인트 변경
+      .style('cursor', 'pointer') // 커서 포인트 변경
+      .on('mouseover', function (_, d) {
+        const connectedNodes = findAllConnectedNodes(d.id, links);
 
+        // 연결된 모든 노드의 opacity 조정
+        node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
+
+        // 연결된 모든 링크의 opacity 조정
+        link.style('opacity', (l) => {
+          let sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+          let targetId = typeof l.target === 'object' ? l.target.id : l.target;
+          return connectedNodes.has(sourceId) && connectedNodes.has(targetId)
+            ? 1
+            : 0.1;
+        });
+      })
+      .on('mouseout', function () {
+        node.style('opacity', 0.1);
+        link.style('opacity', 0.1); // 기본 opacity 값을 사용
+      });
     // 텍스트 요소 추가
     const text = group
       .append('g')
@@ -211,35 +250,6 @@ export const NodeView = ({ searchTerm }: SearchType) => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-
-    // 연결된 노드들의 정보를 저장할 객체 생성
-    const linkedByIndex = {};
-    links.forEach((link) => {
-      linkedByIndex[`${link.source},${link.target}`] = true;
-    });
-
-    // 두 노드가 연결되어 있는지 확인하는 함수
-    function isConnected(a, b) {
-      return (
-        linkedByIndex[`${a.id},${b.id}`] ||
-        linkedByIndex[`${b.id},${a.id}`] ||
-        a.id === b.id
-      );
-    }
-
-    // 노드와 연결된 노드들의 투명도를 조정하는 함수
-    function setOpacityForConnectedNodes(nodeId) {
-      node.style('opacity', (d) => (isConnected(d, nodeId) ? 1 : 0.2));
-      link.style('opacity', (d) =>
-        d.source === nodeId || d.target === nodeId ? 1 : 0.2,
-      );
-    }
-
-    // 모든 노드와 링크의 투명도를 원래대로 복원하는 함수
-    function resetOpacity() {
-      node.style('opacity', 1);
-      link.style('opacity', 1);
-    }
   }, []); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
   useEffect(() => {
