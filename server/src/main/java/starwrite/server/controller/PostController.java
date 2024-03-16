@@ -1,8 +1,6 @@
 package starwrite.server.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +8,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import starwrite.server.dto.PostRelationDTO;
 import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
+import starwrite.server.relationship.Related;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.CreatePost;
+import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.RelatedPosts;
 import starwrite.server.service.PostService;
 
 @RestController
@@ -110,6 +114,12 @@ public class PostController {
   }
 */
 
+
+  @PostMapping
+  public CreatedPost createPost(@RequestBody CreatePost post) {
+    System.out.println("post >>>>>>>>>>>>>>" + post);
+    return postService.createPost(post);
+
   // 새 포스트 만들기 ( create new Post )
 //  @PostMapping
 //  public Post createPost(@RequestBody PostDTO postDTO) {
@@ -121,5 +131,20 @@ public class PostController {
   @PostMapping("/Save")
   public Post savePost(@RequestBody Post post){
     return postService.savePost(post);
+
+  }
+
+
+  @PostMapping("/createRelationship")
+//  public void createRelationship(@RequestBody String postId, @RequestBody List<String> relatedPostId) {
+  public void createRelationship(@RequestBody PostRelationDTO postRelationDTO) {
+    postService.createRelationship(postRelationDTO.getPostId(), postRelationDTO.getRelatedPostId());
+  }
+
+
+  @GetMapping("/{postId}/related")
+  public RelatedPosts getRelatedPosts(@PathVariable String postId) {
+    RelatedPosts relatedPosts = postService.getRelatedPosts(postId);
+    return relatedPosts;
   }
 }

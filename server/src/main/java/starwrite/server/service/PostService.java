@@ -3,17 +3,22 @@ package starwrite.server.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.entity.Users;
+import starwrite.server.relationship.Related;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.CreatePost;
+import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.RelatedPosts;
 
 @Service
 public class PostService {
@@ -57,42 +62,61 @@ public List<BackLink> backLink(String userId){
     return postRepository.setRecentView(postId, recentView);
   }
 
+  
   // 글 작성 ( write Post )
-//  public Post createPost(PostDTO postDTO) {
-//
-//    System.out.println(">>>>>>>>>>>>>>>>>>>>>>" + postDTO);
-//    Post newPost = new Post();
-//
-//    Category foundCategory = categoryRepository.findCategoryById(postDTO.getCategory().getCategoryId());
-//    System.out.println(foundCategory);
-//    Users foundUser = usersRepository.findUserByUserId(postDTO.getUsers().getUserId());
-//    System.out.println(foundUser);
-//    List<PostDTO> foundPosts = new ArrayList<>();
-//
-//    for (int i = 0; i < postDTO.getPostRelate().size(); i++) {
-//      postRepository.findPostByPostId(postDTO.getPostRelate().get(i));
-//    }
-//
-//    for(List<Post> postMention )
-//
-//    newPost.setTitle(postDTO.getTitle());
-//    newPost.setContent(postDTO.getContent());
-//    newPost.setVisible(postDTO.getVisible());
-//    newPost.setTmpSave(false);
-//    newPost.setCreatedAt(LocalDateTime.now());
-//    newPost.setUpdatedAt(newPost.getCreatedAt());
-//    newPost.setRecentView(newPost.getCreatedAt());
-//    newPost.setCategory(foundCategory);
-//    newPost.setUsers(foundUser);
-//    newPost.setMention();
-//    // 중요!!
-//    // 이런 관계가 있다는걸 알려줌
-//    // 이게 있어야 기존 관계가 지워지지 않음
-//    foundCategory.setUsers(foundUser);
-//
-//    return postRepository.save(newPost);
-//  }
+  public CreatedPost createPost(CreatePost post) {
 
+    /*Post newPost = new Post();
+
+    Category foundCategory = categoryRepository.findCategoryById(post.getPost().getCategory().getCategoryId());
+    System.out.println(foundCategory);
+    Users foundUser = usersRepository.findUserByUserId(post.getPost().getUsers().getUserId());
+    System.out.println(foundUser);
+
+    newPost.setTitle(post.getPost().getTitle());
+    newPost.setContent(post.getPost().getContent());
+    newPost.setVisible(post.getPost().getVisible());
+    newPost.setTmpSave(false);
+    newPost.setCreatedAt(LocalDateTime.now());
+    newPost.setUpdatedAt(newPost.getCreatedAt());
+    newPost.setCategory(foundCategory);
+    newPost.setUsers(foundUser);
+
+    // 중요!!
+    // 이런 관계가 있다는걸 알려줌
+    // 이게 있어야 기존 관계가 지워지지 않음
+    foundCategory.setUsers(foundUser);
+    postRepository.save(newPost);*/
+
+    Post newPost = post.getPost();
+
+    LocalDateTime timeNow = LocalDateTime.now();
+
+    String img = newPost.getImg() != null ? newPost.getImg() : "";
+
+    List<Long> newRelated = new ArrayList<>();
+
+
+    if(!post.getRelatedPosts().isEmpty()) {
+      List<String> related = post.getRelatedPosts();
+      related.forEach(item -> newRelated.add(Long.parseLong(item)));
+    }
+
+
+
+
+
+    CreatedPost createdPost = postRepository.createPostLink(newPost.getUsers().getUserId(), post.getCategory(),
+        newPost.getTitle(), newPost.getContent(),
+        newPost.getVisible(), img, newPost.isTmpSave(), timeNow, false,
+        newRelated);
+
+    System.out.println("createdPost >>>>>>>>>" + createdPost);
+
+    return createdPost;
+//    postRepository.save(createdPost);
+
+  }
 
   // 글 임시 저장 ( save Posts )
   public Post savePost(Post post){
@@ -124,6 +148,4 @@ public List<BackLink> backLink(String userId){
   public Post getSavePost(String nickname, String postId){
     return postRepository.findSavePost(nickname, postId);
   }
-
-
 }

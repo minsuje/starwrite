@@ -7,8 +7,8 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.stringtemplate.v4.ST;
 import starwrite.server.entity.Post;
+import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 
@@ -96,8 +96,73 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   )
   Post findPostByPostId(@Param(value = "postId") String postId);
 
-  @Query("MATCH (p:Post) WHERE ID(p) = $id RETURN p")
+  @Query("MATCH (p:Post) WHERE p.postId = $id RETURN p ")
   Post findPostById(@Param(value = "id") String id);
 
+
+  //  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
+//      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) " +
+//      "RETURN p")
+  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
+      "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
+      "WITH p, r, rel " +
+      "WHERE rel IS NULL " +
+      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) "
+      +
+      "RETURN p")
+  Post createAndLinkRelatedPost(@Param("postId") String postId,
+      @Param("relatedPostId") String relatedPostId);
+
+
+  @Query("MATCH (p:Post)-[r:RELATED]->(relatedPost) WHERE p.postId = $postId " +
+      "RETURN p, collect(relatedPost) as relatedPosts")
+  Post findPostWithRelatedPosts(@Param("postId") String postId);
+
+
+  @Query("MATCH (p:Post)-[:RELATED]->(r:Post) WHERE p.postId = $postId RETURN r")
+  List<Post> findRelatedPosts(@Param("postId") String postId);
+
+  @Query("UNWIND $relatedPostIds AS relatedPostId " +
+      "MATCH (p:Post) WHERE p.postId = $postId " +
+      "MATCH (r:Post) WHERE r.postId = relatedPostId " +
+      "MERGE (p)-[:RELATED]->(r)")
+  void createMultipleRelationships(@Param("postId") String postId,
+      @Param("relatedPostIds") List<String> relatedPostIds);
+
+  /*@Query("UNWIND $relatedPosts AS relatedPostId " +
+      "MATCH (relatedPost:Post) WHERE relatedPost.postId = relatedPostId " +
+      "CREATE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: $tmpSave, recentView: $timeNow, createdAt: $timeNow, updatedAt: $timeNow}) "
+      +
+      "MERGE (newPost)-[r:RELATED {postId: newPost.postId, relatedPostId: relatedPost.postId, relatedBack: $relatedBack}]->(relatedPost) "
+      +
+      "RETURN newPost, collect(relatedPost) as relatedPosts")
+  void createPostLink(@Param("title") String title,
+      @Param("content") String content, @Param("visible") String visible,
+      @Param("img") String img, @Param("tmpSave") boolean tmpSave,
+      @Param("timeNow") LocalDateTime timeNow, @Param("relatedBack") boolean relatedBack,
+      @Param("relatedPosts") List<String> relatedPosts);*/
+
+
+  @Query("MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: $tmpSave, createdAt: $timeNow, updatedAt: $timeNow}) " +
+      "WITH newPost " +
+      "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId " +
+      "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
+      "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
+      "        MERGE (newPost)-[r:RELATED]->(p) " +
+      "        ON CREATE SET r.relatedBack = $relatedBack) " +
+      "WITH newPost " +
+      "MATCH (category:Category) WHERE category.categoryId = $categoryId " +
+      "MERGE (newPost)-[:IS_CHILD]->(category) " +
+      "WITH newPost " +
+      "MATCH (user:Users) WHERE user.userId = $userId " +
+      "MERGE (user)-[:POSTED]->(newPost) " +
+      "RETURN newPost AS post, ID(newPost) AS identifier LIMIT 1")
+  CreatedPost createPostLink(@Param("userId") String userId, @Param("categoryId") String categoryId, @Param("title") String title,
+      @Param("content") String content, @Param("visible") String visible,
+      @Param("img") String img, @Param("tmpSave") boolean tmpSave,
+      @Param("timeNow") LocalDateTime timeNow, @Param("relatedBack") boolean relatedBack,
+      @Param("relatedPosts") List<Long> relatedPosts);
+  // 기존에는 Array가 String 타입으로 들어가서 에러가 났었다
+  // Cypher 에는 List<Long> 타입으로 변환해서 넣어주자
 }
 

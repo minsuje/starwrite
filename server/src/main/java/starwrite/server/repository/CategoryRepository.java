@@ -6,10 +6,12 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
+import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 
 //@Repository
 public interface CategoryRepository extends Neo4jRepository<Category, String> {
+
   @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
   List<Post> findPostsByCategory(String categoryId);
 
@@ -20,8 +22,9 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "RETURN c")
   List<Category> getAllCategory();
 
-  @Query("CREATE (c:Category{ name: $name, createdAt: localdatetime(), updatedAt: localdateTime()}) " +
-      "RETURN c")
+  @Query(
+      "CREATE (c:Category{ name: $name, createdAt: localdatetime(), updatedAt: localdateTime()}) " +
+          "RETURN c")
   Category createCategory(@Param(value = "name") String name);
 
 //  @Query("MATCH p=(u:Users)-[r:OWNS]->() WHERE u.userId = $userId RETURN p LIMIT 1")
@@ -42,5 +45,11 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "RETURN u AS userId, type(r) AS relationType, collect(c) AS category, collect(p) AS post")
   PostResponse findCategoryByUserId(@Param(value = "userId") String userId);
 
+
+  @Query("MATCH (u:Users)-[]-(c:Category) " +
+      "MATCH (c)-[r]-(p:Post) " +
+      "RETURN r ")
+  List<GetCategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId,
+      @Param(value = "userId") String userId);
 
 }
