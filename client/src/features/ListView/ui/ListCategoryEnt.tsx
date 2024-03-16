@@ -4,7 +4,7 @@ import { OneCategory, ListCategories } from '../../NewPost/ui/style';
 import { initalList, list } from '../model/CategoryData';
 import { Category } from '../../../shared/types/app';
 
-function ListCategory() {
+function ListCategory({ sort }: { sort: string }) {
   const navigate = useNavigate();
   const { category } = useParams();
 
@@ -18,8 +18,12 @@ function ListCategory() {
   };
 
   useEffect(() => {
-    setCategories(list);
-  }, []);
+    if (sort === 'listView') {
+      setCategories(list);
+    } else if (sort === 'myPage') {
+      setCategories([{ name: '기본 정보', id: 'myProfile' }]);
+    }
+  }, [sort]);
 
   return (
     <>
@@ -55,5 +59,9 @@ function ListCategory() {
     </>
   );
 }
+
+ListCategory.defaultProps = {
+  sort: 'listView',
+};
 
 export default ListCategory;
