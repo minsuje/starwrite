@@ -138,12 +138,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow}) "
           +
           "WITH newPost " +
-          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
-          +
+          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId " +
+          "    OPTIONAL MATCH (p2:Post) WHERE ID(p2) = relatedPostId " +
           "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
           "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
           "        MERGE (newPost)-[r:RELATED]->(p) " +
-          "        ON CREATE SET r.relatedBack = $relatedBack, r.postId = ID(newPost), r.relatedPostId = ID(p)) "
+          "        ON CREATE SET r.relatedBack = $relatedBack, r.postId = ID(newPost), r.postTitle = $title, r.relatedPostId = ID(p), r.relatedPostTitle = p2.title) "
           +
           "WITH newPost " +
           "MATCH (category:Category) WHERE category.categoryId = $categoryId " +

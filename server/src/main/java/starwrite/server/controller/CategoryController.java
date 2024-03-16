@@ -9,6 +9,7 @@ import starwrite.server.dto.UserDTO;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Users;
 import starwrite.server.relationship.Owns;
+import starwrite.server.relationship.Related;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 import starwrite.server.service.CategoryService;
@@ -37,6 +38,12 @@ public class CategoryController {
       @RequestParam(value = "userId") String userId) {
     return categoryService.getCategoryPosts(categoryId, userId);
   }
+
+  @GetMapping("/getCategoryPostNode")
+  public List<GetCategoryPosts> getCategoryPostNode(@RequestBody Category category) {
+    return categoryService.getCategoryPostsNode(category.getCategoryId());
+  }
+
 
 
   @GetMapping("/test/{userId}")

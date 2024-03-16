@@ -7,6 +7,14 @@ import starwrite.server.relationship.Related;
 
 @Data
 public class GetCategoryPosts {
-  private Post posts;
-  private Related related;
+
+  private Long postId;
+
+  private String postTitle;
+
+  private Long relatedPostId;
+
+  private String relatedPostTitle;
+
+//  private Boolean relatedBack;
 }
