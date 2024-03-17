@@ -6,10 +6,12 @@ import { _SmallButton } from '../../shared/CommonStyle';
 import { TitleFeat } from '../../features/CategorySearchFeat/index';
 import { Link, useParams } from 'react-router-dom';
 
+
+
+
+
 export function HeaderWid() {
   const useparam = useParams();
-
-  console.log('useparam', useparam);
 
   return (
     <div
@@ -34,7 +36,9 @@ export function HeaderWid() {
         </_SmallButton>
       </div>
       <div style={{ display: 'flex' }}>
-        <ProfileShard />
+        <Link to={`/user/starwrite/mypage/:userid_num/`}>
+          <ProfileShard />
+        </Link>
       </div>
     </div>
   );

@@ -10,9 +10,9 @@ export interface Node {
   vy?: number;
   fx?: number | null;
   fy?: number | null;
-  subject: any;
-  active: any;
-  alphaTarget: any;
+  subject?: any;
+  active?: any;
+  alphaTarget?: any;
 }
 
 // CustomNode와 Link 인터페이스 정의
@@ -30,6 +30,8 @@ export interface CustomNode {
   userid?: number; // 사용자 ID 필드 추가
   category?: string; // 카테고리 필드 추가
   userid_num?: number;
+  source?: any;
+  target?: string;
 }
 export interface Link extends SimulationLinkDatum<CustomNode> {
   source: string | CustomNode;

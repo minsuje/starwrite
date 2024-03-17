@@ -9,23 +9,53 @@ import {
   _emoji,
   _RegisterBox,
   _ErrorMsg,
+  _registerbtn,
 } from '../../shared/CommonStyle';
 
 // 타입 지정
-export interface RegisteringUser {
+interface RegisteringUser {
   email?: string;
   nickname?: string;
   password?: string;
   checkPW?: string;
 }
+// 닉네임 유효성 검사
+const NicNamePattern = /^[가-힣A-Za-z_]{2,10}$/;
+
+const nicknameSchema = z
+  .string()
+  .min(4, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
+  .max(10, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
+  .regex(NicNamePattern, {
+    message: '닉네임은 한글, 영문, 밑줄(_)만 사용할 수 있습니다.',
+  });
+
+// 패스워드 유효성 검사
+const passwordPattern =
+  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/;
+
+const passwordSchema = z
+  .string()
+  .min(8, {
+    message:
+      '비밀번호는 영문/숫자/특수문자 조합으로 8자리 이상 15자리 이하입니다',
+  })
+  .max(15, {
+    message:
+      '비밀번호는 영문/숫자/특수문자 조합으로 8자리 이상 15자리 이하입니다',
+  })
+  .regex(passwordPattern, {
+    message:
+      '비밀번호는 영문/숫자/특수문자 조합으로 8자리 이상 15자리 이하입니다',
+  });
 
 // 유효성 검사 schema
 const schema = z
   .object({
     email: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
-    nickname: z.string().min(1, { message: '닉네임을 입력해주세요' }),
-    password: z.string().min(1, { message: '비밀번호를 입력해주세요' }),
-    checkPW: z.string().min(1, { message: '비밀번호를 다시 입력해주세요' }),
+    nickname: nicknameSchema,
+    password: passwordSchema,
+    checkPW: passwordSchema,
   })
   .refine((data) => data.password === data.checkPW, {
     path: ['checkPW'],
@@ -73,13 +103,16 @@ function RegisterForm() {
       <form onSubmit={handleSubmit(onValid)}>
         <_RegisterBox>
           <InputBox>
-            <Label>E-MAIL</Label>
+            <Label>
+              E-MAIL
+              <_emoji>{Emoji('email')}</_emoji>
+            </Label>
             <Input
               {...register('email', {
                 onChange: async () => await trigger('email'),
               })}
             ></Input>
-            <_emoji>{Emoji('email')}</_emoji>
+            <_registerbtn bgcolor="#1361d7">중복확인</_registerbtn>
 
             {errors.email && typeof errors.email.message === 'string' && (
               <_ErrorMsg>{errors.email.message}</_ErrorMsg>
@@ -87,39 +120,48 @@ function RegisterForm() {
           </InputBox>
 
           <InputBox>
-            <Label>닉네임</Label>
+            <Label>
+              닉네임
+              <_emoji>{Emoji('nickname')}</_emoji>
+            </Label>
             <Input
               {...register('nickname', {
                 onChange: async () => await trigger('nickname'),
               })}
             ></Input>
-            <_emoji>{Emoji('nickname')}</_emoji>
+            <_registerbtn bgcolor="#1361d7">중복확인</_registerbtn>
+
             {errors.nickname && typeof errors.nickname.message === 'string' && (
               <_ErrorMsg>{errors.nickname.message}</_ErrorMsg>
             )}
           </InputBox>
 
           <InputBox>
-            <Label>비밀번호</Label>
+            <Label>
+              비밀번호<_emoji>{Emoji('password')}</_emoji>
+            </Label>
             <Input
               {...register('password', {
                 onChange: async () => await trigger('password'),
               })}
             ></Input>
-            <_emoji>{Emoji('password')}</_emoji>
+
             {errors.password && typeof errors.password.message === 'string' && (
               <_ErrorMsg>{errors.password.message}</_ErrorMsg>
             )}
           </InputBox>
 
           <InputBox>
-            <Label>비밀번호 확인</Label>
+            <Label>
+              비밀번호 확인
+              <_emoji>{Emoji('checkPW')}</_emoji>
+            </Label>
             <Input
               {...register('checkPW', {
                 onChange: async () => await trigger('checkPW'),
               })}
             ></Input>
-            <_emoji>{Emoji('checkPW')}</_emoji>
+
             {errors.checkPW && typeof errors.checkPW.message === 'string' && (
               <_ErrorMsg>{errors.checkPW.message}</_ErrorMsg>
             )}

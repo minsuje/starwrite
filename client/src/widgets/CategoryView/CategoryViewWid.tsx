@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nodes } from '../../features/CategoryViewFeat/index';
 
+
 const _SyledContainer = styled.div`
   display: 'flex';
   width: '100%';

@@ -1,4 +1,4 @@
-export { nodes, links } from './api/NodeviewApi';
+export { nodes, links, NodeData } from './api/NodeviewApi';
 export {
   type Node,
   type CustomNode,
