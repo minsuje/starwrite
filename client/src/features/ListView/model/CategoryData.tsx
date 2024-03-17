@@ -11,4 +11,4 @@ const categories: Category[] = [
   { id: 'scienceid', name: '과학' },
 ];
 const list: Category[] = [...initalList, ...categories];
-export { list, categories };
+export { initalList, list, categories };

@@ -8,5 +8,6 @@ import starwrite.server.entity.Post;
 public class CreatePost {
   private Post post;
   private String category;
+  private String user;
   private List<String> relatedPosts;
 }

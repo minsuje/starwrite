@@ -1,77 +1,51 @@
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  BlockNoteSchema,
+  defaultInlineContentSpecs,
+  filterSuggestionItems,
+} from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import {
   BlockNoteView,
-  Theme,
-  darkDefaultTheme,
-  lightDefaultTheme,
+  DefaultReactSuggestionItem,
+  SuggestionMenuController,
 } from '@blocknote/react';
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
+import { redTheme } from './style';
 
-// 나중에 분리하기  + 배열에 저장하는 함수로 수정 -> post 함수는 추가
-// async function saveToStorage(jsonBlocks: Block[]) {
-//   localStorage.setItem('editorContent', JSON.stringify(jsonBlocks));
-//   // console.log(JSON.stringify(jsonBlocks)); //Array // string으로 보내기
-// }
+import { Mention } from './Mention';
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
-const lightRedTheme = {
-  colors: {
-    editor: {
-      text: '#222222',
-      background: '#ffeeee',
-    },
-    menu: {
-      text: 'var(--color-zinc-800)',
-      background: 'var(--color-zinc-800)',
-    },
-    tooltip: {
-      text: 'var(--color-zinc-800)',
-      background: 'var(--color-zinc-800)',
-    },
-    hovered: {
-      text: 'var(--color-zinc-800)',
-      background: 'var(--color-zinc-800)',
-    },
-    selected: {
-      text: '#ffffff',
-      background: 'var(--color-zinc-800)',
-    },
-    disabled: {
-      text: '#9b0000',
-      background: 'var(--color-zinc-800)',
-    },
-    shadow: '#640000',
-    border: '#870000',
-    sideMenu: 'var(--color-zinc-800)',
-    highlights: lightDefaultTheme.colors!.highlights,
+const schema = BlockNoteSchema.create({
+  inlineContentSpecs: {
+    // Adds all default inline content.
+    ...defaultInlineContentSpecs,
+    // Adds the mention tag.
+    mention: Mention,
   },
-  borderRadius: 4,
-  fontFamily: 'Helvetica Neue, sans-serif',
-} satisfies Theme;
+});
 
-// The theme for dark mode,
-// users the light theme defined above with a few changes
-const darkRedTheme = {
-  ...lightRedTheme,
-  colors: {
-    ...lightRedTheme.colors,
-    editor: {
-      text: '#ffffff',
-      background: 'var(--color-zinc-800)',
+const getMentionMenuItems = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem[] => {
+  const users = ['Steve', 'Bob', 'Joe', 'Mike'];
+
+  return users.map((user) => ({
+    title: user,
+    onItemClick: () => {
+      editor.insertInlineContent([
+        {
+          type: 'mention',
+          props: {
+            user,
+          },
+        },
+        ' ', // add a space after the mention
+      ]);
     },
-    sideMenu: '#ffffff',
-    highlights: darkDefaultTheme.colors!.highlights,
-  },
-} satisfies Theme;
-
-// The combined "red theme",
-// we pass this to BlockNoteView and then the editor will automatically
-// switch between lightRedTheme / darkRedTheme based on the system theme
-const redTheme = {
-  light: lightRedTheme,
-  dark: darkRedTheme,
+  }));
 };
 async function uploadFile(file: File) {
   const body = new FormData();
@@ -113,7 +87,11 @@ export default function Editor({
     if (initialContent === 'loading') {
       return undefined;
     }
-    return BlockNoteEditor.create({ initialContent, uploadFile });
+    return BlockNoteEditor.create({
+      schema,
+      initialContent,
+      uploadFile,
+    });
   }, [initialContent]);
 
   if (editor === undefined) {
@@ -121,7 +99,6 @@ export default function Editor({
   }
   // console.log('this', editor.document);
 
-  // Renders the editor instance.
   return (
     <BlockNoteView
       editor={editor}
@@ -129,6 +106,14 @@ export default function Editor({
       onChange={() => {
         setContent(JSON.stringify(editor.document));
       }}
-    />
+    >
+      <SuggestionMenuController
+        triggerCharacter={'@'} // 한글자만 가능
+        getItems={async (query) =>
+          // Gets the mentions menu items
+          filterSuggestionItems(getMentionMenuItems(editor), query)
+        }
+      />
+    </BlockNoteView>
   );
 }

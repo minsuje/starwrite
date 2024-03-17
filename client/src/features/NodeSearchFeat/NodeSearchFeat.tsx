@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { nodes } from '../../widgets/NodeView/index';
 import './NodeSearchFeat.css';
@@ -32,7 +32,6 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
     setSearchTerm(newSearchTerm);
     onSearch(newSearchTerm);
 
-    console.log('newSearchTerm', newSearchTerm);
     // 검색어가 있고, 필터링된 결과가 있을 때만 목록을 표시
     if (
       newSearchTerm.trim() &&
@@ -57,9 +56,6 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
 
   const handleInputClick = () => {
     setToggleSearch(true);
-  };
-  const handleoutClick = () => {
-    setToggleSearch(false);
   };
 
   const filterSearch = nodes.filter((node) =>

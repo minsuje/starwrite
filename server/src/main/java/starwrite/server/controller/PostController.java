@@ -2,24 +2,19 @@ package starwrite.server.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import starwrite.server.dto.PostRelationDTO;
-import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
-import starwrite.server.relationship.Related;
 import starwrite.server.repository.UsersRepository;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
-import starwrite.server.response.RelatedPosts;
 import starwrite.server.service.PostService;
 
 @RestController
@@ -44,18 +39,21 @@ public class PostController {
     return postService.backLink(userId);
   }
 
-  // 유저의 모든 글 조회
+  // 유저의 모든 글 조회 (리스트 뷰)
   @GetMapping("/{nickname}/All")
   public GetPosts getAllPosts(@PathVariable(value = "nickname") String nickname) {
     return postService.getAllPosts(nickname);
   }
 
+  // 글 수정
+
+
   // (유저의) 카테고리의 모든 포스트 조회 (All Post Get)
-  @GetMapping("/{nickname}/{categoryId}")
+ /* @GetMapping("/{nickname}/{categoryId}")
   public GetPosts getAllPosts(@PathVariable(value = "nickname") String nickname,
       @PathVariable(value = "categoryId") String categoryId) {
     return postService.getCategoryPosts(nickname, categoryId);
-  }
+  }*/
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
   @GetMapping("/Detail/{postId}")
@@ -74,6 +72,7 @@ public class PostController {
   public Post getSavePost(@PathVariable(value = "nickname") String nickname, @PathVariable(value = "postId") String postId){
     return postService.getSavePost(nickname,postId);
   }
+
 
 /*
 
@@ -114,12 +113,23 @@ public class PostController {
   }
 */
 
-
+  // 새 포스팅
   @PostMapping
   public CreatedPost createPost(@RequestBody CreatePost post) {
-    System.out.println("post >>>>>>>>>>>>>>" + post);
     return postService.createPost(post);
   }
+  // 포스팅 페이지 임시 저장버튼(임시저장)
+  @PostMapping("/Save")
+  public CreatedPost savePosts(@RequestBody CreatePost post) {
+    return postService.savePost(post);
+  }
+
+  // 임시 저장에서 임시 저장버튼 (재 임시저장)
+  @PatchMapping("/save/{postId}")
+  public String saveAgain(@RequestBody CreatedPost post, @PathVariable(value = "postId") Long postId){
+    return postService.saveAgain(post, postId);
+  }
+
 
   // 새 포스트 만들기 ( create new Post )
 //  @PostMapping
@@ -129,11 +139,11 @@ public class PostController {
 //  }
 
   // 임지 서장 글 만들기 ( Create Save Post )
-  @PostMapping("/Save")
-  public Post savePost(@RequestBody Post post){
-    return postService.savePost(post);
-
-  }
+//  @PostMapping("/Save")
+//  public Post savePost(@RequestBody Post post){
+//    return postService.savePost(post);
+//
+//  }
 
 
 //  @PostMapping("/createRelationship")

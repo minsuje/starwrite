@@ -1,20 +1,20 @@
 import { savePost } from '../lib/savePost';
 import { categories } from '../../ListView/model/CategoryData';
 import { _EditorHead, _TitleInput, _PublcButton } from './style';
+import { useState } from 'react';
 
 function NewPostHeadFeat({
   openSaving,
   setTitle,
   setCategory,
   setIsPublic,
-  isPublic,
 }: {
   openSaving: () => void;
   setTitle: (value: string) => void;
   setCategory: (value: string) => void;
-  setIsPublic: (value: boolean) => void;
-  isPublic: boolean;
+  setIsPublic: (value: string) => void;
 }) {
+  const [toggleButton, setToggleButton] = useState<boolean>(false);
   return (
     <>
       <_EditorHead>
@@ -24,7 +24,7 @@ function NewPostHeadFeat({
         />
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={openSaving}>임시저장 불러오기</button>
-          <button onClick={() => savePost('광어')}>저장</button>
+          <button onClick={() => savePost('저장')}>저장</button>
         </div>
       </_EditorHead>
       <_EditorHead content={'start'}>
@@ -59,10 +59,22 @@ function NewPostHeadFeat({
         </select>
       </_EditorHead>
       <_EditorHead>
-        <_PublcButton color={isPublic} onClick={() => setIsPublic(true)}>
+        <_PublcButton
+          color={toggleButton}
+          onClick={() => {
+            setIsPublic('true');
+            setToggleButton(true);
+          }}
+        >
           공개
         </_PublcButton>
-        <_PublcButton color={!isPublic} onClick={() => setIsPublic(false)}>
+        <_PublcButton
+          color={!toggleButton}
+          onClick={() => {
+            setIsPublic('false');
+            setToggleButton(false);
+          }}
+        >
           비공개
         </_PublcButton>
       </_EditorHead>

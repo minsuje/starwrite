@@ -19,16 +19,22 @@ public class UsersController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/register/user")
-    public Users createUser(@RequestBody Users user) {
+    public String createUser(@RequestBody Users user) {
         // db에 넣기 전에 비밀번화 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(user.getCreatedAt());
-        return usersRepository.save(user);
+
 //        return usersRepository.createUser(user.getLogin_type(), user.getMail(), user.getSocialId(),
 //            user.getPassword(), user.getProfile_img(), user.getNickname(), user.getRole(),
 //            user.getCreatedAt(), user.getUpdatedAt());
+        try {
+          usersRepository.save(user);
+          return "유저 생성되었음";
+        } catch(Exception e) {
+          return e.getLocalizedMessage();
+      }
     }
 
 }
