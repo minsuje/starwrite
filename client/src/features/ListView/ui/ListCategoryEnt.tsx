@@ -12,16 +12,24 @@ function ListCategory({ sort }: { sort: string }) {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
     category,
   );
+  // 이게 맞는지 확인 부탁드려요 구휘님 03.17
   const selected = (category: string) => {
-    navigate(`/user/starwrite/listview/main/${category}`);
-    setSelectedCategory(category);
+    if (selectedCategory) {
+      navigate(`/user/starwrite/listview/main/${category}`);
+      setSelectedCategory(category);
+    } else {
+      navigate(`/user/starwrite/mypage/:userid_num/`);
+    }
   };
 
   useEffect(() => {
     if (sort === 'listView') {
       setCategories(list);
     } else if (sort === 'myPage') {
-      setCategories([{ name: '기본 정보', id: 'myProfile' }]);
+      setCategories([
+        { name: '기본정보', id: 'myProfile' },
+        { name: '로그아웃', id: 'logout' },
+      ]);
     }
   }, [sort]);
 

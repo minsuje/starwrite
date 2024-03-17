@@ -49,7 +49,7 @@ export const AppRouter = createBrowserRouter([
         ),
         children: [
           {
-            path: 'mypage/:userid_num',
+            path: 'mypage/:userid_num/',
             element: (
               <>
                 <MyPage></MyPage>
