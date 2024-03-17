@@ -93,7 +93,7 @@ public class JwtTokenProvider {
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         System.out.println("getAuthentication authorities > " + authorities);
 
-//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+//       return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 
 //        // Additional information
         Map<String, Object> additionalInfo = new HashMap<>();

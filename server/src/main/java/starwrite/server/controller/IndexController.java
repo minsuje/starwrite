@@ -1,5 +1,6 @@
 package starwrite.server.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class IndexController {
     }
 
     @GetMapping("/user/home")
+    @RolesAllowed("USER")
     public String handleUserHome() {
         System.out.println("controller");
         System.out.println("controller >>> " + SecurityUtil.getCurrentUsername());
