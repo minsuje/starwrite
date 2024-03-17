@@ -3,6 +3,8 @@ package starwrite.server.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -52,14 +54,25 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public JwtDTO signIn(String mail, String password) {
-        System.out.println("mail > " +  mail);
-        System.out.println("password > "+ password);
         try {
+            // 1. username + password 를 기반으로 Authentication 객체 생성
+            // authentication 은 인증 여부를 확인하는 authenticated 값이 false
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(mail, password);
 
+            // 2. 실제 검증. authenticate() 매서드를 통해 요청된 User 에 대한 검증 진행
+            // authenticate 메서드가 실행될 때 UsersDetailService 에서 만든 loadUserByUsername 메서드 실행
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+            System.out.println("authentication >>> " + authentication);
+
+            // 3. 인증 정보를 기반으로 jwt 토큰 생성
             JwtDTO jwtDTO = jwtTokenProvider.generateToken(authentication);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setBearerAuth(jwtDTO.getAccessToken());
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+            log.info("httpHeaders = {}", httpHeaders);
 
             return jwtDTO;
         } catch (AuthenticationException e) {

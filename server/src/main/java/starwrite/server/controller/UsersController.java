@@ -11,6 +11,7 @@ import starwrite.server.repository.UsersRepository;
 
 @RestController
 public class UsersController {
+
     @Autowired
     UsersRepository usersRepository;
 
@@ -24,13 +25,16 @@ public class UsersController {
 
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(user.getCreatedAt());
+
+//        return usersRepository.createUser(user.getLogin_type(), user.getMail(), user.getSocialId(),
+//            user.getPassword(), user.getProfile_img(), user.getNickname(), user.getRole(),
+//            user.getCreatedAt(), user.getUpdatedAt());
         try {
           usersRepository.save(user);
           return "유저 생성되었음";
         } catch(Exception e) {
           return e.getLocalizedMessage();
       }
-
     }
 
 }

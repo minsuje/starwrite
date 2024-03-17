@@ -28,11 +28,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장 -> 요청 처리하는 동안 인증 정보 유지
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            System.out.println("authentication" + authentication.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             System.out.println("filterChain authentication >>> " + authentication);
         }
-        System.out.println("filterChain");
+        System.out.println("filterChain servletRequest > " + servletRequest);
         filterChain.doFilter(servletRequest, servletResponse); // 다음 필터로 요청 전달
     }
 

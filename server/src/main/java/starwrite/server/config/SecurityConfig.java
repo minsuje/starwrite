@@ -36,22 +36,32 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-
-
+    CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
+            config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000")); // 허용할 origin
+            config.setAllowCredentials(true);
+            return config;
+        };
+    }
 
     @Bean // securityFilterChain 통해서 HTTP 보안에 엑세스 할 수 있음
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
             // Basic 인증 사용하지 않음
             .httpBasic(AbstractHttpConfigurer::disable)
+            // cors 설정
+            .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
             // cross-site request forgery -> 사이트 간 재위조 방지 기술
             .csrf(AbstractHttpConfigurer::disable)
             // JWT 를 사용하기 때문에 세션을 사용하지 않음
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
             SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
-                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경
-//                registry.requestMatchers("/home", "/register/**").permitAll(); // 홈은 누구나 접근할 수 있다는 의미
+                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
+//                registry.requestMatchers("/home", "/register/**", "/login/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
 //                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
 //                registry.requestMatchers("/user/**").hasRole("USER");
                 registry.anyRequest().authenticated(); // 위에 언급하지 않은 3가지 요청 외에는 허용되지 않는다는 의미.
@@ -60,7 +70,7 @@ public class SecurityConfig {
                 httpSecurityFormLoginConfigurer
                     .loginPage("/login")
                     // 인증이 성공하면 다음에 수행할 작업을 사용자 정의할 수 있음
-                    .successHandler(new AuthenticationSuccessHandler())
+//                    .successHandler(new AuthenticationSuccessHandler())
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
