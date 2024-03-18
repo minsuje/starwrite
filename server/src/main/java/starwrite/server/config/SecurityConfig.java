@@ -22,7 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
-import starwrite.server.service.CustomOAuth2UserService;
+//import starwrite.server.service.CustomOAuth2UserService;
 import starwrite.server.service.UsersDetailService;
 
 @Configuration
@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final CustomOAuth2UserService customOAuth2UserService;
 
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
