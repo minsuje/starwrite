@@ -201,6 +201,16 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param("timeNow") LocalDateTime timeNow, @Param("newContent") String newContent,
       @Param("visible") String visible);
 
+
+  // 임시저장 페이지에서 포스팅
+//  @Query("MATCH (u:Users) " +
+//      "MATCH (p:Post) " +
+//      "WHERE ID(p) = $postId AND u.userId = $userId " +
+//      "SET p.title = $newTitle, p.content = $newContent, p.img = $img, p.updatedAt = $timeNow, p.visible = $visible "
+//      +
+//      "RETURN p"
+//  )
+//
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
       "WITH p, r, rel " +
