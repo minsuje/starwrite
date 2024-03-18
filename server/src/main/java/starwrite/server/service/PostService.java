@@ -175,7 +175,7 @@ public class PostService {
   }
 
   // 임시 저장 하나 불러오기 ( Load One Save Post)
-  public Post getSavePost(String nickname, String postId) {
+  public Post getSavePost(String nickname, Long postId) {
     return postRepository.findSavePost(nickname, postId);
   }
 }
