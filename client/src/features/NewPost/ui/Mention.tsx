@@ -5,7 +5,10 @@ export const Mention = createReactInlineContentSpec(
   {
     type: 'mention',
     propSchema: {
-      user: {
+      name: {
+        default: 'Unknown',
+      },
+      id: {
         default: 'Unknown',
       },
     },
@@ -13,12 +16,11 @@ export const Mention = createReactInlineContentSpec(
   },
   {
     render: (props) => (
-      //   <span style={{ backgroundColor: '#5f5615e0' }}>
-      //     @{props.inlineContent.props.user}
-      //   </span>
-
-      <a href="http://localhost:5173/user/starwrite/listview/main/전체/1">
-        @{props.inlineContent.props.user}
+      <a
+        style={{ color: 'white' }}
+        href={`http://localhost:5173/user/starwrite/listview/main/전체/${props.inlineContent.props.id}`}
+      >
+        @{props.inlineContent.props.name}
       </a>
     ),
   },

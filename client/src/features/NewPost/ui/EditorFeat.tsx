@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { redTheme } from './style';
 
 import { Mention } from './Mention';
+import Titles from '../model/Titles';
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 const schema = BlockNoteSchema.create({
@@ -30,16 +31,18 @@ const schema = BlockNoteSchema.create({
 const getMentionMenuItems = (
   editor: typeof schema.BlockNoteEditor,
 ): DefaultReactSuggestionItem[] => {
-  const users = ['Steve', 'Bob', 'Joe', 'Mike'];
+  const titles = Titles;
 
-  return users.map((user) => ({
-    title: user,
+  return titles.map((title) => ({
+    title: title.name,
     onItemClick: () => {
+      // const name = title.name;
       editor.insertInlineContent([
         {
           type: 'mention',
           props: {
-            user,
+            name: title.name,
+            id: title.id,
           },
         },
         ' ', // add a space after the mention
@@ -97,7 +100,6 @@ export default function Editor({
   if (editor === undefined) {
     return 'Loading content...';
   }
-  // console.log('this', editor.document);
 
   return (
     <BlockNoteView

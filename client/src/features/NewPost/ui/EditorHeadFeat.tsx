@@ -60,7 +60,7 @@ function NewPostHeadFeat({
       </_EditorHead>
       <_EditorHead>
         <_PublcButton
-          color={toggleButton}
+          color={toggleButton ? 'var(--color-zinc-600)' : undefined}
           onClick={() => {
             setIsPublic('true');
             setToggleButton(true);
@@ -69,7 +69,7 @@ function NewPostHeadFeat({
           공개
         </_PublcButton>
         <_PublcButton
-          color={!toggleButton}
+          color={!toggleButton ? 'var(--color-zinc-600)' : undefined}
           onClick={() => {
             setIsPublic('false');
             setToggleButton(false);

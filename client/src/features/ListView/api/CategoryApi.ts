@@ -11,10 +11,10 @@ export const getCategoriesApi = async (user: string) => {
     throw error;
   }
 };
-// 카테고리 추가 axios
+// 카테고리 추가 axios post
 export const newCategoryApi = async (name: string) => {
   try {
-    const response = await axios.post('localhost', name);
+    const response = await axios.post('/category', name);
     console.log('newCategoryApi', response.data);
     return response.data;
   } catch (error) {

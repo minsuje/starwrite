@@ -8,9 +8,7 @@ const OneCategory = styled.div`
   text-align: center;
   padding: 15px 0px;
   background-color: var(--color-zinc-700);
-
   opacity: ${(props) => props.color || '0.6'};
-
   &:hover {
     opacity: 1;
     cursor: pointer;
@@ -62,13 +60,13 @@ const _EditorDiv = styled.div`
   overflow-y: auto;
 `;
 
-const _PublcButton = styled.div<{ color: boolean }>`
+const _PublcButton = styled.div`
   border: 1px solid var(--color-zinc-600);
   border-radius: 4px;
   width: 50%;
   text-align: center;
   padding: 4px 0;
-  background-color: ${(props) => props.color && ' var(--color-zinc-600)'};
+  background-color: ${(props) => props.color || 'none'};
 `;
 
 // 에디터 테마
