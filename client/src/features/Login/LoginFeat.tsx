@@ -9,6 +9,7 @@ import {
   _emoji,
 } from '../../shared/CommonStyle';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // 타입 지정
 interface LoginInput {
@@ -71,10 +72,26 @@ function LoginForm() {
     return '';
   };
 
+  async function handleTempLogin() {
+    try {
+      const response = await axios.post(
+        `http://52.79.228.200:8080/login/post`,
+        {
+          mail: 'gogil@navdfe.com',
+          password: '1234',
+        },
+      );
+      console.log(response.data);
+      localStorage.setItem('accessToken', response.data.accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit(onValid)}>
-        <RegisterBox>
+        {/* <RegisterBox>
           <InputBox>
             <Label>E-MAIL</Label>
             <Input
@@ -101,10 +118,11 @@ function LoginForm() {
             {errors.password && typeof errors.password.message === 'string' && (
               <ErrorMsg>{errors.password.message}</ErrorMsg>
             )}
-          </InputBox>
+          </InputBox> */}
 
-          <LargeButton type="submit">로그인</LargeButton>
-        </RegisterBox>
+        <LargeButton type="submit">로그인</LargeButton>
+        <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton>
+        {/* </RegisterBox> */}
       </form>
     </>
   );

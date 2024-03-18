@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.entity.Annotation;
+import starwrite.server.request.CreateAnnotation;
 import starwrite.server.service.AnnotationService;
 
 @RestController
@@ -18,9 +19,15 @@ public class AnnotationController {
     this.annotationService = annotationService;
   }
 
+//  @PostMapping
+//  public Annotation createPostComment(@RequestBody Annotation annotation) {
+//    System.out.println("comment controller comment >>>>>>>>>" + annotation);
+//    return annotationService.createPostComment(annotation);
+//  }
+
   @PostMapping
-  public Annotation createPostComment(@RequestBody Annotation annotation) {
+  public String createAnnotation(@RequestBody CreateAnnotation annotation) {
     System.out.println("comment controller comment >>>>>>>>>" + annotation);
-    return annotationService.createPostComment(annotation);
+    return annotationService.createAnnotation(annotation);
   }
 }
