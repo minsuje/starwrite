@@ -61,7 +61,7 @@ public class CategoryService {
 //  }
 
 
-  public List<GetCategoryPosts> getCategoryPostsNode(String categoryId) {
+  public GetCategoryPosts getCategoryPostsNode(String categoryId) {
     return categoryRepository.getCategoryPostsNode(categoryId);
   }
 
