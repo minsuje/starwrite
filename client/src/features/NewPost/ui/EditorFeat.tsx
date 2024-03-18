@@ -17,7 +17,6 @@ import { redTheme } from './style';
 
 import { Mention } from './Mention';
 import Titles from '../model/Titles';
-import Savings from '../model/Savings';
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 const schema = BlockNoteSchema.create({
@@ -66,7 +65,7 @@ async function uploadFile(file: File) {
 }
 // 불러오기 get
 async function loadFromStorage() {
-  const storageString = Savings[1].content;
+  const storageString = undefined;
   return storageString
     ? (JSON.parse(storageString) as PartialBlock[])
     : undefined;

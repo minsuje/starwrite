@@ -9,6 +9,7 @@ import {
   patchPostApi,
   patchSavingApi,
 } from '../api/newPostApi';
+import checkLinking from '../lib/checkLinking';
 
 function NewPostFeat() {
   // useParams로 postId 불러오기
@@ -32,18 +33,19 @@ function NewPostFeat() {
   const [category, setCategory] = useState<string>();
   const [isPublic, setIsPublic] = useState<string>('true');
   const [content, setContent] = useState<string | undefined>();
+  const [relatedPosts, setRelatedPosts] = useState<string[]>([]);
 
   function publishPost() {
     const postData = {
       category: category,
-      user: '2c05b09d-e6bd-40e7-84a3-3e1b8c7fb235',
       post: {
         title: title,
         content: content,
         visible: isPublic,
       },
-      relatedPosts: [],
+      relatedPosts: relatedPosts,
     };
+    console.log('data', postData);
     if (postId) {
       patchPostApi(postData);
     } else {
@@ -55,14 +57,13 @@ function NewPostFeat() {
   function savePost() {
     const postData = {
       category: category,
-      user: '2c05b09d-e6bd-40e7-84a3-3e1b8c7fb235',
       post: {
         title: title,
         content: content,
         visible: isPublic,
       },
-      relatedPosts: [],
     };
+    console.log(postData);
     if (postId) {
       patchSavingApi(postData, Number(postId));
     } else {
@@ -75,8 +76,13 @@ function NewPostFeat() {
       {openSaving && <GetSavings onclick={() => setOpenSaving(false)} />}
       <NewPostHeadFeat
         data={{ title, category, isPublic }}
-        savePost={savePost}
-        publishPost={publishPost}
+        savePost={() => {
+          savePost();
+        }}
+        publishPost={() => {
+          setRelatedPosts(checkLinking(content));
+          publishPost();
+        }}
         openSaving={() => setOpenSaving(!openSaving)}
         setTitle={(value: string) => {
           setTitle(value);

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 interface NewPost {
   category: string | undefined;
-  user: string;
   post: {
     title: string | undefined;
     content: string | undefined;
@@ -10,7 +9,7 @@ interface NewPost {
     category?: string | undefined;
     tmpSave?: boolean;
   };
-  relatedPosts: string[];
+  relatedPosts?: string[];
 }
 
 // 글 저장 하기

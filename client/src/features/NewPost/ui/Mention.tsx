@@ -17,6 +17,7 @@ export const Mention = createReactInlineContentSpec(
   {
     render: (props) => (
       <a
+        className="backlinking"
         style={{ color: 'white' }}
         href={`http://localhost:5173/user/starwrite/listview/main/전체/${props.inlineContent.props.id}`}
       >
