@@ -10,11 +10,13 @@ export interface Category {
 }
 
 export interface Posts {
-  id: number;
-  category_id: number;
-  writer: string;
-  holder: string;
+  id: string;
+  category_id: string;
   content: string;
   created_at?: Date;
   updated_at?: Date;
+  title: string;
+  tmpSave: boolean;
+  public: string;
+  recentView: Date;
 }

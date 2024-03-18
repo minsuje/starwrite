@@ -1,35 +1,56 @@
-import { savePost } from '../lib/savePost';
 import { categories } from '../../ListView/model/CategoryData';
 import { _EditorHead, _TitleInput, _PublcButton } from './style';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function NewPostHeadFeat({
+  data,
+  publishPost,
+  savePost,
   openSaving,
   setTitle,
   setCategory,
   setIsPublic,
 }: {
+  data: {
+    title: string | undefined;
+    category: string | undefined;
+    isPublic: string | undefined;
+  };
+  savePost: () => void;
+  publishPost: () => void;
   openSaving: () => void;
   setTitle: (value: string) => void;
   setCategory: (value: string) => void;
   setIsPublic: (value: string) => void;
 }) {
-  const [toggleButton, setToggleButton] = useState<boolean>(false);
+  const [toggleButton, setToggleButton] = useState<boolean>(true);
+
+  const { title, category, isPublic } = data;
+  useEffect(() => {
+    if (isPublic === 'true') {
+      setToggleButton(true);
+    } else {
+      setToggleButton(false);
+    }
+  }, [isPublic]);
   return (
     <>
       <_EditorHead>
         <_TitleInput
           placeholder="제목을 입력하세요"
+          value={title}
           onChange={(value) => setTitle(value.currentTarget.value)}
         />
         <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={savePost}>임시저장 </button>
           <button onClick={openSaving}>임시저장 불러오기</button>
-          <button onClick={() => savePost('저장')}>저장</button>
+          <button onClick={() => publishPost()}>저장</button>
         </div>
       </_EditorHead>
       <_EditorHead content={'start'}>
         <p>카테고리 </p>
         <select
+          value={category}
           onChange={(value) => setCategory(value.currentTarget.value)}
           style={{
             width: '40%',

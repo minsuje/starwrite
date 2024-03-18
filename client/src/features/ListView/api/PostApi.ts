@@ -3,7 +3,7 @@ import axios from 'axios';
 // 카테고리 선택시 글 리스트 불러오기
 export const postListApi = async (category: string) => {
   try {
-    const response = await axios.get(`localhost/${category}`);
+    const response = await axios.get(`http://52.79.228.200:8080/${category}`);
     console.log('postListApi', response.data);
     return response.data;
   } catch (error) {
