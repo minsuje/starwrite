@@ -19,7 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import starwrite.server.AuthenticationSuccessHandler;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
 import starwrite.server.service.UsersDetailService;
@@ -28,6 +27,7 @@ import starwrite.server.service.UsersDetailService;
 @EnableWebSecurity // 전체 보안이 활성화되어야 한다는 것을 의미
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     @Autowired
     UsersDetailService usersDetailService;
 
@@ -41,7 +41,8 @@ public class SecurityConfig {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000")); // 허용할 origin
+            config.setAllowedOriginPatterns(
+                Collections.singletonList("http://localhost:3000, http://localhost:5173")); // 허용할 origin
             config.setAllowCredentials(true);
             return config;
         };
@@ -58,7 +59,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             // JWT 를 사용하기 때문에 세션을 사용하지 않음
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-            SessionCreationPolicy.STATELESS))
+                SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
                 registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
 //                registry.requestMatchers("/home", "/register/**", "/login/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
@@ -73,7 +74,8 @@ public class SecurityConfig {
 //                    .successHandler(new AuthenticationSuccessHandler())
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
