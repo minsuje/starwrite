@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { nodes, links } from '../../features/NodeViewFeat/index';
+// import { links } from '../../features/NodeViewFeat/index';
 
 import {
   SmallCircleData,
@@ -8,18 +8,26 @@ import {
   Link,
 } from '../../features/NodeViewFeat/index';
 import './NodeView.css';
+import { fetchData } from '../../features/NodeViewFeat/api/NodeviewApi';
 
 export type SearchType = {
   searchTerm: string;
 };
 
 export const NodeView = ({ searchTerm }: SearchType) => {
+  const [nodes, setNodes] = useState([]);
+  const [links, setlinks] = useState([]);
+
+  console.log('nodes', nodes);
+  console.log('links', links);
+
   const svgRef = useRef(null);
   const [viewportSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
+  console.log('nodes', nodes);
   function drag(simulation: d3.Simulation<CustomNode, undefined>) {
     return d3
       .drag<SVGImageElement, CustomNode>()
@@ -86,6 +94,9 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     svg.attr('width', '100%').attr('height', viewportSize.height);
 
     const group = svg.append('g');
+    // 선택자와 데이터 바인딩 결과 확인
+    const nodeSelection = svg.selectAll('.nodes').data(nodes);
+    console.log('nodeSelection:', nodeSelection);
 
     const zoomHandler = d3.zoom().on('zoom', (event) => {
       group.attr('transform', event.transform);
@@ -174,8 +185,8 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .data(nodes)
       .enter()
       .append('text')
-      .attr('x', (d) => d.x ?? 0)
-      .attr('y', (d) => d.y ?? 0) // 노드 위에 위치하도록 y 좌표 조정
+      .attr('x', (d) => d.x ?? 50)
+      .attr('y', (d) => d.y ?? 50) // 노드 위에 위치하도록 y 좌표 조정
       .attr('text-anchor', 'middle') // 텍스트를 중앙 정렬
       .attr('fill', '#ffffff') // 텍스트 색상 설정
       .text((d) => d.label); // 각 노드의 라벨을 텍스트로 설정
@@ -251,7 +262,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
             20 * Math.sin((2 * Math.PI * d.index) / d.total),
         );
     });
-  }, []); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
+  }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -272,6 +283,28 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     }
   }, [searchTerm]);
 
+  useEffect(() => {
+    // 데이터 로딩
+    const getData = async () => {
+      try {
+        const fetchedNodes = await fetchData();
+        const nodesData = fetchedNodes.map((node) => ({
+          ...node,
+          id: node.relatedPostId, // 예: 'relatedPostId'를 노드의 고유 ID로 사용
+          label: node.relatedPostTitle,
+          x: Math.random() * viewportSize.width,
+          y: Math.random() * viewportSize.height,
+        }));
+
+        setNodes(nodesData);
+        setlinks([{ source: 1, target: 2 }]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getData();
+  }, []);
   return (
     <svg
       ref={svgRef}

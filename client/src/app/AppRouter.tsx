@@ -8,6 +8,7 @@ import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
+import { Spinner } from '../shared/spinner';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -126,7 +127,7 @@ export const AppRouter = createBrowserRouter([
 
       {
         path: '*',
-        element: <p>404에러페이지인디요?</p>,
+        element: <Spinner></Spinner>,
       },
     ],
   },

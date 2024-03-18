@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, CustomNode } from '../model/Types';
 import { baseApi } from '../../../shared/api/BaseApi';
 
-export function NodeData() {
-  const [nodesData, setNodesData] = useState<CustomNode[]>([]);
-  const [linksData, setLinksData] = useState<Link[]>([]);
+export function NodeData(setLoading) {
+  const [, setNodesData] = useState<CustomNode[]>([]);
+  const [, setLinksData] = useState<Link[]>([]);
 
   interface CustomNode {
     id: string;
@@ -24,11 +24,12 @@ export function NodeData() {
           `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
         );
 
-        console.log(response);
+        console.log(response.data);
 
         // API 응답으로 받은 데이터를 상태에 저장
-        setNodesData(response.data.nodes);
-        setLinksData(response.data.links);
+        setNodesData(response.data);
+        setLinksData(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('API Error', error);
       }
@@ -38,24 +39,26 @@ export function NodeData() {
   }, []);
 
   return (
-    <div>
-      <ul>
-        {nodesData.map((node) => (
-          <li key={node.id}>
-            {node.label} (User ID: {node.userid_num})
-          </li>
-        ))}
-      </ul>
-      <ul>
-        {linksData.map((link, index) => (
-          <li key={index}>
-            {link.source} {link.target}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <></>
+    //   <div>
+    //     <ul>
+    //       {nodesData.map((node, index) => (
+    //         <li key={index}>
+    //           {node.postTitle} (User ID: {node.postId})
+    //         </li>
+    //       ))}
+    //     </ul>
+    //     <ul>
+    //       {linksData.map((link, index) => (
+    //         <li key={index}>
+    //           {link.postId} {link.relatedPostId}
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
   );
 }
+
 export const nodes: CustomNode[] = [
   {
     id: '1',
@@ -97,8 +100,24 @@ export const nodes: CustomNode[] = [
 // 링크 데이터
 export const links: Link[] = [
   { source: '1', target: '2' },
-  { source: '2', target: '3' },
-  { source: '3', target: '4' },
-  { source: '4', target: '5' },
-  { source: '5', target: '1' }, // 예시로 마지막 노드가 첫 번째 노드와 연결되도록 추가
+  // { source: '2', target: '3' },
+  // { source: '3', target: '4' },
+  // { source: '4', target: '5' },
+  // { source: '5', target: '1' }, // 예시로 마지막 노드가 첫 번째 노드와 연결되도록 추가
 ];
+
+export const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
+    );
+
+    return response.data;
+
+    console.log(response.data);
+
+    // API 응답으로 받은 데이터를 상태에 저장
+  } catch (error) {
+    console.error('API Error', error);
+  }
+};

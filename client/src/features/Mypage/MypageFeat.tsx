@@ -165,7 +165,9 @@ export function MyPgaeFeat() {
             })}
           ></Input>
           <InputBox>
-            <_registerbtn bgcolor="#1361d7">중복확인</_registerbtn>
+            <_registerbtn type="button" bgcolor="#1361d7">
+              중복확인
+            </_registerbtn>
           </InputBox>
 
           {errors.nickname && typeof errors.nickname.message === 'string' && (
