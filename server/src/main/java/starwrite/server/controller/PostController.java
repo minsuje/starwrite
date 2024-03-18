@@ -130,6 +130,12 @@ public class PostController {
     return postService.saveAgain(post, postId);
   }
 
+  // 임시 저장 페이지에서 포스트 버튼
+//  @PatchMapping("/{postId}")
+//  public String saveTmpPost(@RequestBody CreatedPost post, @PathVariable(value = "postId") Long postId){
+//    return postService.
+//  }
+
 
   // 새 포스트 만들기 ( create new Post )
 //  @PostMapping
