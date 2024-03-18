@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
             System.out.println("filterChain authentication >>> " + authentication);
         }
-        System.out.println("filterChain servletRequest > " + servletRequest);
+        System.out.println("filterChain servletRequest > " + ((HttpServletRequest) servletRequest).getAuthType());
         filterChain.doFilter(servletRequest, servletResponse); // 다음 필터로 요청 전달
     }
 

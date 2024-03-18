@@ -44,7 +44,7 @@ public class JwtTokenProvider {
         UserTokenDTO userDetails = (UserTokenDTO) authentication.getPrincipal();
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
         long now = (new Date()).getTime();
 
@@ -93,14 +93,13 @@ public class JwtTokenProvider {
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         System.out.println("getAuthentication authorities > " + authorities);
 
-//       return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-
-//        // Additional information
+        // Additional information
         Map<String, Object> additionalInfo = new HashMap<>();
         additionalInfo.put("nickname", claims.get("nickname")); // 닉네임 추가
         additionalInfo.put("userId", claims.get("userId")); // 유저 아이디 추가
         additionalInfo.put("auth", claims.get("auth"));
-//
+
+//       return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 //
 //        // JwtAuthenticationToken에 추가 정보를 포함하여 반환
         return new JwtAuthenticationToken(principal, "", authorities, additionalInfo);

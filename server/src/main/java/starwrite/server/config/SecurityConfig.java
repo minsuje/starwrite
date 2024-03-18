@@ -11,6 +11,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
+import starwrite.server.service.CustomOAuth2UserService;
 import starwrite.server.service.UsersDetailService;
 
 @Configuration
@@ -36,6 +38,8 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
@@ -46,6 +50,13 @@ public class SecurityConfig {
             config.setAllowCredentials(true);
             return config;
         };
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
+        return web -> web.ignoring()
+            // error endpoint를 열어줘야 함, favicon.ico 추가!
+            .requestMatchers("/error", "/favicon.ico");
     }
 
     @Bean // securityFilterChain 통해서 HTTP 보안에 엑세스 할 수 있음
@@ -61,10 +72,12 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
-                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
-//                registry.requestMatchers("/home", "/register/**", "/login/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
+//                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
+                registry.requestMatchers("/home", "/register/**", "/login/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
+//                registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
 //                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
-//                registry.requestMatchers("/user/**").hasRole("USER");
+                registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
+                registry.requestMatchers("/admin/**").hasAuthority("ADMIN");
                 registry.anyRequest().authenticated(); // 위에 언급하지 않은 3가지 요청 외에는 허용되지 않는다는 의미.
             })
             .formLogin(httpSecurityFormLoginConfigurer -> {
@@ -74,6 +87,12 @@ public class SecurityConfig {
 //                    .successHandler(new AuthenticationSuccessHandler())
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
+//            .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
+//                // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
+//                oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
+//                    // 로그인 성공 시 핸들러
+//                    .successHandler(oAuth2SuccessHandler)
+//            )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
             .build();
