@@ -35,7 +35,7 @@ public class PostController {
   @GetMapping("/write")
   public List<BackLink> getIdAndTitle(){
     // 임시
-    String userId = "ca04fd1f-3f4b-4c94-929d-c39efac871a4";
+    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
     return postService.backLink(userId);
   }
 
@@ -126,30 +126,17 @@ public class PostController {
 
   // 임시 저장에서 임시 저장버튼 (재 임시저장)
   @PatchMapping("/save/{postId}")
-  public String saveAgain(@RequestBody CreatedPost post, @PathVariable(value = "postId") Long postId){
+  public String saveAgain(@RequestBody CreatePost post, @PathVariable(value = "postId") Long postId){
     return postService.saveAgain(post, postId);
   }
 
-  // 임시 저장 페이지에서 포스트 버튼
-//  @PatchMapping("/{postId}")
-//  public String saveTmpPost(@RequestBody CreatedPost post, @PathVariable(value = "postId") Long postId){
-//    return postService.
-//  }
+//   임시 저장 페이지에서 포스트 버튼
+  @PatchMapping("/{postId}")
+  public String saveTmpPost(@RequestBody CreatePost post, @PathVariable(value = "postId") Long postId){
+    String userId ="a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
+    return postService.saveTmpPost(post, postId, userId);
+  }
 
-
-  // 새 포스트 만들기 ( create new Post )
-//  @PostMapping
-//  public Post createPost(@RequestBody PostDTO postDTO) {
-//    System.out.println(postDTO);
-//    return postService.createPost(postDTO);
-//  }
-
-  // 임지 서장 글 만들기 ( Create Save Post )
-//  @PostMapping("/Save")
-//  public Post savePost(@RequestBody Post post){
-//    return postService.savePost(post);
-//
-//  }
 
 
 //  @PostMapping("/createRelationship")
