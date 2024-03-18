@@ -129,12 +129,12 @@ public class PostService {
   }
 
   // 임시저장 페이지에서 임시저장
-  public String saveAgain(CreatedPost post, Long postId){
+  public String saveAgain(CreatePost post, Long postId){
     LocalDateTime timeNow = LocalDateTime.now();
     Post newPost = post.getPost();
     String img = newPost.getImg() != null ? newPost.getImg() : "";
     // 헤더에서 로그인 아이디 가져옴
-    String userId = "ca04fd1f-3f4b-4c94-929d-c39efac871a4";
+    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
     postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible());
     if(postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible()) != null){
       return "success";
@@ -143,20 +143,31 @@ public class PostService {
     }
   }
 
-  // 글 임시 저장 ( save Posts )
-//  public Post savePost(Post post){
-//
-//    Post savePost = new Post();
-//    savePost.setTitle("임시 " + post.getTitle());
-//    savePost.setContent(post.getContent());
-//    savePost.setVisible(post.getVisible());
-//    savePost.setTmpSave(true);
-//    savePost.setCreatedAt(LocalDateTime.now());
-//    savePost.setUpdatedAt(savePost.getCreatedAt());
-//    savePost.setRecentView(savePost .getRecentView());
-//
-//    return postRepository.save(savePost);
-//  }
+  // 임시저장에서 포스트 생성
+  public String saveTmpPost(CreatePost post, Long postId, String userId){
+    LocalDateTime newTime = LocalDateTime.now();
+    String img = post.getPost().getImg() != null ? post.getPost().getImg() : "";
+    String newTitle = post.getPost().getTitle();
+    String newVisible = post.getPost().getVisible();
+    String categoryId = post.getCategory();
+    String newContent = post.getPost().getContent();
+
+    List<Long> rel = new ArrayList<>();
+
+    if(!post.getRelatedPosts().isEmpty()){
+      List<String> related = post.getRelatedPosts();
+      related.forEach(item -> rel.add(Long.parseLong(item)));
+    }
+    System.out.println("Rel >>> " + rel);
+
+    postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId);
+    System.out.println(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId));
+    if(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId) != null){
+      return "Success";
+    }
+    return "fail";
+  }
+
 
   // 임시 저장 글 모두 불러오기 ( load All Save Posts )
   public GetPosts getSavePosts(String nickname) {

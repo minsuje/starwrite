@@ -138,7 +138,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow}) "
           +
           "WITH newPost " +
-          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId " +
+          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
+          +
           "    OPTIONAL MATCH (p2:Post) WHERE ID(p2) = relatedPostId " +
           "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
           "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
@@ -147,7 +148,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           +
           "WITH newPost " +
           "MATCH (category:Category) WHERE category.categoryId = $categoryId " +
-          "MERGE (newPost)-[:IS_CHILD]->(category) " +
+          "MERGE (newPost)<-[:IS_CHILD]-(category) " +
           "WITH newPost " +
           "MATCH (user:Users) WHERE user.userId = $userId " +
           "MERGE (user)-[:POSTED]->(newPost) " +
@@ -167,16 +168,16 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (savePost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: true, createdAt: $timeNow, updatedAt: $timeNow}) "
           +
           "WITH savePost " +
-          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
-          +
-          "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
-          "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
-          "        MERGE (savePost)-[r:RELATED]->(p) " +
-          "        ON CREATE SET r.relatedBack = $relatedBack, r.postId = ID(savePost), r.relatedPostId = ID(p)) "
-          +
-          "WITH savePost " +
+//          "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
+//          +
+//          "    OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
+//          "    FOREACH (p IN CASE WHEN relatedPost IS NOT NULL THEN [relatedPost] ELSE [] END | " +
+//          "        MERGE (savePost)-[r:RELATED]->(p) " +
+//          "        ON CREATE SET r.relatedBack = $relatedBack, r.postId = ID(savePost), r.relatedPostId = ID(p)) "
+//          +
+//          "WITH savePost " +
           "MATCH (category:Category) WHERE category.categoryId = $categoryId " +
-          "MERGE (savePost)-[:IS_CHILD]->(category) " +
+          "MERGE (savePost)<-[:IS_CHILD]-(category) " +
           "WITH savePost " +
           "MATCH (user:Users) WHERE user.userId = $userId " +
           "MERGE (user)-[:POSTED]->(savePost) " +
@@ -202,15 +203,33 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param("visible") String visible);
 
 
-  // 임시저장 페이지에서 포스팅
-//  @Query("MATCH (u:Users) " +
-//      "MATCH (p:Post) " +
-//      "WHERE ID(p) = $postId AND u.userId = $userId " +
-//      "SET p.title = $newTitle, p.content = $newContent, p.img = $img, p.updatedAt = $timeNow, p.visible = $visible "
-//      +
-//      "RETURN p"
-//  )
-//
+  //   임시저장 페이지에서 포스팅
+  @Query("MATCH (u:Users) " +
+      "MATCH (post:Post) " +
+      "WHERE ID(post) = $postId AND u.nickname = $nickname " +
+      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = $newTime, post.visible = $newVisible, post.tmpSave = false "
+      +
+      "WITH post " +
+      "UNWIND [$rel] AS relatedPostId " +
+      "   OPTIONAL MATCH (relatedPost: Post) WHERE ID(relatedPost) = relatedPostId " +
+      "   WITH post, relatedPost " +
+      "   WHERE relatedPost IS NOT NULL " +
+      "     MERGE (post)-[re:RELATED]->(relatedPost) " +
+      "     ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false " +
+      "     WITH post, relatedPost, re " +
+      "     OPTIONAL MATCH (post)<-[r:RELATED]-(relatedPost) " +
+      "     SET r.relatedBack = CASE WHEN r.relatedBack = false " +
+      "     THEN true AND re.relatedBack = true ELSE r.relatedBack END " +
+      "WITH post " +
+      "MATCH (category : Category) WHERE category.categoryId = $categoryId " +
+      "OPTIONAL MATCH (category)-[i:IS_CHILD]-(post) DELETE i " +
+      "MERGE (category)-[:IS_CHILD]->(post) " +
+      "RETURN post")
+  CreatedPost saveTmpPost(@Param("postId") Long postId, @Param("nickname") String nickname,
+      @Param("newTitle") String newTitle, @Param("img") String img,
+      @Param("newContent") String newContent, @Param("newTime") LocalDateTime newTime, @Param("rel") List<Long> rel,@Param("newVisible") String newVisible, @Param("categoryId") String categoryId);
+
+
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
       "WITH p, r, rel " +
