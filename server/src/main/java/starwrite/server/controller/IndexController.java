@@ -40,7 +40,9 @@ public class IndexController {
 
     @GetMapping("/user/home")
     public String handleUserHome() {
-        System.out.println("controller >>> " + SecurityUtil.getCurrentUserInfo());
+        System.out.println("controller nickname >>> " + SecurityUtil.getCurrentUserNickname());
+        System.out.println("controller userId >>> " + SecurityUtil.getCurrentUserUserId());
+        System.out.println("controller auth >>> " + SecurityUtil.getCurrentUserAuth());
         return "home_user";
     }
 

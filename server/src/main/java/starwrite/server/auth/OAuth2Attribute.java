@@ -19,8 +19,20 @@
 //    // 서비스에 따라 OAuth2Attribute 객체를 생성하는 메서드
 //    static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes) {
 //        if (provider != null) {
-//
+//            switch (provider) {
+//                case "google" :
+//                    return ofGoogle(provider, attributeKey, attributes);
+//                default :
+//                    throw new RuntimeException();
+//            }
 //        }
+//        return null;
 //    }
+//
+//    //  Google 로그인일 경우 사용하는 메서드, 사용자 정보가 따로 Wrapping 되지 않고 제공되어, 바로 get() 메서드로 접근 가능함
+//    private static OAuth2Attribute ofGoogle(String provider, String attributeKey, Map<String, Object> attributes) {
+//
+//    }
+//
 //
 //}
