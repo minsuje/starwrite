@@ -63,21 +63,22 @@ export const Input = styled.input`
   opacity: 0.6;
   border-radius: 3px;
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
 `;
 
 // label 스타일
 export const Label = styled.label`
-  display: block;
-  flex-direction: column;
+  display: flex;
+  /* flex-direction: column; */
   color: #c0c0c0;
   padding: 10px 0px;
+  width: 100%;
 `;
 
 // input + label 박스 스타일
 export const InputBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   gap: 2px;
 `;
 

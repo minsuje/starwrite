@@ -45,6 +45,9 @@ const _InputFileButton = styled.label`
   right: 110px;
   // label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
 `;
+const _OverlapCheckBox = styled.label`
+  display: flex;
+`;
 
 // 닉네임 유효성 검사
 const NicNamePattern = /^[가-힣A-Za-z_]{2,10}$/;
@@ -155,12 +158,15 @@ export function MyPgaeFeat() {
             닉네임
             <_emoji>{Emoji('nickname')}</_emoji>
           </Label>
+
           <Input
             {...register('nickname', {
               onChange: async () => await trigger('nickname'),
             })}
           ></Input>
-          <_registerbtn bgcolor="#1361d7">중복확인</_registerbtn>
+          <InputBox>
+            <_registerbtn bgcolor="#1361d7">중복확인</_registerbtn>
+          </InputBox>
 
           {errors.nickname && typeof errors.nickname.message === 'string' && (
             <_ErrorMsg>{errors.nickname.message}</_ErrorMsg>
