@@ -40,7 +40,7 @@ public class CategoryController {
   }
 
   @GetMapping("/getCategoryPostNode")
-  public List<GetCategoryPosts> getCategoryPostNode(@RequestBody Category category) {
+  public List<GetCategoryPosts> getCategoryPostNode(@RequestParam (value = "categoryId") Category category) {
     return categoryService.getCategoryPostsNode(category.getCategoryId());
   }
 

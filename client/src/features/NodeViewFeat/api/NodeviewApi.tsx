@@ -20,13 +20,11 @@ export function NodeData() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(
-          `http://52.79.228.200:8080/category/getCategoryPostNode`,
-          {
-            categoryId: '0c487293-615e-4476-aba3-c1c5fac46b1c',
-          },
+        const response = await axios.get(
+          `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
         );
-        console.log(response.data);
+
+        console.log(response);
 
         // API 응답으로 받은 데이터를 상태에 저장
         setNodesData(response.data.nodes);

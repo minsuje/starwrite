@@ -13,5 +13,5 @@ tried();
 import axios from 'axios';
 
 export const baseApi = axios.create({
-  baseURL: 'localhost:5713/user/starwrite/',
+  baseURL: 'localhost:5173/user/',
 });
