@@ -29,9 +29,9 @@ public class CategoryService {
   @Autowired
   private PostRepository postRepository;
 
-  public Category getPosts(String id) {
-    return categoryRepository.findCategoryById(id);
-  }
+//  public Category getPosts(String id) {
+//    return categoryRepository.findCategoryById(id);
+//  }
 
   public List<Category> getAllCategories() {
     return categoryRepository.getAllCategory();
@@ -40,6 +40,10 @@ public class CategoryService {
   public List<GetCategoryPosts> getCategoryPosts(String categoryId, String userId) {
 
     return categoryRepository.getCategoryPosts(categoryId, userId);
+  }
+
+  public List<Category> getCategoryById(String categoryId) {
+    return categoryRepository.findCategoryById(categoryId);
   }
 
 

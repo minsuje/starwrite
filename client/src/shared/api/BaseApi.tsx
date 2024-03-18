@@ -13,5 +13,8 @@ tried();
 import axios from 'axios';
 
 export const baseApi = axios.create({
-  baseURL: 'localhost:5173/user/',
+  baseURL: 'http://52.79.228.200:8080/user/',
+  headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+  },
 });

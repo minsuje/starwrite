@@ -19,9 +19,9 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   List<Post> findPostsByCategory(String categoryId);
 
   @Query("MATCH (c:Category) WHERE c.categoryId = $id RETURN c LIMIT 1")
-  Category findCategoryById(@Param(value = "id") String id);
+  List<Category> findCategoryById(@Param(value = "id") String id);
 
-//  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+//  @Query("MATCH (u:Users) WHERE u.userId =s $userId " +
 //      "MATCH (c:Category) WHERE c.categoryId = $categoryId " +
 //      "CREATE (u)-[r:OWNS]->(c) " +
 //      "RETURN c")
@@ -31,7 +31,8 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   // 카테고리 안의 모든 글 제목과 관계 보내기
   @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId " +
       "MATCH (c)-[]-(p:Post) " +
-      "MATCH (p)-[r]->(p2:Post) RETURN r.postId AS postId, r.postTitle AS postTitle, r.relatedPostId AS relatedPostId, r.relatedPostTitle AS relatedPostTitle ")
+//      "MATCH (p)-[r]->(p2:Post) RETURN r.postId AS postId, r.postTitle AS postTitle, r.relatedPostId AS relatedPostId, r.relatedPostTitle AS relatedPostTitle ")
+      "MATCH (p)-[r]->(p2:Post) RETURN p AS post, r.postId AS postId, r.relatedPostId AS relatedPostId ")
   List<GetCategoryPosts> getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
 
 

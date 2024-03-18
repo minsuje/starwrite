@@ -39,11 +39,16 @@ public class CategoryController {
     return categoryService.getCategoryPosts(categoryId, userId);
   }
 
-  @GetMapping("/getCategoryPostNode")
-  public List<GetCategoryPosts> getCategoryPostNode(@RequestParam (value = "categoryId") Category category) {
-    return categoryService.getCategoryPostsNode(category.getCategoryId());
+  @GetMapping("/getCategoryById")
+  public List<Category> getCategoryById(@RequestParam(value = "categoryId") String categoryId) {
+    return categoryService.getCategoryById(categoryId);
   }
 
+
+  @GetMapping("/getCategoryPostNode")
+  public List<GetCategoryPosts> getCategoryPostNode(@RequestParam (value = "categoryId") String category) {
+    return categoryService.getCategoryPostsNode(category);
+  }
 
 
   @GetMapping("/test/{userId}")

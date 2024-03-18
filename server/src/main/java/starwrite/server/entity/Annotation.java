@@ -1,7 +1,9 @@
 package starwrite.server.entity;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -10,7 +12,9 @@ import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Data
-@Node("Comment")
+@AllArgsConstructor
+@NoArgsConstructor
+@Node("Annotation")
 public class Annotation {
 
   @Id

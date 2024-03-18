@@ -6,23 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.entity.Annotation;
 import starwrite.server.entity.Post;
-import starwrite.server.repository.CommentRepository;
+import starwrite.server.entity.Users;
+import starwrite.server.repository.AnnotationRepository;
 import starwrite.server.repository.PostRepository;
+import starwrite.server.request.CreateAnnotation;
+import starwrite.server.response.UserResponse;
 
 @Service
 public class AnnotationService {
-  private final CommentRepository commentRepository;
-
-  private final PostRepository postRepository;
 
   @Autowired
-  public AnnotationService(CommentRepository commentRepository, PostRepository postRepository) {
-    this.commentRepository = commentRepository;
-    this.postRepository = postRepository;
-  }
+  AnnotationRepository annotationRepository;
+
+  @Autowired
+  PostRepository postRepository;
 
   public List<Annotation> getCommentsByPostId() {
-    return commentRepository.findAll();
+    return annotationRepository.findAll();
   }
 
   public Annotation createPostComment(Annotation annotation) {
@@ -37,10 +37,27 @@ public class AnnotationService {
     newAnnotation.setUpdatedAt(newAnnotation.getCreatedAt());
     newAnnotation.setPost(foundPost);
 
-    return commentRepository.save(newAnnotation);
+    return annotationRepository.save(newAnnotation);
   }
+
+  public String createAnnotation(CreateAnnotation annotation) {
+
+    System.out.println(annotation.getAnnotation().getContent());
+    System.out.println(annotation.getUserId());
+    System.out.println(annotation.getPostId());
+
+//    List<Users> value = annotationRepository.createAnnotation(annotation.getAnnotation().getContent(), annotation.getAnnotation().isWriter(),
+//        LocalDateTime.now(), annotation.getPostId(), annotation.getUserId());
+    annotationRepository.createAnnotation(annotation.getAnnotation().getContent(), annotation.getAnnotation().isWriter(),
+        LocalDateTime.now(), annotation.getPostId(), annotation.getUserId());
+
+
+    return "success";
+  }
+
+
   public Annotation createReplyComment(Annotation annotation) {
-    Annotation foundAnnotation = commentRepository.findCommentById(annotation.getId());
+    Annotation foundAnnotation = annotationRepository.findCommentById(annotation.getId());
 
     Annotation newAnnotation = new Annotation();
     newAnnotation.setContent(annotation.getContent());
@@ -49,6 +66,6 @@ public class AnnotationService {
     newAnnotation.setUpdatedAt(newAnnotation.getCreatedAt());
     newAnnotation.setParent(foundAnnotation);
 
-    return commentRepository.save(newAnnotation);
+    return annotationRepository.save(newAnnotation);
   }
 }

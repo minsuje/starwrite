@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, CustomNode } from '../model/Types';
+import { baseApi } from '../../../shared/api/BaseApi';
 
 export function NodeData() {
   const [nodesData, setNodesData] = useState<CustomNode[]>([]);
@@ -20,7 +20,7 @@ export function NodeData() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const response = await baseApi.get(
           `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
         );
 
