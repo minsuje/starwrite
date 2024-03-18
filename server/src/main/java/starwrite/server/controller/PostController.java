@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
 import starwrite.server.response.CreatePost;
@@ -30,19 +31,20 @@ public class PostController {
 
   @Autowired
   UsersRepository usersRepository;
+  IndexController indexController;
 
   // 글 작성 BackLink info 전달
   @GetMapping("/write")
   public List<BackLink> getIdAndTitle() {
     // 임시
-    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
+    String userId = SecurityUtil.getCurrentUserUserId();
     return postService.backLink(userId);
   }
 
   // 유저의 모든 글 조회 (리스트 뷰)
   @GetMapping("/all")
   public GetPosts getAllPosts() {
-    String nickname = "minsu";
+    String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getAllPosts(nickname);
   }
 
@@ -64,14 +66,14 @@ public class PostController {
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
   @GetMapping("/all/save")
   public GetPosts getSavePosts() {
-    String nickname = "minsu";
+    String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePosts(nickname);
   }
 
   // 임시글 하나 불러오기 ( load One Save Posts )
   @GetMapping("/all/save/{postId}")
   public Post getSavePost(@PathVariable(value = "postId") Long postId) {
-    String nickname = "minsu";
+    String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePost(nickname, postId);
   }
 
@@ -138,7 +140,7 @@ public class PostController {
   @PatchMapping("/{postId}")
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
-    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
+    String userId = SecurityUtil.getCurrentUserUserId();
     return postService.saveTmpPost(post, postId, userId);
   }
 }
