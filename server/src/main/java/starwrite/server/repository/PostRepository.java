@@ -104,10 +104,10 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 임시 저장글 하나 불러오기
   @Query("MATCH (p:Post) " +
       "MATCH (u:Users) " +
-      "WHERE p.postId = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
+      "WHERE ID(p) = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
       "RETURN p")
   Post findSavePost(@Param(value = "nickname") String nickname,
-      @Param(value = "postId") String postId);
+      @Param(value = "postId") Long postId);
 
   // 포스트 아이디로 하나의 포스트 찾기
   @Query("MATCH (p:Post) " +
