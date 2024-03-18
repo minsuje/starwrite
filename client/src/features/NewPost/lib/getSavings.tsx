@@ -1,98 +1,82 @@
 import styled from 'styled-components';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
-import { z } from 'zod';
+import Savings from '../model/Savings';
+import { OneCategory } from '../ui/style';
+import { useNavigate } from 'react-router';
 
 type closeModal = () => void;
 
 // style 정의
-const _Box = styled.form`
+const _Box = styled(_Modal)`
   display: flex;
+  width: 80%;
+  height: 80%;
+  top: 0;
   flex-direction: column;
   gap: 30px;
   color: #adadad;
-  input {
-    background-color: #3b3d41;
-    border: none;
-    padding: 10px;
-  }
+
   label {
     font-size: 20px;
   }
 `;
 
-const _ErrorMsg = styled.p`
-  color: #ffafaf;
-  font-size: 12px;
-  padding-top: 2px;
-`;
-
-const _ButtonBox = styled.div`
+const _postBox = styled.div`
+  padding: 25px 20px;
+  background-color: var(--color-zinc-700);
+  border-radius: 3px;
   display: flex;
-  justify-content: space-between;
-  gap: 9px;
-`;
-
-const _Button = styled.button`
-  flex-grow: 1;
-  padding: 8px 0;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  flex-direction: column;
+  gap: 20px;
+  text-decoration: none;
+  text-decoration-line: none;
+  h1 {
+    font-size: 20px;
+    color: var(--color-zinc-300);
+  }
+  p {
+    font-size: 13px;
+    color: var(--color-zinc-500);
+  }
   &:hover {
     opacity: 0.8;
-    cursor: pointer;
   }
-
-  background-color: ${(props) => props.color || '#1361D7'};
 `;
 
-// 유효성 검사 schema
-const schema = z.object({
-  category: z.string().min(1, { message: '입력해주세요' }),
-});
-
 function GetSavings({ onclick }: { onclick: closeModal }) {
-  // react-hook-form
-  const {
-    register, // input 할당, value 변경 감지
-    handleSubmit, // form submit 이벤트 시 호출
-    formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  const onValid = (data: { category?: string }) => {
-    console.log('onValid', data);
-    //여기에  axios 작성
-  };
-
+  const navigate = useNavigate();
   return (
     <>
       <_ModalBg>
-        <_Modal>
-          <_Box onSubmit={handleSubmit(onValid)}>
-            <label htmlFor="newCategory">카테고리 추가</label>
-            <input placeholder="카테고리 명" {...register('category')}></input>
-            {errors.category && typeof errors.category.message === 'string' && (
-              <_ErrorMsg>{errors.category.message}</_ErrorMsg>
-            )}
+        <_Box>
+          <div>
+            <span>임시저장 글 목록</span>
+            <button
+              onClick={() => {
+                onclick();
+              }}
+            >
+              취소
+            </button>
+          </div>
 
-            <_ButtonBox>
-              <_Button type="submit">추가</_Button>
-
-              <_Button
-                color="#ffffff1d"
+          {Savings.map((saving) => {
+            return (
+              <OneCategory
+                key={saving.id}
                 onClick={() => {
+                  navigate(`/user/starwrite/writenewpost/${saving.id}`);
                   onclick();
                 }}
               >
-                취소
-              </_Button>
-            </_ButtonBox>
-          </_Box>
-        </_Modal>
+                <_postBox>
+                  <h1>{saving.title === null ? '제목없음' : saving.title}</h1>
+                  <p>작성 날짜 추가</p>
+                </_postBox>
+              </OneCategory>
+            );
+          })}
+        </_Box>
       </_ModalBg>
     </>
   );

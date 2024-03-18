@@ -37,6 +37,7 @@ const _postBox = styled.div`
 
 function ListViewMainEnt() {
   const { category } = useParams();
+  console.log('category params', category);
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>();
   useEffect(() => {

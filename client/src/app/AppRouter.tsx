@@ -82,7 +82,18 @@ export const AppRouter = createBrowserRouter([
                 <NewPostPage />
               </>
             ),
+            children: [
+              {
+                path: ':postId',
+                element: (
+                  <>
+                    <NewPostPage />
+                  </>
+                ),
+              },
+            ],
           },
+
           // 리스트뷰 메인 페이지
           {
             path: 'listview/main/:category',
