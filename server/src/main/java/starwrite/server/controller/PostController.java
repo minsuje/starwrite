@@ -33,20 +33,20 @@ public class PostController {
 
   // 글 작성 BackLink info 전달
   @GetMapping("/write")
-  public List<BackLink> getIdAndTitle(){
+  public List<BackLink> getIdAndTitle() {
     // 임시
     String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
     return postService.backLink(userId);
   }
 
   // 유저의 모든 글 조회 (리스트 뷰)
-  @GetMapping("/{nickname}/All")
-  public GetPosts getAllPosts(@PathVariable(value = "nickname") String nickname) {
+  @GetMapping("/all")
+  public GetPosts getAllPosts() {
+    String nickname = "minsu";
     return postService.getAllPosts(nickname);
   }
 
   // 글 수정
-
 
   // (유저의) 카테고리의 모든 포스트 조회 (All Post Get)
  /* @GetMapping("/{nickname}/{categoryId}")
@@ -56,21 +56,23 @@ public class PostController {
   }*/
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
-  @GetMapping("/Detail/{postId}")
-  public Post getDetailPost(@PathVariable(value = "postId") String postId){
+  @GetMapping("/detail/{postId}")
+  public Post getDetailPost(@PathVariable(value = "postId") String postId) {
     return postService.getDetailPost(postId);
   }
 
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
-  @GetMapping("/{nickname}/All/Save")
-  public GetPosts getSavePosts(@PathVariable(value = "nickname") String nickname){
+  @GetMapping("/all/save")
+  public GetPosts getSavePosts() {
+    String nickname = "minsu";
     return postService.getSavePosts(nickname);
   }
 
   // 임시글 하나 불러오기 ( load One Save Posts )
-  @GetMapping("/{nickname}/All/Save/{postId}")
-  public Post getSavePost(@PathVariable(value = "nickname") String nickname, @PathVariable(value = "postId") Long postId){
-    return postService.getSavePost(nickname,postId);
+  @GetMapping("/all/save/{postId}")
+  public Post getSavePost(@PathVariable(value = "postId") Long postId) {
+    String nickname = "minsu";
+    return postService.getSavePost(nickname, postId);
   }
 
 
@@ -118,6 +120,7 @@ public class PostController {
   public CreatedPost createPost(@RequestBody CreatePost post) {
     return postService.createPost(post);
   }
+
   // 포스팅 페이지 임시 저장버튼(임시저장)
   @PostMapping("/Save")
   public CreatedPost savePosts(@RequestBody CreatePost post) {
@@ -126,29 +129,16 @@ public class PostController {
 
   // 임시 저장에서 임시 저장버튼 (재 임시저장)
   @PatchMapping("/save/{postId}")
-  public String saveAgain(@RequestBody CreatePost post, @PathVariable(value = "postId") Long postId){
+  public String saveAgain(@RequestBody CreatePost post,
+      @PathVariable(value = "postId") Long postId) {
     return postService.saveAgain(post, postId);
   }
 
-//   임시 저장 페이지에서 포스트 버튼
+  //   임시 저장 페이지에서 포스트 버튼
   @PatchMapping("/{postId}")
-  public String saveTmpPost(@RequestBody CreatePost post, @PathVariable(value = "postId") Long postId){
-    String userId ="a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
+  public String saveTmpPost(@RequestBody CreatePost post,
+      @PathVariable(value = "postId") Long postId) {
+    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
     return postService.saveTmpPost(post, postId, userId);
   }
-
-
-
-//  @PostMapping("/createRelationship")
-////  public void createRelationship(@RequestBody String postId, @RequestBody List<String> relatedPostId) {
-//  public void createRelationship(@RequestBody PostRelationDTO postRelationDTO) {
-//    postService.createRelationship(postRelationDTO.getPostId(), postRelationDTO.getRelatedPostId());
-//  }
-//
-//
-//  @GetMapping("/{postId}/related")
-//  public RelatedPosts getRelatedPosts(@PathVariable String postId) {
-//    RelatedPosts relatedPosts = postService.getRelatedPosts(postId);
-//    return relatedPosts;
-//  }
 }
