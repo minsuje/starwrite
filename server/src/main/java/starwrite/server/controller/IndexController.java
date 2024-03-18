@@ -1,11 +1,11 @@
 package starwrite.server.controller;
 
-import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,10 +39,8 @@ public class IndexController {
     }
 
     @GetMapping("/user/home")
-    @RolesAllowed("USER")
     public String handleUserHome() {
-        System.out.println("controller");
-        System.out.println("controller >>> " + SecurityUtil.getCurrentUsername());
+        System.out.println("controller >>> " + SecurityUtil.getCurrentUserInfo());
         return "home_user";
     }
 
@@ -62,5 +60,10 @@ public class IndexController {
         log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(), jwtDTO.getRefreshToken());
 
         return jwtDTO;
+    }
+
+    @GetMapping("/test")
+    public Authentication authentication(Authentication authentication) {
+        return authentication;
     }
 }

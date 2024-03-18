@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +33,8 @@ public class Users implements UserDetails {
     private String userId;
 
     private String login_type;
+
+    private String provider; // OAuth provider -> 어느 소셜 로그인인지 (예: 네이버, 구글, 카카오)
 
     private String mail;
 

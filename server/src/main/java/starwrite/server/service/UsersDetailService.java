@@ -28,7 +28,7 @@ public class UsersDetailService implements UserDetailsService {
 
         if(user != null) {
             System.out.println("user >>>>" + user);
-
+//
 //            UserDetails users = User.builder()
 //                .username(user.getMail())
 //                .password(user.getPassword())
@@ -43,7 +43,7 @@ public class UsersDetailService implements UserDetailsService {
                 user.getUserId()
             );
 
-            System.out.println("users >>>>" + users.getNickname());
+//            System.out.println("users >>>>" + users.getNickname());
 
             return users;
         } else {
