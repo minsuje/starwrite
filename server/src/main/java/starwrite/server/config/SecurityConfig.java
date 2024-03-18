@@ -42,7 +42,7 @@ public class SecurityConfig {
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
             config.setAllowedOriginPatterns(
-                Collections.singletonList("http://localhost:3000, http://localhost:5173")); // 허용할 origin
+                Collections.singletonList("http://localhost:5173")); // 허용할 origin
             config.setAllowCredentials(true);
             return config;
         };
