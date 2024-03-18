@@ -13,12 +13,14 @@ function ListCategory({ sort }: { sort: string }) {
     category,
   );
   // 이게 맞는지 확인 부탁드려요 구휘님 03.17
-  const selected = (category: string) => {
+  const selected = (category: Category) => {
     if (selectedCategory) {
-      navigate(`/user/starwrite/listview/main/${category}`);
-      setSelectedCategory(category);
+      navigate(`/user/starwrite/listview/main/${category.name}`);
+      setSelectedCategory(category.name);
+    } else if (category.id === 'logout') {
+      navigate(`/`);
     } else {
-      navigate(`/user/starwrite/mypage/:userid_num/`);
+      navigate(`/user/starwrite/mypage/${category.id}`);
     }
   };
 
@@ -43,7 +45,7 @@ function ListCategory({ sort }: { sort: string }) {
                 <OneCategory
                   key={idx}
                   onClick={() => {
-                    selected(category.name);
+                    selected(category);
                   }}
                 >
                   {category.name}
@@ -55,7 +57,7 @@ function ListCategory({ sort }: { sort: string }) {
                   color={'1'}
                   key={idx}
                   onClick={() => {
-                    selected(category.name);
+                    selected(category);
                   }}
                 >
                   {category.name}

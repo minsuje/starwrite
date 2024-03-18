@@ -1,9 +1,24 @@
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  BlockNoteSchema,
+  defaultInlineContentSpecs,
+} from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView, darkDefaultTheme } from '@blocknote/react';
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
+import { PostList } from '../../model/listViewData';
+import { Mention } from '../../../NewPost/ui/Mention';
 
+const schema = BlockNoteSchema.create({
+  inlineContentSpecs: {
+    // Adds all default inline content.
+    ...defaultInlineContentSpecs,
+    // Adds the mention tag.
+    mention: Mention,
+  },
+});
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 async function uploadFile(file: File) {
   const body = new FormData();
@@ -21,7 +36,8 @@ async function uploadFile(file: File) {
 // 나중에 분리하기
 // 불러오기 get
 async function loadFromStorage() {
-  const storageString = localStorage.getItem('editorContent');
+  const storageString = PostList[1].content;
+  console.log('?', JSON.parse(storageString) as PartialBlock[]);
   return storageString
     ? (JSON.parse(storageString) as PartialBlock[])
     : undefined;
@@ -42,7 +58,7 @@ export default function ListDetailFeat() {
     if (initialContent === 'loading') {
       return undefined;
     }
-    return BlockNoteEditor.create({ initialContent, uploadFile });
+    return BlockNoteEditor.create({ schema, initialContent, uploadFile });
   }, [initialContent]);
 
   if (editor === undefined) {
@@ -53,7 +69,17 @@ export default function ListDetailFeat() {
 
   return (
     <div onKeyDown={(e) => e.preventDefault()}>
-      <BlockNoteView editor={editor} theme={darkDefaultTheme} />
+      <BlockNoteView
+        editor={editor}
+        theme={darkDefaultTheme}
+        onSelectionChange={() => {
+          const textCursorPosition = editor.getTextCursorPosition();
+          editor.toggleStyles({
+            backgroundColor: 'yellow',
+          });
+          console.log('textCursorPosition', textCursorPosition.block);
+        }}
+      />
     </div>
   );
 }

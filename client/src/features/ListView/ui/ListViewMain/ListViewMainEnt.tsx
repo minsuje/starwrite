@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import styled from 'styled-components';
-import { Posts } from '../../../../shared/types/app';
+
 import { PostList } from '../../model/listViewData';
 import { Link, useParams } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ function ListViewMainEnt() {
   const { category } = useParams();
   console.log('category params', category);
   // 글 리스트
-  const [postsList, setPostsList] = useState<Posts[]>();
+  const [postsList, setPostsList] = useState();
   useEffect(() => {
     setPostsList(PostList);
   }, []);
