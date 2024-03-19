@@ -2,7 +2,9 @@ package starwrite.server.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -52,9 +54,23 @@ public class PostService {
   }
 
   // 상세 글 조회
-  public Post getDetailPost(String postId) {
+  public Map<String, Object> getDetailPost(Long postId) {
     LocalDateTime recentView = LocalDateTime.now();
-    return postRepository.setRecentView(postId, recentView);
+    String userId = SecurityUtil.getCurrentUserUserId();
+    String postUserId = postRepository.findUserIdByPostId(postId);
+    System.out.println("상대 아이디 >>>>> "  + postUserId);
+    System.out.println("내 아이디 >>>> " + userId);
+    Map<String, Object> result = new HashMap<>();
+    if(!postUserId.equals(userId)){
+      System.out.println(">>>>>>>>>>> 상대가 본글 볼거야");
+      result.put("isMine", false);
+      result.put("post", postRepository.otherUserPost(postId));
+      return result;
+    }
+    System.out.println("내가 쓴글 볼거야 <<<<<<<<<<<");
+    result.put("isMine", true);
+    result.put("post", postRepository.setRecentView(postId, recentView));
+    return result;
   }
 
 
@@ -96,6 +112,7 @@ public class PostService {
     }
 
     String userId = SecurityUtil.getCurrentUserUserId();
+    System.out.println("userID >>>>" + userId);
     CreatedPost createdPost = postRepository.createPostLink(userId, post.getCategory(),
         newPost.getTitle(), newPost.getContent(),
         newPost.getVisible(), img, timeNow, false,

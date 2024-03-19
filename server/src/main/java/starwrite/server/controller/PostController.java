@@ -1,6 +1,7 @@
 package starwrite.server.controller;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,7 +65,7 @@ public class PostController {
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
   @GetMapping("/detail/{postId}")
-  public Post getDetailPost(@PathVariable(value = "postId") String postId) {
+  public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
     return postService.getDetailPost(postId);
   }
 
