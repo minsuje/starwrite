@@ -14,6 +14,8 @@ import starwrite.server.relationship.Related;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 import starwrite.server.response.RelatedPosts;
@@ -34,7 +36,7 @@ public class CategoryService {
 
 
   // 카테고리 안의 모든 글 불러오기
-  public List<Post> getCategoryPosts(String categoryId) {
+  public List<CategoryPosts> getCategoryPosts(String categoryId) {
     return categoryRepository.getCategoryPosts(categoryId);
   }
 
