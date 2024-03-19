@@ -95,7 +95,7 @@ video {
 html body {
   height: 100%;
   width: 100%;
-  background-color: var(--color-gray-950);
+  background-color: var(--color-zinc-900);
   color: white;
 }
 

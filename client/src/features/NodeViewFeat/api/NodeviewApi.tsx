@@ -109,7 +109,7 @@ export const links: Link[] = [
 export const fetchData = async () => {
   try {
     const response = await baseApi.get(
-      `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
+      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=111a8a97-eb41-40a1-9e62-940b7fe9f671`,
     );
     console.log('resdata', response);
     return response.data;

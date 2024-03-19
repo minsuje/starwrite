@@ -3,6 +3,7 @@ import { IoIosSearch } from 'react-icons/io';
 import { nodes } from '../CategoryViewFeat/index';
 import './CategorySearchFeat.css';
 import { baseApi } from '../../shared/api/BaseApi';
+import { SearchIcon } from '../../shared/Search';
 
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
@@ -83,15 +84,7 @@ export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
           }}
           placeholder="노드를 입력해주세요"
         />
-        <IoIosSearch
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '22px',
-            transform: 'translateY(-50%)',
-            color: '#ffff',
-          }}
-        ></IoIosSearch>
+        <SearchIcon></SearchIcon>
         {toggleSearch && searchTerm.length != 0 && (
           <ul
             style={{

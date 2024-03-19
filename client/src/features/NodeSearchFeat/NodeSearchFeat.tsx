@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { nodes } from '../../widgets/NodeView/index';
+import { SearchIcon } from '../../shared/Search';
 import './NodeSearchFeat.css';
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
@@ -81,15 +82,7 @@ export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
           }}
           placeholder="노드를 입력해주세요"
         />
-        <IoIosSearch
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '22px',
-            transform: 'translateY(-50%)',
-            color: '#ffff',
-          }}
-        ></IoIosSearch>
+        <SearchIcon></SearchIcon>
         {toggleSearch && searchTerm.length != 0 && (
           <ul
             style={{
