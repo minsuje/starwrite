@@ -8,6 +8,8 @@ import org.springframework.security.core.parameters.P;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.relationship.Related;
+import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 import starwrite.server.response.RelatedPosts;
@@ -26,8 +28,31 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
   // 카테고리에 해당하는 모든 글 찾아오기
   // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
-  @Query("MATCH (c:Category)-[]-(p:Post) WHERE c.categoryId = $categoryId RETURN p ")
-  List<Post> getCategoryPosts(@Param(value = "categoryId") String categoryId);
+  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
+      "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
+      "MATCH (u:Users)-[:POSTED|HOLDS]->(p) " +
+      "RETURN ID(p) AS postId, p.title AS title, substring(p.content, 0, 100) AS content, " +
+      "p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, " +
+      "u.userId AS userId, u.nickname AS nickname ORDER BY p.createdAt DESC ")
+  List<CategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId);
+
+
+
+  // 카테고리 모든 글 가져오기. 무한 스크롤 추가
+//  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
+//      "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
+//      "MATCH (p)-[:POSTED|HOLDS]->(u:Users) " +
+//      "RETURN p.postId AS categoryPostId, p.title AS title, " +
+//      "substring(p.content, 0, 50) AS content, " +
+//      "p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, u.userId AS userId " +
+//      "ORDER BY p.createdAt DESC " + // 여기서 정렬 조건을 추가할 수 있습니다.
+//      "SKIP $skip LIMIT $limit")
+//  List<CategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId,
+//      @Param(value = "skip") int skip,
+//      @Param(value = "limit") int limit);
+
+
+
 
 
   // 카테고리 안의 모든 글 제목과 관계 보내기

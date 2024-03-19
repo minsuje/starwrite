@@ -13,6 +13,8 @@ public interface AnnotationRepository extends Neo4jRepository<Annotation, String
   @Query("MATCH (c:Comment) WHERE ID(c) = $id RETURN c")
   Annotation findCommentById(String commentId);
 
+
+  // 어노테이션 생성
   @Query(
       "MATCH (u:Users), (p:Post) " +
           "WHERE u.userId = $userId AND ID(p) = $postId " +
@@ -28,7 +30,24 @@ public interface AnnotationRepository extends Neo4jRepository<Annotation, String
       @Param(value = "userId") String userId);
 
 
-  @Query("MATCH ")
-  void updateAnnotation(@Param(value = "content") String content,
-      @Param(value = "type") String type);
+
+  // 어노테이션 수정
+  @Query(
+      "MATCH (a:Annotation) " +
+          "WHERE ID(a) = $annotationId " +
+          "SET a.content = $content, a.updatedAt = localDateTime() "
+  )
+  void updateAnnotation(@Param(value = "id") Long annotationId,
+      @Param(value = "content") String content);
+
+
+
+  // 어노테이션 삭제
+  @Query(
+      "MATCH (a:Annotation) " +
+          "WHERE ID(a) = $annotationId " +
+          "DETACH DELETE a"
+  )
+  void deleteAnnotation(@Param(value = "id") String annotationId);
+
 }
