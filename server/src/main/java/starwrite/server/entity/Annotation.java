@@ -23,6 +23,8 @@ public class Annotation {
 
   private Integer position;
 
+  private String type;
+
   private String content;
 
   private boolean isWriter;
