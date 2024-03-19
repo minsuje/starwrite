@@ -10,6 +10,7 @@ import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
 import { Spinner } from '../shared/spinner';
 import { DataSpinnerSh } from '../shared/DataSpinner';
+import { MainPage } from '../pages/Main/Main';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -19,7 +20,8 @@ export const AppRouter = createBrowserRouter([
         path: '/',
         element: (
           <>
-            <div>렌딩페이지인디요 ?</div>
+            <HeaderWid />
+            <MainPage></MainPage>
           </>
         ),
       },

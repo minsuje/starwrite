@@ -6,6 +6,7 @@ const _spinnerTitle = styled.h1`
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+  border: '1px solid #383737';
 `;
 export function Spinner() {
   return (
