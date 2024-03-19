@@ -6,11 +6,10 @@ export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
 };
 
-export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
+export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
-
   // useEffect(() => {
   //   function handleClickOutside(event: any) {
   //     if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -58,7 +57,7 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
     setToggleSearch(true);
   };
 
-  const filterSearch = nodes.filter((node) =>
+  const filterSearch = nodesData.filter((node) =>
     node.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
