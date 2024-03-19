@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
@@ -91,13 +92,27 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "nickname") String nickname);
 
 
-  // 포스트 상세 페이지 + 최근 본 시점 기록
-  @Query("MATCH (p:Post{postId : $postId}) " +
+  // 포스트 상세 페이지 + 최근 본 시점 기록 (내 글)
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
       "SET p.recentView = $recentView " +
       "RETURN p"
   )
-  Post setRecentView(@Param(value = "postId") String postId,
+  Post setRecentView(@Param(value = "postId") Long postId,
       @Param(value = "recentView") LocalDateTime recentView);
+
+  // 포스트 상세 보기 (상대방 꺼)
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "RETURN p"
+  )
+  Post otherUserPost(@Param("postId") Long postId);
+
+
+  // 포스트에 유저 아이디 추출하기
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "MATCH (p)-[r]-(u:Users) " +
+      "RETURN u.userId"
+  )
+  String findUserIdByPostId(@Param("postId") Long postId);
 
   // 임시 저장글 하나 불러오기
   @Query("MATCH (p:Post) " +

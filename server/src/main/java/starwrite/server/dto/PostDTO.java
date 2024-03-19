@@ -14,6 +14,7 @@ import starwrite.server.entity.Users;
 public class PostDTO extends Post {
   private String postId;
 
+
   private String title;
 
   private String content;
@@ -27,13 +28,8 @@ public class PostDTO extends Post {
   private LocalDateTime recentView;
 
   private LocalDateTime createdAt;
+
   private LocalDateTime updatedAt;
 
-  @Relationship(type = "IS_CHILD", direction = Direction.INCOMING)
-  private Category category;
-
-  @Relationship(type = "POSTED", direction = Direction.INCOMING)
-  private Users users;
-
-  private List<String> postRelate;
+  private boolean isMine;
 }
