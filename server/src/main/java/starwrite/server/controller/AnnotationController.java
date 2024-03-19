@@ -13,7 +13,7 @@ import starwrite.server.request.UpdateAnnotation;
 import starwrite.server.service.AnnotationService;
 
 @RestController
-@RequestMapping("annotation")
+@RequestMapping("user/annotation")
 public class AnnotationController {
   private final AnnotationService annotationService;
 
