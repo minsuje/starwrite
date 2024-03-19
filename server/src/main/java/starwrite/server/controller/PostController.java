@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
@@ -18,6 +19,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.PostDetail;
 import starwrite.server.service.PostService;
 
 @RestController
@@ -49,9 +51,10 @@ public class PostController {
 
   // 유저의 모든 글 조회 (리스트 뷰)
   @GetMapping("/all")
-  public GetPosts getAllPosts() {
+  public List<GetPosts> getAllPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
+      @RequestParam(value = "limit", defaultValue = "10") int limit) {
     String nickname = SecurityUtil.getCurrentUserNickname();
-    return postService.getAllPosts(nickname);
+    return postService.getAllPosts(nickname, skip, limit);
   }
 
   // 글 수정
@@ -68,6 +71,15 @@ public class PostController {
   public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
     return postService.getDetailPost(postId);
   }
+
+  // 글 상세 조회
+  @GetMapping("/detail")
+  public PostDetail getPostDetail(@RequestParam(value = "postId") Long postId) {
+    String userId = SecurityUtil.getCurrentUserUserId();
+    return postService.getPostDetail(postId, userId);
+  }
+
+
 
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
   @GetMapping("/all/save")
@@ -152,9 +164,9 @@ public class PostController {
 
   // 글 삭제
   @DeleteMapping("/delete/{postId}")
-  public String deletePost(@PathVariable(value = "postId") Long postId){
+  public String deletePost(@PathVariable(value = "postId") Long postId) {
     String userId = SecurityUtil.getCurrentUserUserId();
-    return postService.deletePost(postId,userId);
+    return postService.deletePost(postId, userId);
   }
 
 }

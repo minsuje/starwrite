@@ -16,6 +16,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.PostDetail;
 
 @Service
 public class PostService {
@@ -49,8 +50,8 @@ public class PostService {
   }
 
   // (해당 유저) 모든 글 조회
-  public GetPosts getAllPosts(String nickname) {
-    return postRepository.findAllPostsByUserNickname(nickname);
+  public List<GetPosts> getAllPosts(String nickname, int skip, int limit) {
+    return postRepository.findAllPostsByUserNickname(nickname, skip, limit);
   }
 
   // 상세 글 조회
@@ -71,6 +72,11 @@ public class PostService {
     result.put("isMine", true);
     result.put("post", postRepository.setRecentView(postId, recentView));
     return result;
+  }
+
+  // 글 상세 조회
+  public PostDetail getPostDetail(Long postId, String userId) {
+    return postRepository.getPostDetail(postId, userId);
   }
 
 
