@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
-import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 import starwrite.server.service.PostService;
 
@@ -34,12 +34,16 @@ public class PostController {
   IndexController indexController;
 
   // 글 작성 BackLink info 전달
-  @GetMapping("/write")
+  @GetMapping("write")
   public List<BackLink> getIdAndTitle() {
     // 임시
     String userId = SecurityUtil.getCurrentUserUserId();
+    System.out.println(userId);
     return postService.backLink(userId);
   }
+
+//  @GetMapping("writing")
+//  public String getI
 
   // 유저의 모든 글 조회 (리스트 뷰)
   @GetMapping("/all")
@@ -124,7 +128,7 @@ public class PostController {
   }
 
   // 포스팅 페이지 임시 저장버튼(임시저장)
-  @PostMapping("/Save")
+  @PostMapping("/save")
   public CreatedPost savePosts(@RequestBody CreatePost post) {
     return postService.savePost(post);
   }
