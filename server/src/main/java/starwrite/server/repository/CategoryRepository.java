@@ -11,21 +11,23 @@ import starwrite.server.relationship.Related;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 import starwrite.server.response.RelatedPosts;
+import starwrite.server.response.UserCategories;
 
 //@Repository
 public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
-  @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
-  List<Post> findPostsByCategory(String categoryId);
+  // 특정 유저에 해당하는 카테고리 찾아오기
+  @Query("MATCH (c:Category)-[]-(u:Users) WHERE u.userId = $userId " +
+      "OPTIONAL MATCH (c)-[r]->(p:Post) " +
+      "RETURN c.categoryId AS categoryId, c.createdAt AS createdAt, c.name AS name, COUNT(p) AS postCount")
+  List<UserCategories> getUserCategory(@Param(value = "userId") String userId);
 
-  @Query("MATCH (c:Category) WHERE c.categoryId = $id RETURN c LIMIT 1")
-  List<Category> findCategoryById(@Param(value = "id") String id);
 
-//  @Query("MATCH (u:Users) WHERE u.userId =s $userId " +
-//      "MATCH (c:Category) WHERE c.categoryId = $categoryId " +
-//      "CREATE (u)-[r:OWNS]->(c) " +
-//      "RETURN c")
-//  RelatedPosts getCategoryPostsNode(@Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+
+  // 카테고리에 해당하는 모든 글 찾아오기
+  // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
+  @Query("MATCH (c:Category)-[]-(p:Post) WHERE c.categoryId = $categoryId RETURN p ")
+  List<Post> getCategoryPosts(@Param(value = "categoryId") String categoryId);
 
 
   // 카테고리 안의 모든 글 제목과 관계 보내기
@@ -37,15 +39,26 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "RETURN posts, COLLECT(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) AS relation ")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
 
+  //  @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
+//  List<Post> findPostsByCategory(String categoryId);
 
-  @Query("MATCH (c:Category)" +
-      "RETURN c")
-  List<Category> getAllCategory();
+//  @Query("MATCH (c:Category) WHERE c.categoryId = $id RETURN c LIMIT 1")
+//  List<Category> findCategoryById(@Param(value = "id") String id);
 
-  @Query(
-      "CREATE (c:Category{ name: $name, createdAt: localdatetime(), updatedAt: localdateTime()}) " +
-          "RETURN c")
-  Category createCategory(@Param(value = "name") String name);
+//  @Query("MATCH (u:Users) WHERE u.userId =s $userId " +
+//      "MATCH (c:Category) WHERE c.categoryId = $categoryId " +
+//      "CREATE (u)-[r:OWNS]->(c) " +
+//      "RETURN c")
+//  RelatedPosts getCategoryPostsNode(@Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+
+//  @Query("MATCH (c:Category)" +
+//      "RETURN c")
+//  List<Category> getAllCategory();
+
+//  @Query(
+//      "CREATE (c:Category{ name: $name, createdAt: localdatetime(), updatedAt: localdateTime()}) " +
+//          "RETURN c")
+//  Category createCategory(@Param(value = "name") String name);
 
 //  @Query("MATCH p=(u:Users)-[r:OWNS]->() WHERE u.userId = $userId RETURN p LIMIT 1")
 //  List<Object> findCategoryByUserId(@Param(value = "userId") String userId);
@@ -60,16 +73,14 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 //@Query("MATCH (u:Users)-[r]-(c:Category) WHERE u.userId = $userId RETURN u AS userId, type(r) AS relationType, c AS category LIMIT 1")
 //PostResponse findCategoryByUserId(@Param(value = "userId") String userId);
 
+//  @Query("MATCH (u:Users)-[r]-(c:Category)-[]-(p:Post) WHERE u.userId = $userId " +
+//      "RETURN u AS userId, type(r) AS relationType, collect(c) AS category, collect(p) AS post")
+//  PostResponse findCategoryByUserId(@Param(value = "userId") String userId);
 
-  @Query("MATCH (u:Users)-[r]-(c:Category)-[]-(p:Post) WHERE u.userId = $userId " +
-      "RETURN u AS userId, type(r) AS relationType, collect(c) AS category, collect(p) AS post")
-  PostResponse findCategoryByUserId(@Param(value = "userId") String userId);
-
-
-  @Query("MATCH (u:Users)-[]-(c:Category) " +
-      "MATCH (c)-[r]-(p:Post) " +
-      "RETURN r ")
-  List<GetCategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId,
-      @Param(value = "userId") String userId);
+//  @Query("MATCH (u:Users)-[]-(c:Category) " +
+//      "MATCH (c)-[r]-(p:Post) " +
+//      "RETURN r ")
+//  List<GetCategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId,
+//      @Param(value = "userId") String userId);
 
 }

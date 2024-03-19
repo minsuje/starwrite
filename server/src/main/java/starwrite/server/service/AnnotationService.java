@@ -40,6 +40,8 @@ public class AnnotationService {
     return annotationRepository.save(newAnnotation);
   }
 
+
+  // 어노테이션 생성
   public String createAnnotation(CreateAnnotation annotation) {
 
     System.out.println(annotation.getAnnotation().getContent());
@@ -48,7 +50,7 @@ public class AnnotationService {
 
 //    List<Users> value = annotationRepository.createAnnotation(annotation.getAnnotation().getContent(), annotation.getAnnotation().isWriter(),
 //        LocalDateTime.now(), annotation.getPostId(), annotation.getUserId());
-    annotationRepository.createAnnotation(annotation.getAnnotation().getContent(), annotation.getAnnotation().isWriter(),
+    annotationRepository.createAnnotation(annotation.getAnnotation().getContent(), annotation.getAnnotation().getType(), annotation.getAnnotation().isWriter(),
         LocalDateTime.now(), annotation.getPostId(), annotation.getUserId());
 
 

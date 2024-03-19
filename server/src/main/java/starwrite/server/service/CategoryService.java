@@ -17,6 +17,7 @@ import starwrite.server.repository.UsersRepository;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
 import starwrite.server.response.RelatedPosts;
+import starwrite.server.response.UserCategories;
 
 @Service
 public class CategoryService {
@@ -29,42 +30,29 @@ public class CategoryService {
   @Autowired
   private PostRepository postRepository;
 
-//  public Category getPosts(String id) {
-//    return categoryRepository.findCategoryById(id);
-//  }
 
-  public List<Category> getAllCategories() {
-    return categoryRepository.getAllCategory();
-  }
 
-  public List<GetCategoryPosts> getCategoryPosts(String categoryId, String userId) {
 
-    return categoryRepository.getCategoryPosts(categoryId, userId);
-  }
-
-  public List<Category> getCategoryById(String categoryId) {
-    return categoryRepository.findCategoryById(categoryId);
+  // 카테고리 안의 모든 글 불러오기
+  public List<Post> getCategoryPosts(String categoryId) {
+    return categoryRepository.getCategoryPosts(categoryId);
   }
 
 
-  public PostResponse getCategoryByUserId(String userId) {
-    return categoryRepository.findCategoryByUserId(userId);
-  };
-
-//  public RelatedPosts getRelatedPosts(String userId, String categoryId) {
-//    List<Post> relatedPosts = categoryRepository.getCategoryPostsNode(userId, categoryId);
-//    List<String> relatedPostIds = relatedPosts.stream()
-//        .map(Post::getPostId)
-//        .collect(Collectors.toList());
-//
-//    return new RelatedPosts(postId, relatedPostIds);
-//  }
+  // 특정 유저에 해당하는 카테고리 찾아오기
+  public List<UserCategories> getUserCategory(String userId) {
+    return categoryRepository.getUserCategory(userId);
+  }
 
 
+
+  // 특정 카테고리의 노드 뷰 글, 관계 가져오기
   public GetCategoryPosts getCategoryPostsNode(String categoryId) {
     return categoryRepository.getCategoryPostsNode(categoryId);
   }
 
+
+  // 카테고리 생성
   public Category addCategory(Category category) {
 
     Category newCategory = new Category();
@@ -79,20 +67,52 @@ public class CategoryService {
     return categoryRepository.save(newCategory);
   }
 
-  public Category updateCategory(Category category) {
-    Optional<Category> categoryFromDB = categoryRepository.findById(category.getCategoryId());
-    if (categoryFromDB.isPresent()) {
-      Category categoryFromDBVal = categoryFromDB.get();
-      categoryFromDBVal.setName(category.getName());
-      categoryRepository.save(categoryFromDBVal);
-    } else {
-      return null;
-    }
-    return category;
-  }
 
-  public void deleteCategory(String id) {
-    categoryRepository.deleteById(id);
-  }
+
+  //  public Category getPosts(String id) {
+//    return categoryRepository.findCategoryById(id);
+//  }
+
+//  public List<Category> getAllCategories() {
+//    return categoryRepository.getAllCategory();
+//  }
+
+
+
+//  public List<Category> getCategoryById(String categoryId) {
+//    return categoryRepository.findCategoryById(categoryId);
+//  }
+
+
+
+  ;
+
+//  public RelatedPosts getRelatedPosts(String userId, String categoryId) {
+//    List<Post> relatedPosts = categoryRepository.getCategoryPostsNode(userId, categoryId);
+//    List<String> relatedPostIds = relatedPosts.stream()
+//        .map(Post::getPostId)
+//        .collect(Collectors.toList());
+//
+//    return new RelatedPosts(postId, relatedPostIds);
+//  }
+
+
+
+
+//  public Category updateCategory(Category category) {
+//    Optional<Category> categoryFromDB = categoryRepository.findById(category.getCategoryId());
+//    if (categoryFromDB.isPresent()) {
+//      Category categoryFromDBVal = categoryFromDB.get();
+//      categoryFromDBVal.setName(category.getName());
+//      categoryRepository.save(categoryFromDBVal);
+//    } else {
+//      return null;
+//    }
+//    return category;
+//  }
+
+//  public void deleteCategory(String id) {
+//    categoryRepository.deleteById(id);
+//  }
 
 }
