@@ -140,7 +140,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "OPTIONAL MATCH (p)<-[:IS_CHILD]-(c:Category) " +
       "WITH p, u, c " +
       "OPTIONAL MATCH (p)-[:POSTED]-(u) " +
-      "WITH p, u, c, collect(u.userId) as authors " +
+      "WITH p, u, c " +
       "OPTIONAL MATCH (p)<-[:COMMENT]-(a:Annotation) " +
       "WHERE (p)-[:POSTED]-(u) AND a.type = 'comment' " +
       "OR NOT (p)-[:POSTED]-(u) AND (a.type = 'comment' OR (p)-[:COMMENT]-(u)) " +
