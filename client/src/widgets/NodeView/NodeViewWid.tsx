@@ -8,18 +8,24 @@ import {
   Link,
 } from '../../features/NodeViewFeat/index';
 import './NodeView.css';
-import { fetchData } from '../../features/NodeViewFeat/api/NodeviewApi';
+import { fetchData } from '../../features/NodeViewFeat/index';
+import { DataSpinnerSh } from '../../shared/DataSpinner';
 
 export type SearchType = {
   searchTerm: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const NodeView = ({ searchTerm }: SearchType) => {
+export const NodeView = ({
+  searchTerm,
+  setLoading,
+  setNodesData,
+}: SearchType) => {
   const [nodes, setNodes] = useState([]);
   const [links, setlinks] = useState([]);
-
-  console.log('nodes', nodes);
-  console.log('links', links);
+  const [hasData, setHasData] = useState(false);
+  // console.log('nodes', nodes);
+  // console.log('links', links);
 
   const svgRef = useRef(null);
   const [viewportSize] = useState({
@@ -27,7 +33,6 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     height: window.innerHeight,
   });
 
-  console.log('nodes', nodes);
   function drag(simulation: d3.Simulation<CustomNode, undefined>) {
     return d3
       .drag<SVGImageElement, CustomNode>()
@@ -95,8 +100,8 @@ export const NodeView = ({ searchTerm }: SearchType) => {
 
     const group = svg.append('g');
     // 선택자와 데이터 바인딩 결과 확인
-    const nodeSelection = svg.selectAll('.nodes').data(nodes);
-    console.log('nodeSelection:', nodeSelection);
+    // const nodeSelection = svg.selectAll('.nodes').data(nodes);
+    // console.log('nodeSelection:', nodeSelection);
 
     const zoomHandler = d3.zoom().on('zoom', (event) => {
       group.attr('transform', event.transform);
@@ -120,7 +125,7 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2),
+        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 1.4),
       )
       .force(
         'radial',
@@ -185,11 +190,11 @@ export const NodeView = ({ searchTerm }: SearchType) => {
       .data(nodes)
       .enter()
       .append('text')
-      .attr('x', (d) => d.x ?? 50)
-      .attr('y', (d) => d.y ?? 50) // 노드 위에 위치하도록 y 좌표 조정
+      // .attr('x', (d) => d.x ?? 50)
+      // .attr('y', (d) => d.y ?? 50) // 노드 위에 위치하도록 y 좌표 조정
       .attr('text-anchor', 'middle') // 텍스트를 중앙 정렬
-      .attr('fill', '#ffffff') // 텍스트 색상 설정
-      .text((d) => d.label); // 각 노드의 라벨을 텍스트로 설정
+      .attr('fill', '#ffffff'); // 텍스트 색상 설정
+    // .text((d) => d.label); // 각 노드의 라벨을 텍스트로 설정
 
     // 작은 원 그리기 위한 'g' 태그 추가
     const smallCircleGroups = group
@@ -288,16 +293,34 @@ export const NodeView = ({ searchTerm }: SearchType) => {
     const getData = async () => {
       try {
         const fetchedNodes = await fetchData();
-        const nodesData = fetchedNodes.map((node) => ({
-          ...node,
-          id: node.relatedPostId, // 예: 'relatedPostId'를 노드의 고유 ID로 사용
-          label: node.relatedPostTitle,
-          x: Math.random() * viewportSize.width,
-          y: Math.random() * viewportSize.height,
-        }));
 
-        setNodes(nodesData);
-        setlinks([{ source: 1, target: 2 }]);
+        if (fetchedNodes !== '') {
+          const nodesData = fetchedNodes.posts.map((node) => ({
+            ...node,
+            id: node.postId,
+            label: node.title,
+            x: Math.random() * viewportSize.width,
+            y: Math.random() * viewportSize.height,
+          }));
+          setNodes(nodesData);
+          setLoading(false);
+          setNodesData(nodes);
+          console.log('if?');
+          console.log(fetchedNodes);
+        } else if (fetchedNodes === '') {
+          setHasData(false);
+          console.log(nodes);
+          setLoading(false);
+        }
+
+        const LinksData = fetchedNodes.relation.map((link) => ({
+          ...link,
+          source: link.postId,
+          target: link.relatedPostId,
+        }));
+        setlinks(LinksData);
+
+        // setlinks(fetchedNodes.relation);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -305,15 +328,19 @@ export const NodeView = ({ searchTerm }: SearchType) => {
 
     getData();
   }, []);
+
+  if (!hasData) {
+    console.log(hasData);
+  }
+
   return (
     <svg
       ref={svgRef}
       height={viewportSize.height}
       style={{
-        display: 'flex',
-        justifyContent: 'center',
+        zIndex: -5,
+        top: 0,
         position: 'fixed',
-        width: '100%',
       }}
     ></svg>
   );

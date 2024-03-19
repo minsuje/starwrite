@@ -9,6 +9,7 @@ import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
 import { Spinner } from '../shared/spinner';
+import { DataSpinnerSh } from '../shared/DataSpinner';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -127,7 +128,7 @@ export const AppRouter = createBrowserRouter([
 
       {
         path: '*',
-        element: <Spinner></Spinner>,
+        element: <DataSpinnerSh></DataSpinnerSh>,
       },
     ],
   },
