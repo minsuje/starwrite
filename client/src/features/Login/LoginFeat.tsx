@@ -49,11 +49,30 @@ function LoginForm() {
     trigger,
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      email: 'gogil@navdfe.com',
+      password: '1234',
+    },
   });
 
-  const onValid = (data: LoginInput) => {
+  const onValid = async (data: LoginInput) => {
     console.log('onValid', data);
     //여기에 회원가입 axios 작성
+
+    try {
+      const response = await axios.post(
+        `http://52.79.228.200:8080/login/post`,
+        {
+          mail: data.email,
+          password: data.password,
+        },
+      );
+      localStorage.setItem('accessToken', response.data.accessToken);
+      alert('로그인 완료');
+    } catch (error) {
+      alert('로그인 실패');
+      console.error(error);
+    }
   };
 
   //  유효성 검사 error 확인 함수
@@ -72,17 +91,11 @@ function LoginForm() {
     return '';
   };
 
-  async function handleTempLogin() {
+  async function handleGoogleLogin() {
     try {
       const response = await axios.post(
-        `http://52.79.228.200:8080/login/post`,
-        {
-          mail: 'gogil@navdfe.com',
-          password: '1234',
-        },
+        `http://52.79.228.200:8080/login/post/ouath/authorization/google`,
       );
-      console.log(response.data);
-      localStorage.setItem('accessToken', response.data.accessToken);
     } catch (error) {
       console.error(error);
     }
@@ -91,7 +104,7 @@ function LoginForm() {
   return (
     <>
       <form onSubmit={handleSubmit(onValid)}>
-        {/* <RegisterBox>
+        <RegisterBox>
           <InputBox>
             <Label>E-MAIL</Label>
             <Input
@@ -118,11 +131,12 @@ function LoginForm() {
             {errors.password && typeof errors.password.message === 'string' && (
               <ErrorMsg>{errors.password.message}</ErrorMsg>
             )}
-          </InputBox> */}
+          </InputBox>
 
-        <LargeButton type="submit">로그인</LargeButton>
-        <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton>
-        {/* </RegisterBox> */}
+          <LargeButton type="submit">로그인</LargeButton>
+          {/* <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton> */}
+          <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
+        </RegisterBox>
       </form>
     </>
   );
