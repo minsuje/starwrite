@@ -10,7 +10,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,12 +33,10 @@ public class JwtTokenProvider {
 
 //Base64.getEncoder().encodeToString("your-secret-key".getBytes())
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret.key}") String secretKey) {
 
-      String secretKey2 = Base64.getEncoder().encodeToString(secretKey.getBytes());
-      System.out.println("secret 1 >>>>>>>>>>>>>>>> " + secretKey);
-      System.out.println("secret 2 >>>>>>>>>>>>>>>> " + secretKey2);
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey2);
+      System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
       System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
