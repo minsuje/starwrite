@@ -22,11 +22,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
-//import starwrite.server.service.CustomOAuth2UserService;
+import starwrite.server.service.CustomOAuth2UserService;
 import starwrite.server.service.UsersDetailService;
 
 @Configuration
-@EnableWebSecurity // 전체 보안이 활성화되어야 한다는 것을 의미
+@EnableWebSecurity(debug = true
+) // 전체 보안이 활성화되어야 한다는 것을 의미
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -38,7 +39,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-//    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
@@ -87,12 +88,12 @@ public class SecurityConfig {
 //                    .successHandler(new AuthenticationSuccessHandler())
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
-//            .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
-//                // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
-//                oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-//                    // 로그인 성공 시 핸들러
+            .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
+                // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
+                oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
+                    // 로그인 성공 시 핸들러
 //                    .successHandler(oAuth2SuccessHandler)
-//            )
+            )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
             .build();

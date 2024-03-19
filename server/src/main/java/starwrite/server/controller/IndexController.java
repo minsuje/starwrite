@@ -1,5 +1,6 @@
 package starwrite.server.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class IndexController {
     @Autowired
     UsersServiceImpl usersServiceimpl;
 
+    @Autowired
+    private HttpServletResponse response;
+
     @GetMapping("/home")
     public String handleWelcome() {
         return "home";
@@ -43,6 +47,12 @@ public class IndexController {
         System.out.println("controller nickname >>> " + SecurityUtil.getCurrentUserNickname());
         System.out.println("controller userId >>> " + SecurityUtil.getCurrentUserUserId());
         System.out.println("controller auth >>> " + SecurityUtil.getCurrentUserAuth());
+
+//        Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
+//        cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
+//        response.addCookie(cookie);
+//
+//        System.out.println("cookie >>>>>>> " + cookie);
         return "home_user";
     }
 
@@ -66,6 +76,13 @@ public class IndexController {
 
     @GetMapping("/test")
     public Authentication authentication(Authentication authentication) {
+
         return authentication;
     }
+
+    @PostMapping("/token/logout")
+    public ResonseEntity<StatusResponseDto>{
+
+    }
+
 }
