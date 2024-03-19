@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
-import starwrite.server.entity.Users;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
-import starwrite.server.response.BackLink;
 import starwrite.server.response.GetPosts;
 
 @Service

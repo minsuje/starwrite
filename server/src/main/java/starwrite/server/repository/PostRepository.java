@@ -2,15 +2,13 @@ package starwrite.server.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.neo4j.cypherdsl.core.Create;
-import org.neo4j.cypherdsl.core.Match;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import starwrite.server.entity.Post;
-import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
+import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 
 @Repository
@@ -35,11 +33,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //  GetPosts findAllPosts(@Param(value = "userId") String userId);
 
   // 백링크 정보 보내기 (send back link info )
-  @Query("MATCH (p: Post) " +
-      "MATCH (u:Users) " +
-      "WHERE u.userId = $userId AND p.tmpSave = false " +
-      "RETURN p.postId AS postId, p.title AS title")
-  List<BackLink> backLink(@Param(value = "userId") String userId);
+  @Query(
+  "MATCH (p:Post{tmpSave:false}) " +
+  "MATCH (u:Users) where u.userId=$userId " +
+      "RETURN ID(p) AS postid, p.title AS title" )
+  List<BackLink> backLink(@Param("userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
 /*
