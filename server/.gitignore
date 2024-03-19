@@ -33,6 +33,10 @@ out/
 /nbdist/
 /.nb-gradle/
 
+## S3 ##
+application.yml
+
+
 ### VS Code ###
 .vscode/
 

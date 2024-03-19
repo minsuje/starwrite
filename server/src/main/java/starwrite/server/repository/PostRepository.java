@@ -227,6 +227,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param("newTitle") String newTitle, @Param("img") String img,
       @Param("newContent") String newContent, @Param("newTime") LocalDateTime newTime, @Param("rel") List<Long> rel,@Param("newVisible") String newVisible, @Param("categoryId") String categoryId);
 
+@Query("MATCH (u:Users) WHERE u.userId = $userId " +
+    "MATCH (p:Post) WHERE ID(p) = $postId " +
+    "DETACH DELETE p "
+)
+  void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
 
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
