@@ -2,6 +2,7 @@ package starwrite.server.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -147,4 +148,12 @@ public class PostController {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.saveTmpPost(post, postId, userId);
   }
+
+  // 글 삭제
+  @DeleteMapping("/delete/{postId}")
+  public String deletePost(@PathVariable(value = "postId") Long postId){
+    String userId = SecurityUtil.getCurrentUserUserId();
+    return postService.deletePost(postId,userId);
+  }
+
 }

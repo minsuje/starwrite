@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
@@ -59,8 +60,6 @@ public class PostService {
 
   // 글 작성 ( write Post )
   public CreatedPost createPost(CreatePost post) {
-    System.out.println(">>>>>>>>>>>>>>>>>>><><><><><><>" + post);
-
     /*Post newPost = new Post();
 
     Category foundCategory = categoryRepository.findCategoryById(post.getPost().getCategory().getCategoryId());
@@ -96,7 +95,8 @@ public class PostService {
       related.forEach(item -> newRelated.add(Long.parseLong(item)));
     }
 
-    CreatedPost createdPost = postRepository.createPostLink(post.getUser(), post.getCategory(),
+    String userId = SecurityUtil.getCurrentUserUserId();
+    CreatedPost createdPost = postRepository.createPostLink(userId, post.getCategory(),
         newPost.getTitle(), newPost.getContent(),
         newPost.getVisible(), img, timeNow, false,
         newRelated);
@@ -120,7 +120,8 @@ public class PostService {
       related.forEach(item -> newRelated.add(Long.parseLong(item)));
     }
 
-    CreatedPost savePost = postRepository.savePostLink(post.getUser(), post.getCategory(),
+    String userId = SecurityUtil.getCurrentUserUserId();
+    CreatedPost savePost = postRepository.savePostLink(userId, post.getCategory(),
         newPost.getTitle(), newPost.getContent(), newPost.getVisible(), img, timeNow, true,
         newRelated);
     return savePost;
@@ -132,7 +133,7 @@ public class PostService {
     Post newPost = post.getPost();
     String img = newPost.getImg() != null ? newPost.getImg() : "";
     // 헤더에서 로그인 아이디 가져옴
-    String userId = "a0f4db5e-ae79-4104-9e8b-0db9c8f4ff3e";
+    String userId = SecurityUtil.getCurrentUserUserId();
     postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible());
     if(postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible()) != null){
       return "success";
@@ -175,5 +176,11 @@ public class PostService {
   // 임시 저장 하나 불러오기 ( Load One Save Post)
   public Post getSavePost(String nickname, Long postId) {
     return postRepository.findSavePost(nickname, postId);
+  }
+
+  // 글 삭제
+  public String deletePost(Long postId, String userId){
+    postRepository.deletePostByPostId(postId, userId);
+    return "삭제 성공";
   }
 }
