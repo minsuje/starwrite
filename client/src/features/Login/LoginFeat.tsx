@@ -63,13 +63,14 @@ function LoginForm() {
       const response = await axios.post(
         `http://52.79.228.200:8080/login/post`,
         {
-          mail: 'gogil@navdfe.com',
-          password: '1234',
+          mail: data.email,
+          password: data.password,
         },
       );
       localStorage.setItem('accessToken', response.data.accessToken);
       alert('로그인 완료');
     } catch (error) {
+      alert('로그인 실패');
       console.error(error);
     }
   };
@@ -89,22 +90,6 @@ function LoginForm() {
     }
     return '';
   };
-
-  // async function handleTempLogin() {
-  //   try {
-  //     const response = await axios.post(
-  //       `http://52.79.228.200:8080/login/post`,
-  //       {
-  //         mail: 'gogil@navdfe.com',
-  //         password: '1234',
-  //       },
-  //     );
-  //     localStorage.setItem('accessToken', response.data.accessToken);
-  //     alert('로그인 완료');
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   async function handleGoogleLogin() {
     try {
