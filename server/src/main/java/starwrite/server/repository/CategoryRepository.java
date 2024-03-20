@@ -58,7 +58,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   // 카테고리 안의 모든 글 제목과 관계 보내기
   @Query("MATCH (c:Category)-[]-(p:Post) " +
       "WHERE c.categoryId = $categoryId " +
-      "WITH COLLECT({title: p.title, postId: ID(p)}) AS posts " +
+      "WITH COLLECT({title: p.title, postId: ID(p), recentView: p.recentView }) AS posts " +
       "MATCH (p1:Post)-[r:RELATED]-(p2:Post) " +
       "WHERE ID(p1) IN [post IN posts | post.postId] AND ID(p2) IN [post IN posts | post.postId] " +
       "RETURN posts, COLLECT(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) AS relation ")
