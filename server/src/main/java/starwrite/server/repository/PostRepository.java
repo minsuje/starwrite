@@ -312,5 +312,10 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (p)-[:RELATED]->(r)")
   void createMultipleRelationships(@Param("postId") String postId,
       @Param("relatedPostIds") List<String> relatedPostIds);*/
+
+
+
+  // 글 스크랩
+
 }
 

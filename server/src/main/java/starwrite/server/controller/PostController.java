@@ -169,4 +169,12 @@ public class PostController {
     return postService.deletePost(postId, userId);
   }
 
+
+  // 글 스크랩
+//  @PostMapping
+//  public String scrapPost(@RequestBody ) {
+//    return
+//  }
+
+
 }
