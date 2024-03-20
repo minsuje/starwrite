@@ -42,8 +42,8 @@ public class CategoryService {
 
 
   // 특정 유저에 해당하는 카테고리 찾아오기
-  public List<UserCategories> getUserCategory(String userId) {
-    return categoryRepository.getUserCategory(userId);
+  public List<UserCategories> getUserCategory(String nickname) {
+    return categoryRepository.getUserCategory(nickname);
   }
 
 

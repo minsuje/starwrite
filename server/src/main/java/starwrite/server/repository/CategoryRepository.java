@@ -19,10 +19,10 @@ import starwrite.server.response.UserCategories;
 public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
   // 특정 유저에 해당하는 카테고리 찾아오기
-  @Query("MATCH (c:Category)-[]-(u:Users) WHERE u.userId = $userId " +
+  @Query("MATCH (c:Category)-[]-(u:Users) WHERE u.nickname = $nickname " +
       "OPTIONAL MATCH (c)-[r]->(p:Post) " +
       "RETURN c.categoryId AS categoryId, c.createdAt AS createdAt, c.name AS name, COUNT(p) AS postCount")
-  List<UserCategories> getUserCategory(@Param(value = "userId") String userId);
+  List<UserCategories> getUserCategory(@Param(value = "nickname") String nickname);
 
 
 
