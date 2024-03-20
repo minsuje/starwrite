@@ -81,7 +81,6 @@ public class PostController {
   }
 
 
-
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
   @GetMapping("/all/save")
   public List<GetSavePost> getSavePosts() {
@@ -159,9 +158,7 @@ public class PostController {
   @PatchMapping("/{postId}")
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
-    String nickname = SecurityUtil.getCurrentUserNickname();
-    System.out.println("nickname >>>>>>>>> " + nickname);
-    return postService.saveTmpPost(post, postId, nickname);
+    return postService.saveTmpPost(post, postId);
   }
 
   // 글 삭제
@@ -170,7 +167,6 @@ public class PostController {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.deletePost(postId, userId);
   }
-
 
   // 글 스크랩
 //  @PostMapping
