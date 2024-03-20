@@ -8,6 +8,7 @@ const _StyledContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-top: 150px;
 `;
 
 // 제목

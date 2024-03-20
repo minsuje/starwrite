@@ -49,7 +49,7 @@ public class PostController {
 //  @GetMapping("writing")
 //  public String getI
 
-  // 유저의 모든 글 조회 (리스트 뷰)
+  // 유저의 모든 글 조회 (노드 뷰)
   @GetMapping("/all")
   public List<GetPosts> getAllPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
@@ -158,8 +158,8 @@ public class PostController {
   @PatchMapping("/{postId}")
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
-    String userId = SecurityUtil.getCurrentUserUserId();
-    return postService.saveTmpPost(post, postId, userId);
+    String nickname = SecurityUtil.getCurrentUserNickname();
+    return postService.saveTmpPost(post, postId, nickname);
   }
 
   // 글 삭제
@@ -168,5 +168,13 @@ public class PostController {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.deletePost(postId, userId);
   }
+
+
+  // 글 스크랩
+//  @PostMapping
+//  public String scrapPost(@RequestBody ) {
+//    return
+//  }
+
 
 }

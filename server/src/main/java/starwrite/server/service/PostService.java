@@ -29,11 +29,6 @@ public class PostService {
   UsersRepository usersRepository;
 
 
-  // 현재 접속한 유저 아이디 ( current user id )
-  public String findUserid(String userid) {
-    return usersRepository.findUserById(userid);
-  }
-
   // BackLink Info (postId , title)
   public List<BackLink> backLink(String userId) {
     return postRepository.backLink(userId);
@@ -63,12 +58,10 @@ public class PostService {
     System.out.println("내 아이디 >>>> " + userId);
     Map<String, Object> result = new HashMap<>();
     if(!postUserId.equals(userId)){
-      System.out.println(">>>>>>>>>>> 상대가 본글 볼거야");
       result.put("isMine", false);
       result.put("post", postRepository.otherUserPost(postId));
       return result;
     }
-    System.out.println("내가 쓴글 볼거야 <<<<<<<<<<<");
     result.put("isMine", true);
     result.put("post", postRepository.setRecentView(postId, recentView));
     return result;
@@ -166,13 +159,18 @@ public class PostService {
   }
 
   // 임시저장에서 포스트 생성
-  public String saveTmpPost(CreatePost post, Long postId, String userId){
+  public String saveTmpPost(CreatePost post, Long postId, String nickname){
     LocalDateTime newTime = LocalDateTime.now();
     String img = post.getPost().getImg() != null ? post.getPost().getImg() : "";
+    System.out.println(">>>> IMG " + img + 1);
     String newTitle = post.getPost().getTitle();
+    System.out.println(">>> new Title >>" + newTitle);
     String newVisible = post.getPost().getVisible();
+    System.out.println(">>>> NewVISIBLE >>> " + newVisible);
     String categoryId = post.getCategory();
+    System.out.println(">>>>> categoryId >>> " + categoryId);
     String newContent = post.getPost().getContent();
+    System.out.println(">>>>>> Content >> " + newContent);
 
     List<Long> rel = new ArrayList<>();
 
@@ -182,9 +180,11 @@ public class PostService {
     }
     System.out.println("Rel >>> " + rel);
 
-    postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId);
-    System.out.println(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId));
-    if(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId) != null){
+    System.out.println(">>>> NICK NAME >>> " + nickname);
+
+    postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId);
+    System.out.println(">>>>>>> <><><><><> " + postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId));
+    if(postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId) != null){
       return "Success";
     }
     return "fail";
