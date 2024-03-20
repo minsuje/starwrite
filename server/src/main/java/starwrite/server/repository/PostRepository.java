@@ -11,6 +11,7 @@ import starwrite.server.entity.Post;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 
 @Repository
@@ -82,9 +83,9 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MATCH (u: Users) " +
       "MATCH (u)-[r]->(p) " +
       "WHERE p.tmpSave = true AND u.nickname = $nickname " +
-      "RETURN collect(p) AS post, type(r) AS usersRelationType"
+      "RETURN collect(p) AS posts, type(r) AS usersRelationType, ID(p) AS postid"
   )
-  GetPosts findAllSavePosts(@Param(value = "nickname") String nickname);
+  List<GetSavePost> findAllSavePosts(@Param(value = "nickname") String nickname);
 
   // 비공개 글을 제외하고 표시 (without pub post)
   @Query("MATCH (p:Post) " +

@@ -16,6 +16,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 
 @Service
@@ -192,7 +193,7 @@ public class PostService {
 
 
   // 임시 저장 글 모두 불러오기 ( load All Save Posts )
-  public GetPosts getSavePosts(String nickname) {
+  public List<GetSavePost> getSavePosts(String nickname) {
     return postRepository.findAllSavePosts(nickname);
   }
 
