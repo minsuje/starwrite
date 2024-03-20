@@ -107,47 +107,51 @@ function LoginForm() {
   async function handleGoogleLogin() {
     try {
       const response = await axios.post(
-        `http://52.79.228.200:8080/login/oauth2/code/google`,
+        `http://localhost:8080/login/api/v1/oauth2/google`,
       );
+      console.log(' reponse >>>>>> ', response);
     } catch (error) {
       console.error(error);
     }
   }
 
-  async function handleGoogleData() {
-    try {
-      const response = await axios.post(
-        `http://52.79.228.200:8080/login/oauth2/code/google`,
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function handleGoogleData() {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://52.79.228.200:8080/login/oauth2/code/google`,
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
-  const handleSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
-    try {
-      // credential이 존재하는지 확인합니다.
-      if (credentialResponse.credential) {
-        // JWT 토큰 디코드
-        const decodedToken = jwtDecode(credentialResponse.credential);
-        console.log('>>>>>>>>', decodedToken);
+  // const handleSuccess = async (credentialResponse) => {
+  //   console.log(credentialResponse);
+  //   try {
+  //     // credential이 존재하는지 확인합니다.
+  //     if (credentialResponse.credential) {
+  //       // JWT 토큰 디코드
+  //       const decodedToken = jwtDecode(credentialResponse.credential);
+  //       console.log('>>>>>>>>', decodedToken);
 
-        // 서버에 POST 요청 보내기
-        const response = await axios.post('/login/oauth/google/post', {
-          access_token: credentialResponse.credential,
-          decodedToken: decodedToken,
-        });
+  //       // 서버에 POST 요청 보내기
+  //       const response = await axios.post(
+  //         'http://localhost:8080/login/oauth/google/post',
+  //         {
+  //           access_token: credentialResponse.credential,
+  //           decodedToken: decodedToken,
+  //         },
+  //       );
 
-        // 서버 응답 처리
-        console.log(response);
-      } else {
-        console.log('No credentials returned from Google');
-      }
-    } catch (error) {
-      console.error('Login Failed', error);
-    }
-  };
+  //       // 서버 응답 처리
+  //       console.log(response);
+  //     } else {
+  //       console.log('No credentials returned from Google');
+  //     }
+  //   } catch (error) {
+  //     console.error('Login Failed', error);
+  //   }
+  // };
 
   return (
     <>
@@ -183,9 +187,8 @@ function LoginForm() {
 
           <LargeButton type="submit">로그인</LargeButton>
           {/* <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton> */}
-          <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
         </RegisterBox>
-        <GoogleOAuthProvider clientId="547835898042-k7ltqkia6kdspu0fjenn79jaenbrj6nj.apps.googleusercontent.com">
+        {/* <GoogleOAuthProvider clientId="547835898042-k7ltqkia6kdspu0fjenn79jaenbrj6nj.apps.googleusercontent.com">
           <GoogleLogin
             // /login/oauth/google/post
             onSuccess={handleSuccess}
@@ -193,8 +196,9 @@ function LoginForm() {
               console.log('Login Failed');
             }}
           />
-        </GoogleOAuthProvider>
+        </GoogleOAuthProvider> */}
       </form>
+      <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
     </>
   );
 }

@@ -9,5 +9,5 @@ import lombok.ToString;
 @NoArgsConstructor
 public class OAuthGoogleDTO {
     String access_token;
-    Object refreshToken;
+    Object decodedToken;
 }
