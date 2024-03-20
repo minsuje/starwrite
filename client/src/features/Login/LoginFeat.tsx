@@ -60,14 +60,20 @@ function LoginForm() {
     //여기에 회원가입 axios 작성
 
     try {
-      const response = await axios.post(
-        `http://52.79.228.200:8080/login/post`,
-        {
-          mail: data.email,
-          password: data.password,
-        },
-      );
+      const response = await axios.post(`http://localhost:8080/login/post`, {
+        mail: data.email,
+        password: data.password,
+      });
       localStorage.setItem('accessToken', response.data.accessToken);
+
+      const cookie = await axios.get(`http://localhost:8080/cookie`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+        },
+      });
+
+      localStorage.setItem('nickname', cookie.data.value);
+
       alert('로그인 완료');
     } catch (error) {
       alert('로그인 실패');
@@ -91,15 +97,15 @@ function LoginForm() {
     return '';
   };
 
-  async function handleGoogleLogin() {
-    try {
-      const response = await axios.post(
-        `http://52.79.228.200:8080/login/post/ouath/authorization/google`,
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function handleGoogleLogin() {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://52.79.228.200:8080/login/post/ouath/authorization/google`,
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <>
@@ -135,7 +141,7 @@ function LoginForm() {
 
           <LargeButton type="submit">로그인</LargeButton>
           {/* <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton> */}
-          <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
+          {/* <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton> */}
         </RegisterBox>
       </form>
     </>
