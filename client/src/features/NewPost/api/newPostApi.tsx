@@ -37,7 +37,7 @@ export const patchPostApi = async (data: NewPost, id: number) => {
 // 글 임시저장 하기(post 새로 생길 때)
 export const newSavingApi = async (data: NewPost) => {
   try {
-    const response = await baseApi.post(`/post/Save`, data);
+    const response = await baseApi.post(`/post/save`, data);
     console.log('newSavingApi', response.data);
     return response.data;
   } catch (error) {

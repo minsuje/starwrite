@@ -51,8 +51,8 @@ public class CategoryController {
 
   // 유저 닉네임에 해당하는 카테고리 가져오기
   @GetMapping("/user")
-  public List<UserCategories> getUserCategory(@RequestParam(value = "userId") String userId) {
-    return categoryService.getUserCategory(userId);
+  public List<UserCategories> getUserCategory(@RequestParam(value = "nickname") String nickname) {
+    return categoryService.getUserCategory(nickname);
   }
 
 

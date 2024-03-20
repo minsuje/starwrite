@@ -43,17 +43,22 @@ public class JwtTokenProvider {
 
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
-        System.out.println("JwtTokenProvider generateToken");
+        System.out.println("JwtTokenProvider generateToken > " +  authentication);
 
         UserTokenDTO userDetails = (UserTokenDTO) authentication.getPrincipal();
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
+        // 토큰을 Redis에 저장한다. ---------------------
+//        RefreshTokenService.saveTokenInfo(email, refreshToken, accessToken);
+//        return new GeneratedToken(accessToken, refreshToken);
+
         long now = (new Date()).getTime();
 
         // AccessToken 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
+//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L); // 60초
         String accessToken = Jwts.builder()
             .setSubject(authentication.getName())
             .claim("auth", authorities)
@@ -64,7 +69,7 @@ public class JwtTokenProvider {
 
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
-            .setExpiration(new Date(now + 86400000)) // 86400000 -> 1일
+            .setExpiration(new Date(now + 1000L * 60L * 60L * 24L * 14)) // 14일
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
 

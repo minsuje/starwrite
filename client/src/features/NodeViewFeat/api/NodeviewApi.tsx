@@ -99,7 +99,7 @@ export const nodes: CustomNode[] = [
 
 // 링크 데이터
 export const links: Link[] = [
-  // { source: '1', target: '2' },
+  // { source: '1', target: '2' url },
   // { source: '2', target: '3' },
   // { source: '3', target: '4' },
   // { source: '4', target: '5' },
@@ -111,7 +111,6 @@ export const fetchData = async () => {
     const response = await baseApi.get(
       `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=111a8a97-eb41-40a1-9e62-940b7fe9f671`,
     );
-    console.log('resdata', response);
     return response.data;
 
     // API 응답으로 받은 데이터를 상태에 저장

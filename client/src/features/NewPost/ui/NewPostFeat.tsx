@@ -4,9 +4,9 @@ import { Editor, GetSavings, NewPostHeadFeat } from '..';
 import { useParams } from 'react-router-dom';
 import {
   getsavingApi,
-  newPostApi,
+  // newPostApi,
   newSavingApi,
-  patchPostApi,
+  // patchPostApi,
   patchSavingApi,
 } from '../api/newPostApi';
 import checkLinking from '../lib/checkLinking';
@@ -17,7 +17,12 @@ function NewPostFeat() {
   // postId가 존재하면 글 정보 불러오기
   useEffect(() => {
     if (postId) {
-      getsavingApi(Number(postId));
+      const promise = getsavingApi(Number(postId));
+      promise.then((saving) => {
+        console.log('saving data: ', saving);
+        setTitle(saving.title);
+        setSaved(saving.content);
+      });
     }
   }, [postId]);
 
@@ -26,11 +31,13 @@ function NewPostFeat() {
   const [category, setCategory] = useState<string>();
   const [isPublic, setIsPublic] = useState<string>('true');
   const [content, setContent] = useState<string | undefined>();
-  const [relatedPosts, setRelatedPosts] = useState<string[]>([]);
+  const [relatedPosts, setRelatedPosts] = useState<number[]>([]);
+  const [saved, setSaved] = useState<string | undefined>();
 
   function publishPost() {
+    setRelatedPosts(checkLinking(content));
     const postData = {
-      category: '111a8a97-eb41-40a1-9e62-940b7fe9f671',
+      category: 'e2c29eec-ef40-496b-9a47-e39214505e39',
       post: {
         title: title,
         content: content,
@@ -39,21 +46,22 @@ function NewPostFeat() {
       relatedPosts: relatedPosts,
     };
     console.log('data', postData);
-    if (postId) {
-      patchPostApi(postData, Number(postId));
-    } else {
-      newPostApi(postData);
-    }
+    // if (postId) {
+    //   patchPostApi(postData, Number(postId));
+    // } else {
+    //   newPostApi(postData);
+    // }
   }
 
   function savePost() {
     const postData = {
-      category: category,
+      category: 'e2c29eec-ef40-496b-9a47-e39214505e39',
       post: {
         title: title,
         content: content,
         visible: isPublic,
       },
+      // relatedPosts: [],
     };
     if (postId) {
       patchSavingApi(postData, Number(postId));
@@ -86,9 +94,9 @@ function NewPostFeat() {
       />
       <_EditorDiv>
         <Editor
+          content={saved}
           setContent={(value: string) => {
             setContent(value);
-            setRelatedPosts(checkLinking(content));
           }}
         />
       </_EditorDiv>

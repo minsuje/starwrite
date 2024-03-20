@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.entity.Users;
@@ -42,8 +44,8 @@ public class CategoryService {
 
 
   // 특정 유저에 해당하는 카테고리 찾아오기
-  public List<UserCategories> getUserCategory(String userId) {
-    return categoryRepository.getUserCategory(userId);
+  public List<UserCategories> getUserCategory(String nickname) {
+    return categoryRepository.getUserCategory(nickname);
   }
 
 
@@ -57,9 +59,11 @@ public class CategoryService {
   // 카테고리 생성
   public Category addCategory(Category category) {
 
+    String userId = SecurityUtil.getCurrentUserUserId();
+
     Category newCategory = new Category();
 
-    Users foundUser = usersRepository.findUserByUserId(category.getUsers().getUserId());
+    Users foundUser = usersRepository.findUserByUserId(userId);
 
     newCategory.setName(category.getName());
     newCategory.setUsers(foundUser);

@@ -184,7 +184,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   @Query(
-      "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow}) "
+      "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow, recentView: $timeNow }) "
           +
           "WITH newPost " +
           "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
@@ -315,5 +315,10 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (p)-[:RELATED]->(r)")
   void createMultipleRelationships(@Param("postId") String postId,
       @Param("relatedPostIds") List<String> relatedPostIds);*/
+
+
+
+  // 글 스크랩
+
 }
 

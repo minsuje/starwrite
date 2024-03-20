@@ -44,7 +44,7 @@ export const AppRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/:user/starwrite',
+        path: '/user/starwrite',
         element: (
           <>
             <HeaderWid />
@@ -53,7 +53,7 @@ export const AppRouter = createBrowserRouter([
         ),
         children: [
           {
-            path: 'mypage/:userid_num/',
+            path: 'mypage/:nickname/',
             element: (
               <>
                 <MyPage></MyPage>
@@ -62,7 +62,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 카테고리 페이지
           {
-            path: 'categoryview/:userid_num',
+            path: 'categoryview/:nickname',
             element: (
               <>
                 <CategoryViewPage></CategoryViewPage>
@@ -71,7 +71,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 노드 뷰 페이지
           {
-            path: 'nodeview/:userid_num/:category',
+            path: 'nodeview/:nickname/:category',
             element: (
               <>
                 <NodeViewPage></NodeViewPage>

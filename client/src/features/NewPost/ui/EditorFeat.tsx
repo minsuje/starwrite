@@ -14,10 +14,14 @@ import {
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
 import { redTheme } from './style';
-
 import { Mention } from './Mention';
 import Titles from '../model/Titles';
+import { getTitleApi } from '../api/newPostApi';
 
+interface Titles {
+  postid: number;
+  title: string;
+}
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -30,22 +34,27 @@ const schema = BlockNoteSchema.create({
 
 const getMentionMenuItems = (
   editor: typeof schema.BlockNoteEditor,
+  titles: Titles[],
 ): DefaultReactSuggestionItem[] => {
-  const titles = Titles;
+  // const promise = getTitleApi();
+  // promise.then((titleList) => {
+  //   console.log('titles data: ', titleList);
+  //   titles = titleList;
+  // });
 
   return titles.map((title) => ({
-    title: title.name,
+    title: title.title,
     onItemClick: () => {
       // const name = title.name;
       editor.insertInlineContent([
         {
           type: 'mention',
           props: {
-            name: title.name,
-            id: title.id,
+            title: title.title,
+            postid: title.postid.toString(),
           },
         },
-        ' ', // add a space after the mention
+        '\n', // add a space after the mention
       ]);
     },
   }));
@@ -63,26 +72,32 @@ async function uploadFile(file: File) {
     'tmpfiles.org/dl/',
   );
 }
-// 불러오기 get
-async function loadFromStorage() {
-  const storageString = undefined;
-  return storageString
-    ? (JSON.parse(storageString) as PartialBlock[])
-    : undefined;
-}
 
 export default function Editor({
+  content,
   setContent,
 }: {
+  content: string | undefined;
   setContent: (value: string) => void;
 }) {
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
-  >('loading');
+  >(undefined);
+
+  const [titles, setTitles] = useState<Titles[]>([]);
 
   useEffect(() => {
-    loadFromStorage().then((content) => {
-      setInitialContent(content);
+    if (content) {
+      setInitialContent(JSON.parse(content));
+      console.log('content', content);
+    }
+  }, [content]);
+
+  useEffect(() => {
+    const promise = getTitleApi();
+    promise.then((titleList) => {
+      console.log('titles data: ', titleList);
+      setTitles(titleList);
     });
   }, []);
 
@@ -113,7 +128,7 @@ export default function Editor({
         triggerCharacter={'@'} // 한글자만 가능
         getItems={async (query) =>
           // Gets the mentions menu items
-          filterSuggestionItems(getMentionMenuItems(editor), query)
+          filterSuggestionItems(getMentionMenuItems(editor, titles), query)
         }
       />
     </BlockNoteView>

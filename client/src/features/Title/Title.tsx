@@ -10,7 +10,7 @@ export function TitleFeat() {
   return (
     <>
       <_Title>
-        <_StyledLink to="/user/starwrite/categoryview/:userid_num">
+        <_StyledLink to="/">
           <_MainTitle>STARWRITE</_MainTitle>
         </_StyledLink>
       </_Title>
