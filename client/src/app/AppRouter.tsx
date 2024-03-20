@@ -11,6 +11,7 @@ import { MyPage } from '../pages/MyPage/MyPage';
 import { Spinner } from '../shared/spinner';
 import { DataSpinnerSh } from '../shared/DataSpinner';
 import { MainPage } from '../pages/Main/Main';
+import { GoogleOAuth } from '../features/Login/google';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -130,7 +131,7 @@ export const AppRouter = createBrowserRouter([
 
       {
         path: '*',
-        element: <DataSpinnerSh></DataSpinnerSh>,
+        element: <GoogleOAuth></GoogleOAuth>,
       },
     ],
   },
