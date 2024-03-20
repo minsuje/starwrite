@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.request.CreateAnnotation;
 import starwrite.server.request.UpdateAnnotation;
@@ -32,7 +33,7 @@ public class AnnotationController {
 
 
   // 어노테이션 수정
-  @PutMapping
+  @PatchMapping
   public String updateAnnotation(@RequestBody UpdateAnnotation annotation) {
     return annotationService.updateAnnotation(annotation);
   }
@@ -40,8 +41,8 @@ public class AnnotationController {
 
   // 어노테이션 삭제
   @DeleteMapping
-  public String deleteAnnotation(String anntationId) {
-    return annotationService.deleteAnnotation(anntationId);
+  public String deleteAnnotation(@RequestParam(value = "annotationId") String annotationId) {
+    return annotationService.deleteAnnotation(annotationId);
   }
 
 
