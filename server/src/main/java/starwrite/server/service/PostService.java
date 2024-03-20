@@ -12,6 +12,7 @@ import starwrite.server.entity.Post;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
@@ -207,5 +208,17 @@ public class PostService {
   public String deletePost(Long postId, String userId) {
     postRepository.deletePostByPostId(postId, userId);
     return "삭제 성공";
+  }
+
+
+  // 글 스크랩
+  public String scrapPost(ScrapPost scrapPost) {
+    String userId = SecurityUtil.getCurrentUserUserId();
+    System.out.println("userId >>>>> " + userId);
+    int result = postRepository.scrapPost(scrapPost.getPostId(), userId, scrapPost.getCategory());
+    if (result == 0) {
+      return "post already scraped";
+    }
+    return "post scraped";
   }
 }
