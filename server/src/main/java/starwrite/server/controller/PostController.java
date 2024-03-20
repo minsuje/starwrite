@@ -91,7 +91,7 @@ public class PostController {
 
   // 임시글 하나 불러오기 ( load One Save Posts )
   @GetMapping("/all/save/{postId}")
-  public Post getSavePost(@PathVariable(value = "postId") Long postId) {
+  public GetSavePost getSavePost(@PathVariable(value = "postId") Long postId) {
     String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePost(nickname, postId);
   }

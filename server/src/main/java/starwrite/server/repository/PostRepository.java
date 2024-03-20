@@ -81,9 +81,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 임시 저장 글 모두 불러오기
   @Query("MATCH (p:Post) " +
       "MATCH (u: Users) " +
+      "MATCH (c: Category) " +
       "MATCH (u)-[r]->(p) " +
+      "MATCH (c)-[i:IS_CHILD]->(p) " +
       "WHERE p.tmpSave = true AND u.nickname = $nickname " +
-      "RETURN collect(p) AS posts, type(r) AS usersRelationType, ID(p) AS postid"
+      "RETURN collect(p) AS posts, type(r) AS usersRelationType, ID(p) AS postid, c.categoryId AS categoryid"
   )
   List<GetSavePost> findAllSavePosts(@Param(value = "nickname") String nickname);
 
@@ -153,9 +155,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 임시 저장글 하나 불러오기
   @Query("MATCH (p:Post) " +
       "MATCH (u:Users) " +
+      "MATCH (c:Category) " +
       "WHERE ID(p) = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
-      "RETURN p")
-  Post findSavePost(@Param(value = "nickname") String nickname,
+      "WITH p, u , c " +
+      "MATCH (c)-[:IS_CHILD]-(p) " +
+      "RETURN collect(p) AS posts, c.categoryId AS categoryid ")
+  GetSavePost findSavePost(@Param(value = "nickname") String nickname,
       @Param(value = "postId") Long postId);
 
 
