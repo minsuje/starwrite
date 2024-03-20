@@ -19,6 +19,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 import starwrite.server.service.PostService;
 
@@ -83,7 +84,7 @@ public class PostController {
 
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
   @GetMapping("/all/save")
-  public GetPosts getSavePosts() {
+  public List<GetSavePost> getSavePosts() {
     String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePosts(nickname);
   }
