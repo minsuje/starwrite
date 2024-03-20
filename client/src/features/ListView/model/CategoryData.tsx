@@ -1,5 +1,4 @@
 // 카테고리 데이터
-
 import { Category } from '../../../shared/types/app';
 
 const initalList: Category[] = [
@@ -11,4 +10,5 @@ const categories: Category[] = [
   { id: 'scienceid', name: '과학' },
 ];
 const list: Category[] = [...initalList, ...categories];
+
 export { initalList, list, categories };

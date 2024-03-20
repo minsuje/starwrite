@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 interface ButtonProps {
   bgcolor?: string; // bgColor 속성 추가
@@ -118,14 +119,29 @@ export const _ErrorMsg = styled.p`
 
 export const _Background = styled.div`
   position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background: #ffffffb7;
-  z-index: 999;
+  width: 450px;
+  height: 450px;
+  top: 29%;
+  left: 50%;
+  transform: translate(-50%);
+`;
+
+// react-router Link 디자인
+export const _StyledLink = styled(Link)`
+  display: block;
+  padding: 10px;
+  margin: 5px;
+  /* background-color: #212121; */
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+
+  &:hover {
+    background-color: #333;
+  }
+`;
+
+// react-router Link 디자인 박스
+export const _StyledLinkDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;

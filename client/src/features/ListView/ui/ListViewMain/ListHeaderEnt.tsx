@@ -2,19 +2,17 @@ import { useNavigate } from 'react-router';
 import { _headBox, _buttonBox } from '../style';
 import { IoIosTrash } from 'react-icons/io';
 import { LuPencilLine } from 'react-icons/lu';
+import { useRef } from 'react';
 
 function ListHeaderEnt({ category }: { category: string | undefined }) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   function editCategoryName() {
-    const inputName = document.querySelector<HTMLInputElement>('#categoryName');
-    if (inputName !== null) {
-      inputName.focus;
-      inputName.readOnly = !inputName.readOnly;
-      if (inputName.readOnly) {
-        category && (inputName.value = category);
-      } else {
-        inputName.style.backgroundColor = 'var(--color-zinc-700)';
+    if (inputRef.current) {
+      inputRef.current.readOnly = !inputRef.current.readOnly;
+      if (!inputRef.current.readOnly) {
+        inputRef.current.focus();
       }
     }
   }
@@ -22,10 +20,10 @@ function ListHeaderEnt({ category }: { category: string | undefined }) {
   return (
     <>
       <_headBox>
-        <input id="categoryName" placeholder={category} readOnly={true}></input>
+        <input value={category} ref={inputRef}></input>
 
         <_buttonBox>
-          {category != '전체' && category != '스크랩' && (
+          {category != '전체' && category != '' && (
             <>
               <button onClick={editCategoryName}>
                 <LuPencilLine />

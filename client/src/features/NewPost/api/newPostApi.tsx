@@ -1,8 +1,7 @@
-import axios from 'axios';
+import { baseApi } from '../../../shared/api/BaseApi';
 
 interface NewPost {
   category: string | undefined;
-  user: string;
   post: {
     title: string | undefined;
     content: string | undefined;
@@ -10,16 +9,13 @@ interface NewPost {
     category?: string | undefined;
     tmpSave?: boolean;
   };
-  relatedPosts: string[];
+  relatedPosts?: string[];
 }
 
 // 글 저장 하기
 export const newPostApi = async (data: NewPost) => {
   try {
-    const response = await axios.post(
-      `http://52.79.228.200:8080/user/post`,
-      data,
-    );
+    const response = await baseApi.post(`/post`, data);
     console.log('newPostApi', response.data);
     return response.data;
   } catch (error) {
@@ -27,27 +23,21 @@ export const newPostApi = async (data: NewPost) => {
     throw error;
   }
 };
-export const patchPostApi = async (data: NewPost) => {
+export const patchPostApi = async (data: NewPost, id: number) => {
   try {
-    const response = await axios.patch(
-      `http://52.79.228.200:8080/user/post`,
-      data,
-    );
-    console.log('newPostApi', response.data);
+    const response = await baseApi.patch(`/post/${id}`, data);
+    console.log('patchPostApi', response.data);
     return response.data;
   } catch (error) {
-    console.error(`newPostApi Error`, error);
+    console.error(`patchPostApi Error`, error);
     throw error;
   }
 };
 
-// 글 임시저장 하기
+// 글 임시저장 하기(post 새로 생길 때)
 export const newSavingApi = async (data: NewPost) => {
   try {
-    const response = await axios.post(
-      `http://52.79.228.200:8080/user/post/Save`,
-      data,
-    );
+    const response = await baseApi.post(`/post/Save`, data);
     console.log('newSavingApi', response.data);
     return response.data;
   } catch (error) {
@@ -57,10 +47,7 @@ export const newSavingApi = async (data: NewPost) => {
 };
 export const patchSavingApi = async (data: NewPost, postid: number) => {
   try {
-    const response = await axios.patch(
-      `http://52.79.228.200:8080/user/post/save/${postid}`,
-      data,
-    );
+    const response = await baseApi.patch(`/post/save/${postid}`, data);
     console.log('patchSavingApi', response.data);
     return response.data;
   } catch (error) {
@@ -70,10 +57,10 @@ export const patchSavingApi = async (data: NewPost, postid: number) => {
 };
 
 // 임시저장된 글 리스트 불러오기
-export const savingsApi = async (nickname: string) => {
+export const savingsApi = async () => {
   try {
-    const response = await axios.get(`http://52.79.228.200:8080/${nickname}`);
-    console.log(`savingApi`, response.data);
+    const response = await baseApi.get(`/post/all/save`);
+    console.log(`savingsApi`, response.data);
     return response.data;
   } catch (error) {
     console.error(`savingsApi Error`, error);
@@ -84,9 +71,7 @@ export const savingsApi = async (nickname: string) => {
 // 임시저장된 글 불러오기
 export const getsavingApi = async (id: number) => {
   try {
-    const response = await axios.get(
-      `http://52.79.228.200:8080/user/post/홍길동/All/Save/${id}`,
-    );
+    const response = await baseApi.get(`/post/all/save/${id}`);
     console.log(`getsavingApi`, response);
     return response.data;
   } catch (error) {
@@ -98,9 +83,7 @@ export const getsavingApi = async (id: number) => {
 //글 목록 불러오기
 export const getTitleApi = async () => {
   try {
-    const response = await axios.get(
-      `http://52.79.228.200:8080/user/post/write`,
-    );
+    const response = await baseApi.get(`/post/write`);
     console.log(`getTitleApi`, response.data);
     return response.data;
   } catch (error) {

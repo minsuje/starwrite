@@ -2,16 +2,16 @@ package starwrite.server.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.neo4j.cypherdsl.core.Create;
-import org.neo4j.cypherdsl.core.Match;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
-import starwrite.server.response.CreatedPost;
 import starwrite.server.response.BackLink;
+import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.PostDetail;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, String> {
@@ -35,11 +35,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //  GetPosts findAllPosts(@Param(value = "userId") String userId);
 
   // 백링크 정보 보내기 (send back link info )
-  @Query("MATCH (p: Post) " +
-      "MATCH (u:Users) " +
-      "WHERE u.userId = $userId AND p.tmpSave = false " +
-      "RETURN p.postId AS postId, p.title AS title")
-  List<BackLink> backLink(@Param(value = "userId") String userId);
+  @Query(
+      "MATCH (p:Post{tmpSave:false}) " +
+          "MATCH (u:Users) where u.userId=$userId " +
+          "RETURN ID(p) AS postid, p.title AS title")
+  List<BackLink> backLink(@Param("userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
 /*
@@ -53,12 +53,29 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       */
 
   // 특정 유저의 모든 글 조회
-  @Query("MATCH (p:Post) " +
-      "MATCH (u: Users) " +
-      "MATCH (u)-[r]->(p) " +
-      "WHERE p.tmpSave = false AND u.nickname = $nickname " +
-      "RETURN collect(p) AS post , type(r) AS usersRelationType")
-  GetPosts findAllPostsByUserNickname(@Param(value = "nickname") String nickname);
+//  @Query("MATCH (p:Post) " +
+//      "MATCH (u: Users) " +
+//      "MATCH (u)-[r]->(p) " +
+//      "WHERE p.tmpSave = false AND u.nickname = $nickname " +
+//      "RETURN collect(p) AS post , type(r) AS usersRelationType")
+//  GetPosts findAllPostsByUserNickname(@Param(value = "nickname") String nickname);
+
+
+  // 특정 유저의 모든 글 조회. 10개씩 무한스크롤 조회
+  @Query("MATCH (u:Users)-[r:POSTED|HOLDS]->(p:Post) " +
+      "WHERE u.nickname = $nickname AND p.tmpSave = false " +
+      "MATCH (p)-[:IS_CHILD]-(c:Category) " +
+      "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
+      +
+      "p.visible AS visible, p.img AS img, p.recentView AS recentView, " +
+      "p.createdAt AS createdAt, p.updatedAt AS updatedAt, " +
+      "c.categoryId AS categoryId, c.name AS categoryName, " +
+      "u.userId AS userId, u.nickname AS userNickname " +
+      "ORDER BY p.updatedAt DESC " +
+      "SKIP $skip LIMIT $limit ")
+  List<GetPosts> findAllPostsByUserNickname(@Param(value = "nickname") String nickname,
+      @Param(value = "skip") int skip, @Param(value = "limit") int limit);
+
 
   // 임시 저장 글 모두 불러오기
   @Query("MATCH (p:Post) " +
@@ -93,13 +110,44 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "nickname") String nickname);
 
 
-  // 포스트 상세 페이지 + 최근 본 시점 기록
-  @Query("MATCH (p:Post{postId : $postId}) " +
+  // 포스트 상세 페이지 + 최근 본 시점 기록 (내 글)
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
       "SET p.recentView = $recentView " +
       "RETURN p"
   )
-  Post setRecentView(@Param(value = "postId") String postId,
+  Post setRecentView(@Param(value = "postId") Long postId,
       @Param(value = "recentView") LocalDateTime recentView);
+
+
+  // 포스트 상세 보기 (상대방 글)
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "RETURN p"
+  )
+  Post otherUserPost(@Param("postId") Long postId);
+
+
+  // 포스트에 유저 아이디 추출하기
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "MATCH (p)-[r]-(u:Users) " +
+      "RETURN u.userId"
+  )
+  String findUserIdByPostId(@Param("postId") Long postId);
+
+
+  // 글 상세
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "MATCH (u:Users) WHERE u.userId = $userId " +
+      "OPTIONAL MATCH (p)<-[:IS_CHILD]-(c:Category) " +
+      "WITH p, u, c " +
+      "OPTIONAL MATCH (p)-[:POSTED]-(u) " +
+      "WITH p, u, c " +
+      "OPTIONAL MATCH (p)<-[:COMMENT]-(a:Annotation) " +
+      "WHERE (p)-[:POSTED]-(u) AND a.type = 'comment' " +
+      "OR NOT (p)-[:POSTED]-(u) AND (a.type = 'comment' OR (p)-[:COMMENT]-(u)) " +
+      "RETURN ID(p) as postIdentifier, p.title AS title, p.content AS content, p.visible AS visible, p.img AS img, p.tmpSave AS tmpSave, p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, u.userId AS authorUserId, u.nickname AS authorNickname, c.categoryId AS categoryId, collect(a) as annotations")
+  PostDetail getPostDetail(@Param(value = "postId") Long postId,
+      @Param(value = "userId") String userId);
+
 
   // 임시 저장글 하나 불러오기
   @Query("MATCH (p:Post) " +
@@ -108,6 +156,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "RETURN p")
   Post findSavePost(@Param(value = "nickname") String nickname,
       @Param(value = "postId") Long postId);
+
 
   // 포스트 아이디로 하나의 포스트 찾기
   @Query("MATCH (p:Post) " +
@@ -135,7 +184,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   @Query(
-      "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow}) "
+      "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow, recentView: $timeNow }) "
           +
           "WITH newPost " +
           "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
@@ -215,7 +264,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "   WITH post, relatedPost " +
       "   WHERE relatedPost IS NOT NULL " +
       "     MERGE (post)-[re:RELATED]->(relatedPost) " +
-      "     ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false " +
+      "     ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false "
+      +
       "     WITH post, relatedPost, re " +
       "     OPTIONAL MATCH (post)<-[r:RELATED]-(relatedPost) " +
       "     SET r.relatedBack = CASE WHEN r.relatedBack = false " +
@@ -227,8 +277,15 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "RETURN post")
   CreatedPost saveTmpPost(@Param("postId") Long postId, @Param("nickname") String nickname,
       @Param("newTitle") String newTitle, @Param("img") String img,
-      @Param("newContent") String newContent, @Param("newTime") LocalDateTime newTime, @Param("rel") List<Long> rel,@Param("newVisible") String newVisible, @Param("categoryId") String categoryId);
+      @Param("newContent") String newContent, @Param("newTime") LocalDateTime newTime,
+      @Param("rel") List<Long> rel, @Param("newVisible") String newVisible,
+      @Param("categoryId") String categoryId);
 
+  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+      "MATCH (p:Post) WHERE ID(p) = $postId " +
+      "DETACH DELETE p "
+  )
+  void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
 
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +

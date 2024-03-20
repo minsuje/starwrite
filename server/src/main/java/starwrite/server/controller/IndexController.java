@@ -2,6 +2,8 @@ package starwrite.server.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -43,20 +45,10 @@ public class IndexController {
     UsersService usersService;
 
     @Autowired
-    UsersServiceImpl usersServiceimpl;
-
-    @Autowired
     private HttpServletResponse response;
 
-    @GetMapping("/home")
-    public String handleWelcome() {
-        return "home";
-    }
-
-    @GetMapping("/admin/home")
-    public String handleAdminHome() {
-        return "home_admin";
-    }
+    @Autowired
+    UsersServiceImpl usersServiceimpl;
 
     @GetMapping("/user/home")
     public String handleUserHome() {
@@ -72,24 +64,44 @@ public class IndexController {
         return "home_user";
     }
 
+  @GetMapping("/home")
+  public String handleWelcome() {
+    return "home";
+  }
+
+  @GetMapping("/admin/home")
+  public String handleAdminHome() {
+    return "home_admin";
+  }
+
+
 //    @GetMapping("/login")
 //    public String handleLogin() {
 //        return "custom_login";
 //    }
 
-    @PostMapping("/login/post")
-    public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
-        System.out.println("signin" + logInDTO);
-        String username = logInDTO.getMail();
-        String password = logInDTO.getPassword();
-        JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
-        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
-        log.info("request username = {}, password = {}", username, password);
-        log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
-            jwtDTO.getRefreshToken());
+  @PostMapping("/login/post")
+  public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
+    System.out.println("signin" + logInDTO);
+    String username = logInDTO.getMail();
+    String password = logInDTO.getPassword();
+    JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
+    System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
+    log.info("request username = {}, password = {}", username, password);
+    log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
+        jwtDTO.getRefreshToken());
 
-        return jwtDTO;
-    }
+    return jwtDTO;
+  }
+
+  @GetMapping("/cookie")
+  public Cookie setCookie(Authentication authentication) {
+    Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
+    cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
+    response.addCookie(cookie);
+
+    return cookie;
+  }
 
     @GetMapping("/test")
     public Authentication authentication(Authentication authentication) {

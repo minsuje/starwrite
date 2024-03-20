@@ -31,9 +31,13 @@ import starwrite.server.dto.UserTokenDTO;
 public class JwtTokenProvider {
     private final Key key;
 
+//Base64.getEncoder().encodeToString("your-secret-key".getBytes())
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
     public JwtTokenProvider(@Value("${jwt.secret.key}") String secretKey) {
+
+      System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+      System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 

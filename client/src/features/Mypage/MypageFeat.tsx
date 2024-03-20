@@ -50,7 +50,7 @@ const _OverlapCheckBox = styled.label`
 `;
 
 // 닉네임 유효성 검사
-const NicNamePattern = /^[가-힣A-Za-z_]{2,10}$/;
+const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;
 
 const nicknameSchema = z
   .string()

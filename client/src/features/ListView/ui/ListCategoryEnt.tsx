@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { OneCategory, ListCategories } from '../../NewPost/ui/style';
-import { initalList, list } from '../model/CategoryData';
+import { initalList } from '../model/CategoryData';
 import { Category } from '../../../shared/types/app';
+import { getCategoriesApi } from '../api/CategoryApi';
 
 function ListCategory({ sort }: { sort: string }) {
   const navigate = useNavigate();
@@ -26,7 +27,12 @@ function ListCategory({ sort }: { sort: string }) {
 
   useEffect(() => {
     if (sort === 'listView') {
-      setCategories(list);
+      // 닉네임 수정 -> local에서 뽑아오거나 지금 워크스페이스 주인의 닉네임
+      const promise = getCategoriesApi('고길동');
+      promise.then((categories) => {
+        console.log('categories data: ', categories);
+        setCategories([...initalList, ...categories]);
+      });
     } else if (sort === 'myPage') {
       setCategories([
         { name: '기본정보', id: 'myProfile' },

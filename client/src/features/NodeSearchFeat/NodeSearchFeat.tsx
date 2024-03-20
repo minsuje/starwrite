@@ -1,31 +1,17 @@
 import { useState, useRef } from 'react';
-import { IoIosSearch } from 'react-icons/io';
 import { nodes } from '../../widgets/NodeView/index';
+import { SearchIcon } from '../../shared/Search';
 import './NodeSearchFeat.css';
+import { CustomNode } from '../NodeViewFeat/model/Types';
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
+  nodesData: CustomNode[]; // nodesData 속성 추가
 };
 
-export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
+export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
-
-  // useEffect(() => {
-  //   function handleClickOutside(event: any) {
-  //     if (searchRef.current && !searchRef.current.contains(event.target)) {
-  //       setToggleSearch(false);
-  //     }
-  //   }
-
-  //   document.addEventListener('mousedown', handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [searchRef]);
-
-  // console.log(searchRef);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
@@ -58,8 +44,9 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
     setToggleSearch(true);
   };
 
-  const filterSearch = nodes.filter((node) =>
-    node.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  // 검색 로직을 nodesData.posts에 적용
+  const filterSearch = nodesData.posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -82,15 +69,7 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
           }}
           placeholder="노드를 입력해주세요"
         />
-        <IoIosSearch
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '22px',
-            transform: 'translateY(-50%)',
-            color: '#ffff',
-          }}
-        ></IoIosSearch>
+        <SearchIcon></SearchIcon>
         {toggleSearch && searchTerm.length != 0 && (
           <ul
             style={{
@@ -110,12 +89,12 @@ export const NodeSearchFeat = ({ onSearch }: SearchTypes) => {
                   key={index}
                   style={{ padding: '15px', cursor: 'pointer', color: '#ffff' }}
                   onClick={() => {
-                    handleItemClick(item.label);
-                    onSearch(item.label);
+                    handleItemClick(item.title);
+                    onSearch(item.title);
                   }}
                   className="searchItem"
                 >
-                  {item.label}
+                  {item.title}
                 </li>
               ))
             ) : (

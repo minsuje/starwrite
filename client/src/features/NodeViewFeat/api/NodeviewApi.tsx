@@ -2,41 +2,41 @@ import { useState, useEffect } from 'react';
 import { Link, CustomNode } from '../model/Types';
 import { baseApi } from '../../../shared/api/BaseApi';
 
-export function NodeData(setLoading) {
-  const [, setNodesData] = useState<CustomNode[]>([]);
-  const [, setLinksData] = useState<Link[]>([]);
+export function NodeData() {
+  // const [, setNodesData] = useState<CustomNode[]>([]);
+  // const [, setLinksData] = useState<Link[]>([]);
 
-  interface CustomNode {
-    id: string;
-    label: string;
-    isShared?: number;
-    url: string;
-    userid_num: number;
-  }
-  interface Link {
-    source: string;
-    target: string;
-  }
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await baseApi.get(
-          `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
-        );
+  // interface CustomNode {
+  //   id: string;
+  //   label: string;
+  //   isShared?: number;
+  //   url: string;
+  //   userid_num: number;
+  // }
+  // interface Link {
+  //   source: string;
+  //   target: string;
+  // }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await baseApi.get(
+  //         `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
+  //       );
 
-        console.log(response.data);
+  //       console.log(response.data);
 
-        // API 응답으로 받은 데이터를 상태에 저장
-        setNodesData(response.data);
-        setLinksData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('API Error', error);
-      }
-    };
+  //       // API 응답으로 받은 데이터를 상태에 저장
+  //       setNodesData(response.data);
+  //       setLinksData(response.data);
 
-    fetchData();
-  }, []);
+  //     } catch (error) {
+  //       console.error('API Error', error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   return (
     <></>
@@ -99,7 +99,7 @@ export const nodes: CustomNode[] = [
 
 // 링크 데이터
 export const links: Link[] = [
-  { source: '1', target: '2' },
+  // { source: '1', target: '2' url },
   // { source: '2', target: '3' },
   // { source: '3', target: '4' },
   // { source: '4', target: '5' },
@@ -108,13 +108,10 @@ export const links: Link[] = [
 
 export const fetchData = async () => {
   try {
-    const response = await axios.get(
-      `http://52.79.228.200:8080/category/getCategoryPostNode?categoryId=0c487293-615e-4476-aba3-c1c5fac46b1c`,
+    const response = await baseApi.get(
+      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=111a8a97-eb41-40a1-9e62-940b7fe9f671`,
     );
-
     return response.data;
-
-    console.log(response.data);
 
     // API 응답으로 받은 데이터를 상태에 저장
   } catch (error) {

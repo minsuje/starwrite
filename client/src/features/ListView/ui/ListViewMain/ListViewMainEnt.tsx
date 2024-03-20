@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import styled from 'styled-components';
 
-import { PostList } from '../../model/listViewData';
 import { Link, useParams } from 'react-router-dom';
+import { Posts } from '../../../../shared/types/app';
+import { postListApi } from '../../api/PostApi';
 
 const _listBox = styled.div`
   overflow: auto;
@@ -39,16 +40,22 @@ function ListViewMainEnt() {
   const { category } = useParams();
   console.log('category params', category);
   // 글 리스트
-  const [postsList, setPostsList] = useState();
+  const [postsList, setPostsList] = useState<Posts[]>();
   useEffect(() => {
-    setPostsList(PostList);
+    // const promise = PostListApi(category);
+    // promise.then((Posts) => {
+    //   console.log('PostList data: ', Posts);
+    //   setPostsList(Posts);
+    // });
+    setPostsList([]);
   }, []);
+  console.log(postsList);
 
   return (
     <>
       <ListHeaderEnt category={category} />
       <_listBox>
-        {!(postsList?.length === 0) &&
+        {/* {!(postsList?.length === 0) &&
           postsList?.map((post, idx) => {
             return (
               <div key={idx}>
@@ -63,7 +70,7 @@ function ListViewMainEnt() {
                 </Link>
               </div>
             );
-          })}
+          })} */}
       </_listBox>
     </>
   );

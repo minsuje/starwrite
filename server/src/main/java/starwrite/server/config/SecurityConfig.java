@@ -79,7 +79,7 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
 //                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
-                registry.requestMatchers("/home", "/register/**", "/login/**", "/h2-console/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
+                registry.requestMatchers("/home", "/register/**", "/login/**", "/h2-console/**", "/cookie").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
 //                registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
 //                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
                 registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");

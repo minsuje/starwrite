@@ -1,16 +1,19 @@
 package starwrite.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import starwrite.server.entity.Annotation;
 import starwrite.server.request.CreateAnnotation;
+import starwrite.server.request.UpdateAnnotation;
 import starwrite.server.service.AnnotationService;
 
 @RestController
-@RequestMapping("annotation")
+@RequestMapping("user/annotation")
 public class AnnotationController {
   private final AnnotationService annotationService;
 
@@ -19,15 +22,28 @@ public class AnnotationController {
     this.annotationService = annotationService;
   }
 
-//  @PostMapping
-//  public Annotation createPostComment(@RequestBody Annotation annotation) {
-//    System.out.println("comment controller comment >>>>>>>>>" + annotation);
-//    return annotationService.createPostComment(annotation);
-//  }
 
+  // 어노테이션 생성
   @PostMapping
   public String createAnnotation(@RequestBody CreateAnnotation annotation) {
     System.out.println("comment controller comment >>>>>>>>>" + annotation);
     return annotationService.createAnnotation(annotation);
   }
+
+
+  // 어노테이션 수정
+  @PutMapping
+  public String updateAnnotation(@RequestBody UpdateAnnotation annotation) {
+    return annotationService.updateAnnotation(annotation);
+  }
+
+
+  // 어노테이션 삭제
+  @DeleteMapping
+  public String deleteAnnotation(String anntationId) {
+    return annotationService.deleteAnnotation(anntationId);
+  }
+
+
+
 }
