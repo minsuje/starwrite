@@ -36,9 +36,12 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
 
   // 카테고리 삭제
-  @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId" +
-      "DELETE c ")
-  void deleteCategory(@Param(value = "categoryId") String categoryId);
+  @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId " +
+      "MATCH (c)-[r]-(u:Users) " +
+      "DELETE r, c " +
+      "RETURN count(c) as deletedCount")
+  int deleteCategory(@Param(value = "categoryId") String categoryId);
+
 
 
 

@@ -16,6 +16,7 @@ import starwrite.server.relationship.Related;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.CreateCategory;
 import starwrite.server.response.CategoryDetailResponse;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
@@ -57,7 +58,7 @@ public class CategoryService {
 
 
   // 카테고리 생성
-  public Category addCategory(Category category) {
+  public Category addCategory(CreateCategory category) {
 
     String userId = SecurityUtil.getCurrentUserUserId();
 
@@ -83,10 +84,15 @@ public class CategoryService {
 
 
   // 카테고리 삭제
-  public String deleteCategory(String categoryId) {
-    categoryRepository.deleteCategory(categoryId);
+    public String deleteCategory(String categoryId) {
+    int deletedCount = categoryRepository.deleteCategory(categoryId);
+    if (deletedCount == 0) {
+      return "nothing deleted";
+//      throw new RuntimeException("삭제 실패");
+    }
     return "deleted";
   }
+
 
 
 
