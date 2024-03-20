@@ -1,4 +1,5 @@
 import Titles from '../model/Titles';
+
 export default function checkLinking(check: string | undefined) {
   const titleArray: string[] = [];
   const postIdArray: string[] = [];
@@ -9,15 +10,13 @@ export default function checkLinking(check: string | undefined) {
     for (let i = 0; i < array.length; i++) {
       for (let j = 0; j < array[i].content.length; j++) {
         if (array[i].content[j].type == 'mention') {
-          if (!titleArray.includes(array[i].content[j].props.name)) {
-            titleArray.push(array[i].content[j].props.name);
+          if (!titleArray.includes(array[i].content[j].props.id)) {
+            titleArray.push(array[i].content[j].props.id);
           }
         }
       }
     }
     console.log('titleArray', titleArray);
-  } else {
-    console.log('글이 없어요');
   }
 
   // 해당 배열 가지고 와서 postId 찾기
@@ -26,6 +25,6 @@ export default function checkLinking(check: string | undefined) {
       postIdArray.push(Titles[i].id);
     }
   }
-  console.log('idarray', postIdArray);
-  return postIdArray;
+
+  return titleArray;
 }

@@ -1,9 +1,9 @@
-import axios from 'axios';
+import { baseApi } from '../../../shared/api/BaseApi';
 
 // 카테고리 리스트 axios
-export const getCategoriesApi = async (user: string) => {
+export const getCategoriesApi = async (nickname: string) => {
   try {
-    const response = await axios.get(`localhost/${user}`);
+    const response = await baseApi.get(`/category/getCategoryById/${nickname}`);
     console.log('getCategoriesApi', response.data);
     return response.data;
   } catch (error) {
@@ -11,10 +11,11 @@ export const getCategoriesApi = async (user: string) => {
     throw error;
   }
 };
+
 // 카테고리 추가 axios post
 export const newCategoryApi = async (name: string) => {
   try {
-    const response = await axios.post('/category', name);
+    const response = await baseApi.post('/category', name);
     console.log('newCategoryApi', response.data);
     return response.data;
   } catch (error) {
@@ -24,9 +25,9 @@ export const newCategoryApi = async (name: string) => {
 };
 
 // 카테고리 이름 수정 axios
-export const patchCategoryApi = async (name: string) => {
+export const patchCategoryApi = async (id: string) => {
   try {
-    const response = await axios.patch('localhost', name);
+    const response = await baseApi.put('/category', id);
     console.log('patchCategoryApi', response.data);
     return response.data;
   } catch (error) {
@@ -36,9 +37,9 @@ export const patchCategoryApi = async (name: string) => {
 };
 
 // 카테고리 삭제 axios
-export const deleteCategoryApi = async (name: string) => {
+export const deleteCategoryApi = async (id: string) => {
   try {
-    const response = await axios.delete(`localhost/${name}`);
+    const response = await baseApi.delete(`/category/${id}`);
     console.log('deleteCategoryApi', response.data);
     return response.data;
   } catch (error) {
