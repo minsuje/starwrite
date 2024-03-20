@@ -37,6 +37,21 @@ public class CategoryController {
   }
 
 
+  // 카테고리 수정
+  @PatchMapping
+  public String updateCategory(@RequestBody Category category) {
+    System.out.println("category >>>>>>>>>>> " + category);
+    return categoryService.updateCategory(category);
+  }
+
+
+  // 카테고리 삭제
+  @DeleteMapping
+  public String deleteCategory(@RequestParam(value = "categoryId") String categoryId) {
+    return categoryService.deleteCategory(categoryId);
+  }
+
+
   // 카테고리 안의 모든 글 불러오기
   @GetMapping("/posts")
   public List<CategoryPosts> getCategoryPosts(@RequestParam(value = "categoryId") String categoryId) {
@@ -59,6 +74,7 @@ public class CategoryController {
   // 특정 카테고리의 노드 뷰 글, 관계 가져오기
   @GetMapping("/getCategoryPostNode")
   public GetCategoryPosts getCategoryPostNode(@RequestParam(value = "categoryId") String category) {
+    System.out.println("category >>>>>>>>>>>>> " + category);
     return categoryService.getCategoryPostsNode(category);
   }
 

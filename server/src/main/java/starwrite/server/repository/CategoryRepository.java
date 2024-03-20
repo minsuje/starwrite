@@ -26,6 +26,22 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
 
 
+  // 카테고리 수정
+  @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId " +
+      "SET c.name = $name ")
+  void updateCategory(@Param(value = "categoryId") String categoryId,
+      @Param(value = "name") String name);
+
+
+
+
+  // 카테고리 삭제
+  @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId" +
+      "DELETE c ")
+  void deleteCategory(@Param(value = "categoryId") String categoryId);
+
+
+
   // 카테고리에 해당하는 모든 글 찾아오기
   // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
   @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
