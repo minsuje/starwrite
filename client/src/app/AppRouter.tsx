@@ -8,7 +8,6 @@ import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
-import { Spinner } from '../shared/spinner';
 import { DataSpinnerSh } from '../shared/DataSpinner';
 import { MainPage } from '../pages/Main/Main';
 
@@ -44,7 +43,7 @@ export const AppRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/:user/starwrite',
+        path: '/user/starwrite',
         element: (
           <>
             <HeaderWid />
@@ -53,7 +52,7 @@ export const AppRouter = createBrowserRouter([
         ),
         children: [
           {
-            path: 'mypage/:userid_num/',
+            path: 'mypage/:nickname/',
             element: (
               <>
                 <MyPage></MyPage>
@@ -62,7 +61,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 카테고리 페이지
           {
-            path: 'categoryview/:userid_num',
+            path: 'categoryview/:nickname',
             element: (
               <>
                 <CategoryViewPage></CategoryViewPage>
@@ -71,7 +70,7 @@ export const AppRouter = createBrowserRouter([
           },
           // 노드 뷰 페이지
           {
-            path: 'nodeview/:userid_num/:category',
+            path: 'nodeview/:nickname/:category',
             element: (
               <>
                 <NodeViewPage></NodeViewPage>
@@ -100,7 +99,7 @@ export const AppRouter = createBrowserRouter([
 
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/main/:category',
+            path: 'listview/main/:nickname/:category',
             element: (
               <>
                 <ListView />
