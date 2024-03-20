@@ -237,11 +237,13 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           "MATCH (user:Users) WHERE user.userId = $userId " +
           "MERGE (user)-[:POSTED]->(savePost) " +
           "RETURN savePost AS post, ID(savePost) AS identifier LIMIT 1")
-  CreatedPost savePostLink(@Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId,
+  CreatedPost savePostLink(@Param(value = "userId") String userId,
+      @Param(value = "categoryId") String categoryId,
       @Param(value = "title") String title,
       @Param(value = "content") String content, @Param(value = "visible") String visible,
       @Param(value = "img") String img,
-      @Param(value = "timeNow") LocalDateTime timeNow, @Param(value = "relatedBack") boolean relatedBack,
+      @Param(value = "timeNow") LocalDateTime timeNow,
+      @Param(value = "relatedBack") boolean relatedBack,
       @Param(value = "relatedPosts") List<Long> relatedPosts);
 
   // 임시저장 페이지에서 저장
@@ -259,21 +261,33 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   //   임시저장 페이지에서 포스팅
-  @Query("MATCH (u:Users), (post:Post) " +
-      "WHERE ID(post) = $postId AND u.nickname = $nickname " +
-      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false " +
+  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+      "MATCH (p:Post) WHERE ID(p) = $postId " +
+      "DETACH DELETE p "
+  )
+  void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
+
+
+  // 글 수정 - 관련 글이 있는 경우
+  @Query("MATCH (post:Post) " +
+      "WHERE ID(post) = $postId " +
+      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
+      +
       "WITH post " +
-      "MATCH (post)-[oldRel:RELATED]->(oldRelatedPost) " +
+      "OPTIONAL MATCH (post)-[oldRel:RELATED]->(oldRelatedPost) " +
       "DELETE oldRel " +
       "WITH post " +
-      "UNWIND $rel AS relatedPostId " +
-      "   OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
+      "UNWIND (CASE WHEN SIZE($rel) > 0 THEN $rel ELSE [null] END) AS relatedPostId " +
+      "   OPTIONAL MATCH (relatedPost:Post) WHERE relatedPost IS NOT NULL AND ID(relatedPost) = relatedPostId "
+      +
       "   WITH post, relatedPost WHERE relatedPost IS NOT NULL " +
       "   MERGE (post)-[re:RELATED]->(relatedPost) " +
-      "   ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false " +
+      "   ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false "
+      +
       "   WITH post, relatedPost, re " +
       "   OPTIONAL MATCH (post)<-[r:RELATED]-(relatedPost) " +
-      "   SET r.relatedBack = CASE WHEN r.relatedBack = false THEN true ELSE r.relatedBack END, re.relatedBack = CASE WHEN r.relatedBack = true THEN true ELSE re.relatedBack END " +
+      "   SET r.relatedBack = CASE WHEN r.relatedBack = false THEN true ELSE r.relatedBack END, re.relatedBack = CASE WHEN r.relatedBack = true THEN true ELSE re.relatedBack END "
+      +
       "WITH post " +
       "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) " +
       "DELETE oldCatRel " +
@@ -282,7 +296,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (category)-[newRel:IS_CHILD]->(post) " +
       "RETURN count(newRel)")
   int updatePost(@Param(value = "postId") Long postId,
-      @Param(value = "nickname") String nickname,
       @Param(value = "newTitle") String newTitle,
       @Param(value = "img") String img,
       @Param(value = "newContent") String newContent,
@@ -290,11 +303,27 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "visible") String visible,
       @Param(value = "categoryIdentifier") String categoryId);
 
-  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
-      "MATCH (p:Post) WHERE ID(p) = $postId " +
-      "DETACH DELETE p "
-  )
-  void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
+
+  // 글 수정 - 관련 글이 없는 경우
+  @Query("MATCH (post:Post) " +
+      "WHERE ID(post) = $postId " +
+      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
+      +
+      "WITH post " +
+      "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) " +
+      "DELETE oldCatRel " +
+      "WITH post " +
+      "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier " +
+      "MERGE (category)-[newRel:IS_CHILD]->(post) " +
+      "RETURN count(newRel)")
+  int updatePostNull(@Param(value = "postId") Long postId,
+      @Param(value = "newTitle") String newTitle,
+      @Param(value = "img") String img,
+      @Param(value = "newContent") String newContent,
+      @Param(value = "visible") String visible,
+      @Param(value = "categoryIdentifier") String categoryId);
+
+
 
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
@@ -321,8 +350,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (p)-[:RELATED]->(r)")
   void createMultipleRelationships(@Param("postId") String postId,
       @Param("relatedPostIds") List<String> relatedPostIds);*/
-
-
 
   // 글 스크랩
 
