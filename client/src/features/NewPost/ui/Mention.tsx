@@ -5,10 +5,10 @@ export const Mention = createReactInlineContentSpec(
   {
     type: 'mention',
     propSchema: {
-      name: {
+      title: {
         default: 'Unknown',
       },
-      id: {
+      postid: {
         default: 'Unknown',
       },
     },
@@ -20,9 +20,9 @@ export const Mention = createReactInlineContentSpec(
         <a
           className="backlinking"
           style={{ color: 'white' }}
-          href={`http://localhost:5173/user/starwrite/listview/main/전체/${props.inlineContent.props.id}`}
+          href={`http://localhost:5173/user/starwrite/listview/main/전체/${props.inlineContent.props.postid}`}
         >
-          @{props.inlineContent.props.name}
+          @{props.inlineContent.props.title}
         </a>
       </>
     ),

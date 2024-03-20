@@ -10,6 +10,7 @@ import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
 import { PostList } from '../../model/listViewData';
 import { Mention } from '../../../NewPost/ui/Mention';
+import { postDetailApi } from '../../api/PostApi';
 
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -49,8 +50,10 @@ export default function ListDetailFeat() {
   >('loading');
 
   useEffect(() => {
-    loadFromStorage().then((content) => {
-      setInitialContent(content);
+    const promise = postDetailApi(28);
+    promise.then((postDetail) => {
+      console.log('postDetail data: ', postDetail);
+      setInitialContent(JSON.parse(postDetail.post.content));
     });
   }, []);
 

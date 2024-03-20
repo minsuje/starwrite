@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
-import Savings from '../model/Savings';
+// import Savings from '../model/Savings';
 import { OneCategory } from '../ui/style';
 import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { Posts } from '../../../shared/types/app';
+import { savingsApi } from '../api/newPostApi';
 
 type closeModal = () => void;
 
@@ -45,6 +48,38 @@ const _postBox = styled.div`
 
 function GetSavings({ onclick }: { onclick: closeModal }) {
   const navigate = useNavigate();
+  const [savings, setSavings] = useState<Posts[]>([]);
+  useEffect(() => {
+    const promise = savingsApi();
+    promise.then((savings) => {
+      console.log('임시저장 목록 data: ', savings);
+      if (savings) setSavings(savings.post);
+    });
+  }, []);
+
+  if (savings.length == 0) {
+    return (
+      <>
+        <_ModalBg>
+          <_Box>
+            <div>
+              <span>임시저장 글 목록</span>
+              <button
+                onClick={() => {
+                  onclick();
+                }}
+              >
+                취소
+              </button>
+            </div>
+
+            <div>임시저장 글이 없습니다.</div>
+          </_Box>
+        </_ModalBg>
+      </>
+    );
+  }
+
   return (
     <>
       <_ModalBg>
@@ -60,7 +95,7 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
             </button>
           </div>
 
-          {Savings.map((saving) => {
+          {savings.map((saving) => {
             return (
               <OneCategory
                 key={saving.id}
@@ -71,7 +106,7 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
               >
                 <_postBox>
                   <h1>{saving.title === null ? '제목없음' : saving.title}</h1>
-                  <p>작성 날짜 추가</p>
+                  <p></p>
                 </_postBox>
               </OneCategory>
             );
