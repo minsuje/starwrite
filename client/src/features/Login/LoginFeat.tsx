@@ -10,6 +10,7 @@ import {
 } from '../../shared/CommonStyle';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface LoginInput {
@@ -40,7 +41,8 @@ const schema = z.object({
 
 // RegisterForm
 function LoginForm() {
-  // react-hook-form
+  const navigate = useNavigate();
+  const myNickname = localStorage.getItem('nickname');
   const {
     register, // input 할당, value 변경 감지
     handleSubmit, // form submit 이벤트 시 호출
@@ -76,8 +78,8 @@ function LoginForm() {
       });
 
       localStorage.setItem('nickname', cookie.data.value);
-
       alert('로그인 완료');
+      navigate(`/user/starwrite/categoryview/${cookie.data.value}`);
     } catch (error) {
       alert('로그인 실패');
       console.error(error);

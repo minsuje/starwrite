@@ -8,6 +8,7 @@ import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
+import { Spinner } from '../shared/spinner';
 import { DataSpinnerSh } from '../shared/DataSpinner';
 import { MainPage } from '../pages/Main/Main';
 
@@ -99,7 +100,7 @@ export const AppRouter = createBrowserRouter([
 
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/main/:nickname/:category',
+            path: 'listview/main/:category',
             element: (
               <>
                 <ListView />

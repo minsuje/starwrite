@@ -19,6 +19,8 @@ function ListCategory({ sort }: { sort: string }) {
       navigate(`/user/starwrite/listview/main/${category.name}`);
       setSelectedCategory(category.name);
     } else if (category.id === 'logout') {
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('accessToken');
       navigate(`/`);
     } else {
       navigate(`/user/starwrite/mypage/${category.id}`);
