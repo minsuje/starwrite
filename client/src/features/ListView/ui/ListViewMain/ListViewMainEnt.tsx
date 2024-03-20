@@ -42,20 +42,19 @@ function ListViewMainEnt() {
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>();
   useEffect(() => {
-    // const promise = PostListApi(category);
-    // promise.then((Posts) => {
-    //   console.log('PostList data: ', Posts);
-    //   setPostsList(Posts);
-    // });
-    setPostsList([]);
-  }, []);
+    const promise = postListApi(category);
+    promise.then((Posts) => {
+      console.log('PostList data: ', Posts);
+      setPostsList(Posts);
+    });
+  }, [category]);
   console.log(postsList);
 
   return (
     <>
       <ListHeaderEnt category={category} />
       <_listBox>
-        {/* {!(postsList?.length === 0) &&
+        {!(postsList?.length === 0) &&
           postsList?.map((post, idx) => {
             return (
               <div key={idx}>
@@ -70,7 +69,7 @@ function ListViewMainEnt() {
                 </Link>
               </div>
             );
-          })} */}
+          })}
       </_listBox>
     </>
   );

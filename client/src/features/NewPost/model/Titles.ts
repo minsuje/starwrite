@@ -22,3 +22,16 @@ const Titles = [
 ];
 
 export default Titles;
+// export default function getTitle() {
+//   const promise = getTitleApi();
+//   let Titles;
+//   promise.then((titles) => {
+//     console.log('titles data: ', titles);
+//     Titles = titles;
+//   });
+//   if (Titles) {
+//     return Titles;
+//   } else {
+//     return [];
+//   }
+// }
