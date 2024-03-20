@@ -16,5 +16,6 @@ public class GetSavePost {
   private Post posts;
   private Long postid;
   private String usersRelationType;
+  private String categoryid;
 
 }
