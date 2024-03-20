@@ -1,13 +1,9 @@
 package starwrite.server.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Category;
-import starwrite.server.entity.Post;
-import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.request.CreateCategory;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.UserCategories;
@@ -26,13 +22,13 @@ public class CategoryController {
     this.categoryService = categoryService;
   }
 
-  @Autowired
-  private HttpServletResponse response;
+//  @Autowired
+//  private HttpServletResponse response;
 
 
   // 카테고리 생성
   @PostMapping
-  public Category addCategory(@RequestBody Category category) {
+  public Category addCategory(@RequestBody CreateCategory category) {
     return categoryService.addCategory(category);
   }
 
@@ -56,9 +52,9 @@ public class CategoryController {
   @GetMapping("/posts")
   public List<CategoryPosts> getCategoryPosts(@RequestParam(value = "categoryId") String categoryId) {
 
-    Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
-    cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
-    response.addCookie(cookie);
+//    Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
+//    cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
+//    response.addCookie(cookie);
 
     return categoryService.getCategoryPosts(categoryId);
   }
