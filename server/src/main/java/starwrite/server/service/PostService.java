@@ -162,8 +162,7 @@ public class PostService {
   }
 
   // 임시저장에서 포스트 생성
-  public String saveTmpPost(CreatePost post, Long postId, String nickname) {
-    LocalDateTime newTime = LocalDateTime.now();
+  public String saveTmpPost(CreatePost post, Long postId) {
     String img = post.getPost().getImg() != null ? post.getPost().getImg() : "";
     String newTitle = post.getPost().getTitle();
     String newVisible = post.getPost().getVisible();
@@ -191,8 +190,6 @@ public class PostService {
       return "edit failed";
     }
     return "success";
-
-
   }
 
 
