@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
@@ -169,10 +170,10 @@ public class PostController {
   }
 
   // 글 스크랩
-//  @PostMapping
-//  public String scrapPost(@RequestBody ) {
-//    return
-//  }
+  @PostMapping("scrap")
+  public String scrapPost(@RequestBody ScrapPost scrapPost) {
+    return postService.scrapPost(scrapPost);
+  }
 
 
 }
