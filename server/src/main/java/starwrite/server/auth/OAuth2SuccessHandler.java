@@ -38,7 +38,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         boolean isExist = oAuth2User.getAttribute("exist");
 
         // OAuth2User 로부터 Role 을 얻어옴
-        String role = oAuth2User.getAuthorities().stream().findFirst().orElseThrow().getAuthority();
+        String role = oAuth2User.getAuthorities().stream().findFirst().orElseThrow(IllegalAccessError::new).getAuthority();
 
         // 회원이 존재할 경우
         if (isExist)  {

@@ -24,5 +24,7 @@ public class StatusResponseDTO {
         return new StatusResponseDTO(200);
     }
 
-    public static
+    public static StatusResponseDTO success(Object data) {
+        return new StatusResponseDTO(200, data);
+    }
 }
