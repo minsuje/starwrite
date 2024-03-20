@@ -74,6 +74,21 @@ public class CategoryService {
   }
 
 
+  // 카테고리 수정
+  public String updateCategory(Category category) {
+    categoryRepository.updateCategory(category.getCategoryId(), category.getName());
+    return "updated";
+  }
+
+
+
+  // 카테고리 삭제
+  public String deleteCategory(String categoryId) {
+    categoryRepository.deleteCategory(categoryId);
+    return "deleted";
+  }
+
+
 
   //  public Category getPosts(String id) {
 //    return categoryRepository.findCategoryById(id);

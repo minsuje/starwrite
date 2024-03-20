@@ -109,8 +109,9 @@ export const links: Link[] = [
 export const fetchData = async () => {
   try {
     const response = await baseApi.get(
-      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=111a8a97-eb41-40a1-9e62-940b7fe9f671`,
+      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=d598f05e-a08c-494b-b0f6-11ac3899cb26`,
     );
+    console.log('response', response);
     return response.data;
 
     // API 응답으로 받은 데이터를 상태에 저장

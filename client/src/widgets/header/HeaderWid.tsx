@@ -32,21 +32,21 @@ export function HeaderWid() {
 
   function handleNodeViewPage() {
     if (nickname && category) {
-      navigate(`user/starwrite/nodeview/${nickname}/${category}`);
+      navigate(`/user/starwrite/nodeview/${nickname}/${category}`);
     } else if (category === '전체') {
-      navigate(`user/starwrite/categoryview/${nickname}`);
+      navigate(`/user/starwrite/categoryview/${nickname}`);
     } else {
-      navigate(`user/starwrite/categoryview/${myNickname}`);
+      navigate(`/user/starwrite/categoryview/${myNickname}`);
     }
   }
 
   function handleNodeViewListPage() {
     if (category) {
-      navigate(`user/starwrite/listview/main/${nickname}/${category}`);
+      navigate(`/user/starwrite/listview/main/${nickname}/${category}`);
     } else if (nickname) {
-      navigate(`user/starwrite/listview/main/${nickname}/전체`);
+      navigate(`/user/starwrite/listview/main/${nickname}/전체`);
     } else {
-      navigate(`user/starwrite/listview/main/${myNickname}/전체`);
+      navigate(`/user/starwrite/listview/main/${myNickname}/전체`);
     }
   }
 
