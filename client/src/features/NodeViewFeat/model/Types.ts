@@ -9,6 +9,7 @@ export interface CustomNode extends SimulationNodeDatum {
   isShared?: number;
   postId: number;
   title: string;
+  posts: string[];
 }
 
 export interface Link extends SimulationLinkDatum<CustomNode> {

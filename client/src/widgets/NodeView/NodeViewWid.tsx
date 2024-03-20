@@ -26,9 +26,56 @@ export const NodeView = ({
 }: SearchType) => {
   const [nodes, setNodes] = useState<CustomNode[]>([]);
   const [links, setlinks] = useState<Link[]>([]);
-  const [hasData, setHasData] = useState<boolean>(false);
   // console.log('nodes', nodes);
   // console.log('links', links);
+
+  useEffect(() => {
+    // axios 데이터 로딩
+    const getData = async () => {
+      try {
+        const fetchedNodes = await fetchData();
+
+        if (fetchedNodes !== '') {
+          let nodesData = fetchedNodes.posts.map((node: CustomNode) => ({
+            ...node,
+            id: node.postId,
+            label: node.title,
+            x: Math.random() * viewportSize.width,
+            y: Math.random() * viewportSize.height,
+            url: `/user/starwrite/listview/main/과학/${node.postId}`,
+          }));
+          if (searchTerm.trim() !== '') {
+            nodesData = nodesData.filter((node: CustomNode) =>
+              node.label.toLowerCase().includes(searchTerm.toLowerCase()),
+            );
+          }
+
+          setNodes(nodesData);
+          setLoading(false);
+          setNodesData(fetchedNodes);
+
+          setPageDataProp(fetchedNodes);
+        } else if (fetchedNodes === '') {
+          setLoading(false);
+        }
+
+        console.log(fetchedNodes);
+
+        const LinksData = fetchedNodes.relation.map((link: Link) => ({
+          ...link,
+          source: link.postId,
+          target: link.relatedPostId,
+        }));
+        setlinks(LinksData);
+
+        // setlinks(fetchedNodes.relation);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getData();
+  }, []);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [viewportSize] = useState({
@@ -225,7 +272,7 @@ export const NodeView = ({
         link.style('opacity', 0.1); // 기본 opacity 값을 사용
       });
     // 텍스트 요소 추가
-    console.log('nodes', nodes);
+
     const text = group
       .append('g')
       .attr('class', 'texts')
@@ -338,58 +385,6 @@ export const NodeView = ({
         .style('opacity', 1);
     }
   }, [searchTerm]);
-
-  useEffect(() => {
-    // 데이터 로딩
-    const getData = async () => {
-      try {
-        const fetchedNodes = await fetchData();
-
-        if (fetchedNodes !== '') {
-          let nodesData = fetchedNodes.posts.map((node: CustomNode) => ({
-            ...node,
-            id: node.postId,
-            label: node.title,
-            x: Math.random() * viewportSize.width,
-            y: Math.random() * viewportSize.height,
-          }));
-          if (searchTerm.trim() !== '') {
-            nodesData = nodesData.filter((node: CustomNode) =>
-              node.label.toLowerCase().includes(searchTerm.toLowerCase()),
-            );
-          }
-
-          setNodes(nodesData);
-          setLoading(false);
-          setNodesData(nodes);
-          console.log('if?');
-          console.log('nodesData', nodesData);
-          setPageDataProp(fetchedNodes);
-        } else if (fetchedNodes === '') {
-          setHasData(false);
-          console.log(nodes);
-          setLoading(false);
-        }
-
-        const LinksData = fetchedNodes.relation.map((link: Link) => ({
-          ...link,
-          source: link.postId,
-          target: link.relatedPostId,
-        }));
-        setlinks(LinksData);
-
-        // setlinks(fetchedNodes.relation);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    getData();
-  }, []);
-
-  if (!hasData) {
-    console.log(hasData);
-  }
 
   return (
     <svg
