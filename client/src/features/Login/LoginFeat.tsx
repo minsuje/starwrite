@@ -125,16 +125,18 @@ function LoginForm() {
   }
 
   const handleSuccess = async (credentialResponse) => {
+    console.log(credentialResponse);
     try {
       // credential이 존재하는지 확인합니다.
       if (credentialResponse.credential) {
         // JWT 토큰 디코드
         const decodedToken = jwtDecode(credentialResponse.credential);
-        console.log(decodedToken);
+        console.log('>>>>>>>>', decodedToken);
 
         // 서버에 POST 요청 보내기
         const response = await axios.post('/login/oauth/google/post', {
-          access_token: credentialResponse.credential, // 여기서는 credential을 access_token으로 보냅니다.
+          access_token: credentialResponse.credential,
+          decodedToken: decodedToken,
         });
 
         // 서버 응답 처리
