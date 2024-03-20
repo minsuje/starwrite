@@ -263,9 +263,9 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "WHERE ID(post) = $postId AND u.nickname = $nickname " +
       "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false " +
       "WITH post " +
-      "OPTIONAL MATCH (post)-[oldRel:RELATED]->(oldRelatedPost) " +
+      "MATCH (post)-[oldRel:RELATED]->(oldRelatedPost) " +
       "DELETE oldRel " +
-      "WITH DISTINCT post " +
+      "WITH post " +
       "UNWIND $rel AS relatedPostId " +
       "   OPTIONAL MATCH (relatedPost:Post) WHERE ID(relatedPost) = relatedPostId " +
       "   WITH post, relatedPost WHERE relatedPost IS NOT NULL " +
@@ -278,17 +278,17 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) " +
       "DELETE oldCatRel " +
       "WITH post " +
-      "MATCH (category:Category) WHERE category.categoryId = $categoryId " +
-      "MERGE (category)-[:IS_CHILD]->(post) " +
-      "RETURN post")
-  Post updatePost(@Param(value = "postId") Long postId,
+      "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier " +
+      "MERGE (category)-[newRel:IS_CHILD]->(post) " +
+      "RETURN count(newRel)")
+  int updatePost(@Param(value = "postId") Long postId,
       @Param(value = "nickname") String nickname,
       @Param(value = "newTitle") String newTitle,
       @Param(value = "img") String img,
       @Param(value = "newContent") String newContent,
       @Param(value = "rel") List<Long> rel,
       @Param(value = "visible") String visible,
-      @Param(value = "categoryId") String categoryId);
+      @Param(value = "categoryIdentifier") String categoryId);
 
   @Query("MATCH (u:Users) WHERE u.userId = $userId " +
       "MATCH (p:Post) WHERE ID(p) = $postId " +

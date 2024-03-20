@@ -160,6 +160,7 @@ public class PostController {
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
     String nickname = SecurityUtil.getCurrentUserNickname();
+    System.out.println("nickname >>>>>>>>> " + nickname);
     return postService.saveTmpPost(post, postId, nickname);
   }
 

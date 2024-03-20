@@ -62,6 +62,8 @@ public class CategoryService {
 
     String userId = SecurityUtil.getCurrentUserUserId();
 
+    System.out.println("userid >>>>>>>>>>>> " + userId);
+
     Category newCategory = new Category();
 
     Users foundUser = usersRepository.findUserByUserId(userId);
