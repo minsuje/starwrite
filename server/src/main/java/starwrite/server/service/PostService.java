@@ -183,12 +183,13 @@ public class PostService {
 
     System.out.println(">>>> NICK NAME >>> " + nickname);
 
-    postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId);
-    System.out.println(">>>>>>> <><><><><> " + postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId));
-    if(postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId) != null){
-      return "Success";
+    int result = postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId);
+//    System.out.println(">>>>>>> <><><><><> " + postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId));
+//    System.out.println(">>>>> updated Post count >>>>>>>>> " + postRepository.updatePost(postId, nickname, newTitle, img, newContent, rel, newVisible, categoryId));
+    if(result == 0){
+      return "edit failed";
     }
-    return "fail";
+    return "success";
   }
 
 
