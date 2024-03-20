@@ -91,6 +91,7 @@ public class SecurityConfig {
                     .loginPage("/login")
                     // 인증이 성공하면 다음에 수행할 작업을 사용자 정의할 수 있음
 //                    .successHandler(new AuthenticationSuccessHandler())
+                    .loginProcessingUrl("/login")
                     .permitAll();
             }) // 따로 로그인 양식 제공해주는 옵션 -> 로그인 페이지는 누구나 접근할 수 있도록
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
@@ -99,6 +100,7 @@ public class SecurityConfig {
             .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                 // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
                 oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
+                    .loginPage("/login")
                     // 로그인 성공 시 핸들러
                     .successHandler(oAuth2SuccessHandler)
                     .failureHandler(oAuth2FailureHandler)
