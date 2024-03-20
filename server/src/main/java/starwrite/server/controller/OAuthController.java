@@ -31,7 +31,7 @@ import starwrite.server.service.UsersServiceImpl;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5173"})
 public class OAuthController {
 
     private final org.slf4j.Logger Logger = LoggerFactory.getLogger(IndexController.class.getName());
