@@ -10,6 +10,7 @@ import {
 } from '../../shared/CommonStyle';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface LoginInput {
@@ -40,7 +41,8 @@ const schema = z.object({
 
 // RegisterForm
 function LoginForm() {
-  // react-hook-form
+  const navigate = useNavigate();
+  const myNickname = localStorage.getItem('nickname');
   const {
     register, // input 할당, value 변경 감지
     handleSubmit, // form submit 이벤트 시 호출
@@ -60,21 +62,24 @@ function LoginForm() {
     //여기에 회원가입 axios 작성
 
     try {
-      const response = await axios.post(`http://localhost:8080/login/post`, {
-        mail: data.email,
-        password: data.password,
-      });
+      const response = await axios.post(
+        `http://52.79.228.200:8080/login/post`,
+        {
+          mail: data.email,
+          password: data.password,
+        },
+      );
       localStorage.setItem('accessToken', response.data.accessToken);
 
-      const cookie = await axios.get(`http://localhost:8080/cookie`, {
+      const cookie = await axios.get(`http://52.79.228.200:8080/cookie`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
       });
 
       localStorage.setItem('nickname', cookie.data.value);
-
       alert('로그인 완료');
+      navigate(`/user/starwrite/categoryview/${cookie.data.value}`);
     } catch (error) {
       alert('로그인 실패');
       console.error(error);
