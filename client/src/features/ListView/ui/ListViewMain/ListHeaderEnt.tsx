@@ -3,8 +3,15 @@ import { _headBox, _buttonBox } from '../style';
 import { IoIosTrash } from 'react-icons/io';
 import { LuPencilLine } from 'react-icons/lu';
 import { useRef } from 'react';
+import { deleteCategoryApi } from '../../api/CategoryApi';
 
-function ListHeaderEnt({ category }: { category: string | undefined }) {
+function ListHeaderEnt({
+  category,
+  categoryName,
+}: {
+  category: string | undefined;
+  categoryName: string | undefined;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -20,7 +27,7 @@ function ListHeaderEnt({ category }: { category: string | undefined }) {
   return (
     <>
       <_headBox>
-        <input value={category} ref={inputRef}></input>
+        <input value={categoryName} ref={inputRef}></input>
 
         <_buttonBox>
           {category != '전체' && category != '' && (
@@ -28,7 +35,18 @@ function ListHeaderEnt({ category }: { category: string | undefined }) {
               <button onClick={editCategoryName}>
                 <LuPencilLine />
               </button>
-              <button>
+              <button
+                onClick={() => {
+                  if (category) {
+                    if (
+                      confirm(`${categoryName}카테고리를 삭제하시겠습니까?
+                    카테고리에 포함된 글이 모두 삭제되고 복구할 수 없습니다.`)
+                    ) {
+                      deleteCategoryApi(category);
+                    }
+                  }
+                }}
+              >
                 <IoIosTrash />
               </button>
             </>
