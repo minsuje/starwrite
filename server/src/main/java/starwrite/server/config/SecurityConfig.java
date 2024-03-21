@@ -100,7 +100,7 @@ public class SecurityConfig {
             .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                 // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
                 oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-                    .loginPage("/login")
+                    .loginPage("/login/oauth2/code/google")
                     // 로그인 성공 시 핸들러
                     .successHandler(oAuth2SuccessHandler)
                     .failureHandler(oAuth2FailureHandler)
