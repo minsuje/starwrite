@@ -1,6 +1,4 @@
-
 import ListCategory from '../../features/ListView/ui/ListCategoryEnt';
-
 import {
   _CategoryBar,
   _CategoryContent,

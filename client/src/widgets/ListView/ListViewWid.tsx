@@ -6,24 +6,29 @@ import {
   _CategoryContent,
   _ListViewBox,
 } from './ListViewWidStyle';
-
 import { useState } from 'react';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
-  const { category, nickname, postId } = useParams();
-
-  console.log('widget에서 찍어본 params : ', category, nickname, postId);
+  const [updateCategory, setUpdateCategory] = useState<boolean>(true);
+  const { category, nickname } = useParams();
 
   return (
     <_ListViewBox>
       <_CategoryBar>
-        <ListCategory category={category} nickname={nickname}></ListCategory>
+        <ListCategory
+          updateCategory={updateCategory}
+          category={category}
+          nickname={nickname}
+        ></ListCategory>
         <_AddCategoryButton onClick={() => setCategoryModal(true)}>
           추가
         </_AddCategoryButton>
         {categoryModal && (
           <AddCategory
+            setUpdateCategory={() => {
+              setUpdateCategory(!updateCategory);
+            }}
             onclick={() => {
               setCategoryModal(false);
             }}
