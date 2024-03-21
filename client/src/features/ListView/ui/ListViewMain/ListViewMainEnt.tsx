@@ -22,7 +22,7 @@ function ListViewMainEnt() {
 
   return (
     <>
-      <ListHeaderEnt category={categoryName} />
+      <ListHeaderEnt categoryName={categoryName} category={category} />
       <_listBox>
         {!(postsList?.length === 0) &&
           postsList?.map((post, idx) => {

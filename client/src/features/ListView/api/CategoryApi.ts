@@ -39,7 +39,7 @@ export const patchCategoryApi = async (id: string) => {
 // 카테고리 삭제 axios
 export const deleteCategoryApi = async (id: string) => {
   try {
-    const response = await baseApi.delete(`/category/${id}`);
+    const response = await baseApi.delete(`/category?categoryId=${id}`);
     console.log('deleteCategoryApi', response.data);
     return response.data;
   } catch (error) {
