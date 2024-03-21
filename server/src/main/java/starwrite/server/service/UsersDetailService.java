@@ -43,7 +43,7 @@ public class UsersDetailService implements UserDetailsService {
                 user.getUserId()
             );
 
-//            System.out.println("users >>>>" + users.getNickname());
+            System.out.println("loadUserByUsername users >>>>" + users);
 
             return users;
         } else {

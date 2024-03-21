@@ -2,7 +2,6 @@ package starwrite.server.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,13 +23,9 @@ public class UsersServiceImpl implements UsersService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
+     private final AuthenticationManager authenticationManager;
+
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UsersDetailService usersDetailService;
 
     //@Transactional
 //    @Override
@@ -61,8 +56,11 @@ public class UsersServiceImpl implements UsersService {
 
             // 2. 실제 검증. authenticate() 매서드를 통해 요청된 User 에 대한 검증 진행
             // authenticate 메서드가 실행될 때 UsersDetailService 에서 만든 loadUserByUsername 메서드 실행
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+            System.out.println("signIn authenticationToken >>>>>> " + authenticationToken);
+
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
             System.out.println("authentication >>> " + authentication);
 
             // 3. 인증 정보를 기반으로 jwt 토큰 생성

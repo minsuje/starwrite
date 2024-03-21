@@ -1,5 +1,6 @@
 package starwrite.server.config;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
 //                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
-                registry.requestMatchers("/home", "/register/**", "/login/**", "/h2-console/**", "/cookie").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
+                registry.requestMatchers("/home", "/register/**", "/login/**", "/h2-console/**", "/cookie", "/token/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
 //                registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
 //                registry.requestMatchers("/admin/**").hasRole("ADMIN"); // /admin url 은 관리자 권한 가진 사람만 접근 가능
                 registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
@@ -88,6 +89,16 @@ public class SecurityConfig {
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
 //            .addFilterBefore(JwtAuthenticationFilter.class)
+            .logout(logout -> logout
+                .logoutUrl("/logout") // 로그아웃 요청을 처리할 URL 설정
+                .logoutSuccessUrl("/login") // 로그아웃 성공 시 리다이렉트할 URL 설정
+                .addLogoutHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    session.invalidate();
+                }) // 로그아웃 핸들러 추가 (세션 무효화 처리)
+                .logoutSuccessHandler((request, response, authentication) ->
+                    response.sendRedirect("/login")) // 로그아웃 성공 핸들러 추가 (리다이렉션 처리)
+                .deleteCookies("remember-me")) // 로그아웃 시 쿠키 삭제 설정
             .build();
     }
 
