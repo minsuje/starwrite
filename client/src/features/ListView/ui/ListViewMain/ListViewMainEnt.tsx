@@ -59,7 +59,7 @@ function ListViewMainEnt() {
             return (
               <div key={idx}>
                 <Link
-                  to={`/user/starwrite/listview/main/${category}/${post.id}`}
+                  to={`/user/starwrite/listview/main/${category}/${post.postId}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <_postBox>

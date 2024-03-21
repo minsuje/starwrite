@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { z } from 'zod';
+import { newCategoryApi } from '../api/CategoryApi';
 
 type closeModal = () => void;
 
@@ -65,6 +66,9 @@ function AddCategory({ onclick }: { onclick: closeModal }) {
 
   const onValid = (data: { category?: string }) => {
     console.log('onValid', data);
+    if (data.category) {
+      newCategoryApi(data.category);
+    }
     //여기에  axios 작성
   };
 

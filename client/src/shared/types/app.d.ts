@@ -3,14 +3,14 @@
 export type Search = string;
 
 export interface Category {
-  id: string;
   name: string;
+  categoryId: string;
   created_at?: Date;
   updated_at?: Date;
 }
 
 export interface Posts {
-  id: string;
+  postId: number;
   category_id: string;
   content: string;
   created_at?: Date;

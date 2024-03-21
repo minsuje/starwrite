@@ -4,7 +4,7 @@ import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { OneCategory } from '../ui/style';
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import { Posts } from '../../../shared/types/app';
+import { Saving } from '..';
 import { savingsApi } from '../api/newPostApi';
 
 type closeModal = () => void;
@@ -48,12 +48,12 @@ const _postBox = styled.div`
 
 function GetSavings({ onclick }: { onclick: closeModal }) {
   const navigate = useNavigate();
-  const [savings, setSavings] = useState<Posts[]>([]);
+  const [savings, setSavings] = useState<Saving[]>([]);
   useEffect(() => {
     const promise = savingsApi();
     promise.then((savings) => {
       console.log('임시저장 목록 data: ', savings);
-      if (savings) setSavings(savings.post);
+      if (savings) setSavings(savings);
     });
   }, []);
 
@@ -98,14 +98,18 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
           {savings.map((saving) => {
             return (
               <OneCategory
-                key={saving.id}
+                key={saving.postid}
                 onClick={() => {
-                  navigate(`/user/starwrite/writenewpost/${saving.id}`);
+                  navigate(`/user/starwrite/writenewpost/${saving.postid}`);
                   onclick();
                 }}
               >
                 <_postBox>
-                  <h1>{saving.title === null ? '제목없음' : saving.title}</h1>
+                  <h1>
+                    {saving.posts.title === ''
+                      ? '제목없음'
+                      : saving.posts.title}
+                  </h1>
                   <p></p>
                 </_postBox>
               </OneCategory>

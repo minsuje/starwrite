@@ -36,12 +36,6 @@ const getMentionMenuItems = (
   editor: typeof schema.BlockNoteEditor,
   titles: Titles[],
 ): DefaultReactSuggestionItem[] => {
-  // const promise = getTitleApi();
-  // promise.then((titleList) => {
-  //   console.log('titles data: ', titleList);
-  //   titles = titleList;
-  // });
-
   return titles.map((title) => ({
     title: title.title,
     onItemClick: () => {
@@ -54,7 +48,7 @@ const getMentionMenuItems = (
             postid: title.postid.toString(),
           },
         },
-        '\n', // add a space after the mention
+        ' \n', // add a space after the mention
       ]);
     },
   }));
