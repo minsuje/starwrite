@@ -156,7 +156,9 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   @Query("MATCH (p:Post) " +
       "MATCH (u:Users) " +
       "MATCH (c:Category) " +
-      "WHERE ID(p) = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
+      // 임시 저장 삭제
+//      "WHERE ID(p) = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
+      "WHERE ID(p) = $postId AND u.nickname = $nickname " +
       "WITH p, u , c " +
       "MATCH (c)-[:IS_CHILD]-(p) " +
       "RETURN collect(p) AS posts, c.categoryId AS categoryid ")
@@ -331,16 +333,42 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //      "CREATE (u)-[:HOLDS]->(copiedPost) " +
 //      "RETURN count(copiedPost)")
 //  int scrapPost(Long postId, String userId);
+//  @Query("MATCH (u:Users {userId: $userId}), (p:Post) " +
+//      "WHERE ID(p) = $postId AND NOT (u)-[:POSTED]->(p) AND NOT (u)-[:HOLDS]->(:Post)-[:COPY]->(p) " +
+//      "MATCH (c:Category {categoryId: $categoryId}) " +
+//      "MATCH (author:Users)-[:POSTED]-(p) " +
+//      "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, " +
+//      "tmpSave: p.tmpSave, recentView: localDateTime(), createdAt: localDateTime(), updatedAt: localDateTime()}) " +
+//      "CREATE (p)-[:COPY]->(copiedPost) " +
+//      "CREATE (u)-[:HOLDS]->(copiedPost) " +
+//      "CREATE (c)-[r:IS_CHILD]->(copiedPost) " +
+//      "CREATE (author)-[:AUTHOR]->(copiedPost) " +
+//      "RETURN count(r) ")
+//  int scrapPost(@Param(value = "postId") Long postId, @Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
   @Query("MATCH (u:Users {userId: $userId}), (p:Post) " +
-      "WHERE ID(p) = $postId AND NOT (u)-[:POSTED]->(p) AND NOT (u)-[:HOLDS]->(:Post)-[:COPY]->(p) " +
+      "WHERE ID(p) = $postId " +
+      "AND NOT (u)-[:POSTED]->(p) " +
+      "WITH u, p, " +
+      "   CASE " +
+      "   WHEN (u)-[:HOLDS]->(:Post)-[:COPY]->(p) THEN 'Already Scrapped' " +
+      "   WHEN (u)-[:AUTHOR]->(p) THEN 'Author' " +
+      "   ELSE 'Proceed' " +
+      "   END as ScrappingStatus " +
+      "WHERE ScrappingStatus = 'Proceed' " +
       "MATCH (c:Category {categoryId: $categoryId}) " +
+      "MATCH (author:Users)-[:POSTED]->(p) " +
       "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, " +
-      "tmpSave: p.tmpSave, recentView: p.recentView, createdAt: datetime(), updatedAt: datetime()}) " +
+      "tmpSave: p.tmpSave, recentView: localDateTime(), createdAt: localDateTime(), updatedAt: localDateTime()}) " +
       "CREATE (p)-[:COPY]->(copiedPost) " +
       "CREATE (u)-[:HOLDS]->(copiedPost) " +
       "CREATE (c)-[r:IS_CHILD]->(copiedPost) " +
+      "CREATE (author)-[:AUTHOR]->(copiedPost) " +
       "RETURN count(r) ")
   int scrapPost(@Param(value = "postId") Long postId, @Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+
+
+
+
 
 
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
