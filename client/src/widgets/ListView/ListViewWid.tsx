@@ -1,5 +1,5 @@
 import { AddCategory, ListCategory } from '../../features/ListView';
-import { Outlet } from 'react-router';
+import { Outlet, useParams } from 'react-router';
 import {
   _AddCategoryButton,
   _CategoryBar,
@@ -11,11 +11,14 @@ import { useState } from 'react';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
+  const { category, nickname, postId } = useParams();
+
+  console.log('widget에서 찍어본 params : ', category, nickname, postId);
 
   return (
     <_ListViewBox>
       <_CategoryBar>
-        <ListCategory></ListCategory>
+        <ListCategory category={category} nickname={nickname}></ListCategory>
         <_AddCategoryButton onClick={() => setCategoryModal(true)}>
           추가
         </_AddCategoryButton>

@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { PostList } from '../../model/listViewData';
 import { Mention } from '../../../NewPost/ui/Mention';
 import { postDetailApi } from '../../api/PostApi';
+import { useParams } from 'react-router';
 
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -45,17 +46,19 @@ async function loadFromStorage() {
 }
 
 export default function ListDetailFeat() {
+  const { postId } = useParams();
+
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
 
   useEffect(() => {
-    const promise = postDetailApi(28);
+    const promise = postDetailApi(Number(postId));
     promise.then((postDetail) => {
       console.log('postDetail data: ', postDetail);
       setInitialContent(JSON.parse(postDetail.post.content));
     });
-  }, []);
+  }, [postId]);
 
   const editor = useMemo(() => {
     if (initialContent === 'loading') {

@@ -101,7 +101,7 @@ export const AppRouter = createBrowserRouter([
 
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/main/:category',
+            path: 'listview/main/:nickname/:category',
             element: (
               <>
                 <ListView />

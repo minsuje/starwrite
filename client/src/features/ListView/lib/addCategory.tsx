@@ -51,7 +51,10 @@ const _Button = styled.button`
 
 // 유효성 검사 schema
 const schema = z.object({
-  category: z.string().min(1, { message: '입력해주세요' }),
+  category: z
+    .string()
+    .min(1, { message: '1자 이상 입력해주세요' })
+    .max(10, { message: '10자 이내로 작성해주세요' }),
 });
 
 function AddCategory({ onclick }: { onclick: closeModal }) {
@@ -69,6 +72,7 @@ function AddCategory({ onclick }: { onclick: closeModal }) {
     if (data.category) {
       newCategoryApi(data.category);
     }
+
     //여기에  axios 작성
   };
 
