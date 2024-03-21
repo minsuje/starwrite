@@ -30,6 +30,8 @@ public class Post {
 
     private String content;
 
+    private String parsedContent;
+
     private String visible;
 
     private String img;

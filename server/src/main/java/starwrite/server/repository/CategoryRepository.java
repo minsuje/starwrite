@@ -96,7 +96,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "WITH p " +
       "OPTIONAL MATCH (p)-[r:RELATED]->(related:Post) " +
       "RETURN collect(DISTINCT{title: p.title, postId: ID(p), recentView: p.recentView}) as posts, " +
-      "       collect({postId: r.postId, relatedPostId: r.relatedPostId}) as relation ")
+      "       collect(DISTINCT{postId: r.postId, relatedPostId: r.relatedPostId}) as relation ")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
 
 

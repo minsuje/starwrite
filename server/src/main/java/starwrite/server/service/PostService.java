@@ -1,5 +1,6 @@
 package starwrite.server.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
+import starwrite.server.utils.JsonData;
+
 
 @Service
 public class PostService {
@@ -29,6 +32,7 @@ public class PostService {
   CategoryRepository categoryRepository;
   @Autowired
   UsersRepository usersRepository;
+
 
 
   // BackLink Info (postId , title)
@@ -112,10 +116,23 @@ public class PostService {
       related.forEach(item -> newRelated.add(Long.parseLong(item)));
     }
 
+
+    String extractedText = "";
+
+    try {
+      extractedText = JsonData.extractText(post.getPost().getContent());
+      // 추출된 텍스트를 이용하는 로직
+    } catch (IOException e) {
+      // 오류 처리
+    }
+
+    System.out.println("extracted >>>>>>>>>>>>>>>>> " + extractedText);
+
+
     String userId = SecurityUtil.getCurrentUserUserId();
     System.out.println("userID >>>>" + userId);
     CreatedPost createdPost = postRepository.createPostLink(userId, post.getCategory(),
-        newPost.getTitle(), newPost.getContent(),
+        newPost.getTitle(), newPost.getContent(), extractedText,
         newPost.getVisible(), img, timeNow, false,
         newRelated);
 
