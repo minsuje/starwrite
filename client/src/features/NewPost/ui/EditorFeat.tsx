@@ -15,13 +15,8 @@ import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
 import { redTheme } from './style';
 import { Mention } from './Mention';
-import Titles from '../model/Titles';
-import { getTitleApi } from '../api/newPostApi';
+import { Titles } from '../model/types';
 
-interface Titles {
-  postid: number;
-  title: string;
-}
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -68,9 +63,11 @@ async function uploadFile(file: File) {
 }
 
 export default function Editor({
+  titleList,
   content,
   setContent,
 }: {
+  titleList: Titles[];
   content: string | undefined;
   setContent: (value: string) => void;
 }) {
@@ -88,12 +85,8 @@ export default function Editor({
   }, [content]);
 
   useEffect(() => {
-    const promise = getTitleApi();
-    promise.then((titleList) => {
-      console.log('titles data: ', titleList);
-      setTitles(titleList);
-    });
-  }, []);
+    setTitles(titleList);
+  }, [titleList]);
 
   const editor = useMemo(() => {
     if (initialContent === 'loading') {

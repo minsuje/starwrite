@@ -9,6 +9,7 @@ import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.relationship.Related;
 import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.response.CategoryPostResponse;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
@@ -47,14 +48,19 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
   // 카테고리에 해당하는 모든 글 찾아오기
   // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
-  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
-      "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
-      "MATCH (u:Users)-[:POSTED|HOLDS]->(p) " +
-      "OPTIONAL MATCH (author:Users)-[:AUTHOR]->(p) " +
-      "RETURN ID(p) AS postId, p.title AS title, substring(p.content, 0, 100) AS content, " +
-      "p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, " +
-      "author.userId AS userId, author.nickname AS nickname ORDER BY p.createdAt DESC ")
-  List<CategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId);
+  @Query("MATCH (c:Category) " +
+      "WHERE c.categoryId = $categoryId " +
+      "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
+      "WHERE p.tmpSave = false OR p IS NULL " +
+      "OPTIONAL MATCH (p)-[:POSTED|HOLDS]->(u:Users) " +
+      "OPTIONAL MATCH (p)-[:AUTHOR]->(author:Users) " +
+      "WITH c, p, author " +
+      "ORDER BY p.createdAt DESC " +
+      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.content, 0, 100), " +
+      "recentView: p.recentView, createdAt: p.createdAt, updatedAt: p.updatedAt, " +
+      "userId: author.userId, nickname: author.nickname}) AS categoryPosts")
+  CategoryPostResponse getCategoryPosts(@Param(value = "categoryId") String categoryId);
+
 
 
 
@@ -76,13 +82,49 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
 
   // 카테고리 안의 모든 글 제목과 관계 보내기
-  @Query("MATCH (c:Category)-[]-(p:Post) " +
-      "WHERE c.categoryId = $categoryId " +
-      "WITH COLLECT({title: p.title, postId: ID(p), recentView: p.recentView }) AS posts " +
-      "MATCH (p1:Post)-[r:RELATED]-(p2:Post) " +
-      "WHERE ID(p1) IN [post IN posts | post.postId] AND ID(p2) IN [post IN posts | post.postId] " +
-      "RETURN posts, COLLECT(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) AS relation ")
+//  @Query("MATCH (c:Category)-[]-(p:Post) " +
+//      "WHERE c.categoryId = $categoryId " +
+//      "WITH COLLECT({title: p.title, postId: ID(p), recentView: p.recentView }) AS posts " +
+//      "MATCH (p1:Post)-[r:RELATED]-(p2:Post) " +
+//      "WHERE ID(p1) IN [post IN posts | post.postId] AND ID(p2) IN [post IN posts | post.postId] " +
+//      "RETURN posts, COLLECT(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) AS relation ")
+//  GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
+
+  @Query("MATCH (c:Category {categoryId: $categoryId}) " +
+      "WITH c " +
+      "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
+      "WITH p " +
+      "OPTIONAL MATCH (p)-[r:RELATED]->(related:Post) " +
+      "RETURN collect(DISTINCT{title: p.title, postId: ID(p), recentView: p.recentView}) as posts, " +
+      "       collect({postId: r.postId, relatedPostId: r.relatedPostId}) as relation ")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
+
+
+//  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
+//      "WHERE c.categoryId = $categoryId " +
+//      "WITH c, collect({title: p.title, postId: ID(p), recentView: p.recentView}) AS posts " +
+//      "UNWIND posts AS post " +
+//      "OPTIONAL MATCH (p:Post)-[r:RELATED]->(p2:Post) " +
+//      "WHERE ID(p) = post.postId " +
+//      "WITH posts, collect({postId: ID(p), relatedPostId: ID(p2)}) AS relation " +
+//      "RETURN posts, relation")
+//  GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
+
+//  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
+//      "WHERE c.categoryId = $categoryId " +
+//      "WITH p, collect({title: p.title, postId: ID(p), recentView: p.recentView}) AS posts " +
+//      "MATCH (p)-[r:RELATED]->(p2:Post) " +
+//      "WHERE ID(p) IN [post IN posts | post.postId] " +
+//      "RETURN posts, collect(DISTINCT {postId: ID(p), relatedPostId: ID(p2)}) AS relation")
+//  GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
+
+
+
+
+
+
+
+
 
   //  @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
 //  List<Post> findPostsByCategory(String categoryId);

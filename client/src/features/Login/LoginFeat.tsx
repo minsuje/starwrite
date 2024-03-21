@@ -140,7 +140,7 @@ function LoginForm() {
     try {
       // 백엔드에서 Google 로그인 URL을 가져옵니다.
       const response = await axios.post(
-        'http://52.79.228.200:8080/login/api/v1/oauth2/google',
+        'http://localhost:8080/login/api/v1/oauth2/google',
       );
       const googleLoginUrl = response.data;
       console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);

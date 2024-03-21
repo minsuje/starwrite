@@ -4,32 +4,14 @@ import { Editor, GetSavings, NewPostHeadFeat } from '..';
 import { useParams } from 'react-router-dom';
 import {
   getsavingApi,
-  // newPostApi,
+  newPostApi,
   newSavingApi,
-  // patchPostApi,
+  patchPostApi,
   patchSavingApi,
 } from '../api/newPostApi';
 import checkLinking from '../lib/checkLinking';
-
-interface Saving {
-  categoryid: string;
-  posts: {
-    category: string | null;
-    content: string;
-    createdAt: Date;
-    img: string;
-    postId: null;
-    recentView: null;
-    relatedPost: null;
-    title: string;
-    tmpSave: boolean;
-    updatedAt: Date;
-    users: null;
-    visible: string;
-  };
-  postid: null;
-  usersRelationType: null;
-}
+import { getTitleApi } from '../api/newPostApi';
+import { Saving, Titles } from '../model/types';
 
 function NewPostFeat() {
   const { postId } = useParams();
@@ -59,16 +41,34 @@ function NewPostFeat() {
   const [content, setContent] = useState<string | undefined>();
   const [relatedPosts, setRelatedPosts] = useState<number[]>([]);
   const [saved, setSaved] = useState<string | undefined>();
-  const [onValid, setOnValid] = useState<boolean>(true);
+  const [onValid, setOnValid] = useState<string>('true');
+  const [titleList, setTitleList] = useState<Titles[]>([]);
+
+  useEffect(() => {
+    setRelatedPosts(checkLinking(content));
+  }, [content]);
+
+  useEffect(() => {
+    const promise = getTitleApi();
+    promise.then((titleList) => {
+      console.log('titles data: ', titleList);
+      setTitleList(titleList);
+    });
+  }, []);
 
   function publishPost() {
     console.log(title);
-    setRelatedPosts(checkLinking(content));
+
     if (title === undefined || title.length > 50) {
-      setOnValid(false);
+      setOnValid('false');
       console.log('제목 1자 이상 50자 이하로 작성해주세요');
       return;
     }
+
+    if (titleList.find(({ title }) => title == title)) {
+      setOnValid('duplicate');
+    }
+
     const postData = {
       category: category,
       post: {
@@ -79,11 +79,11 @@ function NewPostFeat() {
       relatedPosts: relatedPosts,
     };
     console.log('data', postData);
-    // if (postId) {
-    //   patchPostApi(postData, Number(postId));
-    // } else {
-    //   newPostApi(postData);
-    // }
+    if (postId) {
+      patchPostApi(postData, Number(postId));
+    } else {
+      newPostApi(postData);
+    }
   }
 
   function savePost() {
@@ -129,6 +129,7 @@ function NewPostFeat() {
       />
       <_EditorDiv>
         <Editor
+          titleList={titleList}
           content={saved}
           setContent={(value: string) => {
             setContent(value);

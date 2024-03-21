@@ -22,9 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
-import starwrite.server.auth.OAuth2FailureHandler;
-import starwrite.server.auth.OAuth2SuccessHandler;
-import starwrite.server.service.CustomOAuth2UserService;
 import starwrite.server.service.UsersDetailService;
 
 @Configuration
@@ -39,12 +36,6 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    private final CustomOAuth2UserService customOAuth2UserService;
-
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
-
-    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
@@ -97,14 +88,6 @@ public class SecurityConfig {
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
 //            .addFilterBefore(JwtAuthenticationFilter.class)
-            .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
-                // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
-                oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-                    .loginPage("/login/oauth2/code/google")
-                    // 로그인 성공 시 핸들러
-                    .successHandler(oAuth2SuccessHandler)
-                    .failureHandler(oAuth2FailureHandler)
-            )
             .build();
     }
 

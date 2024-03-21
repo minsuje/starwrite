@@ -1,26 +1,34 @@
 import { AddCategory, ListCategory } from '../../features/ListView';
-import { Outlet } from 'react-router';
+import { Outlet, useParams } from 'react-router';
 import {
   _AddCategoryButton,
   _CategoryBar,
   _CategoryContent,
   _ListViewBox,
 } from './ListViewWidStyle';
-
 import { useState } from 'react';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
+  const [updateCategory, setUpdateCategory] = useState<boolean>(true);
+  const { category, nickname } = useParams();
 
   return (
     <_ListViewBox>
       <_CategoryBar>
-        <ListCategory></ListCategory>
+        <ListCategory
+          updateCategory={updateCategory}
+          category={category}
+          nickname={nickname}
+        ></ListCategory>
         <_AddCategoryButton onClick={() => setCategoryModal(true)}>
           추가
         </_AddCategoryButton>
         {categoryModal && (
           <AddCategory
+            setUpdateCategory={() => {
+              setUpdateCategory(!updateCategory);
+            }}
             onclick={() => {
               setCategoryModal(false);
             }}
