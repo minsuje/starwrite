@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import jwtDecode from 'jwt-decode';
+import { useEffect } from 'react';
 
 // 타입 지정
 interface LoginInput {
@@ -104,19 +105,50 @@ function LoginForm() {
     return '';
   };
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('code');
+    if (code) {
+      sendCodeToBackend(code);
+    }
+    // 이 부분은 Google 로그인 후 리다이렉션된 URL에 'code' 파라미터가 있는 경우에만 실행됩니다.
+  }, []);
+
+  const sendCodeToBackend = async (code) => {
+    console.log('code > ', code);
+    try {
+      // 백엔드에 code를 전송하는 로직...
+      const response = await axios.post(
+        'http://52.79.228.200:8080/login/oauth',
+        { code },
+      );
+      console.log(
+        'Authorization code sent to backend. Response:',
+        response.data,
+      );
+      // 백엔드 응답에 따라 추가적인 처리...
+    } catch (error) {
+      console.error('Error sending authorization code to backend:', error);
+    }
+  };
+
   async function handleGoogleLogin() {
     try {
+      // 백엔드에서 Google 로그인 URL을 가져옵니다.
       const response = await axios.post(
-        `http://localhost:8080/login/api/v1/oauth2/google`,
+        'http://52.79.228.200:8080/login/api/v1/oauth2/google',
       );
-      console.log(' reponse >>>>>> ', response);
-      if (response) {
-        // window.location.href = response.data;
-      }
+      const googleLoginUrl = response.data;
+      console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
+
+      // 사용자를 Google 로그인 페이지로 리다이렉트합니다.
+      window.location.href = googleLoginUrl;
     } catch (error) {
-      console.error(error);
+      console.error('Google 로그인 URL 가져오기 실패:', error);
     }
   }
+
+  // window.onload = extractCodeFromUrl;
 
   // async function handleGoogleData() {
   //   try {
@@ -202,6 +234,7 @@ function LoginForm() {
         </GoogleOAuthProvider> */}
       </form>
       <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
+      {/* <LargeButton onClick={extractCodeFromUrl}>테스트 </LargeButton> */}
     </>
   );
 }
