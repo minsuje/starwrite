@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import starwrite.server.auth.JwtTokenProvider;
+import starwrite.server.dto.GoogleInfResponseDTO;
 import starwrite.server.dto.GoogleRequestDTO;
 import starwrite.server.dto.GoogleResponseDTO;
 import starwrite.server.dto.JwtDTO;
 import starwrite.server.dto.OAuthGoogleDTO;
-import starwrite.server.dto.GoogleInfResponseDTO;
 import starwrite.server.repository.RefreshTokenRepository;
 import starwrite.server.service.RefreshTokenService;
 import starwrite.server.service.UsersService;
@@ -73,16 +74,19 @@ public class OAuthController {
             jwtDTO.getRefreshToken());
 
         return jwtDTO;
-    }
+    }  //
 
 
 
     @RequestMapping(value="login/api/v1/oauth2/google", method = RequestMethod.POST)
     public String loginUrlGoogle(){
+//        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
+//            + "&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+
         String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-            + "&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
-        return reqUrl;
-    }
+            + "&redirect_uri=http://localhost:8080/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
+                return reqUrl;
+    } // 이거 살리고
 
 //    @RequestMapping(value="/login/api/v1/oauth2/google", method = RequestMethod.GET)
 //    public ResponseEntity<String> loginUrlGoogle() {
@@ -91,8 +95,11 @@ public class OAuthController {
 //        return ResponseEntity.ok(reqUrl);
 //    }
 
-    @RequestMapping(value="login/oauth2/code/google", method = RequestMethod.GET)
+//    @RequestMapping(value="login/oauth2/code/google", method = RequestMethod.GET)
+    @GetMapping("login/oauth")
     public String loginGoogle(@RequestParam(value = "code") String authCode){
+        System.out.println("loginGoogle???? " + authCode);
+//        authCode = "4%2F0AeaYSHDCWrAyaET_L8pa8QYWPXrczosr2E0NhxHBHd-51gYBy_B9_LU0wyXenRqamZuNhA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none";
         RestTemplate restTemplate = new RestTemplate();
         GoogleRequestDTO googleOAuthRequestParam = GoogleRequestDTO
             .builder()
@@ -101,9 +108,12 @@ public class OAuthController {
             .code(authCode)
             .redirectUri(googleRedirectUri)
             .grantType("authorization_code").build();
+        System.out.println("GoogleRequestDTO >>> " + googleOAuthRequestParam);
         ResponseEntity<GoogleResponseDTO> resultEntity = restTemplate.postForEntity("https://oauth2.googleapis.com/token",
             googleOAuthRequestParam, GoogleResponseDTO.class);
+        System.out.println("여기는?");
         String jwtToken=resultEntity.getBody().getId_token();
+        System.out.println("jwtToken >> " + jwtToken);
         Map<String, String> map=new HashMap<>();
         map.put("id_token",jwtToken);
         ResponseEntity<GoogleInfResponseDTO> resultEntity2 = restTemplate.postForEntity("https://oauth2.googleapis.com/tokeninfo",
@@ -112,5 +122,29 @@ public class OAuthController {
         System.out.println("email >>>>>>>>>>> " + email);
         return email;
     }
+
+
+//    private static final String REDIRECT_URI = "http://localhost:8080/login";
+//    private static final String RESPONSE_TYPE = "code";
+//    private static final String SCOPE = "email profile openid";
+//    private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+
+//    @GetMapping("login/api/v1/oauth2/google")
+//    public void redirectToGoogleAuth(HttpServletResponse response) throws IOException {
+//        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
+//            + "&redirect_uri=http://localhost:8080/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
+//
+//        https://accounts.google.com/o/oauth2/v2/auth?client_id=547835898042-k7ltqkia6kdspu0fjenn79jaenbrj6nj.apps.googleusercontent.com&redirect_uri=
+//        response.sendRedirect(reqUrl);
+//    }
+//
+//    @GetMapping("login")
+//    public String handleGoogleCallback(@RequestParam(name = "code") String code) {
+//
+//        System.out.println("들어옴?");
+//        // 인증 코드를 받았습니다. 이제 access token을 요청할 수 있습니다.
+//        System.out.println("Received Auth Code: " + code);
+//        return "Auth Code: " + code;
+//    }
 
 }
