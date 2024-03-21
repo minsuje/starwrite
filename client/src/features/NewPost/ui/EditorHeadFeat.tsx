@@ -1,10 +1,13 @@
 // import { Category } from '../../../shared/types/app';
 // import { getCategoriesApi } from '../../ListView/api/CategoryApi';
-import { categories } from '../../ListView/model/CategoryData';
+import { Category } from '../../../shared/types/app';
+import { getCategoriesApi } from '../../ListView/api/CategoryApi';
+
 import { _EditorHead, _TitleInput, _PublcButton } from './style';
 import { useEffect, useState } from 'react';
 
 function NewPostHeadFeat({
+  onValid,
   data,
   publishPost,
   savePost,
@@ -13,6 +16,7 @@ function NewPostHeadFeat({
   setCategory,
   setIsPublic,
 }: {
+  onValid: boolean;
   data: {
     title: string | undefined;
     category: string | undefined;
@@ -26,7 +30,7 @@ function NewPostHeadFeat({
   setIsPublic: (value: string) => void;
 }) {
   const [toggleButton, setToggleButton] = useState<boolean>(true);
-  // const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const { title, category, isPublic } = data;
 
@@ -45,6 +49,18 @@ function NewPostHeadFeat({
       setToggleButton(false);
     }
   }, [isPublic]);
+
+  useEffect(() => {
+    const myNickname = localStorage.getItem('nickname');
+    if (myNickname) {
+      const promise = getCategoriesApi(myNickname);
+      promise.then((categories) => {
+        console.log('categories data: ', categories);
+        setCategories(categories);
+      });
+    }
+  }, []);
+
   return (
     <>
       <_EditorHead>
@@ -60,13 +76,14 @@ function NewPostHeadFeat({
           <button onClick={() => publishPost()}>저장</button>
         </div>
       </_EditorHead>
+      {!onValid ? '입력해주세요' : ' '}
       <_EditorHead content={'start'}>
         <p>카테고리 </p>
         <select
           value={category}
           onChange={(value) => setCategory(value.currentTarget.value)}
           style={{
-            width: '40%',
+            width: '50%',
             padding: '0px 10%',
             backgroundColor: 'rgba(0,0,0,0.3)',
             color: 'white',
@@ -84,7 +101,7 @@ function NewPostHeadFeat({
                   border: 'none',
                 }}
                 key={idx}
-                value={category.id}
+                value={category.categoryId}
               >
                 {category.name}
               </option>

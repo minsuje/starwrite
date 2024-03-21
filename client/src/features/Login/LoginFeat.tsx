@@ -69,7 +69,7 @@ function LoginForm() {
       );
       localStorage.setItem('accessToken', response.data.accessToken);
 
-      const cookie = await axsios.get(`http://52.79.228.200:8080/cookie`, {
+      const cookie = await axios.get(`http://52.79.228.200:8080/cookie`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
