@@ -16,7 +16,7 @@ function NewPostHeadFeat({
   setCategory,
   setIsPublic,
 }: {
-  onValid: boolean;
+  onValid: string;
   data: {
     title: string | undefined;
     category: string | undefined;
@@ -33,14 +33,6 @@ function NewPostHeadFeat({
   const [categories, setCategories] = useState<Category[]>([]);
 
   const { title, category, isPublic } = data;
-
-  // useEffect(() => {
-  //   const promise = getCategoriesApi('고길동');
-  //   promise.then((categories) => {
-  //     console.log('categories data:', categories);
-  //     setCategories(categories);
-  //   });
-  // }, []);
 
   useEffect(() => {
     if (isPublic === 'true') {
@@ -76,9 +68,13 @@ function NewPostHeadFeat({
           <button onClick={() => publishPost()}>저장</button>
         </div>
       </_EditorHead>
-      {!onValid ? '입력해주세요' : ' '}
+      {onValid === 'false'
+        ? '제목은 1자 이상 50자 이하로 작성해주세요'
+        : onValid === 'duplicate'
+          ? '이미 존재하는 제목입니다.'
+          : ''}
       <_EditorHead content={'start'}>
-        <p>카테고리 </p>
+        <p>카테고리</p>
         <select
           value={category}
           onChange={(value) => setCategory(value.currentTarget.value)}

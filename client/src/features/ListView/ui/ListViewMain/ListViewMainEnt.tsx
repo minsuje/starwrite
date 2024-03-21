@@ -37,33 +37,35 @@ const _postBox = styled.div`
 `;
 
 function ListViewMainEnt() {
-  const { category } = useParams();
+  const { nickname, category } = useParams();
   console.log('category params', category);
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>();
+  const [categoryName, setCategoryName] = useState<string>();
+
   useEffect(() => {
     const promise = postListApi(category);
     promise.then((Posts) => {
       console.log('PostList data: ', Posts);
-      setPostsList(Posts);
+      setPostsList(Posts.categoryPosts);
+      setCategoryName(Posts.categoryName);
     });
   }, [category]);
-  console.log(postsList);
 
   return (
     <>
-      <ListHeaderEnt category={category} />
+      <ListHeaderEnt category={categoryName} />
       <_listBox>
         {!(postsList?.length === 0) &&
           postsList?.map((post, idx) => {
             return (
               <div key={idx}>
                 <Link
-                  to={`/user/starwrite/listview/main/${category}/${post.postId}`}
+                  to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postId}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <_postBox>
-                    <h1>제목</h1>
+                    <h1>{post.title}</h1>
                     <p>{post.content}</p>
                   </_postBox>
                 </Link>
