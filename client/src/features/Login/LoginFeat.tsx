@@ -110,6 +110,9 @@ function LoginForm() {
         `http://localhost:8080/login/api/v1/oauth2/google`,
       );
       console.log(' reponse >>>>>> ', response);
+      if (response) {
+        // window.location.href = response.data;
+      }
     } catch (error) {
       console.error(error);
     }
