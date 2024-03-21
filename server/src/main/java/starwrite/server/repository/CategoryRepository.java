@@ -92,9 +92,9 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
   @Query("MATCH (c:Category {categoryId: $categoryId}) " +
       "WITH c " +
-      "MATCH (c)-[:IS_CHILD]->(p:Post) " +
+      "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
       "WITH p " +
-      "MATCH (p)-[r:RELATED]->(related:Post) " +
+      "OPTIONAL MATCH (p)-[r:RELATED]->(related:Post) " +
       "RETURN collect(DISTINCT{title: p.title, postId: ID(p), recentView: p.recentView}) as posts, " +
       "       collect({postId: r.postId, relatedPostId: r.relatedPostId}) as relation ")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
