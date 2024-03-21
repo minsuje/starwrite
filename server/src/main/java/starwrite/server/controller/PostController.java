@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 import starwrite.server.service.PostService;
 
@@ -49,7 +51,7 @@ public class PostController {
 //  @GetMapping("writing")
 //  public String getI
 
-  // 유저의 모든 글 조회 (리스트 뷰)
+  // 유저의 모든 글 조회 (노드 뷰)
   @GetMapping("/all")
   public List<GetPosts> getAllPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
@@ -80,17 +82,16 @@ public class PostController {
   }
 
 
-
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
   @GetMapping("/all/save")
-  public GetPosts getSavePosts() {
+  public List<GetSavePost> getSavePosts() {
     String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePosts(nickname);
   }
 
   // 임시글 하나 불러오기 ( load One Save Posts )
   @GetMapping("/all/save/{postId}")
-  public Post getSavePost(@PathVariable(value = "postId") Long postId) {
+  public GetSavePost getSavePost(@PathVariable(value = "postId") Long postId) {
     String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getSavePost(nickname, postId);
   }
@@ -158,8 +159,7 @@ public class PostController {
   @PatchMapping("/{postId}")
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
-    String userId = SecurityUtil.getCurrentUserUserId();
-    return postService.saveTmpPost(post, postId, userId);
+    return postService.saveTmpPost(post, postId);
   }
 
   // 글 삭제
@@ -168,5 +168,12 @@ public class PostController {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.deletePost(postId, userId);
   }
+
+  // 글 스크랩
+  @PostMapping("scrap")
+  public String scrapPost(@RequestBody ScrapPost scrapPost) {
+    return postService.scrapPost(scrapPost);
+  }
+
 
 }

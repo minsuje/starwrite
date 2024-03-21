@@ -16,9 +16,13 @@ function ListCategory({ sort }: { sort: string }) {
   // 이게 맞는지 확인 부탁드려요 구휘님 03.17
   const selected = (categoryId: string) => {
     if (selectedCategory) {
-      navigate(`/user/starwrite/listview/main/${nickname}/${categoryId}`);
-      setSelectedCategory(categoryId);
-    } else if (categoryId === 'logout') {
+
+      navigate(`/user/starwrite/listview/main/${category.name}`);
+      setSelectedCategory(category.name);
+    } else if (category.id === 'logout') {
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('accessToken');
+
       navigate(`/`);
     } else {
       navigate(`/user/starwrite/mypage/${categoryId}`);

@@ -12,10 +12,12 @@ import starwrite.server.entity.Post;
 import starwrite.server.repository.CategoryRepository;
 import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 
 @Service
@@ -28,11 +30,6 @@ public class PostService {
   @Autowired
   UsersRepository usersRepository;
 
-
-  // 현재 접속한 유저 아이디 ( current user id )
-  public String findUserid(String userid) {
-    return usersRepository.findUserById(userid);
-  }
 
   // BackLink Info (postId , title)
   public List<BackLink> backLink(String userId) {
@@ -59,16 +56,14 @@ public class PostService {
     LocalDateTime recentView = LocalDateTime.now();
     String userId = SecurityUtil.getCurrentUserUserId();
     String postUserId = postRepository.findUserIdByPostId(postId);
-    System.out.println("상대 아이디 >>>>> "  + postUserId);
+    System.out.println("상대 아이디 >>>>> " + postUserId);
     System.out.println("내 아이디 >>>> " + userId);
     Map<String, Object> result = new HashMap<>();
-    if(!postUserId.equals(userId)){
-      System.out.println(">>>>>>>>>>> 상대가 본글 볼거야");
+    if (!postUserId.equals(userId)) {
       result.put("isMine", false);
       result.put("post", postRepository.otherUserPost(postId));
       return result;
     }
-    System.out.println("내가 쓴글 볼거야 <<<<<<<<<<<");
     result.put("isMine", true);
     result.put("post", postRepository.setRecentView(postId, recentView));
     return result;
@@ -151,14 +146,16 @@ public class PostService {
   }
 
   // 임시저장 페이지에서 임시저장
-  public String saveAgain(CreatePost post, Long postId){
+  public String saveAgain(CreatePost post, Long postId) {
     LocalDateTime timeNow = LocalDateTime.now();
     Post newPost = post.getPost();
     String img = newPost.getImg() != null ? newPost.getImg() : "";
     // 헤더에서 로그인 아이디 가져옴
     String userId = SecurityUtil.getCurrentUserUserId();
-    postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible());
-    if(postRepository.saveAgain(postId ,userId, newPost.getTitle(), img, timeNow ,newPost.getContent(), newPost.getVisible()) != null){
+    postRepository.saveAgain(postId, userId, newPost.getTitle(), img, timeNow, newPost.getContent(),
+        newPost.getVisible());
+    if (postRepository.saveAgain(postId, userId, newPost.getTitle(), img, timeNow,
+        newPost.getContent(), newPost.getVisible()) != null) {
       return "success";
     } else {
       return "fail";
@@ -166,8 +163,7 @@ public class PostService {
   }
 
   // 임시저장에서 포스트 생성
-  public String saveTmpPost(CreatePost post, Long postId, String userId){
-    LocalDateTime newTime = LocalDateTime.now();
+  public String saveTmpPost(CreatePost post, Long postId) {
     String img = post.getPost().getImg() != null ? post.getPost().getImg() : "";
     String newTitle = post.getPost().getTitle();
     String newVisible = post.getPost().getVisible();
@@ -176,34 +172,53 @@ public class PostService {
 
     List<Long> rel = new ArrayList<>();
 
-    if(!post.getRelatedPosts().isEmpty()){
+    if (!post.getRelatedPosts().isEmpty()) {
       List<String> related = post.getRelatedPosts();
       related.forEach(item -> rel.add(Long.parseLong(item)));
     }
-    System.out.println("Rel >>> " + rel);
 
-    postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId);
-    System.out.println(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId));
-    if(postRepository.saveTmpPost(postId, userId, img, newContent, newTitle, newTime, rel, newVisible, categoryId) != null){
-      return "Success";
+    int result;
+    if (!post.getRelatedPosts().isEmpty()) {
+      // 관련 글이 있는 경우
+      result = postRepository.updatePost(postId, newTitle, img, newContent, rel, newVisible,
+          categoryId);
+    } else {
+      // 관련 글이 없는 경우
+      result = postRepository.updatePostNull(postId, newTitle, img, newContent, newVisible,
+          categoryId);
     }
-    return "fail";
+    if (result == 0) {
+      return "edit failed";
+    }
+    return "success";
   }
 
 
   // 임시 저장 글 모두 불러오기 ( load All Save Posts )
-  public GetPosts getSavePosts(String nickname) {
+  public List<GetSavePost> getSavePosts(String nickname) {
     return postRepository.findAllSavePosts(nickname);
   }
 
   // 임시 저장 하나 불러오기 ( Load One Save Post)
-  public Post getSavePost(String nickname, Long postId) {
+  public GetSavePost getSavePost(String nickname, Long postId) {
     return postRepository.findSavePost(nickname, postId);
   }
 
   // 글 삭제
-  public String deletePost(Long postId, String userId){
+  public String deletePost(Long postId, String userId) {
     postRepository.deletePostByPostId(postId, userId);
     return "삭제 성공";
+  }
+
+
+  // 글 스크랩
+  public String scrapPost(ScrapPost scrapPost) {
+    String userId = SecurityUtil.getCurrentUserUserId();
+    System.out.println("userId >>>>> " + userId);
+    int result = postRepository.scrapPost(scrapPost.getPostId(), userId, scrapPost.getCategory());
+    if (result == 0) {
+      return "post already scraped";
+    }
+    return "post scraped";
   }
 }

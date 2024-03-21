@@ -11,6 +11,7 @@ import starwrite.server.entity.Post;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
+import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 
 @Repository
@@ -80,11 +81,13 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 임시 저장 글 모두 불러오기
   @Query("MATCH (p:Post) " +
       "MATCH (u: Users) " +
+      "MATCH (c: Category) " +
       "MATCH (u)-[r]->(p) " +
+      "MATCH (c)-[i:IS_CHILD]->(p) " +
       "WHERE p.tmpSave = true AND u.nickname = $nickname " +
-      "RETURN collect(p) AS post, type(r) AS usersRelationType"
+      "RETURN collect(p) AS posts, type(r) AS usersRelationType, ID(p) AS postid, c.categoryId AS categoryid"
   )
-  GetPosts findAllSavePosts(@Param(value = "nickname") String nickname);
+  List<GetSavePost> findAllSavePosts(@Param(value = "nickname") String nickname);
 
   // 비공개 글을 제외하고 표시 (without pub post)
   @Query("MATCH (p:Post) " +
@@ -152,9 +155,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 임시 저장글 하나 불러오기
   @Query("MATCH (p:Post) " +
       "MATCH (u:Users) " +
+      "MATCH (c:Category) " +
       "WHERE ID(p) = $postId AND p.tmpSave = true AND u.nickname = $nickname " +
-      "RETURN p")
-  Post findSavePost(@Param(value = "nickname") String nickname,
+      "WITH p, u , c " +
+      "MATCH (c)-[:IS_CHILD]-(p) " +
+      "RETURN collect(p) AS posts, c.categoryId AS categoryid ")
+  GetSavePost findSavePost(@Param(value = "nickname") String nickname,
       @Param(value = "postId") Long postId);
 
 
@@ -231,12 +237,14 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           "MATCH (user:Users) WHERE user.userId = $userId " +
           "MERGE (user)-[:POSTED]->(savePost) " +
           "RETURN savePost AS post, ID(savePost) AS identifier LIMIT 1")
-  CreatedPost savePostLink(@Param("userId") String userId, @Param("categoryId") String categoryId,
-      @Param("title") String title,
-      @Param("content") String content, @Param("visible") String visible,
-      @Param("img") String img,
-      @Param("timeNow") LocalDateTime timeNow, @Param("relatedBack") boolean relatedBack,
-      @Param("relatedPosts") List<Long> relatedPosts);
+  CreatedPost savePostLink(@Param(value = "userId") String userId,
+      @Param(value = "categoryId") String categoryId,
+      @Param(value = "title") String title,
+      @Param(value = "content") String content, @Param(value = "visible") String visible,
+      @Param(value = "img") String img,
+      @Param(value = "timeNow") LocalDateTime timeNow,
+      @Param(value = "relatedBack") boolean relatedBack,
+      @Param(value = "relatedPosts") List<Long> relatedPosts);
 
   // 임시저장 페이지에서 저장
   @Query("MATCH (u:Users) " +
@@ -253,39 +261,87 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   //   임시저장 페이지에서 포스팅
-  @Query("MATCH (u:Users) " +
-      "MATCH (post:Post) " +
-      "WHERE ID(post) = $postId AND u.nickname = $nickname " +
-      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = $newTime, post.visible = $newVisible, post.tmpSave = false "
-      +
-      "WITH post " +
-      "UNWIND [$rel] AS relatedPostId " +
-      "   OPTIONAL MATCH (relatedPost: Post) WHERE ID(relatedPost) = relatedPostId " +
-      "   WITH post, relatedPost " +
-      "   WHERE relatedPost IS NOT NULL " +
-      "     MERGE (post)-[re:RELATED]->(relatedPost) " +
-      "     ON CREATE SET re.postId = ID(post), re.relatedPostId = ID(relatedPost), re.relatedBack = false "
-      +
-      "     WITH post, relatedPost, re " +
-      "     OPTIONAL MATCH (post)<-[r:RELATED]-(relatedPost) " +
-      "     SET r.relatedBack = CASE WHEN r.relatedBack = false " +
-      "     THEN true AND re.relatedBack = true ELSE r.relatedBack END " +
-      "WITH post " +
-      "MATCH (category : Category) WHERE category.categoryId = $categoryId " +
-      "OPTIONAL MATCH (category)-[i:IS_CHILD]-(post) DELETE i " +
-      "MERGE (category)-[:IS_CHILD]->(post) " +
-      "RETURN post")
-  CreatedPost saveTmpPost(@Param("postId") Long postId, @Param("nickname") String nickname,
-      @Param("newTitle") String newTitle, @Param("img") String img,
-      @Param("newContent") String newContent, @Param("newTime") LocalDateTime newTime,
-      @Param("rel") List<Long> rel, @Param("newVisible") String newVisible,
-      @Param("categoryId") String categoryId);
-
   @Query("MATCH (u:Users) WHERE u.userId = $userId " +
       "MATCH (p:Post) WHERE ID(p) = $postId " +
       "DETACH DELETE p "
   )
   void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
+
+
+  // 글 수정 - 관련 글이 있는 경우
+  @Query("MATCH (post:Post) " +
+      "WHERE ID(post) = $postId " +
+      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false " +
+      "WITH post " +
+      "UNWIND (CASE WHEN SIZE($rel) > 0 THEN $rel ELSE [null] END) AS relatedPostId " +
+      "   OPTIONAL MATCH (relatedPost:Post) WHERE relatedPost IS NOT NULL AND ID(relatedPost) = relatedPostId " +
+      "   OPTIONAL MATCH (post)<-[r:RELATED]-(relatedPost) " +
+      "   FOREACH (ignoreMe IN CASE WHEN r IS NOT NULL THEN [1] ELSE [] END | " +
+      "       SET r.relatedBack = true) " +
+      "   FOREACH (ignoreMe IN CASE WHEN r IS NULL THEN [1] ELSE [] END | " +
+      "       MERGE (post)-[newR:RELATED]->(relatedPost) " +
+      "       ON CREATE SET newR.postId = ID(post), newR.postTitle = post.title, newR.relatedPostId = ID(relatedPost), newR.relatedPostTitle = relatedPost.title, newR.relatedBack = false) " +
+      "WITH post " +
+      "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) " +
+      "DELETE oldCatRel " +
+      "WITH post " +
+      "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier " +
+      "MERGE (category)-[newRel:IS_CHILD]->(post) " +
+      "RETURN count(newRel)")
+  int updatePost(@Param(value = "postId") Long postId,
+      @Param(value = "newTitle") String newTitle,
+      @Param(value = "img") String img,
+      @Param(value = "newContent") String newContent,
+      @Param(value = "rel") List<Long> rel,
+      @Param(value = "visible") String visible,
+      @Param(value = "categoryIdentifier") String categoryId);
+
+
+
+  // 글 수정 - 관련 글이 없는 경우
+  @Query("MATCH (post:Post) " +
+      "WHERE ID(post) = $postId " +
+      "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false " +
+      "WITH post " +
+      "OPTIONAL MATCH (post)-[oldRel:RELATED]->(relatedPost:Post) " +
+      "DELETE oldRel " +
+      "WITH post " +
+      "OPTIONAL MATCH (post)<-[oldRelBack:RELATED]-(relatedPost:Post) " +
+      "SET oldRelBack.relatedBack = CASE WHEN oldRelBack.relatedBack = true THEN false ELSE null END " +
+      "WITH post " +
+      "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) " +
+      "DELETE oldCatRel " +
+      "WITH post " +
+      "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier " +
+      "MERGE (category)-[newRel:IS_CHILD]->(post) " +
+      "RETURN count(newRel)")
+  int updatePostNull(@Param(value = "postId") Long postId,
+      @Param(value = "newTitle") String newTitle,
+      @Param(value = "img") String img,
+      @Param(value = "newContent") String newContent,
+      @Param(value = "visible") String visible,
+      @Param(value = "categoryIdentifier") String categoryId);
+
+
+
+  // 글 스크랩
+//  @Query("MATCH (p:Post {ID(p) = $postId}), (u:Users {userId: $userId}) " +
+//      "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, tmpSave: p.tmpSave, recentView: p.recentView, createdAt: datetime(), updatedAt: datetime()}) " +
+//      "CREATE (p)-[:COPY]->(copiedPost) " +
+//      "CREATE (u)-[:HOLDS]->(copiedPost) " +
+//      "RETURN count(copiedPost)")
+//  int scrapPost(Long postId, String userId);
+  @Query("MATCH (u:Users {userId: $userId}), (p:Post) " +
+      "WHERE ID(p) = $postId AND NOT (u)-[:POSTED]->(p) AND NOT (u)-[:HOLDS]->(:Post)-[:COPY]->(p) " +
+      "MATCH (c:Category {categoryId: $categoryId}) " +
+      "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, " +
+      "tmpSave: p.tmpSave, recentView: p.recentView, createdAt: datetime(), updatedAt: datetime()}) " +
+      "CREATE (p)-[:COPY]->(copiedPost) " +
+      "CREATE (u)-[:HOLDS]->(copiedPost) " +
+      "CREATE (c)-[r:IS_CHILD]->(copiedPost) " +
+      "RETURN count(r) ")
+  int scrapPost(@Param(value = "postId") Long postId, @Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
+
 
 /*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
       "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
@@ -312,5 +368,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "MERGE (p)-[:RELATED]->(r)")
   void createMultipleRelationships(@Param("postId") String postId,
       @Param("relatedPostIds") List<String> relatedPostIds);*/
+
+  // 글 스크랩
+
 }
 
