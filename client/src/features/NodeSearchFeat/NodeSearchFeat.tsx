@@ -17,7 +17,7 @@ export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
     onSearch(newSearchTerm);
-
+    setToggleSearch(!!newSearchTerm.trim());
     // 검색어가 있고, 필터링된 결과가 있을 때만 목록을 표시
     if (
       newSearchTerm.trim() &&
@@ -46,7 +46,7 @@ export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
 
   // 검색 로직을 nodesData.posts에 적용
   const filterSearch = nodesData.posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    (post.title || '').toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

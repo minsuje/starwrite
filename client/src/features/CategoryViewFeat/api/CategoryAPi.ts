@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { baseApi } from '../../../shared/api/BaseApi';
 
 // 카테고리 선택시 글 리스트 불러오기
 export const CategoryApi = async (category: string) => {
@@ -46,3 +47,17 @@ export const nodes: Node[] = [
 nodes.forEach((node) => {
   node.url = `/user/starwrite/nodeview/${node.userid_num}/${node.category}`;
 });
+
+export const fetchDataCategory = async () => {
+  try {
+    const response = await baseApi.get(
+      `http://52.79.228.200:8080/user/category/user?nickname=고길동`,
+    );
+    console.log('fetchDataCategory', response);
+    return response.data;
+
+    // API 응답으로 받은 데이터를 상태에 저장
+  } catch (error) {
+    console.error('API Error', error);
+  }
+};

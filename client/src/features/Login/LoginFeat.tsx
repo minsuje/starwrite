@@ -119,7 +119,12 @@ function LoginForm() {
     try {
       // 백엔드에 code를 전송하는 로직...
       const response = await axios.get(
-        `http://localhost:8080/login/oauth?code=${code}`,
+        'http://52.79.228.200:8080/login/oauth',
+        {
+          params: {
+            code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
+          },
+        },
       );
       console.log(
         'Authorization code sent to backend. Response:',
