@@ -18,6 +18,7 @@ import starwrite.server.repository.PostRepository;
 import starwrite.server.repository.UsersRepository;
 import starwrite.server.request.CreateCategory;
 import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.response.CategoryPostResponse;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
@@ -39,7 +40,7 @@ public class CategoryService {
 
 
   // 카테고리 안의 모든 글 불러오기
-  public List<CategoryPosts> getCategoryPosts(String categoryId) {
+  public CategoryPostResponse getCategoryPosts(String categoryId) {
     return categoryRepository.getCategoryPosts(categoryId);
   }
 

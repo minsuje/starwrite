@@ -9,6 +9,7 @@ import starwrite.server.entity.Category;
 import starwrite.server.entity.Post;
 import starwrite.server.relationship.Related;
 import starwrite.server.response.CategoryDetailResponse;
+import starwrite.server.response.CategoryPostResponse;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.PostResponse;
@@ -51,10 +52,12 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
       "MATCH (u:Users)-[:POSTED|HOLDS]->(p) " +
       "OPTIONAL MATCH (author:Users)-[:AUTHOR]->(p) " +
-      "RETURN ID(p) AS postId, p.title AS title, substring(p.content, 0, 100) AS content, " +
-      "p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, " +
-      "author.userId AS userId, author.nickname AS nickname ORDER BY p.createdAt DESC ")
-  List<CategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId);
+      "WITH p, c, author " +
+      "ORDER BY p.createdAt DESC " +
+      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.content, 0, 100), " +
+      "recentView: p.recentView, createdAt: p.createdAt, updatedAt: p.updatedAt, " +
+      "userId: author.userId, nickname: author.nickname}) AS categoryPosts")
+  CategoryPostResponse getCategoryPosts(@Param(value = "categoryId") String categoryId);
 
 
 

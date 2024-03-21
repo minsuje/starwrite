@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import starwrite.server.entity.Category;
 import starwrite.server.request.CreateCategory;
+import starwrite.server.response.CategoryPostResponse;
 import starwrite.server.response.CategoryPosts;
 import starwrite.server.response.GetCategoryPosts;
 import starwrite.server.response.UserCategories;
@@ -50,7 +51,7 @@ public class CategoryController {
 
   // 카테고리 안의 모든 글 불러오기
   @GetMapping("/posts")
-  public List<CategoryPosts> getCategoryPosts(@RequestParam(value = "categoryId") String categoryId) {
+  public CategoryPostResponse getCategoryPosts(@RequestParam(value = "categoryId") String categoryId) {
 
 //    Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
 //    cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
