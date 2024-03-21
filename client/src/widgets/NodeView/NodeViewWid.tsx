@@ -10,6 +10,8 @@ import {
 import './NodeView.css';
 import { fetchData } from '../../features/NodeViewFeat/index';
 import { ExtendedCustomNode } from '../../features/NodeViewFeat/model/Types';
+import { useParams } from 'react-router';
+import { NoDataComponent } from '../../shared/NoDataComponent';
 
 export type SearchType = {
   setNodesData: (nodes: CustomNode[]) => void;
@@ -25,7 +27,10 @@ export const NodeView = ({
   setPageDataProp,
 }: SearchType) => {
   const [nodes, setNodes] = useState<CustomNode[]>([]);
-  const [links, setlinks] = useState<Link[]>([]);
+  const [links, setLink] = useState<Link[]>([]);
+  const { category } = useParams();
+
+  console.log('categoryId>>?>>>>>', category);
   // console.log('nodes', nodes);
   // console.log('links', links);
 
@@ -33,17 +38,34 @@ export const NodeView = ({
     // axios 데이터 로딩
     const getData = async () => {
       try {
-        const fetchedNodes = await fetchData();
+        const fetchedNodes = await fetchData(category);
 
         if (fetchedNodes !== '') {
           let nodesData = fetchedNodes.posts.map((node: CustomNode) => ({
             ...node,
-            id: node.postId,
-            label: node.title,
+            id: node.postId, //22
+            label: node.title, //토마토
             x: Math.random() * viewportSize.width,
             y: Math.random() * viewportSize.height,
             url: `/user/starwrite/listview/main/과학/${node.postId}`,
           }));
+
+          // validLinks 설정 예시
+          const validLinks = fetchedNodes.relation
+            .filter((link) => {
+              return (
+                link.postId !== null &&
+                link.relatedPostId !== null &&
+                nodesData.some((node) => node.postId === link.postId) &&
+                nodesData.some((node) => node.postId === link.relatedPostId)
+              );
+            })
+            .map((link) => ({
+              ...link,
+              source: link.postId,
+              target: link.relatedPostId,
+            }));
+
           if (searchTerm.trim() !== '') {
             nodesData = nodesData.filter((node: CustomNode) =>
               node.label.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -53,22 +75,24 @@ export const NodeView = ({
           setNodes(nodesData);
           setLoading(false);
           setNodesData(fetchedNodes);
+          setLink(validLinks);
 
           setPageDataProp(fetchedNodes);
         } else if (fetchedNodes === '') {
           setLoading(false);
         }
 
-        console.log(fetchedNodes);
+        console.log('links>>>>>>>>>>>', links);
 
-        const LinksData = fetchedNodes.relation.map((link: Link) => ({
-          ...link,
-          source: link.postId,
-          target: link.relatedPostId,
-        }));
-        setlinks(LinksData);
+        // const LinksData = fetchedNodes.relation.map((link: Link) => ({
+        //   ...link,
+        //   source: link.postId,
+        //   target: link.relatedPostId,
+        // }));
 
-        // setlinks(fetchedNodes.relation);
+        // console.log('LinksData>>>>>>>>', LinksData);
+
+        // setLink(fetchedNodes.relation);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -198,7 +222,7 @@ export const NodeView = ({
         'link',
         d3
           .forceLink<CustomNode, Link>(links)
-          .id((d) => d.id)
+          .id((d) => d.postId)
           // 링크 선 길이 조절
           .distance(100),
       ) // 링크 거리 조절
@@ -385,6 +409,12 @@ export const NodeView = ({
         .style('opacity', 1);
     }
   }, [searchTerm]);
+
+  if (nodes.length === 0 || nodes.every((node) => node.id === null)) {
+    // nodes 배열이 비어 있거나 모든 항목이 null일 때 렌더링할 컴포넌트
+    return <NoDataComponent />;
+  }
+  console.log('>>>>>>>>>>>>>>>>>>', nodes);
 
   return (
     <svg

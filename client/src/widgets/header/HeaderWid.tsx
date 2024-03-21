@@ -33,7 +33,7 @@ export function HeaderWid() {
   function handleNodeViewPage() {
     if (nickname && category) {
       navigate(`/user/starwrite/nodeview/${nickname}/${category}`);
-    } else if (category === '전체') {
+    } else if (category === 'all') {
       navigate(`/user/starwrite/categoryview/${nickname}`);
     } else {
       navigate(`/user/starwrite/categoryview/${myNickname}`);
@@ -44,9 +44,9 @@ export function HeaderWid() {
     if (category) {
       navigate(`/user/starwrite/listview/main/${nickname}/${category}`);
     } else if (nickname) {
-      navigate(`/user/starwrite/listview/main/${nickname}/전체`);
+      navigate(`/user/starwrite/listview/main/${nickname}/all`);
     } else {
-      navigate(`/user/starwrite/listview/main/${myNickname}/전체`);
+      navigate(`/user/starwrite/listview/main/${myNickname}/all`);
     }
   }
 
@@ -69,7 +69,7 @@ export function HeaderWid() {
         <_StyledLinkDiv>
           {/* <_StyledLink to={`${nodeViewPage}`}>노드 뷰</_StyledLink> */}
           {location.pathname === '/' ? null : (
-            <button onClick={handleNodeViewPage}>노드뷰</button>
+            <button onClick={handleNodeViewPage}>카테고리 뷰</button>
           )}
           {location.pathname === '/' ? null : (
             <button onClick={handleNodeViewListPage}>리스트뷰</button>

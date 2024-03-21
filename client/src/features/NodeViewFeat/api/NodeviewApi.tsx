@@ -106,10 +106,10 @@ export const links: Link[] = [
   // { source: '5', target: '1' }, // 예시로 마지막 노드가 첫 번째 노드와 연결되도록 추가
 ];
 
-export const fetchData = async () => {
+export const fetchData = async (category) => {
   try {
     const response = await baseApi.get(
-      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=d598f05e-a08c-494b-b0f6-11ac3899cb26`,
+      `http://52.79.228.200:8080/user/category/getCategoryPostNode?categoryId=${category}`,
     );
     console.log('response', response);
     return response.data;
