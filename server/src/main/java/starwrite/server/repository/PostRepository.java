@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
@@ -192,7 +193,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   @Query(
-      "MERGE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow, recentView: $timeNow }) "
+      "MERGE (newPost:Post {title: $title, content: $content, parsedContent: $parsedContent, visible: $visible, img: $img, tmpSave: false, createdAt: $timeNow, updatedAt: $timeNow, recentView: $timeNow }) "
           +
           "WITH newPost " +
           "UNWIND CASE WHEN size($relatedPosts) = 0 THEN [null] ELSE $relatedPosts END AS relatedPostId "
@@ -212,7 +213,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           "RETURN newPost AS post, ID(newPost) AS identifier LIMIT 1")
   CreatedPost createPostLink(@Param("userId") String userId, @Param("categoryId") String categoryId,
       @Param("title") String title,
-      @Param("content") String content, @Param("visible") String visible,
+      @Param("content") String content, @Param("parsedContent") String parsedContent, @Param("visible") String visible,
       @Param("img") String img,
       @Param("timeNow") LocalDateTime timeNow, @Param("relatedBack") boolean relatedBack,
       @Param("relatedPosts") List<Long> relatedPosts);
