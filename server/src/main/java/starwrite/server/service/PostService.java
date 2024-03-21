@@ -120,7 +120,7 @@ public class PostService {
     String extractedText = "";
 
     try {
-      extractedText = JsonData.extractText(post.getPost().getContent());
+      extractedText = JsonData.parseJson(post.getPost().getContent());
       // 추출된 텍스트를 이용하는 로직
     } catch (IOException e) {
       // 오류 처리
