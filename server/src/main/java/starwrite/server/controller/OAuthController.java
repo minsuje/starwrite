@@ -36,7 +36,8 @@ import starwrite.server.service.UsersServiceImpl;
 @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5173"})
 public class OAuthController {
 
-    private final org.slf4j.Logger Logger = LoggerFactory.getLogger(IndexController.class.getName());
+    private final org.slf4j.Logger Logger = LoggerFactory.getLogger(
+        IndexController.class.getName());
 
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -78,8 +79,7 @@ public class OAuthController {
     }  //
 
 
-
-    @RequestMapping(value="login/api/v1/oauth2/google", method = RequestMethod.POST)
+    @RequestMapping(value = "login/api/v1/oauth2/google", method = RequestMethod.POST)
     public String loginUrlGoogle() throws IOException {
 //        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
 //            + "&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
@@ -92,19 +92,14 @@ public class OAuthController {
 //        response.sendRedirect(reqUrl);
     } // 이거 살리고
 
-//    @RequestMapping(value="/login/api/v1/oauth2/google", method = RequestMethod.GET)
-//    public ResponseEntity<String> loginUrlGoogle() {
-//        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-//            + "&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
-//        return ResponseEntity.ok(reqUrl);
-//    }
 
-//    @RequestMapping(value="login/oauth2/code/google", method = RequestMethod.GET)
+    //    @RequestMapping(value="login/oauth2/code/google", method = RequestMethod.GET)
     @GetMapping("login/oauth")
-    public String loginGoogle(@RequestParam(value = "code") String authCode){
+    public String loginGoogle(@RequestParam(value = "code") String authCode) {
         System.out.println("loginGoogle???? " + authCode);
 //        authCode = "4%2F0AeaYSHDCWrAyaET_L8pa8QYWPXrczosr2E0NhxHBHd-51gYBy_B9_LU0wyXenRqamZuNhA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none";
         RestTemplate restTemplate = new RestTemplate();
+        System.out.println("restTemplate");
         GoogleRequestDTO googleOAuthRequestParam = GoogleRequestDTO
             .builder()
             .clientId(googleClientId)
@@ -113,42 +108,19 @@ public class OAuthController {
             .redirectUri(googleRedirectUri)
             .grantType("authorization_code").build();
         System.out.println("GoogleRequestDTO >>> " + googleOAuthRequestParam);
-        ResponseEntity<GoogleResponseDTO> resultEntity = restTemplate.postForEntity("https://oauth2.googleapis.com/token",
+        ResponseEntity<GoogleResponseDTO> resultEntity = restTemplate.postForEntity(
+            "https://oauth2.googleapis.com/token",
             googleOAuthRequestParam, GoogleResponseDTO.class);
         System.out.println("여기는?");
-        String jwtToken=resultEntity.getBody().getId_token();
+        String jwtToken = resultEntity.getBody().getId_token();
         System.out.println("jwtToken >> " + jwtToken);
-        Map<String, String> map=new HashMap<>();
-        map.put("id_token",jwtToken);
-        ResponseEntity<GoogleInfResponseDTO> resultEntity2 = restTemplate.postForEntity("https://oauth2.googleapis.com/tokeninfo",
+        Map<String, String> map = new HashMap<>();
+        map.put("id_token", jwtToken);
+        ResponseEntity<GoogleInfResponseDTO> resultEntity2 = restTemplate.postForEntity(
+            "https://oauth2.googleapis.com/tokeninfo",
             map, GoogleInfResponseDTO.class);
-        String email=resultEntity2.getBody().getEmail();
+        String email = resultEntity2.getBody().getEmail();
         System.out.println("email >>>>>>>>>>> " + email);
         return email;
     }
-
-
-//    private static final String REDIRECT_URI = "http://localhost:8080/login";
-//    private static final String RESPONSE_TYPE = "code";
-//    private static final String SCOPE = "email profile openid";
-//    private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-
-//    @GetMapping("login/api/v1/oauth2/google")
-//    public void redirectToGoogleAuth(HttpServletResponse response) throws IOException {
-//        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-//            + "&redirect_uri=http://localhost:8080/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
-//
-//        https://accounts.google.com/o/oauth2/v2/auth?client_id=547835898042-k7ltqkia6kdspu0fjenn79jaenbrj6nj.apps.googleusercontent.com&redirect_uri=
-//        response.sendRedirect(reqUrl);
-//    }
-//
-//    @GetMapping("login")
-//    public String handleGoogleCallback(@RequestParam(name = "code") String code) {
-//
-//        System.out.println("들어옴?");
-//        // 인증 코드를 받았습니다. 이제 access token을 요청할 수 있습니다.
-//        System.out.println("Received Auth Code: " + code);
-//        return "Auth Code: " + code;
-//    }
-
 }

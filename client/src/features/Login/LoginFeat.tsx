@@ -118,9 +118,8 @@ function LoginForm() {
     console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
-      const response = await axios.post(
-        'http://52.79.228.200:8080/login/oauth',
-        { code },
+      const response = await axios.get(
+        `http://localhost:8080/login/oauth?code=${code}`,
       );
       console.log(
         'Authorization code sent to backend. Response:',
@@ -136,7 +135,7 @@ function LoginForm() {
     try {
       // 백엔드에서 Google 로그인 URL을 가져옵니다.
       const response = await axios.post(
-        'http://52.79.228.200:8080/login/api/v1/oauth2/google',
+        'http://localhost:8080/login/api/v1/oauth2/google',
       );
       const googleLoginUrl = response.data;
       console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
