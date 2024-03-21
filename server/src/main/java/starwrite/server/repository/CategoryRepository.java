@@ -50,9 +50,10 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
       "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
       "MATCH (u:Users)-[:POSTED|HOLDS]->(p) " +
+      "OPTIONAL MATCH (author:Users)-[:AUTHOR]->(p) " +
       "RETURN ID(p) AS postId, p.title AS title, substring(p.content, 0, 100) AS content, " +
       "p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, " +
-      "u.userId AS userId, u.nickname AS nickname ORDER BY p.createdAt DESC ")
+      "author.userId AS userId, author.nickname AS nickname ORDER BY p.createdAt DESC ")
   List<CategoryPosts> getCategoryPosts(@Param(value = "categoryId") String categoryId);
 
 
