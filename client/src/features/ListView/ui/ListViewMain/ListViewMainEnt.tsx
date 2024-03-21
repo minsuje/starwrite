@@ -1,40 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
-import styled from 'styled-components';
-
 import { Link, useParams } from 'react-router-dom';
 import { Posts } from '../../../../shared/types/app';
 import { postListApi } from '../../api/PostApi';
-
-const _listBox = styled.div`
-  overflow: auto;
-  height: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`;
-
-const _postBox = styled.div`
-  padding: 25px 20px;
-  background-color: var(--color-zinc-800);
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-decoration: none;
-  text-decoration-line: none;
-  h1 {
-    font-size: 20px;
-    color: var(--color-zinc-300);
-  }
-  p {
-    font-size: 13px;
-    color: var(--color-zinc-500);
-  }
-  &:hover {
-    opacity: 0.8;
-  }
-`;
+import { _listBox, _postBox } from '../style';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
@@ -46,7 +15,6 @@ function ListViewMainEnt() {
   useEffect(() => {
     const promise = postListApi(category);
     promise.then((Posts) => {
-      console.log('PostList data: ', Posts);
       setPostsList(Posts.categoryPosts);
       setCategoryName(Posts.categoryName);
     });
