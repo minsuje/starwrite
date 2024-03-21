@@ -56,7 +56,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "OPTIONAL MATCH (p)-[:AUTHOR]->(author:Users) " +
       "WITH c, p, author " +
       "ORDER BY p.createdAt DESC " +
-      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.content, 0, 100), " +
+      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.parsedContent, 0, 100), " +
       "recentView: p.recentView, createdAt: p.createdAt, updatedAt: p.updatedAt, " +
       "userId: author.userId, nickname: author.nickname}) AS categoryPosts")
   CategoryPostResponse getCategoryPosts(@Param(value = "categoryId") String categoryId);
