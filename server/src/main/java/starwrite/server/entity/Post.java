@@ -51,4 +51,7 @@ public class Post {
     @Relationship(type = "POSTED", direction = Direction.INCOMING)
     private Users users;
 
+    @Relationship(type = "AUTHOR", direction = Direction.INCOMING)
+    private Users author;
+
 }

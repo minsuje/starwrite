@@ -48,16 +48,19 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 
   // 카테고리에 해당하는 모든 글 찾아오기
   // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
-  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
-      "WHERE c.categoryId = $categoryId AND p.tmpSave = false " +
-      "MATCH (u:Users)-[:POSTED|HOLDS]->(p) " +
-      "OPTIONAL MATCH (author:Users)-[:AUTHOR]->(p) " +
-      "WITH p, c, author " +
+  @Query("MATCH (c:Category) " +
+      "WHERE c.categoryId = $categoryId " +
+      "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
+      "WHERE p.tmpSave = false OR p IS NULL " +
+      "OPTIONAL MATCH (p)-[:POSTED|HOLDS]->(u:Users) " +
+      "OPTIONAL MATCH (p)-[:AUTHOR]->(author:Users) " +
+      "WITH c, p, author " +
       "ORDER BY p.createdAt DESC " +
       "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.content, 0, 100), " +
       "recentView: p.recentView, createdAt: p.createdAt, updatedAt: p.updatedAt, " +
       "userId: author.userId, nickname: author.nickname}) AS categoryPosts")
   CategoryPostResponse getCategoryPosts(@Param(value = "categoryId") String categoryId);
+
 
 
 
