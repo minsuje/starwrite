@@ -80,15 +80,16 @@ public class OAuthController {
 
 
     @RequestMapping(value="login/api/v1/oauth2/google", method = RequestMethod.POST)
-    public void loginUrlGoogle() throws IOException {
+    public String loginUrlGoogle() throws IOException {
 //        String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
 //            + "&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
 
         String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
             + "&redirect_uri=http://localhost:5173/login&response_type=code&scope=email%20profile%20openid&access_type=offline";
-//                return reqUrl;
 
-        response.sendRedirect(reqUrl);
+        return reqUrl;
+
+//        response.sendRedirect(reqUrl);
     } // 이거 살리고
 
 //    @RequestMapping(value="/login/api/v1/oauth2/google", method = RequestMethod.GET)
