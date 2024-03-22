@@ -40,7 +40,7 @@ export const postDetailApi = async (postid: number) => {
 // 글 수정
 export const patchPostApi = async (postid: number, data: string) => {
   try {
-    const response = await baseApi.patch(`localhost/${postid}`, data);
+    const response = await baseApi.patch(`/${postid}`, data);
     console.log(response.data);
     return response.data;
   } catch (error) {
