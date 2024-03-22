@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,18 +46,26 @@ public class JwtTokenProvider {
 
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthentication = (UsernamePasswordAuthenticationToken) authentication;
         System.out.println("JwtTokenProvider generateToken > " + authentication);
 
-        UserTokenDTO userDetails = (UserTokenDTO) authentication.getPrincipal();
+        System.out.println("usernamePasswordAuthentication >>>> " + usernamePasswordAuthentication);
+        System.out.println("userDetails  getPrincipal >>> " + usernamePasswordAuthentication.getPrincipal());
+        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getPrincipal().getClass().getName());
 
-        System.out.println("userDetails >>> " + authentication.getAuthorities());
+        UserTokenDTO userDetails = (UserTokenDTO) usernamePasswordAuthentication.getPrincipal();
+
+//        User userPrincipal = (User) authentication.getPrincipal(); // 주체 객체가 User 클래스인지 확인하고 캐스팅
+
+
+        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getAuthorities());
         // 권한 가져오기
 //        String authorities = authentication.getAuthorities().stream()
 //            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 //        String authorities = authentication.getAuthorities().toString();
 
         StringBuilder authoritiesBuilder = new StringBuilder();
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
+        for (GrantedAuthority authority : usernamePasswordAuthentication.getAuthorities()) {
             authoritiesBuilder.append(authority.getAuthority()).append(" ");
         }
         String authorities = authoritiesBuilder.toString().trim();
@@ -67,10 +76,10 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // AccessToken 생성
-//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
-        Date accessTokenExpiresIn = new Date(now + 1000L * 60L); // 60초
+        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
+//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L); // 60초
         String accessToken = Jwts.builder()
-            .setSubject(authentication.getName())
+            .setSubject(usernamePasswordAuthentication.getName())
             .claim("auth", authorities)
             .claim("nickname", userDetails.getNickname()) // nickname을 claim으로 추가
             .claim("userId", userDetails.getUserId()) // userId를 claim으로 추가
