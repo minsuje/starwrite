@@ -52,10 +52,9 @@ public class PostController {
 //  public String getI
 
   // 유저의 모든 글 조회 (노드 뷰)
-  @GetMapping("/all")
-  public List<GetPosts> getAllPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
+  @GetMapping("/{nickname}/all")
+  public List<GetPosts> getAllPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getAllPosts(nickname, skip, limit);
   }
 
