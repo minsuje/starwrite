@@ -67,22 +67,23 @@ function NewPostFeat() {
 
     if (titleList.find(({ title }) => title == title)) {
       setOnValid('duplicate');
-    }
-
-    const postData = {
-      category: category,
-      post: {
-        title: title,
-        content: content,
-        visible: isPublic,
-      },
-      relatedPosts: relatedPosts,
-    };
-    console.log('data', postData);
-    if (postId) {
-      patchPostApi(postData, Number(postId));
+      return;
     } else {
-      newPostApi(postData);
+      const postData = {
+        category: category,
+        post: {
+          title: title,
+          content: content,
+          visible: isPublic,
+        },
+        relatedPosts: relatedPosts,
+      };
+      console.log('data', postData);
+      if (postId) {
+        patchPostApi(postData, Number(postId));
+      } else {
+        newPostApi(postData);
+      }
     }
   }
 

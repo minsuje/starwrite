@@ -5,14 +5,15 @@ import {
   defaultInlineContentSpecs,
 } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
-import { BlockNoteView, darkDefaultTheme } from '@blocknote/react';
+import { BlockNoteView } from '@blocknote/react';
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
 import { PostList } from '../../model/listViewData';
 import { Mention } from '../../../NewPost/ui/Mention';
 import { postDetailApi } from '../../api/PostApi';
 import { useParams } from 'react-router';
-
+import { _Title } from '../style';
+import { redTheme } from '../../../NewPost/ui/style';
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
     // Adds all default inline content.
@@ -51,12 +52,16 @@ export default function ListDetailFeat() {
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
+  const [title, setTitle] = useState<string>();
+  const [visible, setVisible] = useState<string>();
 
   useEffect(() => {
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail) => {
       console.log('postDetail data: ', postDetail);
       setInitialContent(JSON.parse(postDetail.post.content));
+      setTitle(postDetail.post.title);
+      setVisible(postDetail.post.visible);
     });
   }, [postId]);
 
@@ -74,18 +79,25 @@ export default function ListDetailFeat() {
   // Renders the editor instance.
 
   return (
-    <div onKeyDown={(e) => e.preventDefault()}>
-      <BlockNoteView
-        editor={editor}
-        theme={darkDefaultTheme}
-        onSelectionChange={() => {
-          const textCursorPosition = editor.getTextCursorPosition();
-          editor.toggleStyles({
-            backgroundColor: 'yellow',
-          });
-          console.log('textCursorPosition', textCursorPosition.block);
-        }}
-      />
-    </div>
+    <>
+      <_Title>
+        {title}
+        <div>{visible === 'true' ? '공개' : '비공개'}</div>
+      </_Title>
+
+      <div onKeyDown={(e) => e.preventDefault()}>
+        <BlockNoteView
+          editor={editor}
+          theme={redTheme.dark}
+          onSelectionChange={() => {
+            const textCursorPosition = editor.getTextCursorPosition();
+            editor.toggleStyles({
+              backgroundColor: 'yellow',
+            });
+            console.log('textCursorPosition', textCursorPosition.block);
+          }}
+        />
+      </div>
+    </>
   );
 }

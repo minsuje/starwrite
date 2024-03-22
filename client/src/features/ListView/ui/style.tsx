@@ -106,5 +106,21 @@ export const _Button = styled.button`
 
   background-color: ${(props) => props.color || '#1361D7'};
 `;
+export const _Title = styled.h1`
+  font-size: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 90%;
 
+  div {
+    background-color: var(--color-zinc-100);
+    color: var(--color-zinc-900);
+    font-size: 12px;
+    padding: 7px;
+    border-radius: 5px;
+    width: fit-content;
+  }
+`;
 export { _headBox, _buttonBox, _CategoryNameInput };
