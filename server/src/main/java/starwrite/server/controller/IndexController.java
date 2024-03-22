@@ -101,6 +101,7 @@ public class IndexController {
 
     @GetMapping("/cookie")
     public Cookie setCookie(Authentication authentication) {
+        System.out.println("/cookie authentication > " + authentication);
         Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
       System.out.println("cookie name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + cookie.getValue()  + " ----- " +   SecurityUtil.getCurrentUserNickname());
         cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
@@ -157,6 +158,8 @@ public class IndexController {
 
             resultToken.updateAccessToken(newAccessToken);
             refreshTokenRepository.save(resultToken);
+
+            System.out.println("여기까지 돌았음");
 
             // 새로운 accessToken 을 반환해줌
             return ResponseEntity.ok(TokenResponseStatus.addStatus(200, newAccessToken));
