@@ -1,5 +1,7 @@
 import { createReactInlineContentSpec } from '@blocknote/react';
 
+const myNickname = localStorage.getItem('nickname');
+
 // The Mention inline content.
 export const Mention = createReactInlineContentSpec(
   {
@@ -20,7 +22,7 @@ export const Mention = createReactInlineContentSpec(
         <a
           className="backlinking"
           style={{ color: 'white' }}
-          href={`http://localhost:5173/user/starwrite/listview/main/전체/${props.inlineContent.props.postid}`}
+          href={`/user/starwrite/listview/main/${myNickname}/all/${props.inlineContent.props.postid}`}
         >
           @{props.inlineContent.props.title}
         </a>

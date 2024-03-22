@@ -27,6 +27,7 @@ public class UserTokenDTO implements UserDetails {
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+
     @Getter
     private final String nickname;
     private final String userId;

@@ -2,8 +2,8 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { nodes } from '../../features/CategoryViewFeat/index';
-
+// import { nodes } from '../../features/CategoryViewFeat/index';
+import { fetchDataCategory } from '../../features/CategoryViewFeat/api/CategoryAPi';
 
 const _SyledContainer = styled.div`
   display: 'flex';
@@ -12,15 +12,51 @@ const _SyledContainer = styled.div`
 
 export function CategoryViewWid({ searchTerm }: any) {
   const navigate = useNavigate();
-  const { userid_num } = useParams();
+  const { nickname } = useParams();
   const svgRef = useRef<SVGSVGElement>(null);
   const [viewportSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
+  const [Category, setCategory] = useState([]);
+  useEffect(() => {
+    // axios 데이터 로딩
+    const getDataCategory = async () => {
+      try {
+        const categoryDataResponse = await fetchDataCategory(); //데이터 응답
+
+        if (categoryDataResponse !== '') {
+          let processedCategoryData = categoryDataResponse.map(
+            (categoryItem) => ({
+              ...categoryItem,
+              id: categoryItem.categoryId,
+              label: categoryItem.name,
+              categoryId: categoryItem.categoryId,
+              url: 'nodeurl',
+            }),
+          );
+
+          // 검색어가 있을 경우 필터링을 적용합니다.
+          if (searchTerm.trim() !== '') {
+            processedCategoryData = processedCategoryData.filter((category) =>
+              category.label.toLowerCase().includes(searchTerm.toLowerCase()),
+            );
+          }
+          setCategory(processedCategoryData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getDataCategory();
+  }, []);
+
+  console.log('Processed Category Data:', Category);
+
   const simulation = d3
-    .forceSimulation(nodes)
+    .forceSimulation(Category)
     .force('charge', d3.forceManyBody().strength(-80))
     .force('collide', d3.forceCollide().radius(100))
     .force(
@@ -70,19 +106,19 @@ export function CategoryViewWid({ searchTerm }: any) {
     const node = group
       .selectAll('.node')
       .attr('class', 'node')
-      .data(nodes)
+      .data(Category)
       .enter()
       .append('g')
       // .attr('transform', 'translate(-17.5, -.5)')
       .style('cursor', 'pointer')
       .on('click', (_, d) => {
         if (d.url) {
-          navigate(`/user/starwrite/nodeview/${d.userid_num}/${d.category}`);
+          navigate(`/user/starwrite/nodeview/${nickname}/${d.id}`);
         }
       })
       .call(dragHandler);
 
-    node.append('circle').attr('r', 26).attr('fill', 'skyblue');
+    node.append('circle').attr('r', 56).attr('fill', '#A6A6A6');
     // console.log('nodes', nodes);
     node
       .append('text')
@@ -94,7 +130,7 @@ export function CategoryViewWid({ searchTerm }: any) {
     simulation.on('tick', () => {
       node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
     });
-  }, []);
+  }, [Category]);
 
   return (
     <svg

@@ -20,6 +20,7 @@ public class UsersController {
 
     @PostMapping("/register/user")
     public String createUser(@RequestBody Users user) {
+        System.out.println("createUser" + user);
         // db에 넣기 전에 비밀번화 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

@@ -4,12 +4,14 @@ import { Editor, GetSavings, NewPostHeadFeat } from '..';
 import { useParams } from 'react-router-dom';
 import {
   getsavingApi,
-  // newPostApi,
+  newPostApi,
   newSavingApi,
-  // patchPostApi,
+  patchPostApi,
   patchSavingApi,
 } from '../api/newPostApi';
 import checkLinking from '../lib/checkLinking';
+import { getTitleApi } from '../api/newPostApi';
+import { Saving, Titles } from '../model/types';
 
 function NewPostFeat() {
   const { postId } = useParams();
@@ -18,10 +20,16 @@ function NewPostFeat() {
   useEffect(() => {
     if (postId) {
       const promise = getsavingApi(Number(postId));
-      promise.then((saving) => {
+      promise.then((saving: Saving) => {
         console.log('saving data: ', saving);
-        setTitle(saving.title);
-        setSaved(saving.content);
+        setTitle(saving.posts.title);
+        setSaved(saving.posts.content);
+        setIsPublic(saving.posts.visible);
+        if (saving.categoryid) {
+          setCategory(saving.categoryid);
+        } else {
+          setCategory('');
+        }
       });
     }
   }, [postId]);
@@ -33,36 +41,63 @@ function NewPostFeat() {
   const [content, setContent] = useState<string | undefined>();
   const [relatedPosts, setRelatedPosts] = useState<number[]>([]);
   const [saved, setSaved] = useState<string | undefined>();
+  const [onValid, setOnValid] = useState<string>('true');
+  const [titleList, setTitleList] = useState<Titles[]>([]);
+
+  useEffect(() => {
+    setRelatedPosts(checkLinking(content));
+  }, [content]);
+
+  useEffect(() => {
+    const promise = getTitleApi();
+    promise.then((titleList) => {
+      console.log('titles data: ', titleList);
+      setTitleList(titleList);
+    });
+  }, []);
 
   function publishPost() {
-    setRelatedPosts(checkLinking(content));
-    const postData = {
-      category: 'e2c29eec-ef40-496b-9a47-e39214505e39',
-      post: {
-        title: title,
-        content: content,
-        visible: isPublic,
-      },
-      relatedPosts: relatedPosts,
-    };
-    console.log('data', postData);
-    // if (postId) {
-    //   patchPostApi(postData, Number(postId));
-    // } else {
-    //   newPostApi(postData);
-    // }
+    console.log(title);
+
+    if (title === undefined || title.length > 50) {
+      setOnValid('false');
+      console.log('제목 1자 이상 50자 이하로 작성해주세요');
+      return;
+    }
+
+    if (titleList.find(({ title }) => title == title)) {
+      setOnValid('duplicate');
+      return;
+    } else {
+      const postData = {
+        category: category,
+        post: {
+          title: title,
+          content: content,
+          visible: isPublic,
+        },
+        relatedPosts: relatedPosts,
+      };
+      console.log('data', postData);
+      if (postId) {
+        patchPostApi(postData, Number(postId));
+      } else {
+        newPostApi(postData);
+      }
+    }
   }
 
   function savePost() {
     const postData = {
-      category: 'e2c29eec-ef40-496b-9a47-e39214505e39',
+      category: category,
       post: {
         title: title,
         content: content,
         visible: isPublic,
       },
-      // relatedPosts: [],
+      relatedPosts: [],
     };
+    console.log('postData', postData);
     if (postId) {
       patchSavingApi(postData, Number(postId));
     } else {
@@ -74,6 +109,7 @@ function NewPostFeat() {
     <_EditorBox>
       {openSaving && <GetSavings onclick={() => setOpenSaving(false)} />}
       <NewPostHeadFeat
+        onValid={onValid}
         data={{ title, category, isPublic }}
         savePost={() => {
           savePost();
@@ -94,6 +130,7 @@ function NewPostFeat() {
       />
       <_EditorDiv>
         <Editor
+          titleList={titleList}
           content={saved}
           setContent={(value: string) => {
             setContent(value);

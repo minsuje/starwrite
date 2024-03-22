@@ -32,7 +32,7 @@ export function NodeViewPage() {
   //   <DataSpinnerSh></DataSpinnerSh>;
   // }
   // }
-
+  console.log('pageDataProp>>>>>>>>>>>>>', pageDataProp);
   return (
     <>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
@@ -50,7 +50,7 @@ export function NodeViewPage() {
           <Spinner />
         </_Background>
       ) : pageDataProp ? (
-        '' // 데이터를 여기에 렌더링합니다. 예: <YourDataComponent />
+        ''
       ) : (
         <DataSpinnerSh></DataSpinnerSh>
       )}

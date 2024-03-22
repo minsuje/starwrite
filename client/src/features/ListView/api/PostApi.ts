@@ -3,11 +3,24 @@ import { baseApi } from '../../../shared/api/BaseApi';
 // 카테고리 선택시 글 리스트 불러오기
 export const postListApi = async (category: string | undefined) => {
   try {
-    const response = await baseApi.get(`http://52.79.228.200:8080/${category}`);
+    const response = await baseApi.get(
+      `/category/posts?categoryId=${category}`,
+    );
     console.log('postListApi', response.data);
     return response.data;
   } catch (error) {
     console.error('postListApi Error', error);
+    throw error;
+  }
+};
+// 전체 글 불러오기
+export const postListAllApi = async (nickname: string | undefined) => {
+  try {
+    const response = await baseApi.get(`/category/post/${nickname}/All`);
+    console.log('postListAllApi', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('postListApiAll Error', error);
     throw error;
   }
 };

@@ -1,22 +1,13 @@
 import { baseApi } from '../../../shared/api/BaseApi';
-
-interface NewPost {
-  category: string | undefined;
-  post: {
-    title: string | undefined;
-    content: string | undefined;
-    visible: string | undefined;
-    category?: string | undefined;
-    tmpSave?: boolean;
-  };
-  relatedPosts?: string[];
-}
+import { NewPost } from '../model/types';
 
 // 글 저장 하기
 export const newPostApi = async (data: NewPost) => {
   try {
+    const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.post(`/post`, data);
     console.log('newPostApi', response.data);
+    window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
     console.error(`newPostApi Error`, error);

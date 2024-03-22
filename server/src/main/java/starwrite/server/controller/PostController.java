@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
@@ -51,10 +52,9 @@ public class PostController {
 //  public String getI
 
   // 유저의 모든 글 조회 (노드 뷰)
-  @GetMapping("/all")
-  public List<GetPosts> getAllPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
+  @GetMapping("/{nickname}/all")
+  public List<GetPosts> getAllPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    String nickname = SecurityUtil.getCurrentUserNickname();
     return postService.getAllPosts(nickname, skip, limit);
   }
 
@@ -79,7 +79,6 @@ public class PostController {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.getPostDetail(postId, userId);
   }
-
 
 
   // 임시저장 글 모두 불러오기 ( load  All Save Posts )
@@ -159,8 +158,7 @@ public class PostController {
   @PatchMapping("/{postId}")
   public String saveTmpPost(@RequestBody CreatePost post,
       @PathVariable(value = "postId") Long postId) {
-    String nickname = SecurityUtil.getCurrentUserNickname();
-    return postService.saveTmpPost(post, postId, nickname);
+    return postService.saveTmpPost(post, postId);
   }
 
   // 글 삭제
@@ -170,12 +168,11 @@ public class PostController {
     return postService.deletePost(postId, userId);
   }
 
-
   // 글 스크랩
-//  @PostMapping
-//  public String scrapPost(@RequestBody ) {
-//    return
-//  }
+  @PostMapping("scrap")
+  public String scrapPost(@RequestBody ScrapPost scrapPost) {
+    return postService.scrapPost(scrapPost);
+  }
 
 
 }

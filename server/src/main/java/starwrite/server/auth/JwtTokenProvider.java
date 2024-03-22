@@ -25,40 +25,50 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import starwrite.server.dto.JwtDTO;
 import starwrite.server.dto.UserTokenDTO;
+import starwrite.server.service.RefreshTokenService;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
+
     private final Key key;
 
-//Base64.getEncoder().encodeToString("your-secret-key".getBytes())
+    //Base64.getEncoder().encodeToString("your-secret-key".getBytes())
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
     public JwtTokenProvider(@Value("${jwt.secret.key}") String secretKey) {
 
-      System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
+        System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-      System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
+        System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
-        System.out.println("JwtTokenProvider generateToken > " +  authentication);
+        System.out.println("JwtTokenProvider generateToken > " + authentication);
 
         UserTokenDTO userDetails = (UserTokenDTO) authentication.getPrincipal();
+
+        System.out.println("userDetails >>> " + authentication.getAuthorities());
         // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+//        String authorities = authentication.getAuthorities().stream()
+//            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+//        String authorities = authentication.getAuthorities().toString();
 
-        // 토큰을 Redis에 저장한다. ---------------------
-//        RefreshTokenService.saveTokenInfo(email, refreshToken, accessToken);
-//        return new GeneratedToken(accessToken, refreshToken);
-
+        StringBuilder authoritiesBuilder = new StringBuilder();
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            authoritiesBuilder.append(authority.getAuthority()).append(" ");
+        }
+        String authorities = authoritiesBuilder.toString().trim();
+//
+//        String authorities = authentication.getAuthorities().stream()
+//            .collect(Collectors.joining(" "));
+        System.out.println("authorities >>>>>>>>> " + authorities);
         long now = (new Date()).getTime();
 
         // AccessToken 생성
-        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
-//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L); // 60초
+//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
+        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L * 7); // 60초
         String accessToken = Jwts.builder()
             .setSubject(authentication.getName())
             .claim("auth", authorities)
@@ -67,11 +77,22 @@ public class JwtTokenProvider {
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256).compact();
 
+        System.out.println("key >>>>>>>>>>> " + key);
+
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
             .setExpiration(new Date(now + 1000L * 60L * 60L * 24L * 14)) // 14일
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
+
+        System.out.println("refreshToken >>>>>>>>>>>> " + refreshToken);
+
+//        String accessToken = accessToken(authentication, userDetails, authorities);
+//        String refreshToken = refreshToken();
+
+        // 토큰을 Redis에 저장한다. ---------------------
+        RefreshTokenService.saveTokenInfo(authentication.getName(), refreshToken, accessToken);
+//        String new GeneratedToken(accessToken, refreshToken);
 
         return JwtDTO.builder()
             .grantType("Bearer")
@@ -80,9 +101,36 @@ public class JwtTokenProvider {
             .build();
     }
 
+//    // AccessToken 생성
+//    public String accessToken(Authentication authentication, UserTokenDTO userDetails,
+//        String authorities) {
+//        long now = (new Date()).getTime();
+//        Date accessTokenExpiresIn = new Date(now + 1000L * 60L * 60L * 24L); // 1일
+////        Date accessTokenExpiresIn = new Date(now + 1000L * 60L); // 60초
+//        String accessToken = Jwts.builder()
+//            .setSubject(authentication.getName())
+//            .claim("auth", authorities)
+//            .claim("nickname", userDetails.getNickname()) // nickname을 claim으로 추가
+//            .claim("userId", userDetails.getUserId()) // userId를 claim으로 추가
+//            .setExpiration(accessTokenExpiresIn)
+//            .signWith(key, SignatureAlgorithm.HS256).compact();
+//
+//        return accessToken;
+//    }
+//
+//    // RefreshToken 생성
+//    public String refreshToken() {
+//        long now = (new Date()).getTime();
+//        String refreshToken = Jwts.builder()
+//            .setExpiration(new Date(now + 1000L * 60L * 60L * 24L * 14)) // 14일
+//            .signWith(key, SignatureAlgorithm.HS256)
+//            .compact();
+//        return refreshToken;
+//    }
+
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        System.out.println("jwtTokenProvider getAuthentication");
+        System.out.println("jwtTokenProvider getAuthentication" + accessToken);
         // jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
         // Claim 이란? 사용자에 대한 프로퍼티나 속성. 토큰 자체가 정보를 가지고 있는 방식
@@ -94,7 +142,8 @@ public class JwtTokenProvider {
         }
 
         // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(
+                claims.get("auth").toString().split(","))
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return

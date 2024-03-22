@@ -8,10 +8,8 @@ import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
-import { Spinner } from '../shared/spinner';
-import { DataSpinnerSh } from '../shared/DataSpinner';
 import { MainPage } from '../pages/Main/Main';
-import { GoogleOAuth } from '../features/Login/google';
+// import { GoogleOAuth } from '../features/Login/google';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -101,7 +99,7 @@ export const AppRouter = createBrowserRouter([
 
           // 리스트뷰 메인 페이지
           {
-            path: 'listview/main/:category',
+            path: 'listview/main/:nickname/:category',
             element: (
               <>
                 <ListView />
@@ -131,7 +129,7 @@ export const AppRouter = createBrowserRouter([
 
       {
         path: '*',
-        element: <GoogleOAuth></GoogleOAuth>,
+        // element: <GoogleOAuth></GoogleOAuth>,
       },
     ],
   },

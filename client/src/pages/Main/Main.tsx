@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import { Spinner } from '../../shared/spinner';
+
 const _StyledContainer = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 10px;
+  margin: 0px 7.5%;
 `;
 
 // 제목
@@ -54,35 +55,42 @@ const _StyledSpan = styled.span`
 // 내용
 const _styledContent = styled.p`
   text-align: center;
-  padding: 30px;
+  padding: 3%;
 `;
 
 const _styledDiv = styled.div`
-  width: 50%;
-  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; // 가로 축 중앙 정렬
+  text-align: center;
+  width: 40%; //
 `;
 
 export function MainPage() {
   return (
-    <>
+    <_StyledContainer>
       {/* <_MainPageTitle>StarWirte</_MainPageTitle>
       <_MainPageTitle>별이 가득한 데이터를 수집하세요</_MainPageTitle>
       <_MainPageContent>
         "별이 촘촘한 밤하늘처럼, 당신만의 지식 우주를 넓혀가세요."
       </_MainPageContent> */}
-
-      <_StyledContainer>
+      <_styledDiv>
         <_StyledHeading>
           STARWRITE
           <_StyledSpan>별 과 데이터</_StyledSpan>
         </_StyledHeading>
+      </_styledDiv>
+
+      <_styledDiv>
         <_styledContent>
           "밤 하늘 촘촘한 별처럼, 당신만의 지식 데이터를 넓혀가세요."
         </_styledContent>
-        <_styledDiv>
-          <Spinner></Spinner>
-        </_styledDiv>
-      </_StyledContainer>
-    </>
+      </_styledDiv>
+
+      <_styledDiv>
+        <Spinner></Spinner>
+      </_styledDiv>
+    </_StyledContainer>
   );
 }

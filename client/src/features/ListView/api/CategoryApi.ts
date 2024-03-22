@@ -3,7 +3,7 @@ import { baseApi } from '../../../shared/api/BaseApi';
 // 카테고리 리스트 axios
 export const getCategoriesApi = async (nickname: string) => {
   try {
-    const response = await baseApi.get(`/category/getCategoryById/${nickname}`);
+    const response = await baseApi.get(`/category/user?nickname=${nickname}`);
     console.log('getCategoriesApi', response.data);
     return response.data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const getCategoriesApi = async (nickname: string) => {
 // 카테고리 추가 axios post
 export const newCategoryApi = async (name: string) => {
   try {
-    const response = await baseApi.post('/category', name);
+    const response = await baseApi.post('/category', { name: name });
     console.log('newCategoryApi', response.data);
     return response.data;
   } catch (error) {
@@ -39,8 +39,9 @@ export const patchCategoryApi = async (id: string) => {
 // 카테고리 삭제 axios
 export const deleteCategoryApi = async (id: string) => {
   try {
-    const response = await baseApi.delete(`/category/${id}`);
+    const response = await baseApi.delete(`/category?categoryId=${id}`);
     console.log('deleteCategoryApi', response.data);
+    alert('카테고리 삭제가 완료되었습니다.');
     return response.data;
   } catch (error) {
     console.error('deleteCategoryError', error);
