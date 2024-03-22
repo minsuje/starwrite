@@ -163,18 +163,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   GetSavePost findSavePost(@Param(value = "nickname") String nickname,
       @Param(value = "postId") Long postId);
 
-
-  // 포스트 아이디로 하나의 포스트 찾기
-  @Query("MATCH (p:Post) " +
-      "WHERE p.postId = $postId " +
-      "RETURN p"
-  )
-  Post findPostByPostId(@Param(value = "postId") String postId);
-
-  @Query("MATCH (p:Post) WHERE p.postId = $id RETURN p ")
-  Post findPostById(@Param(value = "id") String id);
-
-
   /*@Query("UNWIND $relatedPosts AS relatedPostId " +
       "MATCH (relatedPost:Post) WHERE relatedPost.postId = relatedPostId " +
       "CREATE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: $tmpSave, recentView: $timeNow, createdAt: $timeNow, updatedAt: $timeNow}) "
@@ -295,32 +283,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       "DETACH DELETE p "
   )
   void deletePostByPostId(@Param("postId") Long postId, @Param("userId") String userId);
-
-/*  @Query("MATCH (p:Post), (r:Post) WHERE p.postId = $postId AND r.postId = $relatedPostId " +
-      "OPTIONAL MATCH (p)-[rel:RELATED]->(r) " +
-      "WITH p, r, rel " +
-      "WHERE rel IS NULL " +
-      "CREATE (p)-[:RELATED {postId: $postId, relatedPostId: $relatedPostId, relatedBack: false}]->(r) "
-      +
-      "RETURN p")
-  Post createAndLinkRelatedPost(@Param("postId") String postId,
-      @Param("relatedPostId") String relatedPostId);*/
-
-
-/*  @Query("MATCH (p:Post)-[r:RELATED]->(relatedPost) WHERE p.postId = $postId " +
-      "RETURN p, collect(relatedPost) as relatedPosts")
-  Post findPostWithRelatedPosts(@Param("postId") String postId);*/
-
-
-/*  @Query("MATCH (p:Post)-[:RELATED]->(r:Post) WHERE p.postId = $postId RETURN r")
-  List<Post> findRelatedPosts(@Param("postId") String postId);*/
-
-  /*@Query("UNWIND $relatedPostIds AS relatedPostId " +
-      "MATCH (p:Post) WHERE p.postId = $postId " +
-      "MATCH (r:Post) WHERE r.postId = relatedPostId " +
-      "MERGE (p)-[:RELATED]->(r)")
-  void createMultipleRelationships(@Param("postId") String postId,
-      @Param("relatedPostIds") List<String> relatedPostIds);*/
 
 
 
