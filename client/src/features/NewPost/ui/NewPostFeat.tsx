@@ -58,6 +58,7 @@ function NewPostFeat() {
 
   function publishPost() {
     console.log(title);
+    console.log(category);
 
     if (title === undefined || title.length > 50) {
       setOnValid('false');
@@ -65,26 +66,25 @@ function NewPostFeat() {
       return;
     }
 
-    if (titleList.find(({ title }) => title == title)) {
-      setOnValid('duplicate');
-      return;
+    // if (titleList.find(({ title }) => title == title)) {
+    //   setOnValid('duplicate');
+    // } else {
+    const postData = {
+      category: category,
+      post: {
+        title: title,
+        content: content,
+        visible: isPublic,
+      },
+      relatedPosts: relatedPosts,
+    };
+    console.log('data', postData);
+    if (postId) {
+      patchPostApi(postData, Number(postId));
     } else {
-      const postData = {
-        category: category,
-        post: {
-          title: title,
-          content: content,
-          visible: isPublic,
-        },
-        relatedPosts: relatedPosts,
-      };
-      console.log('data', postData);
-      if (postId) {
-        patchPostApi(postData, Number(postId));
-      } else {
-        newPostApi(postData);
-      }
+      newPostApi(postData);
     }
+    // }
   }
 
   function savePost() {
