@@ -22,6 +22,7 @@ import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
+import starwrite.server.response.SearchPosts;
 import starwrite.server.service.PostService;
 
 @RestController
@@ -172,6 +173,14 @@ public class PostController {
   @PostMapping("scrap")
   public String scrapPost(@RequestBody ScrapPost scrapPost) {
     return postService.scrapPost(scrapPost);
+  }
+
+
+
+  // 글 제목 검색
+  @GetMapping("/search")
+  public List<SearchPosts> searchPosts(@RequestParam(value = "title") String title) {
+    return postService.searchPosts(title);
   }
 
 

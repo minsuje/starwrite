@@ -14,6 +14,7 @@ import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
+import starwrite.server.response.SearchPosts;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, String> {
@@ -356,7 +357,13 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   int scrapPost(@Param(value = "postId") Long postId, @Param(value = "userId") String userId, @Param(value = "categoryId") String categoryId);
 
 
-
+// 글 검색
+@Query("MATCH (post:Post)<-[r:POSTED|AUTHOR]-(user:Users) " +
+    "WHERE post.title =~ ('.*' + $title + '.*') " +
+    "AND post.visible = 'true' " +
+    "AND post.tmpSave = false " +
+    "RETURN ID(post) AS searchPostId, post.title AS title, post.parsedContent AS content, user.userId AS userId, user.nickname AS nickName, post.createdAt AS createdAt")
+List<SearchPosts> searchPosts(@Param(value = "title") String title);
 
 
 

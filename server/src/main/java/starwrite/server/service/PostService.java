@@ -20,6 +20,7 @@ import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
+import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
 
 
@@ -237,5 +238,12 @@ public class PostService {
       return "post already scraped";
     }
     return "post scraped";
+  }
+
+
+  // 글 검색
+  public List<SearchPosts> searchPosts(String title) {
+    System.out.println("title >>>>> " + title);
+    return postRepository.searchPosts(title);
   }
 }
