@@ -10,7 +10,12 @@ const _SyledContainer = styled.div`
   width: '100%';
 `;
 
-export function CategoryViewWid({ searchTerm }: any) {
+export function CategoryViewWid({
+  searchTerm,
+  setLoading,
+  setCategoryDataNone,
+  setCategoryData,
+}) {
   const navigate = useNavigate();
   const { nickname } = useParams();
   const svgRef = useRef<SVGSVGElement>(null);
@@ -18,8 +23,9 @@ export function CategoryViewWid({ searchTerm }: any) {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [category, setCategory] = useState([]);
+  const [categoryDatas, setCategoryDatas] = useState([]);
 
-  const [Category, setCategory] = useState([]);
   useEffect(() => {
     // axios 데이터 로딩
     const getDataCategory = async () => {
@@ -31,19 +37,23 @@ export function CategoryViewWid({ searchTerm }: any) {
             (categoryItem) => ({
               ...categoryItem,
               id: categoryItem.categoryId,
-              label: categoryItem.name,
+              name: categoryItem.name,
               categoryId: categoryItem.categoryId,
               url: 'nodeurl',
             }),
           );
 
-          // 검색어가 있을 경우 필터링을 적용합니다.
+          // 검색어가 있을 경우 필터링을 적용
           if (searchTerm.trim() !== '') {
             processedCategoryData = processedCategoryData.filter((category) =>
-              category.label.toLowerCase().includes(searchTerm.toLowerCase()),
+              category.name.toLowerCase().includes(searchTerm.toLowerCase()),
             );
           }
           setCategory(processedCategoryData);
+          setLoading(false);
+          setCategoryDataNone(categoryDataResponse);
+          setCategoryData(categoryDataResponse);
+          setCategoryDatas(processedCategoryData);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -53,10 +63,10 @@ export function CategoryViewWid({ searchTerm }: any) {
     getDataCategory();
   }, []);
 
-  console.log('Processed Category Data:', Category);
+  // console.log('Processed category Data:', category);
 
   const simulation = d3
-    .forceSimulation(Category)
+    .forceSimulation(category)
     .force('charge', d3.forceManyBody().strength(-80))
     .force('collide', d3.forceCollide().radius(100))
     .force(
@@ -106,7 +116,7 @@ export function CategoryViewWid({ searchTerm }: any) {
     const node = group
       .selectAll('.node')
       .attr('class', 'node')
-      .data(Category)
+      .data(category)
       .enter()
       .append('g')
       // .attr('transform', 'translate(-17.5, -.5)')
@@ -124,13 +134,13 @@ export function CategoryViewWid({ searchTerm }: any) {
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('fill', '#ffffff')
-      .text((d) => d.label)
+      .text((d) => d.name)
       .attr('y', 4);
 
     simulation.on('tick', () => {
       node.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
     });
-  }, [Category]);
+  }, [category]);
 
   return (
     <svg

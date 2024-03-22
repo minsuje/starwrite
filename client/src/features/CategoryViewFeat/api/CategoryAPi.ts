@@ -5,7 +5,7 @@ import { baseApi } from '../../../shared/api/BaseApi';
 export const CategoryApi = async (category: string) => {
   try {
     const response = await axios.get(
-      `http://52.79.228.200:8080/category/${category}/getCategoryPostNode`,
+      `http://54.180.103.144:8080/category/${category}/getCategoryPostNode`,
     );
     console.log('CategoryApi', response.data);
     return response.data;
@@ -48,10 +48,11 @@ nodes.forEach((node) => {
   node.url = `/user/starwrite/nodeview/${node.userid_num}/${node.category}`;
 });
 
+const nickname = localStorage.getItem('nickname');
 export const fetchDataCategory = async () => {
   try {
     const response = await baseApi.get(
-      `http://52.79.228.200:8080/user/category/user?nickname=고길동`,
+      `http://54.180.103.144:8080/user/category/user?nickname=${nickname}`,
     );
     console.log('fetchDataCategory', response);
     return response.data;

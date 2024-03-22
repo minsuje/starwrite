@@ -1,6 +1,5 @@
-export { nodes, links, fetchData } from './api/NodeviewApi';
+export { fetchData } from './api/NodeviewApi';
 export {
-  type Node,
   type CustomNode,
   type Link,
   type SmallCircleData,

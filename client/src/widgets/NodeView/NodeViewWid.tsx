@@ -12,9 +12,10 @@ import { fetchData } from '../../features/NodeViewFeat/index';
 import { ExtendedCustomNode } from '../../features/NodeViewFeat/model/Types';
 import { useParams } from 'react-router';
 import { NoDataComponent } from '../../shared/NoDataComponent';
+import { PagesearchNode } from '../../pages/NodeView/NodeViewPage';
 
 export type SearchType = {
-  setNodesData: (nodes: CustomNode[]) => void;
+  setNodesData: React.Dispatch<React.SetStateAction<PagesearchNode>>;
   setPageDataProp: (data: boolean) => void;
   searchTerm: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +31,7 @@ export const NodeView = ({
   const [links, setLink] = useState<Link[]>([]);
   const { nickname, category } = useParams();
 
-  console.log('categoryId>>?>>>>>', category);
+  // console.log('categoryId>>?>>>>>', category);
   // console.log('nodes', nodes);
   // console.log('links', links);
 
@@ -82,7 +83,7 @@ export const NodeView = ({
           setLoading(false);
         }
 
-        console.log('links>>>>>>>>>>>', links);
+        // console.log('links>>>>>>>>>>>', links);
 
         // const LinksData = fetchedNodes.relation.map((link: Link) => ({
         //   ...link,
@@ -414,7 +415,7 @@ export const NodeView = ({
     // nodes 배열이 비어 있거나 모든 항목이 null일 때 렌더링할 컴포넌트
     return <NoDataComponent />;
   }
-  console.log('>>>>>>>>>>>>>>>>>>', nodes);
+  // console.log('>>>>>>>>>>>>>>>>>>', nodes);
 
   return (
     <svg
