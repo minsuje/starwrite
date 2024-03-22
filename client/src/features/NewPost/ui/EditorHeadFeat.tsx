@@ -49,9 +49,10 @@ function NewPostHeadFeat({
       promise.then((categories) => {
         console.log('categories data: ', categories);
         setCategories(categories);
+        setCategory(categories[0].categoryId);
       });
     }
-  }, []);
+  }, [setCategory]);
 
   return (
     <>
@@ -78,7 +79,10 @@ function NewPostHeadFeat({
         <p>카테고리</p>
         <select
           value={category}
-          onChange={(value) => setCategory(value.currentTarget.value)}
+          onChange={(value) => {
+            setCategory(value.currentTarget.value);
+            console.log(value.currentTarget.value);
+          }}
           style={{
             width: '50%',
             padding: '0px 5%',
