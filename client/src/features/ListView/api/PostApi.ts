@@ -16,7 +16,7 @@ export const postListApi = async (category: string | undefined) => {
 // 전체 글 불러오기
 export const postListAllApi = async (nickname: string | undefined) => {
   try {
-    const response = await baseApi.get(`/category/post/${nickname}/All`);
+    const response = await baseApi.get(`/post/${nickname}/all`);
     console.log('postListAllApi', response.data);
     return response.data;
   } catch (error) {
