@@ -51,16 +51,11 @@ function NewPostFeat() {
   useEffect(() => {
     const promise = getTitleApi();
     promise.then((titleList) => {
-      console.log('titles data: ', titleList);
       setTitleList(titleList);
     });
   }, []);
 
   function publishPost() {
-
-    console.log('category', category);
-
-
     if (title === undefined || title.length > 50) {
       setOnValid('false');
       console.log('제목 1자 이상 50자 이하로 작성해주세요');

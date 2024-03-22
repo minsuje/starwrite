@@ -80,7 +80,6 @@ export default function Editor({
   useEffect(() => {
     if (content) {
       setInitialContent(JSON.parse(content));
-      console.log('content', content);
     }
   }, [content]);
 

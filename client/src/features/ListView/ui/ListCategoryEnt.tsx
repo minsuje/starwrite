@@ -41,7 +41,6 @@ function ListCategory({
         const promise = getCategoriesApi(nickname);
         // 현재 주소에서 뽑아낸 nickname
         promise.then((categories) => {
-          console.log('categories data: ', categories);
           setCategories([...initalList, ...categories]);
         });
       }
@@ -53,16 +52,15 @@ function ListCategory({
     }
   }, [sort, nickname, updateCategory]);
 
-  useEffect(() => {
-    if (nickname) {
-      const promise = getCategoriesApi(nickname);
-      // 현재 주소에서 뽑아낸 nickname
-      promise.then((categories) => {
-        console.log('categories data: ', categories);
-        setCategories([...initalList, ...categories]);
-      });
-    }
-  }, [updateCategory, nickname]);
+  // useEffect(() => {
+  //   if (nickname) {
+  //     const promise = getCategoriesApi(nickname);
+  //     // 현재 주소에서 뽑아낸 nickname
+  //     promise.then((categories) => {
+  //       setCategories([...initalList, ...categories]);
+  //     });
+  //   }
+  // }, [updateCategory, nickname]);
 
   return (
     <>

@@ -7,7 +7,7 @@ import { _listBox, _postBox } from '../style';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
-  console.log('category params', category);
+
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>([]);
   const [categoryName, setCategoryName] = useState<string>();

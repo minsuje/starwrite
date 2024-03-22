@@ -58,7 +58,6 @@ function AddCategory({
 
             <_ButtonBox>
               <_Button type="submit">추가</_Button>
-
               <_Button
                 color="#ffffff1d"
                 onClick={() => {
