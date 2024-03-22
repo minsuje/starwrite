@@ -4,8 +4,8 @@ import { baseApi } from '../../../shared/api/BaseApi';
 // 카테고리 선택시 글 리스트 불러오기
 export const CategoryApi = async (category: string) => {
   try {
-    const response = await axios.get(
-      `http://54.180.103.144:8080/category/${category}/getCategoryPostNode`,
+    const response = await baseApi.get(
+      `/category/${category}/getCategoryPostNode`,
     );
     console.log('CategoryApi', response.data);
     return response.data;
@@ -51,9 +51,7 @@ nodes.forEach((node) => {
 const nickname = localStorage.getItem('nickname');
 export const fetchDataCategory = async () => {
   try {
-    const response = await baseApi.get(
-      `http://54.180.103.144:8080/user/category/user?nickname=${nickname}`,
-    );
+    const response = await baseApi.get(`/category/user?nickname=${nickname}`);
     console.log('fetchDataCategory', response);
     return response.data;
 

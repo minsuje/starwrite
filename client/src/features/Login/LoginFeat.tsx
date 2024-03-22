@@ -65,13 +65,16 @@ function LoginForm() {
     //여기에 회원가입 axios 작성
 
     try {
-      const response = await axios.post(`http://localhost:8080/login/post`, {
-        mail: data.email,
-        password: data.password,
-      });
+      const response = await axios.post(
+        `http://54.180.103.144:8080/login/post`,
+        {
+          mail: data.email,
+          password: data.password,
+        },
+      );
       localStorage.setItem('accessToken', response.data.accessToken);
 
-      const cookie = await axios.get(`http://localhost:8080/cookie`, {
+      const cookie = await axios.get(`http://54.180.103.144:8080/cookie`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
@@ -118,11 +121,14 @@ function LoginForm() {
     console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
-      const response = await axios.get('http://localhost:8080/login/oauth', {
-        params: {
-          code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
+      const response = await axios.get(
+        'http://54.180.103.144:8080/login/oauth',
+        {
+          params: {
+            code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
+          },
         },
-      });
+      );
       console.log(
         'Authorization code sent to backend. Response:',
         response.data,
@@ -137,7 +143,7 @@ function LoginForm() {
     try {
       // 백엔드에서 Google 로그인 URL을 가져옵니다.
       const response = await axios.post(
-        'http://localhost:8080/login/api/v1/oauth2/google',
+        'http://54.180.103.144:8080/login/api/v1/oauth2/google',
       );
       const googleLoginUrl = response.data;
       console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
@@ -154,7 +160,7 @@ function LoginForm() {
   // async function handleGoogleData() {
   //   try {
   //     const response = await axios.post(
-  //       `http://localhost:8080/login/oauth2/code/google`,
+  //       `http://54.180.103.144:8080/login/oauth2/code/google`,
   //     );
   //   } catch (error) {
   //     console.error(error);
@@ -172,7 +178,7 @@ function LoginForm() {
 
   //       // 서버에 POST 요청 보내기
   //       const response = await axios.post(
-  //         'http://localhost:8080/login/oauth/google/post',
+  //         'http://54.180.103.144:8080/login/oauth/google/post',
   //         {
   //           access_token: credentialResponse.credential,
   //           decodedToken: decodedToken,
