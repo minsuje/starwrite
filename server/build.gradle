@@ -100,3 +100,7 @@ tasks.named('test') {
 //	delete file(querydslDir)
 //}
 
+// docker 설정
+jar {
+	enabled = false
+}

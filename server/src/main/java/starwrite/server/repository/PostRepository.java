@@ -166,18 +166,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   GetSavePost findSavePost(@Param(value = "nickname") String nickname,
       @Param(value = "postId") Long postId);
 
-
-  // 포스트 아이디로 하나의 포스트 찾기
-  @Query("MATCH (p:Post) " +
-      "WHERE p.postId = $postId " +
-      "RETURN p"
-  )
-  Post findPostByPostId(@Param(value = "postId") String postId);
-
-  @Query("MATCH (p:Post) WHERE p.postId = $id RETURN p ")
-  Post findPostById(@Param(value = "id") String id);
-
-
   /*@Query("UNWIND $relatedPosts AS relatedPostId " +
       "MATCH (relatedPost:Post) WHERE relatedPost.postId = relatedPostId " +
       "CREATE (newPost:Post {title: $title, content: $content, visible: $visible, img: $img, tmpSave: $tmpSave, recentView: $timeNow, createdAt: $timeNow, updatedAt: $timeNow}) "
