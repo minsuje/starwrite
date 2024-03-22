@@ -28,7 +28,7 @@ export const NodeView = ({
 }: SearchType) => {
   const [nodes, setNodes] = useState<CustomNode[]>([]);
   const [links, setLink] = useState<Link[]>([]);
-  const { category } = useParams();
+  const { nickname, category } = useParams();
 
   console.log('categoryId>>?>>>>>', category);
   // console.log('nodes', nodes);
@@ -47,7 +47,7 @@ export const NodeView = ({
             label: node.title, //토마토
             x: Math.random() * viewportSize.width,
             y: Math.random() * viewportSize.height,
-            url: `/user/starwrite/listview/main/과학/${node.postId}`,
+            url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
           }));
 
           // validLinks 설정 예시

@@ -8,8 +8,6 @@ import { ListDetailFeat, ListViewMainEnt } from '../features/ListView';
 import NewPostPage from '../pages/NewPost/NewPostPage';
 import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
-import { Spinner } from '../shared/spinner';
-import { DataSpinnerSh } from '../shared/DataSpinner';
 import { MainPage } from '../pages/Main/Main';
 // import { GoogleOAuth } from '../features/Login/google';
 

@@ -8,6 +8,7 @@ const _spinnerTitle = styled.h1`
   text-align: center;
   border: '1px solid #383737';
 `;
+
 export function Spinner() {
   return (
     <>
