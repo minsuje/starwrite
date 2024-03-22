@@ -57,8 +57,9 @@ function NewPostFeat() {
   }, []);
 
   function publishPost() {
-    console.log(title);
-    console.log(category);
+
+    console.log('category', category);
+
 
     if (title === undefined || title.length > 50) {
       setOnValid('false');
@@ -68,6 +69,7 @@ function NewPostFeat() {
 
     // if (titleList.find(({ title }) => title == title)) {
     //   setOnValid('duplicate');
+
     // } else {
     const postData = {
       category: category,
@@ -86,6 +88,7 @@ function NewPostFeat() {
     }
     // }
   }
+  // }
 
   function savePost() {
     const postData = {

@@ -18,7 +18,12 @@ function ListViewMainEnt() {
       const promise = postListAllApi(nickname);
       promise
         .then((Posts) => {
-          setPostsList(Posts.categoryPosts);
+          if (Posts.categoryPosts) {
+            setPostsList(Posts.categoryPosts);
+          } else {
+            setPostsList([]);
+            console.log('데이터에 categoryPosts 없음');
+          }
         })
         .catch(() => {
           setPostsList([]);
@@ -28,7 +33,12 @@ function ListViewMainEnt() {
       const promise = postListAllApi('all');
       promise
         .then((Posts) => {
-          setPostsList(Posts.categoryPosts);
+          if (Posts.categoryPosts) {
+            setPostsList(Posts.categoryPosts);
+          } else {
+            setPostsList([]);
+            console.log('데이터에 categoryPosts 없음');
+          }
         })
         .catch(() => {
           setPostsList([]);
@@ -36,8 +46,18 @@ function ListViewMainEnt() {
     } else {
       const promise = postListApi(category);
       promise.then((Posts) => {
-        setPostsList(Posts.categoryPosts);
-        setCategoryName(Posts.categoryName);
+        if (Posts.categoryPosts) {
+          setPostsList(Posts.categoryPosts);
+        } else {
+          setPostsList([]);
+          console.log('데이터에 categoryPosts 없음');
+        }
+        if (Posts.categoryName) {
+          setCategoryName(Posts.categoryName);
+        } else {
+          setCategoryName('찾을 수 없음');
+          console.log('데이터에 categoryName 없음');
+        }
       });
     }
   }, [category, nickname]);
