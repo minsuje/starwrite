@@ -27,21 +27,26 @@ const ListCategories = styled.div`
 
 const _EditorHead = styled.div`
   width: 90%;
-  background-color: var(--color-zinc-800);
+  background-color: var(--color-zinc-900);
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.3);
+  border-radius: 7px;
   padding: 2% 5%;
   display: flex;
   justify-content: ${(props) => props.content || 'space-between'};
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   p {
     font-size: 15px;
+    font-weight: 800;
     width: 50%;
     text-align: center;
   }
 `;
 
 const _TitleInput = styled(Input)`
-  background-color: var(--color-zinc-800);
+  width: 100%;
+  background-color: var(--color-zinc-900);
   font-size: 20px;
 `;
 
@@ -62,11 +67,15 @@ const _EditorDiv = styled.div`
 
 const _PublcButton = styled.div`
   border: 1px solid var(--color-zinc-600);
+  font-size: 0.8rem;
   border-radius: 4px;
-  width: 50%;
+  width: 5em;
   text-align: center;
   padding: 4px 0;
   background-color: ${(props) => props.color || 'none'};
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 // 에디터 테마
