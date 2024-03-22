@@ -33,7 +33,6 @@ public interface UsersRepository extends
   @Query("MATCH (u:Users) WHERE u.mail = $mail RETURN u LIMIT 1")
   Users findUserByEmail(@Param(value = "mail") String mail);
 
-
   // 해당 유저 아이디에 대한 유저 아이디 반환
   @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u.userId")
   String findUserById(@Param(value = "userId") String userId);
@@ -43,5 +42,24 @@ public interface UsersRepository extends
 
   @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.userId")
   String findUserByNickname(@Param(value = "nickname") String nickname);
+
+  // 마이페이지 유저 정보 수정하기
+  // - 닉네임만 수정
+  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+      "SET u.nickname = $nickname " +
+      "RETURN u")
+  Users updateUserNickname(@Param(value = "userId") String userId, @Param(value = "nickname") String nickname);
+
+  // - 비밀번호도 수정
+  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+      "SET u.nickname = $nickname, u.password = $password " +
+      "RETURN u")
+  Users updateUserPassword(@Param(value = "userId") String userId, @Param(value = "password") String password, @Param(value = "nickname") String nickname);
+
+  // 유저 탈퇴
+  @Query("MATCH (u:Users) WHERE u.userId = $userId " +
+      "DELETE u " +
+      "RETURN count(u) as deletedCount")
+  int deleteUser(@Param(value = "userId") String userId);
 }
 

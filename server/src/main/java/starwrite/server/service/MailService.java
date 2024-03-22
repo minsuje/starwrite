@@ -4,8 +4,11 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage.RecipientType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import starwrite.server.entity.Users;
+import starwrite.server.repository.UsersRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +16,9 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private static final String senderMail = "introvertinnovator5@gmail.com"; // 메일 발신하는 이메일
     private static int number;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     public static void createNumber() {
         number = (int)(Math.random() * (90000)) + 100000;
@@ -42,5 +48,10 @@ public class MailService {
         javaMailSender.send(message);
 
         return number;
+    }
+
+    // 이메일 중복 확인
+    public Users doubleCheck(String mail) {
+        return usersRepository.findUserByEmail(mail);
     }
 }

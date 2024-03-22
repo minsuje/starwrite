@@ -21,18 +21,27 @@ public class MailController {
     @PostMapping("/mail/send")
     public HashMap<String, Object> mailSend(@RequestBody EmailDTO mail) {
         System.out.println("mail >>> " + mail.getMail());
-        HashMap<String, Object> map = new HashMap<>();
-        try {
-            number = mailService.sendMail(mail.getMail());
-            String num = String.valueOf(number);
 
-            map.put("success", Boolean.TRUE);
-            map.put("number", num);
-        } catch (Exception e) {
-            map.put("success", Boolean.FALSE);
-            map.put("error", e.getMessage());
+        HashMap<String, Object> map = new HashMap<>();
+        // 이메일 중복인지 확인
+        if (mailService.doubleCheck(mail.getMail()) == null) {
+
+            try {
+                number = mailService.sendMail(mail.getMail());
+                String num = String.valueOf(number);
+
+                map.put("success", Boolean.TRUE);
+                map.put("number", num);
+            } catch (Exception e) {
+                map.put("success", Boolean.FALSE);
+                map.put("error", e.getMessage());
+            }
+            return map;
+        } else {
+            System.out.println("이미 있는 사용자입니다.");
+            map.put("fail", "duplicate email");
+            return  map;
         }
-        return map;
     }
 
     // 인증번호 일치 여부 확인
