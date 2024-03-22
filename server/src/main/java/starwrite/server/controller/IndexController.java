@@ -1,6 +1,7 @@
 package starwrite.server.controller;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +84,10 @@ public class IndexController {
     @PostMapping("/login/post")
     public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
         System.out.println("signin" + logInDTO);
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+
         String username = logInDTO.getMail();
         String password = logInDTO.getPassword();
         JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
@@ -97,6 +102,7 @@ public class IndexController {
     @GetMapping("/cookie")
     public Cookie setCookie(Authentication authentication) {
         Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
+      System.out.println("cookie name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + cookie.getValue()  + " ----- " +   SecurityUtil.getCurrentUserNickname());
         cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
         response.addCookie(cookie);
 
@@ -104,10 +110,22 @@ public class IndexController {
     }
 
     // 로그아웃
-    @PostMapping("/logout")
+    @PostMapping("user/logout")
     public ResponseEntity<StatusResponseDTO> logout(
-        @RequestHeader("Authorization") final String accessToken) {
+        @RequestHeader("Authorization") final String accessToken, HttpServletRequest httpServletRequest) {
         System.out.println("logout accessToken >>>>>>>>>>  " + accessToken);
+
+      Cookie[] cookies = httpServletRequest.getCookies();
+      if (cookies != null && cookies.length > 0) {
+        for (Cookie cookie : cookies) {
+          if (cookie.getName().equals("nickName")) {
+            cookie.setValue("");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+          }
+        }
+      }
 
         // 엑세스 토큰으로 현재 Redis 정보 삭제
         refreshTokenService.removeRefreshToken(accessToken);
