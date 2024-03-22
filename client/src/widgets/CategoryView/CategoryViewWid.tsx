@@ -118,7 +118,7 @@ export function CategoryViewWid({ searchTerm }: any) {
       })
       .call(dragHandler);
 
-    node.append('circle').attr('r', 26).attr('fill', 'skyblue');
+    node.append('circle').attr('r', 56).attr('fill', '#A6A6A6');
     // console.log('nodes', nodes);
     node
       .append('text')
