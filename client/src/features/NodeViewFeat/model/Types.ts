@@ -31,6 +31,11 @@ export interface SmallCircleData {
   total: number; // 전체 원의 수
 }
 
+export interface searchNode {
+  posts: [];
+  relation: [];
+}
+
 // export interface Node {
 //   id: string;
 //   group: number;

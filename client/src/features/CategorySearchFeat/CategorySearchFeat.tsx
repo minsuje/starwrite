@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import { IoIosSearch } from 'react-icons/io';
-import { nodes } from '../CategoryViewFeat/index';
+import { useState, useRef } from 'react';
+
+// import { nodes } from '../CategoryViewFeat/index';
 import './CategorySearchFeat.css';
-import { baseApi } from '../../shared/api/BaseApi';
+// import { baseApi } from '../../shared/api/BaseApi';
 import { SearchIcon } from '../../shared/Search';
 
 export type SearchTypes = {
   onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
 };
 
-export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
+export const CategorySearchFeat = ({ onSearch, categoryData }: SearchTypes) => {
   const [searchTerm, setSearchTerm] = useState(''); // api 데이터 담을 예정
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
@@ -40,28 +40,25 @@ export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
     // 검색어가 있고, 필터링된 결과가 있을 때만 목록을 표시
     if (
       newSearchTerm.trim() &&
-      nodes.filter((node) =>
-        node.label.toLowerCase().includes(newSearchTerm.toLowerCase()),
+      categoryData.filter((category) =>
+        category.name.toLowerCase().includes(newSearchTerm.toLowerCase()),
       ).length
     ) {
       setToggleSearch(true);
     }
   };
 
-  const handleItemClick = (label: string) => {
-    setSearchTerm(label);
+  const handleItemClick = (name: string) => {
+    setSearchTerm(name);
     setToggleSearch(false);
   };
 
   const handleInputClick = () => {
     setToggleSearch(true);
   };
-  const handleoutClick = () => {
-    setToggleSearch(false);
-  };
 
-  const filterSearch = nodes.filter((node) =>
-    node.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filterSearch = categoryData.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -103,10 +100,10 @@ export const CategorySearchFeat = ({ onSearch }: SearchTypes) => {
                 <li
                   key={index}
                   style={{ padding: '15px', cursor: 'pointer', color: '#ffff' }}
-                  onClick={() => handleItemClick(item.label)}
+                  onClick={() => handleItemClick(item.name)}
                   className="searchItem"
                 >
-                  {item.label}
+                  {item.name}
                 </li>
               ))
             ) : (
