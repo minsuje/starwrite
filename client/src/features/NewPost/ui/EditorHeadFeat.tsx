@@ -41,7 +41,6 @@ function NewPostHeadFeat({
       setToggleButton(false);
     }
   }, [isPublic]);
-
   useEffect(() => {
     const myNickname = localStorage.getItem('nickname');
     if (myNickname) {
@@ -49,7 +48,11 @@ function NewPostHeadFeat({
       promise.then((categories) => {
         console.log('categories data: ', categories);
         setCategories(categories);
-        setCategory(categories[0].categoryId);
+
+        if (categories[0]) {
+          setCategory(categories[0].categoryId);
+        }
+
       });
     }
   }, [setCategory]);

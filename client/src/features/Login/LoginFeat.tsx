@@ -66,7 +66,7 @@ function LoginForm() {
 
     try {
       const response = await axios.post(
-        `http://52.79.228.200:8080/login/post`,
+        `http://54.180.103.144:8080/login/post`,
         {
           mail: data.email,
           password: data.password,
@@ -74,7 +74,7 @@ function LoginForm() {
       );
       localStorage.setItem('accessToken', response.data.accessToken);
 
-      const cookie = await axios.get(`http://52.79.228.200:8080/cookie`, {
+      const cookie = await axios.get(`http://54.180.103.144:8080/cookie`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
@@ -119,7 +119,7 @@ function LoginForm() {
     try {
       // 백엔드에 code를 전송하는 로직...
       const response = await axios.get(
-        'http://52.79.228.200:8080/login/oauth',
+        'http://54.180.103.144:8080/login/oauth',
         {
           params: {
             code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
@@ -157,7 +157,7 @@ function LoginForm() {
   // async function handleGoogleData() {
   //   try {
   //     const response = await axios.post(
-  //       `http://52.79.228.200:8080/login/oauth2/code/google`,
+  //       `http://54.180.103.144:8080/login/oauth2/code/google`,
   //     );
   //   } catch (error) {
   //     console.error(error);
@@ -237,7 +237,7 @@ function LoginForm() {
           />
         </GoogleOAuthProvider> */}
       </form>
-      <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
+      {/* <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton> */}
       {/* <LargeButton onClick={extractCodeFromUrl}>테스트 </LargeButton> */}
     </>
   );

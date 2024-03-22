@@ -1,14 +1,13 @@
 import { useState, useRef } from 'react';
-import { nodes } from '../../widgets/NodeView/index';
+// import { nodes } from '../../widgets/NodeView/index';
 import { SearchIcon } from '../../shared/Search';
 import './NodeSearchFeat.css';
-import { CustomNode } from '../NodeViewFeat/model/Types';
-export type SearchTypes = {
-  onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
-  nodesData: CustomNode[]; // nodesData 속성 추가
-};
+import { NodeViewProps } from '../../pages/NodeView/NodeViewPage';
 
-export const NodeSearchFeat = ({ onSearch, nodesData }: SearchTypes) => {
+export const NodeSearchFeat: React.FC<NodeViewProps> = ({
+  onSearch,
+  nodesData,
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);

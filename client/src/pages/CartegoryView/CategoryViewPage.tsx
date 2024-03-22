@@ -1,24 +1,43 @@
 import { CategoryViewWid } from '../../widgets/CategoryView';
 import { CategorySearchFeat } from '../../features/CategorySearchFeat/index';
 import { useState } from 'react';
+import { _Background } from '../../shared/CommonStyle';
+import { Spinner } from '../../shared/spinner';
+import { DataSpinnerSh } from '../../shared/DataSpinner';
 
 export function CategoryViewPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [CategoryId, setCategoryId] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState([]);
+  const [categoryDataNone, setCategoryDataNone] = useState<boolean>(false);
 
   // 검색어가 업데이트될 때 호출되는 함수
   const onSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm); // 검색어 상태 업데이트
   };
 
-  console.log('pagesCategoryId>>>>>>>>>>>>>>', CategoryId);
+  // console.log('categoryData??', categoryDataNone);
+  // console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
+
   return (
     <>
-      <CategorySearchFeat onSearch={onSearch} />
+      <CategorySearchFeat onSearch={onSearch} categoryData={categoryData} />
       <CategoryViewWid
         searchTerm={searchTerm}
-        CategoryId={setCategoryId}
+        setLoading={setLoading}
+        setCategoryDataNone={setCategoryDataNone}
+        setCategoryData={setCategoryData}
       ></CategoryViewWid>
+
+      {loading ? (
+        <_Background>
+          <Spinner></Spinner>
+        </_Background>
+      ) : categoryDataNone ? (
+        ''
+      ) : (
+        <DataSpinnerSh></DataSpinnerSh>
+      )}
     </>
   );
 }
