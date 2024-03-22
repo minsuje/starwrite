@@ -237,7 +237,7 @@ function LoginForm() {
           />
         </GoogleOAuthProvider> */}
       </form>
-      <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton>
+      {/* <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton> */}
       {/* <LargeButton onClick={extractCodeFromUrl}>테스트 </LargeButton> */}
     </>
   );
