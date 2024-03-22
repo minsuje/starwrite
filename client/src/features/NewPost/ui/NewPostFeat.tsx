@@ -57,7 +57,9 @@ function NewPostFeat() {
   }, []);
 
   function publishPost() {
-    console.log(title);
+
+    console.log('category', category);
+
 
     if (title === undefined || title.length > 50) {
       setOnValid('false');
@@ -65,10 +67,10 @@ function NewPostFeat() {
       return;
     }
 
-    if (titleList.find(({ title }) => title == title)) {
-      setOnValid('duplicate');
-    }
+    // if (titleList.find(({ title }) => title == title)) {
+    //   setOnValid('duplicate');
 
+    // } else {
     const postData = {
       category: category,
       post: {
@@ -84,7 +86,9 @@ function NewPostFeat() {
     } else {
       newPostApi(postData);
     }
+    // }
   }
+  // }
 
   function savePost() {
     const postData = {

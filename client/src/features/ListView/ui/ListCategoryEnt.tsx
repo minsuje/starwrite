@@ -4,6 +4,7 @@ import { OneCategory, ListCategories } from '../../NewPost/ui/style';
 import { initalList } from '../model/CategoryData';
 import { Category } from '../../../shared/types/app';
 import { getCategoriesApi } from '../api/CategoryApi';
+import { baseApi } from '../../../shared/api/BaseApi';
 
 function ListCategory({
   sort,
@@ -22,10 +23,18 @@ function ListCategory({
     category,
   );
   // 이게 맞는지 확인 부탁드려요 구휘님 03.17
-  const selected = (categoryId: string) => {
+  const selected = async (categoryId: string) => {
     if (categoryId === 'logout') {
       localStorage.removeItem('nickname');
       localStorage.removeItem('accessToken');
+
+      try {
+        const response = await baseApi.post(`/logout`);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+
       navigate(`/`);
     } else if (categoryId === 'myProfile') {
       navigate(`/user/starwrite/mypage/${categoryId}`);

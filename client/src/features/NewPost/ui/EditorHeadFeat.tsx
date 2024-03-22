@@ -41,7 +41,6 @@ function NewPostHeadFeat({
       setToggleButton(false);
     }
   }, [isPublic]);
-
   useEffect(() => {
     const myNickname = localStorage.getItem('nickname');
     if (myNickname) {
@@ -49,25 +48,31 @@ function NewPostHeadFeat({
       promise.then((categories) => {
         console.log('categories data: ', categories);
         setCategories(categories);
+
+        if (categories[0]) {
+          setCategory(categories[0].categoryId);
+        }
+
       });
     }
-  }, []);
+  }, [setCategory]);
 
   return (
     <>
-      <_EditorHead>
-        <_TitleInput
-          placeholder="제목을 입력하세요"
-          value={title ? title : undefined}
-          onChange={(value) => setTitle(value.currentTarget.value)}
-        />
+      <div style={{ display: 'flex', justifyContent: 'end', gap: '10px' }}>
+        <button onClick={openSaving}>임시저장 불러오기</button>
+        <button onClick={savePost}>임시저장 </button>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={savePost}>임시저장 </button>
-          <button onClick={openSaving}>임시저장 불러오기</button>
-          <button onClick={() => publishPost()}>저장</button>
-        </div>
-      </_EditorHead>
+        <button onClick={() => publishPost()}>저장</button>
+      </div>
+
+      {/* <_EditorHead> */}
+      <_TitleInput
+        placeholder="제목을 입력하세요"
+        value={title ? title : undefined}
+        onChange={(value) => setTitle(value.currentTarget.value)}
+      />
+      {/* </_EditorHead> */}
       {onValid === 'false'
         ? '제목은 1자 이상 50자 이하로 작성해주세요'
         : onValid === 'duplicate'
@@ -77,14 +82,17 @@ function NewPostHeadFeat({
         <p>카테고리</p>
         <select
           value={category}
-          onChange={(value) => setCategory(value.currentTarget.value)}
+          onChange={(value) => {
+            setCategory(value.currentTarget.value);
+            console.log(value.currentTarget.value);
+          }}
           style={{
             width: '50%',
-            padding: '0px 10%',
-            backgroundColor: 'rgba(0,0,0,0.3)',
+            padding: '0px 5%',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
             color: 'white',
             border: 'none',
-            fontSize: '17px',
+            fontSize: '0.9rem',
           }}
         >
           {categories.map((category, idx) => {
@@ -104,8 +112,31 @@ function NewPostHeadFeat({
             );
           })}
         </select>
+
+        <p>공개설정</p>
+
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <_PublcButton
+            color={toggleButton ? 'var(--color-zinc-600)' : undefined}
+            onClick={() => {
+              setIsPublic('true');
+              setToggleButton(true);
+            }}
+          >
+            공개
+          </_PublcButton>
+          <_PublcButton
+            color={!toggleButton ? 'var(--color-zinc-600)' : undefined}
+            onClick={() => {
+              setIsPublic('false');
+              setToggleButton(false);
+            }}
+          >
+            비공개
+          </_PublcButton>
+        </div>
       </_EditorHead>
-      <_EditorHead>
+      {/* <_EditorHead>
         <_PublcButton
           color={toggleButton ? 'var(--color-zinc-600)' : undefined}
           onClick={() => {
@@ -124,7 +155,7 @@ function NewPostHeadFeat({
         >
           비공개
         </_PublcButton>
-      </_EditorHead>
+      </_EditorHead> */}
     </>
   );
 }

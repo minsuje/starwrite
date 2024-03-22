@@ -9,11 +9,11 @@ const tried = async () => {
 };
 tried();
 */
-
+//'http://54.180.103.144:8080/user/',
 import axios from 'axios';
 
 export const baseApi = axios.create({
-  baseURL: 'http://52.79.228.200:8080/user/',
+  baseURL: 'http://54.180.103.144:8080/user/',
   headers: {
     Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
   },

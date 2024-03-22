@@ -1,40 +1,60 @@
-import { ProfileShard } from '../../shared/Profile';
-// import { Title } from '../../shared/Title';
-import { _StyledLinkDiv } from '../../shared/CommonStyle';
-// import { SearchFeat } from '../../features/index';
-// import { SearchTypes } from '../../pages/NodeView/index';
-import { TitleFeat } from '../../features/CategorySearchFeat/index';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { _StyledLink } from '../../shared/CommonStyle';
-import { useState, useEffect, userLocation } from 'react';
+import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { TitleFeat } from '../../features/CategorySearchFeat/index';
+import { ProfileShard } from '../../shared/Profile';
+import { _StyledLink } from '../../shared/CommonStyle';
+
+const _StyledHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between; // 컨테이너의 내용을 양 끝과 중앙으로 분배
+  align-items: center;
+  /* background-color: #f8f8f8; */
+  padding: 0px 50px;
+  margin-bottom: 50px;
+  border-bottom: 2px solid #a29e9e;
+`;
+
+const _StyledNavigation = styled.div`
+  display: flex;
+  justify-content: center; // 네비게이션 요소를 중앙에 위치
+  align-items: center;
+  gap: 15px;
+  padding-right: 0px;
+`;
+
+const _StyledButton = styled.button`
+  padding: 8px 20px;
+  border-radius: 4px;
+  border: none;
+  background-color: #18181b;
+  color: #ffffff;
+  cursor: pointer;
+  &:hover {
+    background-color: #333;
+  }
+`;
+
+// const _StyledLink = styled(Link)`
+//   padding: 0 30px;
+//   color: #61dafb;
+//   text-decoration: none;
+//   &:hover {
+//     text-decoration: underline;
+//   }
+// `;
 
 export function HeaderWid() {
   const location = useLocation();
-  console.log(location.pathname); // 현재 경로
-  console.log(location.search); // URL의 쿼리 스트링
-  console.log(location.hash); // URL의 해시 (예: #something)
-
   const { nickname, category } = useParams();
-  const useParam = useParams();
-  console.log('header param', nickname, category);
-  console.log('header param', useParam);
-
   const navigate = useNavigate();
   const myNickname = localStorage.getItem('nickname');
 
-  // const [nodeViewPage, setNodeViewPage] = useState();
-
-  // if (nickname && category) {
-  //   const NodeView = `nodeview/${nickname}/${category}`;
-  //   setNodeViewPage(NodeView);
-  // }
-
   function handleNodeViewPage() {
-    if (nickname && category) {
-      navigate(`/user/starwrite/nodeview/${nickname}/${category}`);
-    } else if (category === 'all') {
+    if (category === 'all') {
       navigate(`/user/starwrite/categoryview/${nickname}`);
+    } else if (category && nickname) {
+      navigate(`/user/starwrite/nodeview/${nickname}/${category}`);
     } else {
       navigate(`/user/starwrite/categoryview/${myNickname}`);
     }
@@ -51,42 +71,31 @@ export function HeaderWid() {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginBottom: '50px',
-        paddingBottom: '13px',
-        marginTop: '20px',
-        borderBottom: '1px solid #383737',
-      }}
-    >
-      <div>
-        <TitleFeat />
-      </div>
-      <div>
-        <_StyledLinkDiv>
-          {/* <_StyledLink to={`${nodeViewPage}`}>노드 뷰</_StyledLink> */}
-          {location.pathname === '/' ? null : (
-            <button onClick={handleNodeViewPage}>카테고리 뷰</button>
-          )}
-          {location.pathname === '/' ? null : (
-            <button onClick={handleNodeViewListPage}>리스트뷰</button>
-          )}
-        </_StyledLinkDiv>
-      </div>
-      <div style={{ display: 'flex' }}>
-        {myNickname ? (
-          <Link to={`/user/starwrite/mypage/nickname/`}>
-            <ProfileShard />
-          </Link>
-        ) : (
-          <Link to={`/login`}>
-            <div>LOGIN</div>
-          </Link>
+    <_StyledHeaderContainer>
+      <TitleFeat />
+      <_StyledNavigation>
+        {/* 중앙 정렬 */}
+        {location.pathname !== '/' && (
+          <>
+            <_StyledButton onClick={handleNodeViewPage}>노드 뷰</_StyledButton>
+            <_StyledButton onClick={handleNodeViewListPage}>
+              리스트뷰
+            </_StyledButton>
+          </>
         )}
-      </div>
-    </div>
+        {myNickname && location.pathname === '/' && (
+          <_StyledLink to={`user/starwrite/categoryview/${myNickname}`}>
+            {myNickname}의 카테고리 돌아가기
+          </_StyledLink>
+        )}
+      </_StyledNavigation>
+      {myNickname ? (
+        <_StyledLink to={`/user/starwrite/mypage/nickname/`}>
+          <ProfileShard />
+        </_StyledLink>
+      ) : (
+        <_StyledLink to={`/login`}>LOGIN</_StyledLink>
+      )}
+    </_StyledHeaderContainer>
   );
 }

@@ -5,6 +5,16 @@ interface ButtonProps {
   bgcolor?: string; // bgColor 속성 추가
 }
 
+export const _StyledContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
+`;
+
 // 중복 검사버튼
 export const _registerbtn = styled.button<ButtonProps>`
   width: 63px;
@@ -129,8 +139,7 @@ export const _Background = styled.div`
 // react-router Link 디자인
 export const _StyledLink = styled(Link)`
   display: block;
-  padding: 10px;
-  margin: 5px;
+  padding: 10px 20px;
   /* background-color: #212121; */
   color: #ffffff;
   text-decoration: none;
@@ -139,9 +148,4 @@ export const _StyledLink = styled(Link)`
   &:hover {
     background-color: #333;
   }
-`;
-
-// react-router Link 디자인 박스
-export const _StyledLinkDiv = styled.div`
-  display: flex;
 `;

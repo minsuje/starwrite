@@ -13,6 +13,17 @@ export const postListApi = async (category: string | undefined) => {
     throw error;
   }
 };
+// 전체 글 불러오기
+export const postListAllApi = async (nickname: string | undefined) => {
+  try {
+    const response = await baseApi.get(`/category/post/${nickname}/All`);
+    console.log('postListAllApi', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('postListApiAll Error', error);
+    throw error;
+  }
+};
 
 // 글 하나 선택시 내용 불러오기
 export const postDetailApi = async (postid: number) => {

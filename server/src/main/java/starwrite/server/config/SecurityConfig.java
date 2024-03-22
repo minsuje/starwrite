@@ -89,7 +89,7 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class)
 //            .addFilterBefore(JwtAuthenticationFilter.class)
             .logout(logout -> logout
-                .logoutUrl("/logout") // 로그아웃 요청을 처리할 URL 설정
+                .logoutUrl("/user/logout") // 로그아웃 요청을 처리할 URL 설정
                 .logoutSuccessUrl("/login") // 로그아웃 성공 시 리다이렉트할 URL 설정
                 .addLogoutHandler((request, response, authentication) -> {
                     HttpSession session = request.getSession();
