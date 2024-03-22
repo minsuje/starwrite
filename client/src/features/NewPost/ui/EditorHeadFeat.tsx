@@ -41,21 +41,20 @@ function NewPostHeadFeat({
       setToggleButton(false);
     }
   }, [isPublic]);
+
   useEffect(() => {
     const myNickname = localStorage.getItem('nickname');
     if (myNickname) {
       const promise = getCategoriesApi(myNickname);
       promise.then((categories) => {
-        console.log('categories data: ', categories);
         setCategories(categories);
 
         if (categories[0]) {
           setCategory(categories[0].categoryId);
         }
-
       });
     }
-  }, [setCategory]);
+  }, []);
 
   return (
     <>
@@ -69,7 +68,7 @@ function NewPostHeadFeat({
       {/* <_EditorHead> */}
       <_TitleInput
         placeholder="제목을 입력하세요"
-        value={title ? title : undefined}
+        defaultValue={title ? title : undefined}
         onChange={(value) => setTitle(value.currentTarget.value)}
       />
       {/* </_EditorHead> */}
@@ -81,13 +80,14 @@ function NewPostHeadFeat({
       <_EditorHead content={'start'}>
         <p>카테고리</p>
         <select
-          value={category}
+          defaultValue={category}
           onChange={(value) => {
             setCategory(value.currentTarget.value);
             console.log(value.currentTarget.value);
           }}
           style={{
-            width: '50%',
+            // width: '50%',
+            width: 'fit-content',
             padding: '0px 5%',
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
             color: 'white',

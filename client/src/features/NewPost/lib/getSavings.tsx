@@ -1,49 +1,16 @@
 import styled from 'styled-components';
-import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
-// import Savings from '../model/Savings';
+import { _ModalBg } from '../../../shared/Modal/ModalStyle';
 import { OneCategory } from '../ui/style';
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Saving } from '..';
 import { savingsApi } from '../api/newPostApi';
+import { _Box, _postBox } from '../ui/style';
 
 type closeModal = () => void;
 
-// style 정의
-const _Box = styled(_Modal)`
-  display: flex;
-  width: 80%;
-  height: 80%;
-  top: 0;
-  flex-direction: column;
-  gap: 30px;
-  color: #adadad;
-
-  label {
-    font-size: 20px;
-  }
-`;
-
-const _postBox = styled.div`
-  padding: 25px 20px;
-  background-color: var(--color-zinc-700);
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-decoration: none;
-  text-decoration-line: none;
-  h1 {
-    font-size: 20px;
-    color: var(--color-zinc-300);
-  }
-  p {
-    font-size: 13px;
-    color: var(--color-zinc-500);
-  }
-  &:hover {
-    opacity: 0.8;
-  }
+const _SavingListTitle = styled.div`
+  font-size: 2rem;
 `;
 
 function GetSavings({ onclick }: { onclick: closeModal }) {
@@ -52,7 +19,6 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
   useEffect(() => {
     const promise = savingsApi();
     promise.then((savings) => {
-      console.log('임시저장 목록 data: ', savings);
       if (savings) setSavings(savings);
     });
   }, []);
@@ -62,18 +28,18 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
       <>
         <_ModalBg>
           <_Box>
-            <div>
-              <span>임시저장 글 목록</span>
-              <button
-                onClick={() => {
-                  onclick();
-                }}
-              >
-                취소
-              </button>
-            </div>
+            <_SavingListTitle>
+              <span>임시저장 목록</span>
+            </_SavingListTitle>
 
             <div>임시저장 글이 없습니다.</div>
+            <button
+              onClick={() => {
+                onclick();
+              }}
+            >
+              취소
+            </button>
           </_Box>
         </_ModalBg>
       </>
@@ -86,13 +52,6 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
         <_Box>
           <div>
             <span>임시저장 글 목록</span>
-            <button
-              onClick={() => {
-                onclick();
-              }}
-            >
-              취소
-            </button>
           </div>
 
           {savings.map((saving) => {
@@ -115,6 +74,13 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
               </OneCategory>
             );
           })}
+          <button
+            onClick={() => {
+              onclick();
+            }}
+          >
+            취소
+          </button>
         </_Box>
       </_ModalBg>
     </>

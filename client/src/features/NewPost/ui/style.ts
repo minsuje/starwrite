@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Input } from '../../../shared/CommonStyle';
 import { Theme, darkDefaultTheme, lightDefaultTheme } from '@blocknote/react';
+
+import { _Modal } from '../../../shared/Modal/ModalStyle';
 // 스타일
 const OneCategory = styled.div`
   width: 80%;
@@ -136,6 +138,43 @@ const redTheme = {
   light: lightRedTheme,
   dark: darkRedTheme,
 };
+
+//  임시저장 Modal style 정의
+export const _Box = styled(_Modal)`
+  display: flex;
+  width: 80%;
+  height: 80%;
+  top: 0;
+  flex-direction: column;
+  gap: 30px;
+  color: #adadad;
+
+  label {
+    font-size: 20px;
+  }
+`;
+
+export const _postBox = styled.div`
+  padding: 25px 20px;
+  background-color: var(--color-zinc-700);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-decoration: none;
+  text-decoration-line: none;
+  h1 {
+    font-size: 20px;
+    color: var(--color-zinc-300);
+  }
+  p {
+    font-size: 13px;
+    color: var(--color-zinc-500);
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 
 export {
   redTheme,
