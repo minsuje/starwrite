@@ -41,6 +41,7 @@ export const deleteCategoryApi = async (id: string) => {
   try {
     const response = await baseApi.delete(`/category?categoryId=${id}`);
     console.log('deleteCategoryApi', response.data);
+    alert('카테고리 삭제가 완료되었습니다.');
     return response.data;
   } catch (error) {
     console.error('deleteCategoryError', error);
