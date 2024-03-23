@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { OneCategory, ListCategories } from '../../NewPost/ui/style';
 import { initalList } from '../model/CategoryData';
-import { Category } from '../../../shared/types/app';
+import { Category } from '../../../../types/app';
 import { getCategoriesApi } from '../api/CategoryApi';
 import { baseApi } from '../../../shared/api/BaseApi';
 
@@ -60,16 +60,6 @@ function ListCategory({
       ]);
     }
   }, [sort, nickname, updateCategory]);
-
-  // useEffect(() => {
-  //   if (nickname) {
-  //     const promise = getCategoriesApi(nickname);
-  //     // 현재 주소에서 뽑아낸 nickname
-  //     promise.then((categories) => {
-  //       setCategories([...initalList, ...categories]);
-  //     });
-  //   }
-  // }, [updateCategory, nickname]);
 
   return (
     <>
