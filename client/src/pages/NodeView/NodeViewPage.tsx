@@ -1,7 +1,7 @@
 import { NodeView } from '../../widgets/NodeView/index';
 import { useState } from 'react';
 import { NodeSearchFeat } from '../../features/NodeSearchFeat/index';
-import { NodeData } from '../../features/NodeViewFeat/api/NodeviewApi';
+// import { NodeData } from '../../features/NodeViewFeat/api/NodeviewApi';
 import { Spinner } from '../../shared/spinner';
 import { _Background } from '../../shared/CommonStyle';
 import { DataSpinnerSh } from '../../shared/DataSpinner';
@@ -63,7 +63,7 @@ export function NodeViewPage() {
   return (
     <>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
-      <NodeData></NodeData>
+      {/* <NodeData></NodeData> */}
 
       <NodeView
         searchTerm={searchTerm}

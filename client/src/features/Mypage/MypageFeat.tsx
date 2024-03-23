@@ -45,9 +45,6 @@ const _InputFileButton = styled.label`
   right: 110px;
   // label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
 `;
-const _OverlapCheckBox = styled.label`
-  display: flex;
-`;
 
 // 닉네임 유효성 검사
 const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { baseApi } from '../../../shared/api/BaseApi';
 
 // 카테고리 선택시 글 리스트 불러오기

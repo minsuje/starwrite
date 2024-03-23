@@ -17,21 +17,6 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
     setSearchTerm(newSearchTerm);
     onSearch(newSearchTerm);
     setToggleSearch(!!newSearchTerm.trim());
-    // 검색어가 있고, 필터링된 결과가 있을 때만 목록을 표시
-    if (
-      newSearchTerm.trim() &&
-      nodes.filter((node) =>
-        node.label.toLowerCase().includes(newSearchTerm.toLowerCase()),
-      ).length
-    ) {
-      setToggleSearch(true);
-    } else {
-      return (
-        <li style={{ padding: '15px', color: '#ffff' }}>
-          검색 결과가 없습니다.
-        </li>
-      );
-    }
   };
 
   const handleItemClick = (label: string) => {

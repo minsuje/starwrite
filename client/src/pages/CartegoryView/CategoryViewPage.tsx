@@ -4,6 +4,14 @@ import { useState } from 'react';
 import { _Background } from '../../shared/CommonStyle';
 import { Spinner } from '../../shared/spinner';
 import { DataSpinnerSh } from '../../shared/DataSpinner';
+interface CategoryDataItem {
+  name: string;
+}
+
+export interface CategoryViewProps {
+  onSearch: (newSearchTerm: string) => void;
+  categoryData: CategoryDataItem[];
+}
 
 export function CategoryViewPage() {
   const [searchTerm, setSearchTerm] = useState('');

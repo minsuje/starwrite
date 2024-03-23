@@ -4,33 +4,16 @@ import { useState, useRef } from 'react';
 import './CategorySearchFeat.css';
 // import { baseApi } from '../../shared/api/BaseApi';
 import { SearchIcon } from '../../shared/Search';
+import { CategoryViewProps } from '../../pages/CartegoryView/CategoryViewPage';
 
-export type SearchTypes = {
-  onSearch: (newSearchTerm: string) => void; // 반환 타입을 void로 변경
-};
-
-export const CategorySearchFeat = ({ onSearch, categoryData }: SearchTypes) => {
+export const CategorySearchFeat = ({
+  onSearch,
+  categoryData,
+}: CategoryViewProps) => {
   const [searchTerm, setSearchTerm] = useState(''); // api 데이터 담을 예정
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
-
-  // useEffect(() => {
-  //   function handleClickOutside(event: any) {
-  //     if (searchRef.current && !searchRef.current.contains(event.target)) {
-  //       setToggleSearch(false);
-  //     }
-  //   }
-
-  //   document.addEventListener('mousedown', handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [searchRef]);
-
-  // console.log(searchRef);
-
-  // console.log('baseApi', baseApi);
+;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;

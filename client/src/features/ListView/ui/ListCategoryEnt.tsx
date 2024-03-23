@@ -22,11 +22,12 @@ function ListCategory({
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
     category,
   );
-  // 이게 맞는지 확인 부탁드려요 구휘님 03.17
+
   const selected = async (categoryId: string) => {
     if (categoryId === 'logout') {
       localStorage.removeItem('nickname');
       localStorage.removeItem('accessToken');
+      
 
       try {
         const response = await baseApi.post(`/logout`);

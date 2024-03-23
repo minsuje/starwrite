@@ -1,36 +1,59 @@
-.nine h1 {
+body {
+  font: 400 1em/1.5 'Neuton';
+  background: #090d00;
+  color: rgba(255, 255, 255, 0.25);
   text-align: center;
-  font-size: 50px;
-  text-transform: uppercase;
-  color: #222;
-  letter-spacing: 1px;
-  font-family: 'Playfair Display', serif;
-  font-weight: 400;
-}
-.nine h1 span {
-  margin-top: 5px;
-  font-size: 15px;
-  color: #444;
-  word-spacing: 1px;
-  font-weight: normal;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 500;
-
-  display: grid;
-  grid-template-columns: 1fr max-content 1fr;
-  grid-template-rows: 27px 0;
-  grid-gap: 20px;
-  align-items: center;
+  margin: 0;
 }
 
-.nine h1 span:after,
-.nine h1 span:before {
-  content: ' ';
-  display: block;
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  height: 5px;
-  background-color: #f8f8f8;
+p {
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  display: inline-block;
+  border: 4px double rgba(255, 255, 255, 0.25);
+  border-width: 4px 0;
+  padding: 1.5em 0em;
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 40em;
+  margin: 0 0 0 -20em;
+
+  span {
+    font:
+      700 4em/1 'Oswald',
+      sans-serif;
+    letter-spacing: 0;
+    padding: 0.25em 0 0.325em;
+    display: block;
+    margin: 0 auto;
+    text-shadow: 0 0 80px rgba(255, 255, 255, 0.5);
+
+    /* Clip Background Image */
+
+    background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* Animate Background Image */
+
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: aitf 80s linear infinite;
+
+    /* Activate hardware acceleration for smoother animations */
+
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* Animate Background Image */
+
+@-webkit-keyframes aitf {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
