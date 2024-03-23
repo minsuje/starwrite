@@ -90,7 +90,7 @@ export function HeaderWid() {
         )}
       </_StyledNavigation>
       {myNickname ? (
-        <_StyledLink to={`/user/starwrite/mypage/nickname/`}>
+        <_StyledLink to={`/user/starwrite/mypage/${myNickname}/`}>
           <ProfileShard />
         </_StyledLink>
       ) : (
