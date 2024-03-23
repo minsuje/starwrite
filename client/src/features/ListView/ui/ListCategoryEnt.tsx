@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { OneCategory, ListCategories } from '../../NewPost/ui/style';
 import { initalList } from '../model/CategoryData';
-import { Category } from '../../../../types/app';
 import { getCategoriesApi } from '../api/CategoryApi';
 import { baseApi } from '../../../shared/api/BaseApi';
+import { Category } from '../../../shared/model';
+import { useAppDispatch } from '../../../shared/model';
+import { categoriesActions } from '../model/CategoriesSlice';
 
 function ListCategory({
   sort,
@@ -22,6 +24,9 @@ function ListCategory({
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
     category,
   );
+
+  const dispatch = useAppDispatch();
+
   // 이게 맞는지 확인 부탁드려요 구휘님 03.17
   const selected = async (categoryId: string) => {
     if (categoryId === 'logout') {
@@ -51,6 +56,7 @@ function ListCategory({
         // 현재 주소에서 뽑아낸 nickname
         promise.then((categories) => {
           setCategories([...initalList, ...categories]);
+          dispatch(categoriesActions.change(categories));
         });
       }
     } else if (sort === 'myPage') {
@@ -59,7 +65,7 @@ function ListCategory({
         { name: '로그아웃', categoryId: 'logout' },
       ]);
     }
-  }, [sort, nickname, updateCategory]);
+  }, [sort, nickname, updateCategory, dispatch]);
 
   return (
     <>
@@ -95,7 +101,6 @@ function ListCategory({
     </>
   );
 }
-
 ListCategory.defaultProps = {
   sort: 'listView',
 };
