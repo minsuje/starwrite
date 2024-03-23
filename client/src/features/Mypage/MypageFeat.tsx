@@ -12,6 +12,8 @@ import {
 import { ProfileShard } from '../../shared/Profile';
 import './mypage.css';
 import { styled } from 'styled-components';
+import { useEffect, useState } from 'react';
+import { baseApi } from '../../shared/api/BaseApi';
 
 interface RegisteringUser {
   email?: string;
@@ -51,7 +53,7 @@ const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;
 
 const nicknameSchema = z
   .string()
-  .min(4, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
+  .min(2, { message: '닉네임은 최소 2글자 이상 10자 이하여야 합니다.' })
   .max(10, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
   .regex(NicNamePattern, {
     message: '닉네임은 한글, 영문, 밑줄(_)만 사용할 수 있습니다.',
@@ -97,23 +99,106 @@ const schema = z
   });
 
 export function MyPgaeFeat() {
-  const test = '222@naver.com'; // 이메일 예시데이터
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [nicknameAvailabilityMessage, setNicknameAvailabilityMessage] =
+    useState('');
+  const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [isNicknameTouched, setIsNicknameTouched] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
     trigger,
   } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
+    defaultValues: {
+      nickname: nickname,
+    },
   });
+
+  let errorMessage = '';
+  if (errors.nickname && isNicknameTouched) {
+    errorMessage = errors.nickname.message;
+  } else if (isNicknameTouched && !isNicknameChecked) {
+    errorMessage = '중복 검사를 해주세요';
+  } else if (nicknameAvailabilityMessage) {
+    errorMessage = nicknameAvailabilityMessage;
+  }
+
+  const isNicknameInvalid = !!errors.nickname;
+
+  const handleNicknameChange = async () => {
+    setIsNicknameTouched(true);
+    setIsNicknameChecked(false);
+    await trigger('nickname');
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await baseApi.get(`mypage`);
+        setEmail(response.data.mail);
+
+        // Use reset to set the default values
+        reset({
+          nickname: response.data.nickname,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [reset]);
 
   const changeValid = (data: RegisteringUser) => {
     console.log('changeValid', data);
     //여기에 마이페이지 axios 작성
   };
+
+  const getErrorMessage = () => {
+    if (errors.nickname && typeof errors.nickname.message === 'string') {
+      return errors.nickname.message;
+    }
+    if (!nicknameChecked && watch('nickname')) {
+      return '중복 검사를 해주세요';
+    }
+    return nicknameAvailabilityMessage;
+  };
+
+  const handleNicknameCheck = async () => {
+    const currentNickname = watch('nickname');
+    try {
+      const response = await baseApi.post(
+        `mypage/nickCheck?nickname=${currentNickname}`,
+      );
+      setIsNicknameChecked(true);
+      // Update the state based on the response
+      if (response.data === true) {
+        setNicknameAvailabilityMessage('사용 가능한 닉네임입니다.');
+      } else {
+        setNicknameAvailabilityMessage('이미 사용중인 닉네임입니다.');
+      }
+    } catch (error) {
+      console.error('Error checking nickname:', error);
+      setNicknameAvailabilityMessage('닉네임 검사 중 오류가 발생했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'nickname' && type === 'change') {
+        setNicknameChecked(false);
+        setNicknameAvailabilityMessage('');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   // const onInvalid = (data: RegisteringUser) => {
   //   console.log('통과 못한 data', data);
@@ -147,7 +232,11 @@ export function MyPgaeFeat() {
 
         <InputBox>
           <Label>이메일</Label>
-          <_emaliinput placeholder={`${test}`} disabled></_emaliinput>
+          <_emaliinput
+            placeholder="이메일"
+            value={email} // Set the value to the state variable
+            disabled
+          ></_emaliinput>
         </InputBox>
 
         <InputBox>
@@ -155,21 +244,22 @@ export function MyPgaeFeat() {
             닉네임
             <_emoji>{Emoji('nickname')}</_emoji>
           </Label>
-
           <Input
             {...register('nickname', {
-              onChange: async () => await trigger('nickname'),
+              onChange: handleNicknameChange,
             })}
           ></Input>
           <InputBox>
-            <_registerbtn type="button" bgcolor="#1361d7">
+            <_registerbtn
+              type="button"
+              bgcolor="#1361d7"
+              onClick={handleNicknameCheck}
+              disabled={isNicknameInvalid} // Disable button if nickname is invalid
+            >
               중복확인
             </_registerbtn>
           </InputBox>
-
-          {errors.nickname && typeof errors.nickname.message === 'string' && (
-            <_ErrorMsg>{errors.nickname.message}</_ErrorMsg>
-          )}
+          {errorMessage && <_ErrorMsg>{errorMessage}</_ErrorMsg>}
         </InputBox>
 
         <InputBox>

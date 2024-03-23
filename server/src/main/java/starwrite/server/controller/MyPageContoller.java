@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Users;
@@ -39,13 +40,13 @@ public class MyPageContoller {
 
     // 마이페이지 닉네임 중복 확인
     @PostMapping("nickCheck")
-    public Boolean checNickname(@RequestBody String nickname) {
+    public Boolean checNickname(@RequestParam(value = "nickname") String nickname) {
         String userId = SecurityUtil.getCurrentUserUserId();
 
-        System.out.println("nickCheck> " + myPageService.checkNickname(nickname));
+      String foundNickname = myPageService.checkNickname(nickname);
 
         // 원래 내 닉네임이거나 사용 가능한 닉네임이면
-        if (userId == myPageService.checkNickname(nickname) || myPageService.checkNickname(nickname) == null) {
+        if (userId == foundNickname || foundNickname == null) {
             System.out.println("if 문 안");
             return true;
         } else return false;
