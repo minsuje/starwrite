@@ -28,7 +28,7 @@
 # COPY --from=builder application/application ./
 #
 # ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
-#
+
 
 
 #
