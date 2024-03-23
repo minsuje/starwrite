@@ -1,5 +1,5 @@
 // 카테고리 데이터
-import { Category } from '../../../shared/types/app';
+import { Category } from '../../../../types/app';
 
 const initalList: Category[] = [
   { categoryId: 'all', name: '전체' },
