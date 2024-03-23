@@ -1,7 +1,3 @@
-// 자주사용되는 tpyes
-
-export type Search = string;
-
 export interface Category {
   name: string;
   categoryId: string;

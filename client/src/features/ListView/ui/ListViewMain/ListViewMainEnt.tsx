@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import { Link, useParams } from 'react-router-dom';
-import { Posts } from '../../../../shared/types/app';
+import { Posts } from '../../../../../types/app';
 import { postListApi, postListAllApi } from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
 
