@@ -92,7 +92,7 @@ function RegisterForm() {
     try {
       // 회원가입 요청 전송
       const response = await axios.post(
-        `http://54.180.103.144:8080/register/user`,
+        `http://localhost:8080/register/user`,
         data,
       );
 
@@ -117,12 +117,9 @@ function RegisterForm() {
     setIsSendingEmail(true);
     try {
       // 이메일 유효성 검사 요청 전송
-      const response = await axios.post(
-        `http://54.180.103.144:8080/mail/send`,
-        {
-          mail,
-        },
-      );
+      const response = await axios.post(`http://localhost:8080/mail/send`, {
+        mail,
+      });
 
       // 성공 응답 처리
       if (response.status === 200) {
@@ -153,7 +150,7 @@ function RegisterForm() {
     try {
       // 서버에 인증 코드 검증 요청
       const response = await axios.get(
-        `http://54.180.103.144:8080/mail/check?userNumber=${authCode}`,
+        `http://localhost:8080/mail/check?userNumber=${authCode}`,
       );
 
       // 인증 성공 처리

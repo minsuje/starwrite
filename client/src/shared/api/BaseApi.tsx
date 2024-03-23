@@ -13,7 +13,7 @@ tried();
 import axios from 'axios';
 //Minsu's
 export const baseApi = axios.create({
-  baseURL: 'http://54.180.103.144:8080/user/',
+  baseURL: 'http://localhost:8080/user/',
   headers: {
     Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
   },
