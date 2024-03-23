@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { z } from 'zod';
 import { newCategoryApi } from '../api/CategoryApi';
+import { useAppSelector } from '../../../shared/model';
+import { collectCategories } from '../model/CategoriesSlice';
 
 type closeModal = () => void;
 
@@ -38,6 +40,8 @@ function AddCategory({
       setUpdateCategory();
     }
   };
+  const categories = useAppSelector(collectCategories);
+  console.log(categories);
 
   return (
     <>

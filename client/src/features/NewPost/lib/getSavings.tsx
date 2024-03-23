@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { Saving } from '..';
 import { savingsApi } from '../api/newPostApi';
 import { _Box, _postBox } from '../ui/style';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 type closeModal = () => void;
 
@@ -69,7 +71,13 @@ function GetSavings({ onclick }: { onclick: closeModal }) {
                       ? '제목없음'
                       : saving.posts.title}
                   </h1>
-                  <p></p>
+                  <p>
+                    {saving.posts.createdAt
+                      ? format(saving.posts.createdAt, 'PPP EEE요일', {
+                          locale: ko,
+                        })
+                      : '날짜정보없음'}
+                  </p>
                 </_postBox>
               </OneCategory>
             );

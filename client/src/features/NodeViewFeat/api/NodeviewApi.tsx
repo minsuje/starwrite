@@ -110,7 +110,7 @@ export const links: Link[] = [
 export const fetchData = async (category) => {
   try {
     const response = await baseApi.get(
-      `http://54.180.103.144:8080/user/category/getCategoryPostNode?categoryId=${category}`,
+      `http://localhost:8080/user/category/getCategoryPostNode?categoryId=${category}`,
     );
     console.log('response', response);
     return response.data;
