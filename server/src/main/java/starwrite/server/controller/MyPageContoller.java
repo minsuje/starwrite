@@ -40,16 +40,18 @@ public class MyPageContoller {
 
     // 마이페이지 닉네임 중복 확인
     @PostMapping("nickCheck")
-    public Boolean checNickname(@RequestParam(value = "nickname") String nickname) {
+    public String checNickname(@RequestParam(value = "nickname") String nickname) {
         String userId = SecurityUtil.getCurrentUserUserId();
 
-      String foundNickname = myPageService.checkNickname(nickname);
+        String foundNickname = myPageService.checkNickname(nickname);
 
-        // 원래 내 닉네임이거나 사용 가능한 닉네임이면
-        if (userId == foundNickname || foundNickname == null) {
-            System.out.println("if 문 안");
-            return true;
-        } else return false;
+        if (userId == foundNickname) { // 원래 내 닉네임일 때
+            return "no change";
+        } else if (foundNickname == null) { // 사용 가능한 닉네임일 때
+            return "available";
+        } else {
+            return "unavailable"; // 사용 불가능한 닉네임일 때
+        }
     }
 
     // 마이페이지에서 유저 정보 수정하기
