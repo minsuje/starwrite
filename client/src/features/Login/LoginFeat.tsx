@@ -133,7 +133,6 @@ function LoginForm() {
     }
   };
 
-
   // async function handleGoogleLogin() {
   //   try {
   //     // 백엔드에서 Google 로그인 URL을 가져옵니다.
@@ -143,14 +142,14 @@ function LoginForm() {
   //     const googleLoginUrl = response.data;
   //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
 
-  async function handleGoogleLogin() {
-    try {
-      // 백엔드에서 Google 로그인 URL을 가져옵니다.
-      const response = await axios.post(
-        'http://localhost:8080/login/api/v1/oauth2/google',
-      );
-      const googleLoginUrl = response.data;
-      console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
+  // async function handleGoogleLogin() {
+  //   try {
+  //     // 백엔드에서 Google 로그인 URL을 가져옵니다.
+  //     const response = await axios.post(
+  //       'http://localhost:8080/login/api/v1/oauth2/google',
+  //     );
+  //     const googleLoginUrl = response.data;
+  //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
 
   //     // 사용자를 Google 로그인 페이지로 리다이렉트합니다.
   //     window.location.href = googleLoginUrl;
