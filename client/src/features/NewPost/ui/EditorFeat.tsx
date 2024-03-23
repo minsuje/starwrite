@@ -48,19 +48,19 @@ const getMentionMenuItems = (
     },
   }));
 };
-async function uploadFile(file: File) {
-  const body = new FormData();
-  body.append('file', file);
+// async function uploadFile(file: File) {
+//   const body = new FormData();
+//   body.append('file', file);
 
-  const ret = await fetch('https://tmpfiles.org/api/v1/upload', {
-    method: 'POST',
-    body: body,
-  });
-  return (await ret.json()).data.url.replace(
-    'tmpfiles.org/',
-    'tmpfiles.org/dl/',
-  );
-}
+//   const ret = await fetch('https://tmpfiles.org/api/v1/upload', {
+//     method: 'POST',
+//     body: body,
+//   });
+//   return (await ret.json()).data.url.replace(
+//     'tmpfiles.org/',
+//     'tmpfiles.org/dl/',
+//   );
+// }
 
 export default function Editor({
   titleList,
@@ -79,7 +79,7 @@ export default function Editor({
 
   useEffect(() => {
     if (content) {
-      setInitialContent(JSON.parse(content));
+      setInitialContent(JSON.parse(content) as PartialBlock[]);
     }
   }, [content]);
 
@@ -94,7 +94,7 @@ export default function Editor({
     return BlockNoteEditor.create({
       schema,
       initialContent,
-      uploadFile,
+      // uploadFile,
     });
   }, [initialContent]);
 
