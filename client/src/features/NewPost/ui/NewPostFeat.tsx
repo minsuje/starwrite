@@ -55,35 +55,45 @@ function NewPostFeat() {
     });
   }, []);
 
+  // useEffect(() => {
+  //   const selected = searchParams.get('selected');
+  //   if (selected) {
+  //     setCategory(selected);
+  //     setSearchParams(selected);
+  //     console.log('selected', selected);
+  //   }
+  // }, []);
+
   function publishPost() {
-    if (title === undefined || title.length > 50) {
+    if (title === undefined || title.length > 50 || title.length === 0) {
       setOnValid('false');
-      console.log('제목 1자 이상 50자 이하로 작성해주세요');
       return;
     }
 
-    // if (titleList.find(({ title }) => title == title)) {
-    //   setOnValid('duplicate');
-
-    // } else {
-    const postData = {
-      category: category,
-      post: {
-        title: title,
-        content: content,
-        visible: isPublic,
-      },
-      relatedPosts: relatedPosts,
-    };
-    console.log('data', postData);
-    if (postId) {
-      patchPostApi(postData, Number(postId));
+    if (!postId && titleList.find((ontitle) => ontitle.title === title)) {
+      console.log('!!');
+      console.log(titleList.find(({ title }) => title == title));
+      setOnValid('duplicate');
+      return;
     } else {
-      newPostApi(postData);
+      setOnValid('true');
+      const postData = {
+        category: category,
+        post: {
+          title: title,
+          content: content,
+          visible: isPublic,
+        },
+        relatedPosts: relatedPosts,
+      };
+      console.log('data', postData);
+      if (postId) {
+        patchPostApi(postData, Number(postId));
+      } else {
+        newPostApi(postData);
+      }
     }
-    // }
   }
-  // }
 
   function savePost() {
     const postData = {
@@ -124,6 +134,9 @@ function NewPostFeat() {
         }}
         setIsPublic={(value: string) => {
           setIsPublic(value);
+        }}
+        setOnValid={() => {
+          setOnValid('true');
         }}
       />
       <_EditorDiv>

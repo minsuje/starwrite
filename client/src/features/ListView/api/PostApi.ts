@@ -38,16 +38,16 @@ export const postDetailApi = async (postid: number) => {
 };
 
 // 글 수정
-export const patchPostApi = async (postid: number, data: string) => {
-  try {
-    const response = await baseApi.patch(`/${postid}`, data);
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.log('patchPostApi Error', error);
-    throw error;
-  }
-};
+// export const patchPostApi = async (postid: number, data: string) => {
+//   try {
+//     const response = await baseApi.patch(`/${postid}`, data);
+//     console.log(response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.log('patchPostApi Error', error);
+//     throw error;
+//   }
+// };
 
 // 글 삭제
 export const deletePostApi = async (postid: number) => {

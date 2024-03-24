@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import { Link, useParams } from 'react-router-dom';
-import { Posts } from '../../../../../types/app';
+
 import { postListApi, postListAllApi } from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
+import { Posts } from '../../../../shared/model';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
