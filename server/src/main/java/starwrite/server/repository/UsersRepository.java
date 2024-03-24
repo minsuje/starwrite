@@ -40,7 +40,7 @@ public interface UsersRepository extends
   @Query("MATCH (u:Users) WHERE u.userId = $userId RETURN u LIMIT 1")
   Users findUserByUserId(@Param(value = "userId") String userId);
 
-  @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.userId")
+  @Query("MATCH (u:Users) WHERE u.nickname = $nickname return u.nickname")
   String findUserByNickname(@Param(value = "nickname") String nickname);
 
   // 마이페이지 유저 정보 수정하기

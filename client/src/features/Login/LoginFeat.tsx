@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 // import jwtDecode from 'jwt-decode';
 import { useEffect } from 'react';
+import { commonApi } from '../../shared/api/BaseApi';
 
 // 타입 지정
 interface LoginInput {
@@ -65,17 +66,22 @@ function LoginForm() {
     //여기에 회원가입 axios 작성
 
     try {
-      const response = await axios.post(`http://localhost:8080/login/post`, {
+      const response = await commonApi.post(`/login/post`, {
         mail: data.email,
         password: data.password,
       });
       localStorage.setItem('accessToken', response.data.accessToken);
 
-      const cookie = await axios.get(`http://localhost:8080/cookie`, {
+      const cookie = await commonApi.get(`/cookie`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
         },
       });
+
+      if (cookie.data.value == null) {
+        alert('로그인 실패');
+        return;
+      }
 
       console.log(`cookie >>>>>> ${document.cookie}`);
 
@@ -118,7 +124,7 @@ function LoginForm() {
     console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
-      const response = await axios.get('http://localhost:8080/login/oauth', {
+      const response = await commonApi.get('/login/oauth', {
         params: {
           code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
         },
@@ -145,8 +151,10 @@ function LoginForm() {
   // async function handleGoogleLogin() {
   //   try {
   //     // 백엔드에서 Google 로그인 URL을 가져옵니다.
-  //     const response = await axios.post(
-  //       'http://localhost:8080/login/api/v1/oauth2/google',
+
+  //     const response = await commonApi.post(
+  //       '/login/api/v1/oauth2/google',
+
   //     );
   //     const googleLoginUrl = response.data;
   //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);

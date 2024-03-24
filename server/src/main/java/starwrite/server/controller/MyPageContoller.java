@@ -1,5 +1,6 @@
 package starwrite.server.controller;
 
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Users;
@@ -39,16 +41,18 @@ public class MyPageContoller {
 
     // 마이페이지 닉네임 중복 확인
     @PostMapping("nickCheck")
-    public Boolean checNickname(@RequestBody String nickname) {
-        String userId = SecurityUtil.getCurrentUserUserId();
+    public String checNickname(@RequestParam(value = "nickname") String nickname) {
+        String userNickname = SecurityUtil.getCurrentUserNickname();
 
-        System.out.println("nickCheck> " + myPageService.checkNickname(nickname));
+        String foundNickname = myPageService.checkNickname(nickname);
 
-        // 원래 내 닉네임이거나 사용 가능한 닉네임이면
-        if (userId == myPageService.checkNickname(nickname) || myPageService.checkNickname(nickname) == null) {
-            System.out.println("if 문 안");
-            return true;
-        } else return false;
+        if (Objects.equals(userNickname, foundNickname)) { // 원래 내 닉네임일 때
+            return "no change";
+        } else if (foundNickname == null) { // 사용 가능한 닉네임일 때
+            return "available";
+        } else {
+            return "unavailable"; // 사용 불가능한 닉네임일 때
+        }
     }
 
     // 마이페이지에서 유저 정보 수정하기
