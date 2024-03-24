@@ -151,8 +151,10 @@ function LoginForm() {
   // async function handleGoogleLogin() {
   //   try {
   //     // 백엔드에서 Google 로그인 URL을 가져옵니다.
+
   //     const response = await commonApi.post(
   //       '/login/api/v1/oauth2/google',
+
   //     );
   //     const googleLoginUrl = response.data;
   //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);

@@ -4,18 +4,10 @@ import { useForm } from 'react-hook-form';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { z } from 'zod';
 import { newCategoryApi } from '../api/CategoryApi';
-import { useAppSelector } from '../../../shared/model';
+import { Category, useAppSelector } from '../../../shared/model';
 import { collectCategories } from '../model/CategoriesSlice';
 
 type closeModal = () => void;
-
-// 유효성 검사 schema
-const schema = z.object({
-  category: z
-    .string()
-    .min(1, { message: '1자 이상 입력해주세요' })
-    .max(10, { message: '10자 이내로 작성해주세요' }),
-});
 
 function AddCategory({
   onclick,
@@ -24,6 +16,27 @@ function AddCategory({
   onclick: closeModal;
   setUpdateCategory: closeModal;
 }) {
+  // 유효성 검사 schema
+  const schema = z
+    .object({
+      category: z
+        .string()
+        .min(1, { message: '1자 이상 입력해주세요' })
+        .max(10, { message: '10자 이내로 작성해주세요' }),
+    })
+    .refine(
+      (data) =>
+        categories.find(
+          (category: Category) => category.name === data.category,
+        ) === undefined,
+      {
+        path: ['category'],
+        message: '이미 존재하는 카테고리입니다.',
+      },
+    );
+  // store에서 가져온 카테고리 리스트
+  const categories = useAppSelector(collectCategories);
+
   const {
     register, // input 할당, value 변경 감지
     handleSubmit, // form submit 이벤트 시 호출
@@ -33,15 +46,12 @@ function AddCategory({
   });
 
   const onValid = async (data: { category?: string }) => {
-    console.log('onValid', data);
     if (data.category) {
       await newCategoryApi(data.category);
       onclick();
       setUpdateCategory();
     }
   };
-  const categories = useAppSelector(collectCategories);
-  console.log(categories);
 
   return (
     <>
@@ -59,7 +69,6 @@ function AddCategory({
             ) : (
               <_ErrorMsg></_ErrorMsg>
             )}
-
             <_ButtonBox>
               <_Button type="submit">추가</_Button>
               <_Button
