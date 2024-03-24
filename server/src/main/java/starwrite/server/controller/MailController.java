@@ -46,9 +46,11 @@ public class MailController {
 
     // 인증번호 일치 여부 확인
     @GetMapping("/mail/check")
-    public ResponseEntity<?> mailCheck(@RequestParam String userNumber) {
+    public ResponseEntity<?> mailCheck(@RequestParam(value = "userNumber") String userNumber) {
+      System.out.println("email usernumber" + userNumber);
         boolean isMatch = userNumber.equals(String.valueOf(number));
 
+      System.out.println("isMatch >>>>>>>> " + isMatch);
         return ResponseEntity.ok(isMatch);
     }
 }
