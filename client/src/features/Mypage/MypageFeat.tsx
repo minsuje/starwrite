@@ -122,23 +122,6 @@ export function MyPgaeFeat() {
     },
   });
 
-  let errorMessage = '';
-  if (errors.nickname && isNicknameTouched) {
-    errorMessage = errors.nickname.message;
-  } else if (isNicknameTouched && !isNicknameChecked) {
-    errorMessage = '중복 검사를 해주세요';
-  } else if (nicknameAvailabilityMessage) {
-    errorMessage = nicknameAvailabilityMessage;
-  }
-
-  const isNicknameInvalid = !!errors.nickname;
-
-  const handleNicknameChange = async () => {
-    setIsNicknameTouched(true);
-    setIsNicknameChecked(false);
-    await trigger('nickname');
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -155,6 +138,23 @@ export function MyPgaeFeat() {
     };
     fetchData();
   }, [reset]);
+
+  let errorMessage = '';
+  if (errors.nickname && isNicknameTouched) {
+    errorMessage = errors.nickname.message;
+  } else if (isNicknameTouched && !isNicknameChecked) {
+    errorMessage = '중복 검사를 해주세요';
+  } else if (nicknameAvailabilityMessage) {
+    errorMessage = nicknameAvailabilityMessage;
+  }
+
+  const isNicknameInvalid = !!errors.nickname;
+
+  const handleNicknameChange = async () => {
+    setIsNicknameTouched(true);
+    setIsNicknameChecked(false);
+    await trigger('nickname');
+  };
 
   const changeValid = async (data: RegisteringUser) => {
     console.log('changeValid', data);
@@ -218,6 +218,20 @@ export function MyPgaeFeat() {
     });
     return () => subscription.unsubscribe();
   }, [watch]);
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await baseApi.delete('/mypage');
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('accessToken');
+      console.log(response.data);
+      alert('회원 탈퇴 완료');
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert('회원 탈퇴에 실패했습니다.');
+    }
+  };
 
   // const onInvalid = (data: RegisteringUser) => {
   //   console.log('통과 못한 data', data);
@@ -333,6 +347,9 @@ export function MyPgaeFeat() {
         </InputBox>
         <button type="submit">회원 정보 수정</button>
       </form>
+      <button type="button" onClick={handleDeleteAccount}>
+        회원 탈퇴
+      </button>
     </>
   );
 }

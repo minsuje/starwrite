@@ -25,14 +25,12 @@ function ListCategory({
     category,
   );
 
-
   const dispatch = useAppDispatch();
 
   const selected = async (categoryId: string) => {
     if (categoryId === 'logout') {
       localStorage.removeItem('nickname');
       localStorage.removeItem('accessToken');
-      
 
       try {
         const response = await baseApi.post(`/logout`);

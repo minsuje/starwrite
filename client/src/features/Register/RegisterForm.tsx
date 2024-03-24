@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface RegisteringUser {
-  email?: string;
+  mail?: string;
   nickname?: string;
   role?: string;
   password?: string;
@@ -57,7 +57,7 @@ const passwordSchema = z
 // 유효성 검사 schema
 const schema = z
   .object({
-    email: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
+    mail: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
     nickname: nicknameSchema,
     role: z.string().optional().default('USER'),
     password: passwordSchema,
@@ -231,15 +231,15 @@ function RegisterForm() {
             </Label>
             <Input
               disabled={isEmailInputDisabled}
-              {...register('email', {
-                onChange: async () => await trigger('email'),
+              {...register('mail', {
+                onChange: async () => await trigger('mail'),
               })}
             ></Input>
             <_registerbtn
               bgcolor="#1361d7"
               type="button"
               disabled={isEmailInputDisabled}
-              onClick={() => checkValidEmail(getValues('email'))}
+              onClick={() => checkValidEmail(getValues('mail'))}
             >
               인증 메일 보내기
             </_registerbtn>
