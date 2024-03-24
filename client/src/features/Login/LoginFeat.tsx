@@ -78,6 +78,11 @@ function LoginForm() {
         },
       });
 
+      if (cookie.data.value == null) {
+        alert('로그인 실패');
+        return;
+      }
+
       console.log(`cookie >>>>>> ${document.cookie}`);
 
       localStorage.setItem('nickname', cookie.data.value);
