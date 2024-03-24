@@ -13,6 +13,7 @@ import {
 } from '../../shared/CommonStyle';
 import axios from 'axios';
 import { useState } from 'react';
+import { commonApi } from '../../shared/api/BaseApi';
 
 // 타입 지정
 interface RegisteringUser {
@@ -91,10 +92,7 @@ function RegisterForm() {
   const onValid = async (data: RegisteringUser) => {
     try {
       // 회원가입 요청 전송
-      const response = await axios.post(
-        `http://localhost:8080/register/user`,
-        data,
-      );
+      const response = await commonApi.post(`/register/user`, data);
 
       // 성공 응답 처리
       if (response.status === 200) {
@@ -117,7 +115,7 @@ function RegisterForm() {
     setIsSendingEmail(true);
     try {
       // 이메일 유효성 검사 요청 전송
-      const response = await axios.post(`http://localhost:8080/mail/send`, {
+      const response = await commonApi.post(`/mail/send`, {
         mail,
       });
 
@@ -149,8 +147,8 @@ function RegisterForm() {
   const checkAuthCode = async () => {
     try {
       // 서버에 인증 코드 검증 요청
-      const response = await axios.get(
-        `http://localhost:8080/mail/check?userNumber=${authCode}`,
+      const response = await commonApi.get(
+        `/mail/check?userNumber=${authCode}`,
       );
 
       // 인증 성공 처리

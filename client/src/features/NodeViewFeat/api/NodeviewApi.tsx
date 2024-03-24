@@ -22,7 +22,7 @@ export const links: Link[] = [
 export const fetchData = async (category: string | unknown) => {
   try {
     const response = await baseApi.get(
-      `http://localhost:8080/user/category/getCategoryPostNode?categoryId=${category}`,
+      `/category/getCategoryPostNode?categoryId=${category}`,
     );
     console.log('response', response);
     return response.data;
