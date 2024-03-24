@@ -1,13 +1,17 @@
 package starwrite.server.controller;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Users;
 import starwrite.server.repository.UsersRepository;
+import starwrite.server.service.MyPageService;
 
 @RestController
 public class UsersController {
@@ -17,6 +21,9 @@ public class UsersController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+  MyPageService myPageService;
 
     @PostMapping("/register/user")
     public String createUser(@RequestBody Users user) {
@@ -37,5 +44,20 @@ public class UsersController {
           return e.getLocalizedMessage();
       }
     }
+
+
+
+  @PostMapping("nickCheck")
+  public String checNickname(@RequestParam(value = "nickname") String nickname) {
+
+    System.out.println("nickname >>>>>> " + nickname);
+    String foundNickname = myPageService.checkNickname(nickname);
+
+   if (foundNickname == null) { // 사용 가능한 닉네임일 때
+      return "available";
+    } else {
+      return "unavailable"; // 사용 불가능한 닉네임일 때
+    }
+  }
 
 }

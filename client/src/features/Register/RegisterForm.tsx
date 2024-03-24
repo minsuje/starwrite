@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import { useState } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
+import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface RegisteringUser {
@@ -28,8 +29,8 @@ const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;
 
 const nicknameSchema = z
   .string()
-  .min(4, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
-  .max(10, { message: '닉네임은 최소 4글자 이상 10자 이하여야 합니다.' })
+  .min(2, { message: '닉네임은 최소 2글자 이상 10자 이하여야 합니다.' })
+  .max(10, { message: '닉네임은 최소 2글자 이상 10자 이하여야 합니다.' })
   .regex(NicNamePattern, {
     message: '닉네임은 한글, 영문, 밑줄(_)만 사용할 수 있습니다.',
   });
@@ -72,6 +73,11 @@ function RegisterForm() {
   const [authCode, setAuthCode] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [isEmailInputDisabled, setIsEmailInputDisabled] = useState(false);
+  const [isVerificationEmailSent, setIsVerificationEmailSent] = useState(false);
+  const [nicknameAvailabilityMessage, setNicknameAvailabilityMessage] =
+    useState('');
+  const navigate = useNavigate();
 
   // react-hook-form
   const {
@@ -98,6 +104,8 @@ function RegisterForm() {
       if (response.status === 200) {
         // 여기에 성공 시 로직 추가 (예: 로그인 페이지로 리다이렉트)
         console.log('회원가입 성공:', response.data);
+        alert('회원가입 성공');
+        navigate('/login');
       }
     } catch (error) {
       // 에러 처리
@@ -112,6 +120,7 @@ function RegisterForm() {
   };
 
   const checkValidEmail = async (mail: string) => {
+    setIsEmailInputDisabled(true); // Disable the email input
     setIsSendingEmail(true);
     try {
       // 이메일 유효성 검사 요청 전송
@@ -122,6 +131,7 @@ function RegisterForm() {
       // 성공 응답 처리
       if (response.status === 200) {
         console.log('이메일 유효성 검사 성공:', response.data);
+        setIsVerificationEmailSent(true);
         // 추가적인 성공 로직 (예: 메시지 표시 등)
       }
     } catch (error) {
@@ -153,8 +163,16 @@ function RegisterForm() {
 
       // 인증 성공 처리
       if (response.status === 200) {
-        console.log('인증 성공:', response.data);
-        setIsEmailVerified(true); // 인증 상태 업데이트
+        console.log('인증 결과:', response.data);
+        if (response.data === true) {
+          setIsEmailInputDisabled(false);
+          alert('이메일 인증 성공');
+          setIsEmailVerified(true); // 인증 상태 업데이트
+        } else {
+          setIsEmailInputDisabled(false);
+          alert('이메일 인증 실패');
+        }
+
         // 추가적인 성공 로직 (예: 회원가입 버튼 활성화)
       }
     } catch (error) {
@@ -164,6 +182,24 @@ function RegisterForm() {
       } else {
         console.log('에러:', error);
       }
+    }
+  };
+
+  const checkNicknameAvailability = async () => {
+    const nickname = getValues('nickname');
+    console.log(nickname);
+    try {
+      const response = await commonApi.post(`/nickCheck?nickname=${nickname}`);
+      console.log(response);
+      if (response.data === 'available') {
+        setNicknameAvailabilityMessage('사용 가능한 닉네임입니다');
+      } else if (response.data === 'unavailable') {
+        setNicknameAvailabilityMessage('이미 사용중인 닉네임입니다');
+      }
+      // ... handle other cases if necessary ...
+    } catch (error) {
+      console.error('Error checking nickname:', error);
+      // handle errors appropriately
     }
   };
 
@@ -194,6 +230,7 @@ function RegisterForm() {
               <_emoji>{Emoji('email')}</_emoji>
             </Label>
             <Input
+              disabled={isEmailInputDisabled}
               {...register('email', {
                 onChange: async () => await trigger('email'),
               })}
@@ -201,6 +238,7 @@ function RegisterForm() {
             <_registerbtn
               bgcolor="#1361d7"
               type="button"
+              disabled={isEmailInputDisabled}
               onClick={() => checkValidEmail(getValues('email'))}
             >
               인증 메일 보내기
@@ -214,7 +252,12 @@ function RegisterForm() {
           <InputBox>
             <Label>인증 번호 입력</Label>
             <Input onChange={(e) => setAuthCode(e.target.value)}></Input>
-            <_registerbtn bgcolor="#1361d7" onClick={checkAuthCode}>
+            <_registerbtn
+              type="button"
+              bgcolor="#1361d7"
+              onClick={checkAuthCode}
+              disabled={!isVerificationEmailSent}
+            >
               인증하기
             </_registerbtn>
           </InputBox>
@@ -225,17 +268,20 @@ function RegisterForm() {
               <_emoji>{Emoji('nickname')}</_emoji>
             </Label>
             <Input
-              disabled={!isEmailVerified}
               {...register('nickname', {
                 onChange: async () => await trigger('nickname'),
               })}
             ></Input>
-            <_registerbtn bgcolor="#1361d7" type="button">
+            <_registerbtn
+              bgcolor="#1361d7"
+              type="button"
+              onClick={checkNicknameAvailability}
+            >
               중복확인
             </_registerbtn>
-
-            {errors.nickname && typeof errors.nickname.message === 'string' && (
-              <_ErrorMsg>{errors.nickname.message}</_ErrorMsg>
+            {/* Display the nickname availability message */}
+            {nicknameAvailabilityMessage && (
+              <div>{nicknameAvailabilityMessage}</div>
             )}
           </InputBox>
 
