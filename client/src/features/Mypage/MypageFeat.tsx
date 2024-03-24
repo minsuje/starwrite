@@ -156,9 +156,26 @@ export function MyPgaeFeat() {
     fetchData();
   }, [reset]);
 
-  const changeValid = (data: RegisteringUser) => {
+  const changeValid = async (data: RegisteringUser) => {
     console.log('changeValid', data);
-    //여기에 마이페이지 axios 작성
+    try {
+      // 서버로 요청을 보냅니다. 여기서는 POST 요청을 예시로 들었습니다.
+      // URL과 요청 본문은 실제 서버 API에 맞게 수정해야 합니다.
+      const response = await baseApi.patch('/mypage', {
+        nickname: data.nickname,
+        originPassword: data.qurrentPassword,
+        newPassword: data.newPassword,
+      });
+
+      // 응답 처리
+      console.log('Response:', response.data);
+      alert('회원정보 수정 완료');
+      // 여기서는 응답에 따른 사용자 인터페이스 업데이트나 경고 메시지 표시 등의 처리를 추가할 수 있습니다.
+    } catch (error) {
+      // 오류 처리
+      console.error('Error updating user info:', error);
+      // 사용자에게 오류 메시지를 표시할 수 있습니다.
+    }
   };
 
   const getErrorMessage = () => {
@@ -178,11 +195,13 @@ export function MyPgaeFeat() {
         `mypage/nickCheck?nickname=${currentNickname}`,
       );
       setIsNicknameChecked(true);
-      // Update the state based on the response
-      if (response.data === true) {
-        setNicknameAvailabilityMessage('사용 가능한 닉네임입니다.');
-      } else {
+      console.log(response.data);
+      if (response.data === 'no change') {
+        setNicknameAvailabilityMessage('현재 사용중인 닉네임입니다');
+      } else if (response.data === 'unavailable') {
         setNicknameAvailabilityMessage('이미 사용중인 닉네임입니다.');
+      } else if (response.data === 'available') {
+        setNicknameAvailabilityMessage('사용 가능한 닉네임입니다.');
       }
     } catch (error) {
       console.error('Error checking nickname:', error);
@@ -312,7 +331,7 @@ export function MyPgaeFeat() {
               <_ErrorMsg>{errors.checkPassword.message}</_ErrorMsg>
             )}
         </InputBox>
-        <button type="submit">회원가입</button>
+        <button type="submit">회원 정보 수정</button>
       </form>
     </>
   );
