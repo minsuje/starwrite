@@ -1,5 +1,6 @@
 package starwrite.server.controller;
 
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,11 +42,11 @@ public class MyPageContoller {
     // 마이페이지 닉네임 중복 확인
     @PostMapping("nickCheck")
     public String checNickname(@RequestParam(value = "nickname") String nickname) {
-        String userId = SecurityUtil.getCurrentUserUserId();
+        String userNickname = SecurityUtil.getCurrentUserNickname();
 
         String foundNickname = myPageService.checkNickname(nickname);
 
-        if (userId == foundNickname) { // 원래 내 닉네임일 때
+        if (Objects.equals(userNickname, foundNickname)) { // 원래 내 닉네임일 때
             return "no change";
         } else if (foundNickname == null) { // 사용 가능한 닉네임일 때
             return "available";
