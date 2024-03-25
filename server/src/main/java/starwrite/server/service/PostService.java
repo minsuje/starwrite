@@ -65,8 +65,9 @@ public class PostService {
   }
 
   // 해당 유저의 스크랩한 글 조회
-  public List<GetPosts> getScrapPosts(String nickname, int skip, int limit) {
-    return postRepository.findScrapPosts(nickname, skip, limit);
+  public List<GetPosts> getScrapPosts(int skip, int limit) {
+    String userId = SecurityUtil.getCurrentUserUserId();
+    return postRepository.findScrapPosts(userId, skip, limit);
   }
 
 

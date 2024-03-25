@@ -76,9 +76,10 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 
 
+
   // 특정 유저의 스크랩한 글 조회. 10개씩 무한스크롤 조회
   @Query(
-      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.nickname = $nickname AND p.tmpSave = false "
+      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.userId = $userId AND p.tmpSave = false "
           + "MATCH (p)-[:IS_CHILD]-(c:Category) "
           + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
           + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
@@ -86,8 +87,9 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           + "c.categoryId AS categoryId, c.name AS categoryName, "
           + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
           + "SKIP $skip LIMIT $limit ")
-  List<GetPosts> findScrapPosts(@Param(value = "nickname") String nickname,
+  List<GetPosts> findScrapPosts(@Param(value = "userId") String userId,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
+
 
 
   // 임시 저장 글 모두 불러오기

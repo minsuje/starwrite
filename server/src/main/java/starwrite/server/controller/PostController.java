@@ -61,10 +61,10 @@ public class PostController {
 
 
   // 유저의 스크랩한 글 조회
-  @GetMapping("/{nickname}/scrap")
-  public List<GetPosts> getScrapPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
+  @GetMapping("/scrap")
+  public List<GetPosts> getScrapPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    return postService.getScrapPosts(nickname, skip, limit);
+    return postService.getScrapPosts(skip, limit);
   }
 
 
