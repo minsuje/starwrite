@@ -135,14 +135,14 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 글 상세
   @Query("MATCH (p:Post) WHERE ID(p) = $postId " + "MATCH (u:Users) WHERE u.userId = $userId "
       + "OPTIONAL MATCH (p)<-[:IS_CHILD]-(c:Category) " + "WITH p, u, c "
-      + "OPTIONAL MATCH (p)-[:POSTED]-(u) " + "WITH p, u, c "
+      + "OPTIONAL MATCH (p)-[:POSTED]-(author:Users) " + "WITH p, author, c "
       + "OPTIONAL MATCH (p)<-[:COMMENT]-(a:Annotation) "
       + "OPTIONAL MATCH (a)-[:COMMENTED]-(annotationAuthor:Users) "
-      + "WHERE (p)-[:POSTED]-(u) AND a.type = 'comment' "
-      + "OR NOT (p)-[:POSTED]-(u) AND (a.type = 'comment' OR (p)-[:COMMENT]-(u)) "
-      + "WITH p, u, c, a, annotationAuthor "
+      + "WHERE (p)-[:POSTED]-(author) AND a.type = 'comment' "
+      + "OR NOT (p)-[:POSTED]-(author) AND (a.type = 'comment' OR (p)-[:COMMENT]-(author)) "
+      + "WITH p, author, c, a, annotationAuthor "
       + "ORDER BY a.createdAt DESC "
-      + "RETURN ID(p) as postIdentifier, p.title AS title, p.content AS content, p.visible AS visible, p.img AS img, p.tmpSave AS tmpSave, p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, u.userId AS authorUserId, u.nickname AS authorNickname, c.categoryId AS categoryId, c.name AS categoryName, "
+      + "RETURN ID(p) as postIdentifier, p.title AS title, p.content AS content, p.visible AS visible, p.img AS img, p.tmpSave AS tmpSave, p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, author.userId AS authorUserId, author.nickname AS authorNickname, c.categoryId AS categoryId, c.name AS categoryName, "
       + "collect({annotationId: ID(a), position: a.position, type: a.type,  content: a.content, createdAt: a.createdAt, updatedAt: a.updatedAt, userId: annotationAuthor.userId, nickName: annotationAuthor.nickname, parentAnnotation: a.parentAnnotation}) as annotations ")
   PostDetail getPostDetail(@Param(value = "postId") Long postId,
       @Param(value = "userId") String userId);
