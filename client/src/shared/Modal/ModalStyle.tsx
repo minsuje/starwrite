@@ -44,7 +44,7 @@ export const _GlobalModalBg = styled.div`
 export const _GlobalSearchModal = styled.input`
   background-color: var(--color-zinc-800);
   line-height: 16px;
-  padding: 16px 40px;
+  padding: 16px 20px;
   color: #ffff;
   /* padding-bottom: 10px; */
   /* display: flex;
@@ -70,7 +70,7 @@ export const _GlovalSearchBox = styled.div`
   max-height: 70vh; /* 뷰포트 높이의 70%로 최대 높이를 제한 */
   width: 100%;
   background-color: var(--color-zinc-800);
-  padding: 30px;
+  padding: 15px 20px;
   margin-top: 10px;
   overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
 `;
@@ -80,11 +80,12 @@ export const _GlovalSearchResult = styled.div`
 `;
 
 export const _GlovalSearchTitle = styled.div`
-  justify-content: space-between;
   display: flex;
+  align-items: end;
   font-weight: bold;
   padding-bottom: 20px;
   font-size: 20px;
+  width: 100%;
 `;
 
 export const _GlovalSearchContnet = styled.div`
@@ -103,22 +104,23 @@ export const _GlobalLink = styled(Link)`
   color: #ffffff;
   text-decoration: none;
 
-  &:hover {
+  /* &:hover {
     background-color: #333;
-  }
+  } */
 `;
 export const _Globalname = styled.p`
   display: block;
-  padding: 0px 15px;
-  margin-bottom: 15px;
+  padding: 0px 20px;
   color: #656262;
   text-decoration: none;
+  margin-bottom: 15px;
 `;
 export const _Globaldate = styled.p`
-  display: block;
-
-  margin-bottom: 15px;
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
   color: #656262;
   text-decoration: none;
   font-size: 13px;
+  text-align: end;
 `;
