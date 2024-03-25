@@ -23,11 +23,11 @@ public class UsersDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
 
-        System.out.println("loadUserByUsername");
+//        System.out.println("loadUserByUsername");
         Users user = usersRepository.findUserByEmail(mail);
 
         if(user != null) {
-            System.out.println("user >>>>" + user);
+//            System.out.println("user >>>>" + user);
 //
 //            UserDetails users = User.builder()
 //                .username(user.getMail())
@@ -43,7 +43,7 @@ public class UsersDetailService implements UserDetailsService {
                 user.getUserId()
             );
 
-            System.out.println("loadUserByUsername users >>>>" + users);
+//            System.out.println("loadUserByUsername users >>>>" + users);
 
             return users;
         } else {

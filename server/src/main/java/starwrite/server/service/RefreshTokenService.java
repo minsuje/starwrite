@@ -21,7 +21,7 @@ public class RefreshTokenService {
 
     @Transactional
     public static void saveTokenInfo(String mail, String refreshToken, String accessToken) {
-        System.out.println("mail, refreshToken, accessToken" + mail + refreshToken + accessToken);
+//        System.out.println("mail, refreshToken, accessToken" + mail + refreshToken + accessToken);
         refreshTokenRepository.save(new RefreshToken(mail, accessToken, refreshToken));
     }
 

@@ -23,7 +23,7 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
 
     public JwtAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities, Object details) {
         super(principal, credentials, authorities);
-        System.out.println("jwtAuthenticationToken authorities >>> " + authorities);
+//        System.out.println("jwtAuthenticationToken authorities >>> " + authorities);
         this.details = details;
     }
 
