@@ -1,4 +1,3 @@
-
 import { Category, useAppSelector } from '../../../shared/model';
 import { getCategoriesApi } from '../../ListView/api/CategoryApi';
 import { _EditorHead, _TitleInput, _PublcButton } from './style';
@@ -81,7 +80,6 @@ function NewPostHeadFeat({
         <button onClick={() => publishPost()}>저장</button>
       </div>
 
-      {/* <_EditorHead> */}
       <_TitleInput
         placeholder="제목을 입력하세요"
         defaultValue={title ? title : undefined}
@@ -90,7 +88,6 @@ function NewPostHeadFeat({
           setOnValid();
         }}
       />
-      {/* </_EditorHead> */}
 
       <_ErrorMsg>
         {onValid === 'false'
