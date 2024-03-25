@@ -27,7 +27,6 @@ function ListCategory({
   );
 
   const dispatch = useAppDispatch();
-
   const reset = useAppSelector(resetState);
 
   const selected = async (categoryId: string) => {

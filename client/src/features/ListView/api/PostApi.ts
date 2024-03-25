@@ -37,18 +37,6 @@ export const postDetailApi = async (postid: number) => {
   }
 };
 
-// 글 수정
-// export const patchPostApi = async (postid: number, data: string) => {
-//   try {
-//     const response = await baseApi.patch(`/${postid}`, data);
-//     console.log(response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.log('patchPostApi Error', error);
-//     throw error;
-//   }
-// };
-
 // 글 삭제
 export const deletePostApi = async (postid: number) => {
   try {
@@ -57,6 +45,21 @@ export const deletePostApi = async (postid: number) => {
     return response.data;
   } catch (error) {
     console.error('deletePostApi Error', error);
+    throw error;
+  }
+};
+
+// 글 스크랩 하기
+export const scrapPostApi = async (postid: number, category: string) => {
+  try {
+    const response = await baseApi.post('post/scrap', {
+      postId: postid,
+      category: category,
+    });
+    console.log('scrapPostApi', response);
+    return response.data;
+  } catch (error) {
+    console.error('scrapPostApi', error);
     throw error;
   }
 };
