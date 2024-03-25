@@ -14,10 +14,18 @@ import axios from 'axios';
 //Minsu's
 export const baseApi = axios.create({
   baseURL: 'http://localhost:8080/user/',
-  headers: {
-    Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-  },
 });
+
+baseApi.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 export const commonApi = axios.create({
   baseURL: 'http://localhost:8080/',
