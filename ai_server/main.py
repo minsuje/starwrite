@@ -103,3 +103,5 @@ def prettyCypherChain(question: str) -> str:
     
 prettyCypherChain("내 post 들을 참고해서 고구마랑 연관되어 있는걸 알려줘")
     
+
+        
