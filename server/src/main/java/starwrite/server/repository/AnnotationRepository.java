@@ -18,14 +18,13 @@ public interface AnnotationRepository extends Neo4jRepository<Annotation, String
   @Query(
       "MATCH (u:Users), (p:Post) " +
           "WHERE u.userId = $userId AND ID(p) = $postId " +
-          "MERGE (a:Annotation {content: $content, isWriter: $isWriter, type: $type, createdAt: $timeNow, updatedAt: $timeNow, post: $postId, user: $userId}) "
+          "MERGE (a:Annotation {content: $content, type: $type, createdAt: $timeNow, updatedAt: $timeNow, post: $postId, user: $userId}) "
           +
           "MERGE (u)-[:COMMENTED]->(a) " +
           "MERGE (a)-[:COMMENT]->(p) "
   )
   void createAnnotation(@Param(value = "content") String content,
-      @Param(value = "type") String type, @Param(value = "isWriter")
-  boolean isWriter, @Param(value = "timeNow") LocalDateTime timeNow,
+      @Param(value = "type") String type, @Param(value = "timeNow") LocalDateTime timeNow,
       @Param(value = "postId") Long postId,
       @Param(value = "userId") String userId);
 

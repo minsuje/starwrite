@@ -79,14 +79,14 @@ public class PostController {
   }*/
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
-  @GetMapping("/detail/{postId}")
-  public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
-    return postService.getDetailPost(postId);
-  }
+//  @GetMapping("/detail/{postId}")
+//  public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
+//    return postService.getDetailPost(postId);
+//  }
 
   // 글 상세 조회
-  @GetMapping("/detail")
-  public PostDetail getPostDetail(@RequestParam(value = "postId") Long postId) {
+  @GetMapping("/detail/{postId}")
+  public PostDetail getPostDetail(@PathVariable(value = "postId") Long postId) {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.getPostDetail(postId, userId);
   }
