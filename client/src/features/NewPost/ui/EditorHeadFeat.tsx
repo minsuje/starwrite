@@ -1,8 +1,8 @@
 // import { Category } from '../../../shared/types/app';
 // import { getCategoriesApi } from '../../ListView/api/CategoryApi';
 
-import { Category } from '../../../shared/model';
-import { getCategoriesApi } from '../../ListView/api/CategoryApi';
+// import { Category } from '../../../shared/model';
+// import { getCategoriesApi } from '../../ListView/api/CategoryApi';
 
 import { Category, useAppSelector } from '../../../shared/model';
 import { getCategoriesApi } from '../../ListView/api/CategoryApi';

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const _ModalBg = styled.div`
   background-color: rgba(0, 0, 0, 0.75);
@@ -43,14 +44,13 @@ export const _GlobalModalBg = styled.div`
 export const _GlobalSearchModal = styled.input`
   background-color: var(--color-zinc-800);
   line-height: 16px;
-  padding: 16px 30px;
+  padding: 16px 40px;
   color: #ffff;
   /* padding-bottom: 10px; */
   /* display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: relative;
   z-index: 100;
   height: 100%;
   bottom: 50%;
@@ -62,6 +62,7 @@ export const _GlobalSearchModal = styled.input`
   /* padding: 0px; */
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 export const _GlovalSearchBox = styled.div`
@@ -79,7 +80,11 @@ export const _GlovalSearchResult = styled.div`
 `;
 
 export const _GlovalSearchTitle = styled.div`
+  justify-content: space-between;
+  display: flex;
   font-weight: bold;
+  padding-bottom: 20px;
+  font-size: 20px;
 `;
 
 export const _GlovalSearchContnet = styled.div`
@@ -88,4 +93,32 @@ export const _GlovalSearchContnet = styled.div`
   -webkit-line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 13px;
+`;
+
+export const _GlobalLink = styled(Link)`
+  display: block;
+  padding: 0px 15px;
+  /* background-color: #212121; */
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #333;
+  }
+`;
+export const _Globalname = styled.p`
+  display: block;
+  padding: 0px 15px;
+  margin-bottom: 15px;
+  color: #656262;
+  text-decoration: none;
+`;
+export const _Globaldate = styled.p`
+  display: block;
+
+  margin-bottom: 15px;
+  color: #656262;
+  text-decoration: none;
+  font-size: 13px;
 `;
