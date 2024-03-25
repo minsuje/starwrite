@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { InterGratedSearchIcon } from '../../shared/IntegratedSearchIcon';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 import { fetchDataGlobalSearch } from './api/GlobalSearch';
+// import { Link } from 'react-router-dom';
+import { _StyledLink } from '../../shared/CommonStyle';
 import {
   _ModalBg,
   _GlobalModalBg,
@@ -10,6 +14,9 @@ import {
   _GlovalSearchResult,
   _GlovalSearchTitle,
   _GlovalSearchContnet,
+  _GlobalLink,
+  _Globalname,
+  _Globaldate,
 } from '../../shared/Modal/ModalStyle';
 
 export function GlobalSearch() {
@@ -75,24 +82,52 @@ export function GlobalSearch() {
       {modal && (
         <_GlobalModalBg onClick={closeModal}>
           <div style={{ width: '60%' }}>
-            <_GlobalSearchModal
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onClick={stopPropagation}
-              value={searchTerm}
-            />
+            <div style={{ position: 'relative' }}>
+              <_GlobalSearchModal
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onClick={stopPropagation}
+                value={searchTerm}
+                placeholder="검색어를 입력하세요"
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  paddingLeft: '10px',
+                }}
+              >
+                <InterGratedSearchIcon />
+              </div>
+            </div>
+
             {searchResultBox && (
               <_GlovalSearchBox>
+                <_Globalname>통합검색</_Globalname>
                 {searchResults.map((result, id) => (
-                  <_GlovalSearchResult key={result.id}>
-                    <div
-                      style={{ backgroundColor: '#363535', padding: '20px' }}
+                  <_GlovalSearchResult key={id}>
+                    <_GlobalLink
+                      to={`/user/starwrite/listview/main/${result.nickName}/all/${result.searchPostId}`}
                     >
-                      <_GlovalSearchTitle>{result.title}</_GlovalSearchTitle>
-                      <_GlovalSearchContnet>
-                        {result.content}
-                      </_GlovalSearchContnet>
-                    </div>
+                      <div
+                        style={{ backgroundColor: '#363535', padding: '20px' }}
+                      >
+                        <_GlovalSearchTitle>
+                          {result.title}
+                          <_Globaldate>
+                            {format(
+                              new Date(result.createdAt),
+                              'yyyy-MM-dd EEEE',
+                              { locale: ko },
+                            )}
+                          </_Globaldate>
+                        </_GlovalSearchTitle>
+
+                        <_GlovalSearchContnet>
+                          {result.content}
+                        </_GlovalSearchContnet>
+                      </div>
+                    </_GlobalLink>
                   </_GlovalSearchResult>
                 ))}
               </_GlovalSearchBox>
