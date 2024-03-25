@@ -43,18 +43,15 @@ export const nodes: Node[] = [
 ];
 
 // 각각 nodes 객체에 url를 동적으로 추가한다.
-// nodes.forEach((node) => {
-//   node.url = `/user/starwrite/nodeview/${node.userid_num}/${node.category}`;
-// });
+nodes.forEach((node) => {
+  node.url = `/user/starwrite/nodeview/${node.userid_num}/${node.category}`;
+});
 
-// const nickname = localStorage.getItem('nickname');
-export const fetchDataCategory = async (nickname: string) => {
+const nickname = localStorage.getItem('nickname');
+export const fetchDataCategory = async (nickname) => {
   try {
-    const response = await baseApi.get(`/category/user?nickname=${nickname}`, {
-      // headers: {
-      //   Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-      // },
-    });
+    const response = await baseApi.get(`/category/user?nickname=${nickname}`);
+    console.log('fetchDataCategory', response);
     return response.data;
 
     // API 응답으로 받은 데이터를 상태에 저장

@@ -11,7 +11,7 @@ import { _Title } from '../style';
 import { redTheme } from '../../../NewPost/ui/style';
 
 import CommentList from '../Comment/CommentList';
-import SelectCategory from '../../lib/selectCategory';
+import SelectCategory from '../../lib/SelectCategory';
 
 export default function ListDetailFeat() {
   const { postId } = useParams();
