@@ -3,6 +3,7 @@ package starwrite.server.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
+import starwrite.server.dto.AnnotationDTO;
 import starwrite.server.entity.Annotation;
 import starwrite.server.entity.Post;
 
@@ -32,5 +33,7 @@ public class PostDetail {
 
   private String categoryId;
 
-  private List<Annotation> annotations;
+  private String categoryName;
+
+  private List<AnnotationDTO> annotations;
 }

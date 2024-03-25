@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Annotation;
 import starwrite.server.entity.Post;
 import starwrite.server.entity.Users;
@@ -25,10 +26,9 @@ public class AnnotationService {
 
   // 어노테이션 생성
   public String createAnnotation(CreateAnnotation annotation) {
-
+    String userId = SecurityUtil.getCurrentUserUserId();
     annotationRepository.createAnnotation(annotation.getAnnotation().getContent(),
-        annotation.getAnnotation().getType(), annotation.getAnnotation().isWriter(),
-        LocalDateTime.now(), annotation.getPostId(), annotation.getUserId());
+        annotation.getAnnotation().getType(), LocalDateTime.now(), annotation.getPostId(), userId);
 
     return "success";
   }

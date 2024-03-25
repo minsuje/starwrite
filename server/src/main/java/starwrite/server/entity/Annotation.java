@@ -21,13 +21,13 @@ public class Annotation {
   @GeneratedValue(generatorClass = UUIDStringGenerator.class)
   private String id;
 
-  private Integer position;
+  private String position;
 
   private String type;
 
   private String content;
 
-  private boolean isWriter;
+//  private boolean isWriter;
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
