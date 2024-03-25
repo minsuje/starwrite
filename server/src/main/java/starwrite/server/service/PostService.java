@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -33,7 +35,12 @@ public class PostService {
   CategoryRepository categoryRepository;
   @Autowired
   UsersRepository usersRepository;
+  @Autowired
+  VectorStore vectorStore;
 
+  public PostService(VectorStore vectorStore) {
+    this.vectorStore = vectorStore;
+  }
 
 
   // BackLink Info (postId , title)
@@ -104,6 +111,10 @@ public class PostService {
     foundCategory.setUsers(foundUser);
     postRepository.save(newPost);*/
 
+
+
+
+
     Post newPost = post.getPost();
 
     LocalDateTime timeNow = LocalDateTime.now();
@@ -126,6 +137,14 @@ public class PostService {
     } catch (IOException e) {
       // 오류 처리
     }
+
+
+    List<Document> documents = new ArrayList<>();
+    Document document = new Document(extractedText);
+
+    documents.add(document);
+
+    vectorStore.add(documents);
 
     System.out.println("extracted >>>>>>>>>>>>>>>>> " + extractedText);
 
