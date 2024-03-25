@@ -25,7 +25,7 @@ export function CategoryViewPage() {
   };
 
   // console.log('categoryData??', categoryDataNone);
-  // console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
+  console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
 
   return (
     <>
@@ -33,7 +33,7 @@ export function CategoryViewPage() {
       <CategoryViewWid
         searchTerm={searchTerm}
         setLoading={setLoading}
-        setCategoryDataNone={setCategoryDataNone}
+        // setCategoryDataNone={setCategoryDataNone}
         setCategoryData={setCategoryData}
       ></CategoryViewWid>
 
@@ -41,7 +41,7 @@ export function CategoryViewPage() {
         <_Background>
           <Spinner></Spinner>
         </_Background>
-      ) : categoryDataNone ? (
+      ) : categoryData? (
         ''
       ) : (
         <DataSpinnerSh></DataSpinnerSh>

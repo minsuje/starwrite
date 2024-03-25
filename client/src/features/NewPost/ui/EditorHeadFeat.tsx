@@ -1,6 +1,7 @@
 // import { Category } from '../../../shared/types/app';
 // import { getCategoriesApi } from '../../ListView/api/CategoryApi';
-import { Category } from '../../../../types/app';
+
+import { Category } from '../../../shared/model';
 import { getCategoriesApi } from '../../ListView/api/CategoryApi';
 
 import { _EditorHead, _TitleInput, _PublcButton } from './style';

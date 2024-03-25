@@ -14,36 +14,12 @@ import { useParams } from 'react-router';
 import { NoDataComponent } from '../../shared/NoDataComponent';
 import { PagesearchNode } from '../../pages/NodeView/NodeViewPage';
 
-interface linkType {
-  link: string;
-  postId: string;
-  relatedPostId: string;
-}
-interface node {
-  postId: string;
-}
-
 export type SearchType = {
   setNodesData: React.Dispatch<React.SetStateAction<PagesearchNode>>;
   setPageDataProp: (data: boolean) => void;
   searchTerm: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-// 망각 곡선 ? Ebbinghaus S = opacity
-const computeOpacity = (recentView: string) => {
-  const now = new Date();
-  const lastViewDate = new Date(recentView);
-  const timeDifference = Math.abs(now.getTime() - lastViewDate.getTime());
-  const daysDifference = timeDifference / (1000 * 3600 * 24); // 밀리초에서 일 단위로 변환
-
-  const S = 5; // 기억 강도, 필요에 따라 조정
-  const opacity = Math.exp(-daysDifference / S);
-
-  return opacity;
-};
-
-// recentView가 없는 경우, opacity는 0.2로 설정
 
 export const NodeView = ({
   searchTerm,
@@ -53,11 +29,10 @@ export const NodeView = ({
 }: SearchType) => {
   const [nodes, setNodes] = useState<CustomNode[]>([]);
   const [links, setLink] = useState<Link[]>([]);
-
   const { nickname, category } = useParams();
 
   // console.log('categoryId>>?>>>>>', category);
-  console.log('nodes', nodes);
+  // console.log('nodes', nodes);
   // console.log('links', links);
 
   useEffect(() => {
@@ -67,35 +42,26 @@ export const NodeView = ({
         const fetchedNodes = await fetchData(category);
 
         if (fetchedNodes !== '') {
-          let nodesData = fetchedNodes.posts.map((node: CustomNode) => {
-            const opacity = node.recentView
-              ? computeOpacity(node.recentView)
-              : 0.2;
-
-            return {
-              ...node,
-              id: node.postId, //22
-              label: node.title, //토마토
-              x: Math.random() * viewportSize.width,
-              y: Math.random() * viewportSize.height,
-              url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
-              opacity,
-            };
-          });
+          let nodesData = fetchedNodes.posts.map((node: CustomNode) => ({
+            ...node,
+            id: node.postId, //22
+            label: node.title, //토마토
+            x: Math.random() * viewportSize.width,
+            y: Math.random() * viewportSize.height,
+            url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
+          }));
 
           // validLinks 설정 예시
           const validLinks = fetchedNodes.relation
-            .filter((link: linkType) => {
+            .filter((link) => {
               return (
                 link.postId !== null &&
                 link.relatedPostId !== null &&
-                nodesData.some((node: node) => node.postId === link.postId) &&
-                nodesData.some(
-                  (node: node) => node.postId === link.relatedPostId,
-                )
+                nodesData.some((node) => node.postId === link.postId) &&
+                nodesData.some((node) => node.postId === link.relatedPostId)
               );
             })
-            .map((link: linkType) => ({
+            .map((link) => ({
               ...link,
               source: link.postId,
               target: link.relatedPostId,
@@ -187,6 +153,30 @@ export const NodeView = ({
 
     return visited;
   }
+  // function findAllConnectedNodes(nodeId: string, links: any) {
+  //   let visited = new Set<string>(); // 방문한 노드를 추적합니다.
+  //   let queue: string = [nodeId]; // BFS를 위한 큐
+
+  //   while (queue.length > 0) {
+  //     let currentId = queue.shift();
+  //     if (!visited.has(currentId)) {
+  //       visited.add(currentId);
+  //       links.forEach((link) => {
+  //         let sourceId =
+  //           typeof link.source === 'object' ? link.source.id : link.source;
+  //         let targetId =
+  //           typeof link.target === 'object' ? link.target.id : link.target;
+  //         if (sourceId === currentId && !visited.has(targetId)) {
+  //           queue.push(targetId);
+  //         } else if (targetId === currentId && !visited.has(sourceId)) {
+  //           queue.push(sourceId);
+  //         }
+  //       });
+  //     }
+  //   }
+
+  //   return visited;
+  // }
 
   useEffect(() => {
     // 작은 원의 데이터를 준비합니다.
@@ -274,7 +264,6 @@ export const NodeView = ({
       .attr('height', 35) // svg 높이
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정
       .attr('pointer-events', 'all')
-      .style('opacity', (d) => d.opacity)
       .call(
         drag(simulation) as unknown as d3.DragBehavior<
           SVGImageElement,
@@ -290,7 +279,7 @@ export const NodeView = ({
         const connectedNodes = findAllConnectedNodes(d.id, links);
 
         // 연결된 모든 노드의 opacity 조정
-        // node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
+        node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
 
         // 연결된 모든 링크의 opacity 조정
         link.style('opacity', (l) => {
@@ -304,7 +293,7 @@ export const NodeView = ({
         });
       })
       .on('mouseout', function () {
-        // node.style('opacity', 1);
+        node.style('opacity', 1);
         link.style('opacity', 0.1); // 기본 opacity 값을 사용
       });
     // 텍스트 요소 추가
@@ -400,20 +389,25 @@ export const NodeView = ({
     const nodeSelection = svg
       .selectAll('.nodes image')
       .data<CustomNode>(nodes) // 여기서 data는 CustomNode 타입의 배열이어야 합니다.
+      .enter()
+      .append('g')
       .classed('node', true);
     //글 제목 깜빡깜빡
+
     // 검색어가 있는 경우
     if (searchTerm.trim()) {
       nodeSelection
-        .classed('blink-animation', (d) =>
+        .classed('blink-animation', (d: CustomNode) =>
           d.label.toLowerCase().includes(searchTerm.toLowerCase()),
         ) // boolean 값을 반환합니다.
-        .style('opacity', (d) =>
+        .style('opacity', (d: CustomNode) =>
           d.label.toLowerCase().includes(searchTerm.toLowerCase()) ? 1 : 0.2,
         );
     } else {
       // 검색어가 없는 경우
-      nodeSelection.classed('blink-animation', false).style('opacity', 1); // 직접적으로 boolean 값을 제공합니다.
+      nodeSelection
+        .classed('blink-animation', false) // 직접적으로 boolean 값을 제공합니다.
+        .style('opacity', 1);
     }
   }, [searchTerm]);
 
@@ -421,6 +415,7 @@ export const NodeView = ({
     // nodes 배열이 비어 있거나 모든 항목이 null일 때 렌더링할 컴포넌트
     return <NoDataComponent />;
   }
+  // console.log('>>>>>>>>>>>>>>>>>>', nodes);
 
   return (
     <svg

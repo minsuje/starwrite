@@ -10,7 +10,7 @@ import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
 import { MainPage } from '../pages/Main/Main';
 // import { GoogleOAuth } from '../features/Login/google';
-import { InterGratedSearchpage } from '../pages/IntergatedSerach/InterGratedSearchpage';
+// import { InterGratedSearchpage } from '../pages/IntergatedSerach/InterGratedSearchpage';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -126,11 +126,6 @@ export const AppRouter = createBrowserRouter([
             ],
           },
         ],
-      },
-
-      {
-        path: '*',
-        element: <InterGratedSearchpage></InterGratedSearchpage>,
       },
     ],
   },
