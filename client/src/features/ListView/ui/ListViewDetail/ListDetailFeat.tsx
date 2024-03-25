@@ -1,30 +1,17 @@
-import {
-  BlockNoteEditor,
-  PartialBlock,
-  BlockNoteSchema,
-  defaultInlineContentSpecs,
-  Block,
-} from '@blocknote/core';
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/react';
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
-import { Mention } from '../../../NewPost/ui/Mention';
+import { MyBlock, schema } from '../../model/type';
+
 import { deletePostApi, postDetailApi } from '../../api/PostApi';
 import { useNavigate, useParams } from 'react-router';
 import { _Title } from '../style';
 import { redTheme } from '../../../NewPost/ui/style';
 
 import CommentList from '../Comment/CommentList';
-
-const schema = BlockNoteSchema.create({
-  inlineContentSpecs: {
-    // Adds all default inline content.
-    ...defaultInlineContentSpecs,
-    // Adds the mention tag.
-    mention: Mention,
-  },
-});
+import SelectCategory from '../../lib/selectCategory';
 
 export default function ListDetailFeat() {
   const { postId } = useParams();
@@ -36,12 +23,17 @@ export default function ListDetailFeat() {
   const [title, setTitle] = useState<string>();
   const [visible, setVisible] = useState<string>();
   const [isMine, setIsMine] = useState<boolean>(true);
-  const [blocks, setBlocks] = useState<Block>();
+  const [blocks, setBlocks] = useState<MyBlock[]>([]);
+
+  const [scrap, setScrap] = useState<boolean>(false);
 
   function editPost(postid: number) {
     navigate(`/user/starwrite/writenewpost/${postid}`);
   }
-
+  function openScrap() {
+    setScrap(true);
+    console.log(scrap);
+  }
   async function deletePost(postid: number) {
     const promise = deletePostApi(postid);
     promise
@@ -77,20 +69,21 @@ export default function ListDetailFeat() {
     return 'Loading content...';
   }
 
-  // Renders the editor instance.
-
   return (
     <>
       <_Title>
         {title}
         <div>{visible === 'true' ? '공개' : '비공개'}</div>
       </_Title>
-      {isMine && (
+      {isMine ? (
         <_Title>
           <button onClick={() => editPost(Number(postId))}>수정</button>
           <button onClick={() => deletePost(Number(postId))}>삭제</button>
         </_Title>
+      ) : (
+        <button onClick={openScrap}>스크랩</button>
       )}
+      {scrap && <SelectCategory close={() => setScrap(false)}></SelectCategory>}
 
       <div onKeyDown={(e) => e.preventDefault()}>
         <BlockNoteView
@@ -102,9 +95,7 @@ export default function ListDetailFeat() {
             if (selection !== undefined) {
               setBlocks(selection.blocks);
             } else {
-              setBlocks(editor.getTextCursorPosition().block);
-              const lineContent = blocks[0];
-              console.log('detailFeat', blocks);
+              setBlocks([editor.getTextCursorPosition().block]);
             }
           }}
         />

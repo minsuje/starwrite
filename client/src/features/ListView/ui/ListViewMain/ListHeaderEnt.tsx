@@ -22,6 +22,7 @@ function ListHeaderEnt({
   const navigate = useNavigate();
   const { nickname } = useParams();
   const reset = useAppSelector(resetState);
+  const myNickname = localStorage.getItem('nickname');
 
   async function deleteCategory() {
     if (category) {
@@ -47,26 +48,31 @@ function ListHeaderEnt({
       <_headBox>
         <h1>{categoryName}</h1>
 
-        <_buttonBox>
-          {category != '전체' && category != '' && (
-            <>
-              <button>
-                <LuPencilLine />
-              </button>
-              <button onClick={deleteCategory}>
-                <IoIosTrash />
-              </button>
-            </>
-          )}
+        {nickname === myNickname && (
+          <>
+            {' '}
+            <_buttonBox>
+              {category != '전체' && category != '' && (
+                <>
+                  <button>
+                    <LuPencilLine />
+                  </button>
+                  <button onClick={deleteCategory}>
+                    <IoIosTrash />
+                  </button>
+                </>
+              )}
 
-          <button
-            onClick={() => {
-              navigate(`/user/starwrite/writenewpost`);
-            }}
-          >
-            글 추가하기
-          </button>
-        </_buttonBox>
+              <button
+                onClick={() => {
+                  navigate(`/user/starwrite/writenewpost`);
+                }}
+              >
+                글 추가하기
+              </button>
+            </_buttonBox>
+          </>
+        )}
       </_headBox>
     </>
   );
