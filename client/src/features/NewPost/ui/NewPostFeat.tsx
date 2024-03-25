@@ -25,6 +25,7 @@ function NewPostFeat() {
         setTitle(saving.posts.title);
         setSaved(saving.posts.content);
         setIsPublic(saving.posts.visible);
+        setTmpSaved(saving.posts.tmpSave);
         if (saving.categoryid) {
           setCategory(saving.categoryid);
         } else {
@@ -43,6 +44,7 @@ function NewPostFeat() {
   const [saved, setSaved] = useState<string | undefined>();
   const [onValid, setOnValid] = useState<string>('true');
   const [titleList, setTitleList] = useState<Titles[]>([]);
+  const [tmpSaved, setTmpSaved] = useState<boolean>();
 
   useEffect(() => {
     setRelatedPosts(checkLinking(content));
@@ -54,15 +56,6 @@ function NewPostFeat() {
       setTitleList(titleList);
     });
   }, []);
-
-  // useEffect(() => {
-  //   const selected = searchParams.get('selected');
-  //   if (selected) {
-  //     setCategory(selected);
-  //     setSearchParams(selected);
-  //     console.log('selected', selected);
-  //   }
-  // }, []);
 
   function publishPost() {
     if (title === undefined || title.length > 50 || title.length === 0) {
@@ -118,6 +111,7 @@ function NewPostFeat() {
       {openSaving && <GetSavings onclick={() => setOpenSaving(false)} />}
       <NewPostHeadFeat
         onValid={onValid}
+        tmpSaved={tmpSaved}
         data={{ title, category, isPublic }}
         savePost={() => {
           savePost();

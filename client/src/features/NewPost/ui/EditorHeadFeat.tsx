@@ -11,6 +11,7 @@ import { currentCategory } from '../../ListView/model/CategorySlice';
 function NewPostHeadFeat({
   onValid,
   data,
+  tmpSaved,
   publishPost,
   savePost,
   openSaving,
@@ -19,6 +20,7 @@ function NewPostHeadFeat({
   setIsPublic,
   setOnValid,
 }: {
+  tmpSaved: boolean | undefined;
   onValid: string;
   data: {
     title: string | undefined;
@@ -64,18 +66,20 @@ function NewPostHeadFeat({
       setCategory(selected);
       console.log('category2', category);
     } else if (categories[0]) {
-      console.log('설마 여기?');
       setCategory(categories[0].categoryId);
     }
-
-    console.log('category', category);
   }, [categories]);
 
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end', gap: '10px' }}>
-        <button onClick={openSaving}>임시저장 불러오기</button>
-        <button onClick={savePost}>임시저장 </button>
+        {tmpSaved && (
+          <>
+            <button onClick={openSaving}>임시저장 불러오기</button>
+            <button onClick={savePost}>임시저장 </button>
+          </>
+        )}
+
         <button onClick={() => publishPost()}>저장</button>
       </div>
 
