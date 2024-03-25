@@ -9,6 +9,8 @@ import java.util.Map;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
 import starwrite.server.entity.Post;
@@ -24,8 +26,9 @@ import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
+import starwrite.server.utils.PythonApi;
 
-
+@EnableAsync
 @Service
 public class PostService {
 
@@ -37,6 +40,9 @@ public class PostService {
   UsersRepository usersRepository;
   @Autowired
   VectorStore vectorStore;
+
+  @Autowired
+  PythonApi pythonApi;
 
   public PostService(VectorStore vectorStore) {
     this.vectorStore = vectorStore;
@@ -158,9 +164,19 @@ public class PostService {
 
     System.out.println("createdPost >>>>>>>>>" + createdPost);
 
+    parsePostInBackground(createdPost.getIdentifier(), createdPost.getPost().getContent());
+
+
+    System.out.println("service 리턴함? ");
+
     return createdPost;
 //    postRepository.save(createdPost);
 
+  }
+
+  @Async
+  public void parsePostInBackground(Long postId, String content) {
+    pythonApi.parsePost(postId, content);
   }
 
   // 글 생성페이지 임시저장버튼
