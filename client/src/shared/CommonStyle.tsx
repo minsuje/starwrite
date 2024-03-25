@@ -142,7 +142,7 @@ export const _Background = styled.div`
 // react-router Link 디자인
 export const _StyledLink = styled(Link)`
   display: block;
-  padding: 10px 20px;
+  padding: 0px 15px;
   /* background-color: #212121; */
   color: #ffffff;
   text-decoration: none;

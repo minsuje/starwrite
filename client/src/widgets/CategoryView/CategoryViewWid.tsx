@@ -13,8 +13,8 @@ const _SyledContainer = styled.div`
 export function CategoryViewWid({
   searchTerm,
   setLoading,
-  setCategoryDataNone,
   setCategoryData,
+  // setCategoryDataNone,
 }) {
   const navigate = useNavigate();
   const { nickname } = useParams();
@@ -24,13 +24,13 @@ export function CategoryViewWid({
     height: window.innerHeight,
   });
   const [category, setCategory] = useState([]);
-  const [categoryDatas, setCategoryDatas] = useState([]);
+  // const [categoryDatas, setCategoryDatas] = useState([]);
 
   useEffect(() => {
     // axios 데이터 로딩
     const getDataCategory = async () => {
       try {
-        const categoryDataResponse = await fetchDataCategory(); //데이터 응답
+        const categoryDataResponse = await fetchDataCategory(nickname); //데이터 응답
 
         if (categoryDataResponse !== '') {
           let processedCategoryData = categoryDataResponse.map(
@@ -51,9 +51,9 @@ export function CategoryViewWid({
           }
           setCategory(processedCategoryData);
           setLoading(false);
-          setCategoryDataNone(categoryDataResponse);
           setCategoryData(categoryDataResponse);
-          setCategoryDatas(processedCategoryData);
+          // setCategoryDataNone(categoryDataResponse);
+          // setCategoryDatas(processedCategoryData);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -61,7 +61,9 @@ export function CategoryViewWid({
     };
 
     getDataCategory();
-  }, []);
+    // console.log('categoryDatas>>', categoryDatas);
+    console.log();
+  }, [nickname]);
 
   // console.log('Processed category Data:', category);
 

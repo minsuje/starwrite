@@ -9,7 +9,7 @@ const StImg = styled.img.attrs({
   border-radius: 50%;
   position: relative;
 `;
-export function ProfileShard({ image }: any) {
+export function ProfileShard() {
   return (
     <>
       <StImg />
