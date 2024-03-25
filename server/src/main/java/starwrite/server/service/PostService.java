@@ -19,6 +19,7 @@ import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
+import starwrite.server.response.GetPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
@@ -62,6 +63,12 @@ public class PostService {
   public List<GetPosts> getAllPosts(String nickname, int skip, int limit) {
     return postRepository.findAllPostsByUserNickname(nickname, skip, limit);
   }
+
+  // 해당 유저의 스크랩한 글 조회
+  public List<GetPosts> getScrapPosts(String nickname, int skip, int limit) {
+    return postRepository.findScrapPosts(nickname, skip, limit);
+  }
+
 
   // 상세 글 조회
   public Map<String, Object> getDetailPost(Long postId) {
@@ -146,17 +153,17 @@ public class PostService {
 
     vectorStore.add(documents);
 
-    System.out.println("extracted >>>>>>>>>>>>>>>>> " + extractedText);
+//    System.out.println("extracted >>>>>>>>>>>>>>>>> " + extractedText);
 
 
     String userId = SecurityUtil.getCurrentUserUserId();
-    System.out.println("userID >>>>" + userId);
+//    System.out.println("userID >>>>" + userId);
     CreatedPost createdPost = postRepository.createPostLink(userId, post.getCategory(),
         newPost.getTitle(), newPost.getContent(), extractedText,
         newPost.getVisible(), img, timeNow, false,
         newRelated);
 
-    System.out.println("createdPost >>>>>>>>>" + createdPost);
+//    System.out.println("createdPost >>>>>>>>>" + createdPost);
 
     return createdPost;
 //    postRepository.save(createdPost);

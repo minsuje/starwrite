@@ -52,12 +52,22 @@ public class PostController {
 //  @GetMapping("writing")
 //  public String getI
 
-  // 유저의 모든 글 조회 (노드 뷰)
+  // 유저의 모든 글 조회
   @GetMapping("/{nickname}/all")
   public List<GetPosts> getAllPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
     return postService.getAllPosts(nickname, skip, limit);
   }
+
+
+  // 유저의 스크랩한 글 조회
+  @GetMapping("/{nickname}/scrap")
+  public List<GetPosts> getScrapPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
+      @RequestParam(value = "limit", defaultValue = "10") int limit) {
+    return postService.getScrapPosts(nickname, skip, limit);
+  }
+
+
 
   // 글 수정
 
