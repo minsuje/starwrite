@@ -4,12 +4,10 @@ import { BlockNoteView } from '@blocknote/react';
 import '@blocknote/react/style.css';
 import { useEffect, useMemo, useState } from 'react';
 import { MyBlock, schema } from '../../model/type';
-
 import { deletePostApi, postDetailApi } from '../../api/PostApi';
 import { useNavigate, useParams } from 'react-router';
 import { _Title } from '../style';
 import { redTheme } from '../../../NewPost/ui/style';
-
 import CommentList from '../Comment/CommentList';
 import SelectCategory from '../../lib/SelectCategory';
 
@@ -24,7 +22,6 @@ export default function ListDetailFeat() {
   const [visible, setVisible] = useState<string>();
   const [isMine, setIsMine] = useState<boolean>(true);
   const [blocks, setBlocks] = useState<MyBlock[]>([]);
-
   const [scrap, setScrap] = useState<boolean>(false);
 
   function editPost(postid: number) {
@@ -32,7 +29,6 @@ export default function ListDetailFeat() {
   }
   function openScrap() {
     setScrap(true);
-    console.log(scrap);
   }
   async function deletePost(postid: number) {
     const promise = deletePostApi(postid);
@@ -51,12 +47,16 @@ export default function ListDetailFeat() {
   useEffect(() => {
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail) => {
-      setInitialContent(JSON.parse(postDetail.post.content) as PartialBlock[]);
-      setTitle(postDetail.post.title);
-      setVisible(postDetail.post.visible);
-      setIsMine(postDetail.isMine);
+      setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
+      setTitle(postDetail.title);
+      setVisible(postDetail.visible);
+      if (postDetail.authorNickname === myNickname) {
+        setIsMine(true);
+      } else {
+        setIsMine(false);
+      }
     });
-  }, [postId]);
+  }, [postId, myNickname]);
 
   const editor = useMemo(() => {
     if (initialContent === 'loading') {
@@ -83,7 +83,12 @@ export default function ListDetailFeat() {
       ) : (
         <button onClick={openScrap}>스크랩</button>
       )}
-      {scrap && <SelectCategory close={() => setScrap(false)}></SelectCategory>}
+      {scrap && (
+        <SelectCategory
+          postId={postId}
+          close={() => setScrap(false)}
+        ></SelectCategory>
+      )}
 
       <div onKeyDown={(e) => e.preventDefault()}>
         <BlockNoteView
