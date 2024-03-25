@@ -28,6 +28,9 @@ export const _registerbtn = styled.button<ButtonProps>`
   &:hover {
     background-color: #0353cb;
   }
+  &:disabled {
+    background-color: #6d9bdf;
+  }
 `;
 
 // 버튼 스타일

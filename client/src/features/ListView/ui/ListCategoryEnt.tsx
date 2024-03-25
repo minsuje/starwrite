@@ -4,9 +4,10 @@ import { OneCategory, ListCategories } from '../../NewPost/ui/style';
 import { initalList } from '../model/CategoryData';
 import { getCategoriesApi } from '../api/CategoryApi';
 import { baseApi } from '../../../shared/api/BaseApi';
-import { Category } from '../../../shared/model';
+import { Category, useAppSelector } from '../../../shared/model';
 import { useAppDispatch } from '../../../shared/model';
 import { categoriesActions } from '../model/CategoriesSlice';
+import { resetState } from '../model/StateSlice';
 
 function ListCategory({
   sort,
@@ -25,14 +26,14 @@ function ListCategory({
     category,
   );
 
-
   const dispatch = useAppDispatch();
+
+  const reset = useAppSelector(resetState);
 
   const selected = async (categoryId: string) => {
     if (categoryId === 'logout') {
       localStorage.removeItem('nickname');
       localStorage.removeItem('accessToken');
-      
 
       try {
         const response = await baseApi.post(`/logout`);
@@ -66,7 +67,8 @@ function ListCategory({
         { name: '로그아웃', categoryId: 'logout' },
       ]);
     }
-  }, [sort, nickname, updateCategory, dispatch]);
+    console.log('리스트', reset);
+  }, [sort, nickname, updateCategory, dispatch, reset]);
 
   return (
     <>

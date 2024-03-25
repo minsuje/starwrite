@@ -19,6 +19,10 @@ export const baseApi = axios.create({
   },
 });
 
+export const commonApi = axios.create({
+  baseURL: 'http://localhost:8080/',
+});
+
 //Seejin's
 // export const baseApi = axios.create({
 //   baseURL: 'http://52.79.228.200:8080/user/',

@@ -63,9 +63,9 @@ public class IndexController {
     // 유저 홈
     @GetMapping("/user/home")
     public String handleUserHome() {
-        System.out.println("controller nickname >>> " + SecurityUtil.getCurrentUserNickname());
-        System.out.println("controller userId >>> " + SecurityUtil.getCurrentUserUserId());
-        System.out.println("controller auth >>> " + SecurityUtil.getCurrentUserAuth());
+//        System.out.println("controller nickname >>> " + SecurityUtil.getCurrentUserNickname());
+//        System.out.println("controller userId >>> " + SecurityUtil.getCurrentUserUserId());
+//        System.out.println("controller auth >>> " + SecurityUtil.getCurrentUserAuth());
 
 //        Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
 //        cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
@@ -91,19 +91,19 @@ public class IndexController {
         String username = logInDTO.getMail();
         String password = logInDTO.getPassword();
         JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
-        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
-        log.info("request username = {}, password = {}", username, password);
-        log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
-            jwtDTO.getRefreshToken());
+//        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
+//        log.info("request username = {}, password = {}", username, password);
+//        log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
+            jwtDTO.getRefreshToken();
 
         return jwtDTO;
     }
 
     @GetMapping("/cookie")
     public Cookie setCookie(Authentication authentication) {
-        System.out.println("/cookie authentication > " + authentication);
+//        System.out.println("/cookie authentication > " + authentication);
         Cookie cookie = new Cookie("nickName", SecurityUtil.getCurrentUserNickname());
-      System.out.println("cookie name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + cookie.getValue()  + " ----- " +   SecurityUtil.getCurrentUserNickname());
+//      System.out.println("cookie name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + cookie.getValue()  + " ----- " +   SecurityUtil.getCurrentUserNickname());
         cookie.setMaxAge(60 * 60 * 24 * 7);  // 쿠키 유효 시간 : 1주일
         response.addCookie(cookie);
 
@@ -114,7 +114,7 @@ public class IndexController {
     @PostMapping("user/logout")
     public ResponseEntity<StatusResponseDTO> logout(
         @RequestHeader("Authorization") final String accessToken, HttpServletRequest httpServletRequest) {
-        System.out.println("logout accessToken >>>>>>>>>>  " + accessToken);
+//        System.out.println("logout accessToken >>>>>>>>>>  " + accessToken);
 
       Cookie[] cookies = httpServletRequest.getCookies();
       if (cookies != null && cookies.length > 0) {
@@ -137,19 +137,19 @@ public class IndexController {
     @PostMapping("/token/refresh")
     public ResponseEntity<TokenResponseStatus> refresh(
         @RequestHeader("Authorization") final String accessToken) {
-        System.out.println("refresh token");
+//        System.out.println("refresh token");
 //        String tokenWithBearer = accessToken;
         String token = accessToken.substring(7);
         // 액세스 토큰으로 refresh 토큰 객체를 조회
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccessToken(token);
-        System.out.println("refresh token 2");
+//        System.out.println("refresh token 2");
 
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
 
         // RefreshToken 이 존재하고 유효한다면 실행
         if (refreshToken.isPresent() && jwtTokenProvider.validateToken(
             refreshToken.get().getRefreshToken())) {
-            System.out.println("refresh token 3");
+//            System.out.println("refresh token 3");
             // RefreshToken 이 존재하고 유효하다면 실행
             RefreshToken resultToken = refreshToken.get();
 
@@ -159,7 +159,7 @@ public class IndexController {
             resultToken.updateAccessToken(newAccessToken);
             refreshTokenRepository.save(resultToken);
 
-            System.out.println("여기까지 돌았음");
+//            System.out.println("여기까지 돌았음");
 
             // 새로운 accessToken 을 반환해줌
             return ResponseEntity.ok(TokenResponseStatus.addStatus(200, newAccessToken));
