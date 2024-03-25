@@ -61,10 +61,10 @@ public class PostController {
 
 
   // 유저의 스크랩한 글 조회
-  @GetMapping("/{nickname}/scrap")
-  public List<GetPosts> getScrapPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
+  @GetMapping("/scrap")
+  public List<GetPosts> getScrapPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    return postService.getScrapPosts(nickname, skip, limit);
+    return postService.getScrapPosts(skip, limit);
   }
 
 
@@ -79,14 +79,14 @@ public class PostController {
   }*/
 
   // 포스트 상세보기 (최근 본 시점으로 시간 기록)
-  @GetMapping("/detail/{postId}")
-  public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
-    return postService.getDetailPost(postId);
-  }
+//  @GetMapping("/detail/{postId}")
+//  public Map<String, Object> getDetailPost(@PathVariable(value = "postId") Long postId) {
+//    return postService.getDetailPost(postId);
+//  }
 
   // 글 상세 조회
-  @GetMapping("/detail")
-  public PostDetail getPostDetail(@RequestParam(value = "postId") Long postId) {
+  @GetMapping("/detail/{postId}")
+  public PostDetail getPostDetail(@PathVariable(value = "postId") Long postId) {
     String userId = SecurityUtil.getCurrentUserUserId();
     return postService.getPostDetail(postId, userId);
   }
