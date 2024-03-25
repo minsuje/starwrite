@@ -35,9 +35,10 @@ def lambda_handler(event, context):
 
   # URI 출력
   print('>>>>>>>>>>', NEO4J_URI)
+  
 
   # 이벤트에서 postId와 content 추출
-  postId = event.get("title")
+  postId = event.get("postId")
   content = event.get("content")
 
 
@@ -61,17 +62,6 @@ def lambda_handler(event, context):
   print("파싱 완료 어브젝트: ", result_text)
 
 
-
-  random_uuid = uuid.uuid4()
-
-  print(random_uuid)
-
-
-
-    
-    
-
-  chunkId = random_uuid
   chunkText = result_text
 
   merge_chunk_node_query = """
