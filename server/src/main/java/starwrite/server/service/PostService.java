@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,11 @@ import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
 import starwrite.server.utils.PythonApi;
+import starwrite.server.utils.WebClientServiceImpl;
 
 @EnableAsync
 @Service
+@Slf4j
 public class PostService {
 
   @Autowired
@@ -44,6 +47,11 @@ public class PostService {
 
   @Autowired
   PythonApi pythonApi;
+
+
+  @Autowired
+  private BackgroundTaskService backgroundTaskService;
+
 
   public PostService(VectorStore vectorStore) {
     this.vectorStore = vectorStore;
@@ -148,21 +156,10 @@ public class PostService {
 
     try {
       extractedText = JsonData.parseJson(post.getPost().getContent());
-      // 추출된 텍스트를 이용하는 로직
     } catch (IOException e) {
-      // 오류 처리
+      log.error("Error parsing JSON content", e);
+      // 필요한 경우 추가적인 예외 처리
     }
-
-
-    List<Document> documents = new ArrayList<>();
-    Document document = new Document(extractedText);
-
-    documents.add(document);
-
-    vectorStore.add(documents);
-
-//    System.out.println("extracted >>>>>>>>>>>>>>>>> " + extractedText);
-
 
     String userId = SecurityUtil.getCurrentUserUserId();
 //    System.out.println("userID >>>>" + userId);
@@ -173,7 +170,9 @@ public class PostService {
 
 //    System.out.println("createdPost >>>>>>>>>" + createdPost);
 
-    parsePostInBackground(createdPost.getIdentifier(), createdPost.getPost().getContent());
+//    parsePostInBackground(createdPost.getIdentifier(), createdPost.getPost().getContent());
+
+    backgroundTaskService.parsePostBackground(createdPost.getIdentifier(), newPost.getContent());
 
 
     System.out.println("service 리턴함? ");
@@ -183,10 +182,11 @@ public class PostService {
 
   }
 
-  @Async
-  public void parsePostInBackground(Long postId, String content) {
-    pythonApi.parsePost(postId, content);
-  }
+//  @Async
+//  public void parsePostInBackground(Long postId, String content) {
+//    pythonApi.parsePost(postId, content);
+//  }
+
 
   // 글 생성페이지 임시저장버튼
   public CreatedPost savePost(CreatePost post) {

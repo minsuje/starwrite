@@ -1,6 +1,7 @@
 package starwrite.server.utils;
 
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -15,19 +16,21 @@ public class PythonApi {
 //            "https://eluaiy9gg5.execute-api.ap-northeast-2.amazonaws.com/ai/user"))
 //        .build();
 
-    private final WebClient webClient;
+  @Autowired
+  WebClient webClient;
 
+  @Autowired
     public PythonApi(WebClient webClient) {
         this.webClient = webClient;
     }
 
     public Flux<String> parsePost(Long postId, String content) {
 
-        System.out.println("pythonApi >>> " + postId + content);
+        System.out.println("pythonApi >>> " + postId + " " + content);
 
         return webClient.post()
             .uri("/post")
-            .bodyValue(Map.of("postId", postId, "content", content))
+            .bodyValue(Map.of("starPostId", postId, "content", content))
             .retrieve()
             .bodyToFlux(String.class);
     }
