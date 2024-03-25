@@ -58,10 +58,10 @@ public class UsersServiceImpl implements UsersService {
             // authenticate 메서드가 실행될 때 UsersDetailService 에서 만든 loadUserByUsername 메서드 실행
 //            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-            System.out.println("signIn authenticationToken >>>>>> " + authenticationToken);
+//            System.out.println("signIn authenticationToken >>>>>> " + authenticationToken);
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            System.out.println("authentication >>> " + authentication);
+//            System.out.println("authentication >>> " + authentication);
 
             // 3. 인증 정보를 기반으로 jwt 토큰 생성
             JwtDTO jwtDTO = jwtTokenProvider.generateToken(authentication);
@@ -70,7 +70,7 @@ public class UsersServiceImpl implements UsersService {
             httpHeaders.setBearerAuth(jwtDTO.getAccessToken());
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-            log.info("httpHeaders = {}", httpHeaders);
+//            log.info("httpHeaders = {}", httpHeaders);
 
             return jwtDTO;
         } catch (AuthenticationException e) {

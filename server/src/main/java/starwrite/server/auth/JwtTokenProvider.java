@@ -38,27 +38,27 @@ public class JwtTokenProvider {
     // application.properties 에서 jwt.secret 값 가져와서 key 에 저장
     public JwtTokenProvider(@Value("${jwt.secret.key}") String secretKey) {
 
-        System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
+//        System.out.println("secret >>>>>>>>>>>>>>>> " + secretKey);
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
+//        System.out.println("keybyte >>>>>>>>>>>>>>>> " + Arrays.toString(keyBytes));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // User 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public JwtDTO generateToken(Authentication authentication) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthentication = (UsernamePasswordAuthenticationToken) authentication;
-        System.out.println("JwtTokenProvider generateToken > " + authentication);
+//        System.out.println("JwtTokenProvider generateToken > " + authentication);
 
-        System.out.println("usernamePasswordAuthentication >>>> " + usernamePasswordAuthentication);
-        System.out.println("userDetails  getPrincipal >>> " + usernamePasswordAuthentication.getPrincipal());
-        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getPrincipal().getClass().getName());
+//        System.out.println("usernamePasswordAuthentication >>>> " + usernamePasswordAuthentication);
+//        System.out.println("userDetails  getPrincipal >>> " + usernamePasswordAuthentication.getPrincipal());
+//        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getPrincipal().getClass().getName());
 
         UserTokenDTO userDetails = (UserTokenDTO) usernamePasswordAuthentication.getPrincipal();
 
 //        User userPrincipal = (User) authentication.getPrincipal(); // 주체 객체가 User 클래스인지 확인하고 캐스팅
 
 
-        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getAuthorities());
+//        System.out.println("userDetails >>> " + usernamePasswordAuthentication.getAuthorities());
         // 권한 가져오기
 //        String authorities = authentication.getAuthorities().stream()
 //            .map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
@@ -72,7 +72,7 @@ public class JwtTokenProvider {
 //
 //        String authorities = authentication.getAuthorities().stream()
 //            .collect(Collectors.joining(" "));
-        System.out.println("authorities >>>>>>>>> " + authorities);
+//        System.out.println("authorities >>>>>>>>> " + authorities);
         long now = (new Date()).getTime();
 
         // AccessToken 생성
@@ -86,7 +86,7 @@ public class JwtTokenProvider {
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256).compact();
 
-        System.out.println("key >>>>>>>>>>> " + key);
+//        System.out.println("key >>>>>>>>>>> " + key);
 
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
@@ -94,7 +94,7 @@ public class JwtTokenProvider {
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
 
-        System.out.println("refreshToken >>>>>>>>>>>> " + refreshToken);
+//        System.out.println("refreshToken >>>>>>>>>>>> " + refreshToken);
 
 //        String accessToken = accessToken(authentication, userDetails, authorities);
 //        String refreshToken = refreshToken();
@@ -139,12 +139,12 @@ public class JwtTokenProvider {
 
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        System.out.println("jwtTokenProvider getAuthentication" + accessToken);
+//        System.out.println("jwtTokenProvider getAuthentication" + accessToken);
         // jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
         // Claim 이란? 사용자에 대한 프로퍼티나 속성. 토큰 자체가 정보를 가지고 있는 방식
 
-        System.out.println("getAuthentication claims >>" + claims);
+//        System.out.println("getAuthentication claims >>" + claims);
 
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
@@ -158,7 +158,7 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: intercae, User: UserDetails를 구현한 class
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("getAuthentication authorities > " + authorities);
+//        System.out.println("getAuthentication authorities > " + authorities);
 
         // Additional information
         Map<String, Object> additionalInfo = new HashMap<>();
