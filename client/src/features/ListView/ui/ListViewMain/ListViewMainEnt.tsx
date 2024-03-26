@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import { Link, useParams } from 'react-router-dom';
-import { postListApi, postListAllApi } from '../../api/PostApi';
+import {
+  postListApi,
+  postListAllApi,
+  postListScrapApi,
+} from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
 import { Posts } from '../../../../shared/model';
-import ListViewMainAll from './ListViewMainAll';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
-
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>([]);
   const [categoryName, setCategoryName] = useState<string>();
@@ -32,11 +34,11 @@ function ListViewMainEnt() {
         });
     } else if (category == 'scrab') {
       setCategoryName('스크랩');
-      const promise = postListAllApi('all');
+      const promise = postListScrapApi(nickname);
       promise
         .then((Posts) => {
-          if (Posts.categoryPosts) {
-            setPostsList(Posts.categoryPosts);
+          if (Posts) {
+            setPostsList(Posts);
           } else {
             setPostsList([]);
             console.log('데이터에 categoryPosts 없음');
@@ -89,12 +91,43 @@ function ListViewMainEnt() {
           </_listBox>
         </>
       );
-    } else if (categoryName === '전체') {
-      return (
-        <>
-          <ListViewMainAll />
-        </>
-      );
+    } else if (categoryName === '전체' || categoryName === '스크랩') {
+      if (postsList[0]) {
+        if (postsList[0]) {
+          return (
+            <>
+              <ListHeaderEnt categoryName={categoryName} category={category} />
+              <_listBox>
+                {!(postsList?.length === 0) &&
+                  postsList?.map((post, idx) => {
+                    return (
+                      <div key={idx}>
+                        <Link
+                          to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postIdentifier}`}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <_postBox>
+                            <h1>{post.postTitle}</h1>
+                            <p>{post.content}</p>
+                          </_postBox>
+                        </Link>
+                      </div>
+                    );
+                  })}
+              </_listBox>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <ListHeaderEnt categoryName={categoryName} category={category} />
+              <_listBox style={{ textAlign: 'center', paddingTop: '20px' }}>
+                등록된 글이 없습니다.
+              </_listBox>
+            </>
+          );
+        }
+      }
     } else {
       return (
         <>

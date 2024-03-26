@@ -22,7 +22,7 @@ function ListViewWid() {
           nickname={nickname}
         ></ListCategory>
         <_AddCategoryButton onClick={() => setCategoryModal(true)}>
-          추가
+          + 카테고리
         </_AddCategoryButton>
         {categoryModal && (
           <AddCategory
