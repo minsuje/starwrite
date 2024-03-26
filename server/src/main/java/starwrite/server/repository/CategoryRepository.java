@@ -48,7 +48,7 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
       "WHERE p.tmpSave = false OR p IS NULL " +
       "OPTIONAL MATCH (p)-[:POSTED|HOLDS]->(u:Users) " +
-      "OPTIONAL MATCH (p)-[:AUTHOR]->(author:Users) " +
+      "OPTIONAL MATCH (p)-[:AUTHOR]-(author:Users) " +
       "WITH c, p, author " +
       "ORDER BY p.createdAt DESC " +
       "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.parsedContent, 0, 100), "
@@ -87,8 +87,8 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "WITH c, p " +
       "OPTIONAL MATCH (p)-[r:RELATED]->(related:Post) " +
       "WITH c, p, r " +
-      "OPTIONAL MATCH (u:User)-[:HOLDS]->(p) " +
-      "RETURN collect(DISTINCT {title: p.title, postId: ID(p), recentView: p.recentView, categoryName: c.name, categoryId: c.categoryId, scrap: CASE WHEN u IS NOT NULL THEN true ELSE false END}) as posts, " +
+      "OPTIONAL MATCH (u:User)-[h:HOLDS]->(p) " +
+      "RETURN collect(DISTINCT {title: p.title, postId: ID(p), recentView: p.recentView, categoryName: c.name, categoryId: c.categoryId, scrap: EXISTS((p)<-[:AUTHOR]-()) }) as posts, " +
       "       collect(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) as relation")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
 

@@ -304,7 +304,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "   WHEN (u)-[:AUTHOR]->(p) THEN 'Author' " + "   ELSE 'Proceed' "
       + "   END as ScrappingStatus " + "WHERE ScrappingStatus = 'Proceed' "
       + "MATCH (c:Category {categoryId: $categoryId}) " + "MATCH (author:Users)-[:POSTED]->(p) "
-      + "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, "
+      + "CREATE (copiedPost:Post {title: p.title, content: p.content, parsedContent: p.parsedContent, visible: p.visible, img: p.img, "
       + "tmpSave: p.tmpSave, recentView: localDateTime(), createdAt: localDateTime(), updatedAt: localDateTime()}) "
       + "CREATE (p)-[:COPY]->(copiedPost) " + "CREATE (u)-[:HOLDS]->(copiedPost) "
       + "CREATE (c)-[r:IS_CHILD]->(copiedPost) " + "CREATE (author)-[:AUTHOR]->(copiedPost) "
