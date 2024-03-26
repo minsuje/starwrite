@@ -38,9 +38,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //  GetPosts findAllPosts(@Param(value = "userId") String userId);
 
   // 백링크 정보 보내기 (send back link info )
-  @Query("MATCH (p:Post{tmpSave:false}) " + "MATCH (u:Users) where u.userId=$userId "
-      + "RETURN ID(p) AS postid, p.title AS title")
-  List<BackLink> backLink(@Param("userId") String userId);
+  @Query("MATCH (p:Post{tmpSave:false}) " +
+      "MATCH (u:Users) WHERE u.userId = $userId " +
+      "MATCH (u:Users)-[r]->(p:Post) " +
+      "WHERE p.tmpSave = false AND u.userId = $userId " +
+      "RETURN ID(p) AS postid, p.title AS title")
+  List<BackLink> backLink(@Param(value = "userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
 /*
@@ -76,7 +79,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 
 
-
   // 특정 유저의 스크랩한 글 조회. 10개씩 무한스크롤 조회
   @Query(
       "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.userId = $userId AND p.tmpSave = false "
@@ -89,7 +91,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           + "SKIP $skip LIMIT $limit ")
   List<GetPosts> findScrapPosts(@Param(value = "userId") String userId,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
-
 
 
   // 임시 저장 글 모두 불러오기

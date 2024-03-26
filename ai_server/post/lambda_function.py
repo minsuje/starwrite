@@ -84,7 +84,7 @@ def lambda_handler(event, context):
     if isinstance(data, list):
         result_text = ''
         for obj in data:
-            if obj["type"] in ["paragraph", "mention", "heading"]:
+            if obj["type"] in ["paragraph", "mention", "heading", "link"]:
                 if "content" in obj and len(obj["content"]) > 0 and "text" in obj["content"][0]:
                     result_text += obj["content"][0]["text"]
         # 결과 처리
