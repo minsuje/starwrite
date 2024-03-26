@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
-import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
@@ -40,7 +38,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   // 백링크 정보 보내기 (send back link info )
   @Query("MATCH (p:Post{tmpSave:false}) " +
       "MATCH (u:Users) WHERE u.userId = $userId " +
-      "MATCH (u:Users)-[r]->(p:Post) " +
+      "MATCH (u:Users)-[r:POSTED|HOLDS]->(p:Post) " +
       "WHERE p.tmpSave = false AND u.userId = $userId " +
       "RETURN ID(p) AS postid, p.title AS title")
   List<BackLink> backLink(@Param(value = "userId") String userId);
