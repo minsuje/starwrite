@@ -14,10 +14,14 @@ export const newPostApi = async (data: NewPost) => {
     throw error;
   }
 };
+
+// 글 수정 or 다시 저장
 export const patchPostApi = async (data: NewPost, id: number) => {
   try {
+    const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.patch(`/post/${id}`, data);
     console.log('patchPostApi', response.data);
+    window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
     console.error(`patchPostApi Error`, error);

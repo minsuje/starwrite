@@ -7,12 +7,14 @@ const _ListViewBox = styled.div`
 
 const _CategoryBar = styled.div`
   width: 30%;
-  height: 85vh;
+  height: fit-content;
   display: flex;
+  gap: 20px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
 `;
+
 const _CategoryContent = styled.div`
   width: 60%;
   background-color: var(--color-zinc-900);
@@ -20,7 +22,7 @@ const _CategoryContent = styled.div`
 `;
 
 const _AddCategoryButton = styled.div`
-  width: 80%;
+  width: 72%;
   text-align: center;
   padding: 15px 0px;
   &:hover {
