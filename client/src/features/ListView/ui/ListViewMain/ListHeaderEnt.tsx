@@ -52,7 +52,7 @@ function ListHeaderEnt({
           <>
             {' '}
             <_buttonBox>
-              {category != '전체' && category != '' && (
+              {category != 'all' && category != 'scrab' && (
                 <>
                   <button>
                     <LuPencilLine />

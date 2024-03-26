@@ -1,6 +1,7 @@
 export interface Titles {
   postid: number;
   title: string;
+  nickname?: string | null;
 }
 export interface Saving {
   categoryid: string;

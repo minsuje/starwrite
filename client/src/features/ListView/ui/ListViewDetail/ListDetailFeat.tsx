@@ -69,20 +69,24 @@ export default function ListDetailFeat() {
     return 'Loading content...';
   }
 
+  if (!isMine && visible === 'false') {
+    return <>비공개글입니다.</>;
+  }
+  // 스크랩 해온 글 작성자 닉네임 필요
   return (
     <>
       <_Title>
         {title}
         <div>{visible === 'true' ? '공개' : '비공개'}</div>
       </_Title>
-      {isMine ? (
-        <_Title>
-          <button onClick={() => editPost(Number(postId))}>수정</button>
-          <button onClick={() => deletePost(Number(postId))}>삭제</button>
-        </_Title>
-      ) : (
+
+      <_Title>
+        <button onClick={() => editPost(Number(postId))}>수정</button>
+
         <button onClick={openScrap}>스크랩</button>
-      )}
+
+        <button onClick={() => deletePost(Number(postId))}>삭제</button>
+      </_Title>
       {scrap && (
         <SelectCategory
           postId={postId}
