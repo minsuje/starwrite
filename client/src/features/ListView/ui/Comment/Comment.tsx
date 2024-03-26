@@ -5,20 +5,13 @@ const CommentBox = styled.div`
   background-color: var(--color-zinc-800);
 `;
 
-function Comment() {
+function Comment({ content, nickName }: { content: string; nickName: string }) {
   return (
     <>
       <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
-      </CommentBox>
-      <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
-      </CommentBox>
-      <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
+        <div>{nickName}</div>
+        <div>{content}</div>
+        <div>작성 날짜</div>
       </CommentBox>
     </>
   );

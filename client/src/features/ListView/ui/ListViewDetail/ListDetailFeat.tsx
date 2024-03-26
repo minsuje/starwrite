@@ -11,6 +11,8 @@ import { redTheme } from '../../../NewPost/ui/style';
 import CommentList from '../Comment/CommentList';
 import SelectCategory from '../../lib/SelectCategory';
 
+import { Annotation, PostDetail } from '../../../../shared/model/types';
+
 export default function ListDetailFeat() {
   const { postId } = useParams();
   const myNickname = localStorage.getItem('nickname');
@@ -23,6 +25,7 @@ export default function ListDetailFeat() {
   const [isMine, setIsMine] = useState<boolean>(true);
   const [blocks, setBlocks] = useState<MyBlock[]>([]);
   const [scrap, setScrap] = useState<boolean>(false);
+  const [annotations, setAnnotations] = useState<Annotation[]>([]);
 
   function editPost(postid: number) {
     navigate(`/user/starwrite/writenewpost/${postid}`);
@@ -44,9 +47,10 @@ export default function ListDetailFeat() {
       });
   }
 
+  //글 상세 정보 불러오기
   useEffect(() => {
     const promise = postDetailApi(Number(postId));
-    promise.then((postDetail) => {
+    promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
       setTitle(postDetail.title);
       setVisible(postDetail.visible);
@@ -55,9 +59,11 @@ export default function ListDetailFeat() {
       } else {
         setIsMine(false);
       }
+      setAnnotations(postDetail.annotations);
     });
   }, [postId, myNickname]);
 
+  // 에디터 생성
   const editor = useMemo(() => {
     if (initialContent === 'loading') {
       return undefined;
@@ -65,14 +71,17 @@ export default function ListDetailFeat() {
     return BlockNoteEditor.create({ schema, initialContent });
   }, [initialContent]);
 
+  // editor 생성 X
   if (editor === undefined) {
     return 'Loading content...';
   }
-
+  // 내글이 아닐 때 + 비공개 글
   if (!isMine && visible === 'false') {
     return <>비공개글입니다.</>;
   }
   // 스크랩 해온 글 작성자 닉네임 필요
+
+  // 조회가능한 글
   return (
     <>
       <_Title>
@@ -80,11 +89,12 @@ export default function ListDetailFeat() {
         <div>{visible === 'true' ? '공개' : '비공개'}</div>
       </_Title>
 
+      {/* 내글은 수정, 삭제 가능 
+      // 다른 사람글은 스크랩만 가능 
+      (스크랩할 때 중복검사) */}
       <_Title>
         <button onClick={() => editPost(Number(postId))}>수정</button>
-
         <button onClick={openScrap}>스크랩</button>
-
         <button onClick={() => deletePost(Number(postId))}>삭제</button>
       </_Title>
       {scrap && (
@@ -93,7 +103,6 @@ export default function ListDetailFeat() {
           close={() => setScrap(false)}
         ></SelectCategory>
       )}
-
       <div onKeyDown={(e) => e.preventDefault()}>
         <BlockNoteView
           slashMenu={false}
@@ -109,7 +118,7 @@ export default function ListDetailFeat() {
           }}
         />
       </div>
-      <CommentList selectedLine={blocks[0]} />
+      <CommentList annotations={annotations} selectedLine={blocks[0]} />
     </>
   );
 }

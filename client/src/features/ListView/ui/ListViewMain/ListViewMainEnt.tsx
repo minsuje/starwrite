@@ -19,8 +19,9 @@ function ListViewMainEnt() {
       const promise = postListAllApi(nickname);
       promise
         .then((Posts) => {
-          if (Posts.categoryPosts) {
-            setPostsList(Posts.categoryPosts);
+          console.log('Posts', Posts);
+          if (Posts) {
+            setPostsList(Posts);
           } else {
             setPostsList([]);
             console.log('데이터에 categoryPosts 없음');
@@ -87,6 +88,26 @@ function ListViewMainEnt() {
           </_listBox>
         </>
       );
+    } else if (postsList[0].postTitle) {
+      {
+        <ListHeaderEnt categoryName={categoryName} category={category} />;
+        !(postsList?.length === 0) &&
+          postsList?.map((post, idx) => {
+            return (
+              <div key={idx}>
+                <Link
+                  to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postIdentifier}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <_postBox>
+                    <h1>{post.postTitle}</h1>
+                    <p>{post.content}</p>
+                  </_postBox>
+                </Link>
+              </div>
+            );
+          });
+      }
     } else {
       return (
         <>
@@ -97,15 +118,6 @@ function ListViewMainEnt() {
         </>
       );
     }
-  } else {
-    return (
-      <>
-        <ListHeaderEnt categoryName={categoryName} category={category} />
-        <_listBox style={{ textAlign: 'center', paddingTop: '20px' }}>
-          등록된 글이 없습니다.
-        </_listBox>
-      </>
-    );
   }
 }
 
