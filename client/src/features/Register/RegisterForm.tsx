@@ -9,6 +9,7 @@ import {
   _emoji,
   _RegisterBox,
   _ErrorMsg,
+  _SuccessMsg,
   _registerbtn,
 } from '../../shared/CommonStyle';
 import axios from 'axios';
@@ -227,8 +228,8 @@ function RegisterForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onValid)}>
-        <_RegisterBox>
+      <_RegisterBox>
+        <form onSubmit={handleSubmit(onValid)}>
           <InputBox>
             <Label>
               E-MAIL
@@ -284,7 +285,6 @@ function RegisterForm() {
             >
               중복확인
             </_registerbtn>
-            {/* Display the nickname availability message */}
             {nicknameAvailabilityMessage && (
               <div>{nicknameAvailabilityMessage}</div>
             )}
@@ -307,6 +307,11 @@ function RegisterForm() {
           </InputBox>
 
           <InputBox>
+            {!isEmailVerified && (
+              <_ErrorMsg>
+                이메일 인증을 완료 후 비밀번호를 설정해주세요.
+              </_ErrorMsg>
+            )}
             <Label>
               비밀번호 확인
               <_emoji>{Emoji('checkPW')}</_emoji>
@@ -323,9 +328,11 @@ function RegisterForm() {
             )}
           </InputBox>
 
-          <LargeButton type="submit">회원가입</LargeButton>
-        </_RegisterBox>
-      </form>
+          <LargeButton type="submit" style={{ marginTop: '50px' }}>
+            회원가입
+          </LargeButton>
+        </form>
+      </_RegisterBox>
     </>
   );
 }

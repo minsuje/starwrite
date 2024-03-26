@@ -5,6 +5,15 @@ interface ButtonProps {
   bgcolor?: string; // bgColor 속성 추가
 }
 
+export const _PageLayout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+`;
+
 export const _StyledContainer = styled.div`
   width: 100%;
   display: flex;
@@ -17,11 +26,10 @@ export const _StyledContainer = styled.div`
 
 // 중복 검사버튼
 export const _registerbtn = styled.button<ButtonProps>`
-  width: 63px;
+  width: 40%;
   height: 22px;
+  /* margin-top:px; */
   color: white;
-  /* margin-left: 10px; */
-
   text-align: center;
   border: none;
   background-color: ${(props) => props.bgcolor || 'blue'};
@@ -94,6 +102,7 @@ export const InputBox = styled.div`
   /* display: flex; */
   /* flex-direction: column; */
   gap: 2px;
+  margin-bottom: 0px;
 `;
 
 // 메인 뷰 Title
@@ -114,11 +123,15 @@ export const _RegisterBox = styled.div`
   flex-direction: column;
   gap: 20px;
   position: relative;
-  transform: translateY(50%);
 `;
 
 export const _ErrorMsg = styled.p`
   color: #ffafaf;
+  font-size: 12px;
+  padding-top: 2px;
+`;
+export const _SuccessMsg = styled.p`
+  color: #73ec75;
   font-size: 12px;
   padding-top: 2px;
 `;
