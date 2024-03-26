@@ -11,7 +11,6 @@ import './NodeView.css';
 import { fetchData } from '../../features/NodeViewFeat/index';
 import { ExtendedCustomNode } from '../../features/NodeViewFeat/model/Types';
 import { useParams } from 'react-router';
-
 import { PagesearchNode } from '../../pages/NodeView/NodeViewPage';
 
 export type SearchType = {
@@ -29,7 +28,7 @@ export const NodeView = ({
 }: SearchType) => {
   const [nodes, setNodes] = useState<CustomNode[]>([]);
   const [links, setLink] = useState<Link[]>([]);
-  const { nickname, category } = useParams();
+  const { nickname, category } = useParams<string>();
 
   // console.log('categoryId>>?>>>>>', category);
   // console.log('nodes', nodes);
@@ -43,16 +42,17 @@ export const NodeView = ({
       try {
         const fetchedNodes = await fetchData(category);
 
-        if (fetchedNodes !== '') {
-          const nodesData = fetchedNodes.posts.map((node) => {
+        if (fetchedNodes && fetchedNodes.posts.length > 0) {
+          const nodesData = fetchedNodes.posts.map((node: CustomNode) => {
             const currentTime = new Date(); // 현재 시간
             const recentViewTime = new Date(node.recentView); // 각 노드의 recentView 시간
             const timeDiff =
-              Math.abs(currentTime - recentViewTime) / (1000 * 60 * 60 * 24); // 현재 시간과의 차이 (일 단위)
+              Math.abs(currentTime.getTime() - recentViewTime.getTime()) /
+              (1000 * 60 * 60 * 20); // 현재 시간과의 차이 (일 단위)
 
             // decayRate를 조절하여 투명도가 더 천천히 감소하도록 합니다.
             // 이 값은 실험을 통해 최적화할 수 있습니다. 여기서는 시간 차이가 1일 때 투명도가 약 0.5가 되도록 설정합니다.
-            const decayRate = -Math.log(0.5); // 1일이 지날 때마다 투명도가 약 절반으로 감소
+            const decayRate = -Math.log(0.9); // 1일이 지날 때마다 투명도가 약 절반으로 감소
 
             // Math.exp 함수를 사용하여 투명도 계산. 시간 차이가 클수록 투명도가 감소
             const opacity = Math.exp(-decayRate * timeDiff);
@@ -64,21 +64,26 @@ export const NodeView = ({
               x: Math.random() * viewportSize.width,
               y: Math.random() * viewportSize.height,
               url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
-              opacity: Math.max(0.1, opacity), // 투명도가 너무 낮아지는 것을 방지하기 위한 최소값 설정
+              opacity: Math.max(0.2, opacity), // 투명도가 너무 낮아지는 것을 방지하기 위한 최소값 설정
             };
           });
 
           // validLinks 설정 예시
           const validLinks = fetchedNodes.relation
-            .filter((link) => {
+            .filter((link: Link) => {
               return (
                 link.postId !== null &&
                 link.relatedPostId !== null &&
-                nodesData.some((node) => node.postId === link.postId) &&
-                nodesData.some((node) => node.postId === link.relatedPostId)
+                nodesData.some(
+                  (node: CustomNode) => node.postId === link.postId,
+                ) &&
+                nodesData.some(
+                  (node: CustomNode) =>
+                    node.postId === Number(link.relatedPostId),
+                )
               );
             })
-            .map((link) => ({
+            .map((link: Link) => ({
               ...link,
               source: link.postId,
               target: link.relatedPostId,
@@ -252,7 +257,7 @@ export const NodeView = ({
       .data(nodes) // 데이터 배열을 각 이미지 요소에 바인딩
       .enter() // 데이터 배열을 각 이미지 요소에 바인딩합니다.
       .append('image') // 실제 <image> 요소를 추가
-      .attr('href', '/star.svg') // 별모양으로 변경함 pulic 폴더 내부의 svg 파일 사용
+      .attr('href', (d) => (d.scrap ? '/star_scrap.svg' : '/star.svg')) // 별모양으로 변경함 pulic 폴더 내부의 svg 파일 사용
       .attr('width', 35) // svg 넓이
       .attr('height', 35) // svg 높이
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정

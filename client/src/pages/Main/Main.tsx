@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Spinner } from '../../shared/spinner';
+// import styled from 'styled-components';
+// import { Spinner } from '../../shared/spinner';
 
 export function MainPage() {
   return (

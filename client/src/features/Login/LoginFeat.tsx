@@ -45,7 +45,7 @@ const schema = z.object({
 // RegisterForm
 function LoginForm() {
   const navigate = useNavigate();
-  const myNickname = localStorage.getItem('nickname');
+
   const {
     register, // input 할당, value 변경 감지
     handleSubmit, // form submit 이벤트 시 호출
@@ -119,7 +119,7 @@ function LoginForm() {
     // 이 부분은 Google 로그인 후 리다이렉션된 URL에 'code' 파라미터가 있는 경우에만 실행됩니다.
   }, []);
 
-  const sendCodeToBackend = async (code) => {
+  const sendCodeToBackend = async (code:string) => {
     console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
