@@ -57,3 +57,29 @@ p {
     background-position: 100% 50%;
   }
 }
+
+/* 별 반짝임을 위한 CSS (App.css 또는 index.css 파일에 추가) */
+@keyframes twinkling {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.twinkling-star {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: black url('twinkling_stars_background.jpg') repeat;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  animation: twinkling 2s infinite ease-in-out;
+}

@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -18,12 +18,16 @@ import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface RegisteringUser {
-  mail?: string;
-  nickname?: string;
-  role?: string;
-  password?: string;
-  checkPW?: string;
+  email: string;
+  nickname: string;
+  password: string;
+  checkPW: string; // 또는 checkPW로 변경
 }
+
+// interface RegisterEmoji {
+//   fieldName: any;
+// }
+
 // 닉네임 유효성 검사
 const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;
 
@@ -61,10 +65,11 @@ const schema = z
     nickname: nicknameSchema,
     role: z.string().optional().default('USER'),
     password: passwordSchema,
-    checkPW: passwordSchema,
+    checkPW: passwordSchema, // 필드명 변경
   })
   .refine((data) => data.password === data.checkPW, {
-    path: ['checkPW'],
+    // 필드명 변경
+    path: ['checkPW'], // 필드명 변경
     message: '비밀번호가 일치하지 않습니다.',
   });
 
@@ -87,15 +92,15 @@ function RegisterForm() {
     formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
     trigger,
     getValues,
-  } = useForm({
+  } = useForm<RegisteringUser>({
     resolver: zodResolver(schema),
     mode: 'onChange', // 입력값이 변경될때마다 실시간으로 유효성 검사 (react hook form)
-    defaultValues: {
-      role: 'USER', // 기본값으로 'USER' 설정
-    },
+    // defaultValues: {
+    //   role: 'USER', // 기본값으로 'USER' 설정
+    // },
   });
 
-  const onValid = async (data: RegisteringUser) => {
+  const onValid: SubmitHandler<RegisteringUser> = async (data) => {
     try {
       // 회원가입 요청 전송
       const response = await commonApi.post(`/register/user`, data);
@@ -215,10 +220,10 @@ function RegisterForm() {
   };
 
   //  유효성 검사 error 확인 함수
-  //   const onInValid = (err: any) => {
-  //     console.log(typeof err);
-  //     console.log('onInValid', err);
-  //   };
+  // const onInValid = (err: any) => {
+  //   console.log(typeof err);
+  //   console.log('onInValid', err);
+  // };
 
   return (
     <>
@@ -231,15 +236,15 @@ function RegisterForm() {
             </Label>
             <Input
               disabled={isEmailInputDisabled}
-              {...register('mail', {
-                onChange: async () => await trigger('mail'),
+              {...register('email', {
+                onChange: async () => await trigger('email'),
               })}
             ></Input>
             <_registerbtn
               bgcolor="#1361d7"
               type="button"
               disabled={isEmailInputDisabled}
-              onClick={() => checkValidEmail(getValues('mail'))}
+              onClick={() => checkValidEmail(getValues('email'))}
             >
               인증 메일 보내기
             </_registerbtn>

@@ -15,6 +15,8 @@ function SelectCategory({
   const [category, setCategory] = useState<string>();
 
   function scrap() {
+    console.log('why~~~!!!');
+
     if (category) {
       const promise = scrapPostApi(Number(postId), category);
       promise.then((result) => {
