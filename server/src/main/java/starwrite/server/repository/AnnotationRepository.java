@@ -18,13 +18,13 @@ public interface AnnotationRepository extends Neo4jRepository<Annotation, String
   @Query(
       "MATCH (u:Users), (p:Post) " +
           "WHERE u.userId = $userId AND ID(p) = $postId " +
-          "MERGE (a:Annotation {content: $content, type: $type, createdAt: $timeNow, updatedAt: $timeNow, post: $postId, user: $userId}) "
+          "MERGE (a:Annotation {content: $content, type: $type, createdAt: $timeNow, updatedAt: $timeNow, position: $position, post: $postId, user: $userId}) "
           +
           "MERGE (u)-[:COMMENTED]->(a) " +
           "MERGE (a)-[:COMMENT]->(p) "
   )
   void createAnnotation(@Param(value = "content") String content,
-      @Param(value = "type") String type, @Param(value = "timeNow") LocalDateTime timeNow,
+      @Param(value = "type") String type, @Param(value = "timeNow") LocalDateTime timeNow, @Param(value = "position") String position,
       @Param(value = "postId") Long postId,
       @Param(value = "userId") String userId);
 
@@ -34,10 +34,10 @@ public interface AnnotationRepository extends Neo4jRepository<Annotation, String
   @Query(
       "MATCH (a:Annotation) " +
           "WHERE ID(a) = $annotationId " +
-          "SET a.content = $content, a.updatedAt = localDateTime() "
+          "SET a.content = $content, a.updatedAt = localDateTime(), a.position = $position "
   )
   void updateAnnotation(@Param(value = "id") Long annotationId,
-      @Param(value = "content") String content);
+      @Param(value = "content") String content, @Param(value = "position") String position);
 
 
 

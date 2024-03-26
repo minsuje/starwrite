@@ -6,4 +6,5 @@ import lombok.Data;
 public class UpdateAnnotation {
   private Long annotationId;
   private String content;
+  private String position;
 }
