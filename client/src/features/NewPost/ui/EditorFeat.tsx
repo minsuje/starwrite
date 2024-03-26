@@ -27,14 +27,10 @@ const schema = BlockNoteSchema.create({
   },
 });
 
-let myNickname = localStorage.getItem('nickname');
-if (!myNickname) {
-  myNickname = '닉네임';
-}
-
 const getMentionMenuItems = (
   editor: typeof schema.BlockNoteEditor,
   titles: Titles[],
+  myNickname: string,
 ): DefaultReactSuggestionItem[] => {
   return titles.map((title) => ({
     title: title.title,
@@ -81,6 +77,13 @@ export default function Editor({
   >(undefined);
 
   const [titles, setTitles] = useState<Titles[]>([]);
+  const [myNickname, setMyNickname] = useState<string>('');
+  useEffect(() => {
+    const nick = localStorage.getItem('nickname');
+    if (nick) {
+      setMyNickname(nick);
+    }
+  }, []);
 
   useEffect(() => {
     if (content) {
@@ -119,7 +122,10 @@ export default function Editor({
         triggerCharacter={'@'} // 한글자만 가능
         getItems={async (query) =>
           // Gets the mentions menu items
-          filterSuggestionItems(getMentionMenuItems(editor, titles), query)
+          filterSuggestionItems(
+            getMentionMenuItems(editor, titles, myNickname),
+            query,
+          )
         }
       />
     </BlockNoteView>
