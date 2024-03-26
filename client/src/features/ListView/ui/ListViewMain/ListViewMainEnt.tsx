@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
 import { Link, useParams } from 'react-router-dom';
-
 import { postListApi, postListAllApi } from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
 import { Posts } from '../../../../shared/model';
+import ListViewMainAll from './ListViewMainAll';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
@@ -63,6 +63,7 @@ function ListViewMainEnt() {
       });
     }
   }, [category, nickname]);
+
   if (postsList[0]) {
     if (postsList[0].title) {
       return (
@@ -88,26 +89,12 @@ function ListViewMainEnt() {
           </_listBox>
         </>
       );
-    } else if (postsList[0].postTitle) {
-      {
-        <ListHeaderEnt categoryName={categoryName} category={category} />;
-        !(postsList?.length === 0) &&
-          postsList?.map((post, idx) => {
-            return (
-              <div key={idx}>
-                <Link
-                  to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postIdentifier}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <_postBox>
-                    <h1>{post.postTitle}</h1>
-                    <p>{post.content}</p>
-                  </_postBox>
-                </Link>
-              </div>
-            );
-          });
-      }
+    } else if (categoryName === '전체') {
+      return (
+        <>
+          <ListViewMainAll />
+        </>
+      );
     } else {
       return (
         <>

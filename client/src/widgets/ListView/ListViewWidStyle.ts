@@ -23,7 +23,6 @@ const _AddCategoryButton = styled.div`
   width: 80%;
   text-align: center;
   padding: 15px 0px;
-
   &:hover {
     background-color: var(--color-zinc-800);
     cursor: pointer;

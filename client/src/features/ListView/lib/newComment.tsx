@@ -45,7 +45,6 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
     // for문으로 검사
     if (selectedLine && selectedLine.content) {
       setText(selectedLine.content[0]?.text);
-
       setSelected(selectedLine.id);
     } else {
       setText('선택된 내용 없음');
