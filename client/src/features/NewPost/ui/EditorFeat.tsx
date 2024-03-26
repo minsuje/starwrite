@@ -27,6 +27,11 @@ const schema = BlockNoteSchema.create({
   },
 });
 
+let myNickname = localStorage.getItem('nickname');
+if (!myNickname) {
+  myNickname = '닉네임';
+}
+
 const getMentionMenuItems = (
   editor: typeof schema.BlockNoteEditor,
   titles: Titles[],
@@ -34,13 +39,13 @@ const getMentionMenuItems = (
   return titles.map((title) => ({
     title: title.title,
     onItemClick: () => {
-      // const name = title.name;
       editor.insertInlineContent([
         {
           type: 'mention',
           props: {
             title: title.title,
             postid: title.postid.toString(),
+            nickname: myNickname,
           },
         },
         ' \n', // add a space after the mention
