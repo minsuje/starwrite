@@ -55,8 +55,8 @@ function LoginForm() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'gogil@navdfe.com',
-      password: '1234',
+      email: 'test@navdfe.com',
+      password: '1q2w3e4r!',
     },
   });
 
@@ -69,6 +69,7 @@ function LoginForm() {
         mail: data.email,
         password: data.password,
       });
+
       localStorage.setItem('accessToken', response.data.accessToken);
 
       const cookie = await commonApi.get(`/cookie`, {
@@ -248,9 +249,9 @@ function LoginForm() {
           로그인
         </LargeButton>
       </form>
-      <LargeButton>
-        <Link to={`/register`}>회원가입</Link>
-      </LargeButton>
+      <Link to={`/register`}>
+        <LargeButton>회원가입</LargeButton>
+      </Link>
     </RegisterBox>
   );
 }

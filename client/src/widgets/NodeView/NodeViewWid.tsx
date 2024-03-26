@@ -229,14 +229,14 @@ export const NodeView = ({
       .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 1.4),
+        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2),
       )
       .force(
         'radial',
         d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 2),
       )
 
-      .alphaDecay(0.0228); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
+      .alphaDecay(0.00028); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
     // 링크 그리기
     const link = group
       .append('g')
@@ -423,9 +423,9 @@ export const NodeView = ({
       ref={svgRef}
       height={viewportSize.height}
       style={{
-        zIndex: -5,
-        top: 0,
+        justifyContent: 'center',
         position: 'fixed',
+        width: '100%',
       }}
     ></svg>
   );

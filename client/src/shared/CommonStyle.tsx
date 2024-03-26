@@ -37,7 +37,7 @@ export const _registerbtn = styled.button<ButtonProps>`
     background-color: #0353cb;
   }
   &:disabled {
-    background-color: #6d9bdf;
+    background-color: gray;
   }
 `;
 
@@ -85,6 +85,7 @@ export const Input = styled.input`
   opacity: 0.6;
   border-radius: 3px;
   display: flex;
+
   /* flex-direction: row; */
 `;
 
