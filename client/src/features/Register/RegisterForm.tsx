@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -9,8 +9,8 @@ import {
   _emoji,
   _RegisterBox,
   _ErrorMsg,
-  _SuccessMsg,
   _registerbtn,
+  _SuccessMsg,
 } from '../../shared/CommonStyle';
 import axios from 'axios';
 import { useState } from 'react';
@@ -19,16 +19,12 @@ import { useNavigate } from 'react-router';
 
 // 타입 지정
 interface RegisteringUser {
-  email: string;
-  nickname: string;
-  password: string;
-  checkPW: string; // 또는 checkPW로 변경
+  mail?: string;
+  nickname?: string;
+  role?: string;
+  password?: string;
+  checkPW?: string;
 }
-
-// interface RegisterEmoji {
-//   fieldName: any;
-// }
-
 // 닉네임 유효성 검사
 const NicNamePattern = /^[가-힣A-Za-z0-9_]{2,10}$/;
 
@@ -62,15 +58,14 @@ const passwordSchema = z
 // 유효성 검사 schema
 const schema = z
   .object({
-    email: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
+    mail: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
     nickname: nicknameSchema,
     role: z.string().optional().default('USER'),
     password: passwordSchema,
-    checkPW: passwordSchema, // 필드명 변경
+    checkPW: passwordSchema,
   })
   .refine((data) => data.password === data.checkPW, {
-    // 필드명 변경
-    path: ['checkPW'], // 필드명 변경
+    path: ['checkPW'],
     message: '비밀번호가 일치하지 않습니다.',
   });
 
@@ -83,9 +78,8 @@ function RegisterForm() {
   const [isVerificationEmailSent, setIsVerificationEmailSent] = useState(false);
   const [nicknameAvailabilityMessage, setNicknameAvailabilityMessage] =
     useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
-
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
 
   // react-hook-form
   const {
@@ -98,12 +92,12 @@ function RegisterForm() {
   } = useForm<RegisteringUser>({
     resolver: zodResolver(schema),
     mode: 'onChange', // 입력값이 변경될때마다 실시간으로 유효성 검사 (react hook form)
-    // defaultValues: {
-    //   role: 'USER', // 기본값으로 'USER' 설정
-    // },
+    defaultValues: {
+      role: 'USER', // 기본값으로 'USER' 설정
+    },
   });
 
-  const onValid: SubmitHandler<RegisteringUser> = async (data) => {
+  const onValid = async (data: RegisteringUser) => {
     try {
       // 회원가입 요청 전송
       const response = await commonApi.post(`/register/user`, data);
@@ -126,7 +120,6 @@ function RegisterForm() {
       }
     }
   };
-
   const checkValidEmail = async (mail: string) => {
     setIsEmailInputDisabled(true); // Disable the email input
     setIsSendingEmail(true);
@@ -195,7 +188,7 @@ function RegisterForm() {
 
   const checkNicknameAvailability = async () => {
     const nickname = getValues('nickname');
-    if (!nickname.match(NicNamePattern)) {
+    if (!nickname?.match(NicNamePattern)) {
       setNicknameAvailabilityMessage(
         '닉네임은 한글, 영문, 밑줄(_)만 사용할 수 있습니다.',
       );
@@ -240,25 +233,25 @@ function RegisterForm() {
           <InputBox>
             <Label>
               E-MAIL
-              <_emoji>{Emoji('email')}</_emoji>
+              <_emoji>{Emoji('mail')}</_emoji>
             </Label>
             <Input
               disabled={isEmailInputDisabled}
-              {...register('email', {
-                onChange: async () => await trigger('email'),
+              {...register('mail', {
+                onChange: async () => await trigger('mail'),
               })}
             ></Input>
             <_registerbtn
               bgcolor="#1361d7"
               type="button"
               disabled={isEmailInputDisabled}
-              onClick={() => checkValidEmail(getValues('email'))}
+              onClick={() => checkValidEmail(getValues('mail') ?? '')}
             >
               인증 메일 보내기
             </_registerbtn>
             {isSendingEmail && <span>전송중...</span>}
-            {errors.email && typeof errors.email.message === 'string' && (
-              <_ErrorMsg>{errors.email.message}</_ErrorMsg>
+            {errors.mail && typeof errors.mail.message === 'string' && (
+              <_ErrorMsg>{errors.mail.message}</_ErrorMsg>
             )}
           </InputBox>
 
@@ -303,14 +296,13 @@ function RegisterForm() {
               <_ErrorMsg>{nicknameAvailabilityMessage}</_ErrorMsg>
             )}
           </InputBox>
-
           <InputBox>
             <Label>
               비밀번호<_emoji>{Emoji('password')}</_emoji>
             </Label>
             <Input
+              type="password"
               disabled={!isEmailVerified}
-              // type="password"
               {...register('password', {
                 onChange: async () => await trigger('password'),
               })}
@@ -322,18 +314,13 @@ function RegisterForm() {
           </InputBox>
 
           <InputBox>
-            {!isEmailVerified && (
-              <_ErrorMsg>
-                이메일 인증을 완료 후 비밀번호를 설정해주세요.
-              </_ErrorMsg>
-            )}
             <Label>
               비밀번호 확인
               <_emoji>{Emoji('checkPW')}</_emoji>
             </Label>
             <Input
+              type="password"
               disabled={!isEmailVerified}
-              // type="password"
               {...register('checkPW', {
                 onChange: async () => await trigger('checkPW'),
               })}
@@ -344,9 +331,7 @@ function RegisterForm() {
             )}
           </InputBox>
 
-          <LargeButton type="submit" style={{ marginTop: '50px' }}>
-            회원가입
-          </LargeButton>
+          <LargeButton type="submit">회원가입</LargeButton>
         </_RegisterBox>
       </form>
     </>
