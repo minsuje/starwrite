@@ -11,6 +11,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
+import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 
@@ -81,15 +82,17 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
   // 특정 유저의 스크랩한 글 조회. 10개씩 무한스크롤 조회
   @Query(
-      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.userId = $userId AND p.tmpSave = false "
+      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.nickname = $nickname AND p.tmpSave = false "
           + "MATCH (p)-[:IS_CHILD]-(c:Category) "
+          + "WITH p, c, u "
+          + "OPTIONAL MATCH (p)-[ar:AUTHOR]-(author:Users) "
           + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
           + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
           + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
           + "c.categoryId AS categoryId, c.name AS categoryName, "
-          + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
+          + "u.userId AS userId, u.nickname AS userNickname, author.userId AS originAuthorId, author.nickname AS originAuthor " + "ORDER BY p.updatedAt DESC "
           + "SKIP $skip LIMIT 100 ")
-  List<GetPosts> findScrapPosts(@Param(value = "userId") String userId,
+  List<GetScrapPosts> findScrapPosts(@Param(value = "nickname") String nickname,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 
 
