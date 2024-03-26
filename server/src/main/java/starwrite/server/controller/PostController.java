@@ -43,9 +43,7 @@ public class PostController {
   // 글 작성 BackLink info 전달
   @GetMapping("write")
   public List<BackLink> getIdAndTitle() {
-    // 임시
     String userId = SecurityUtil.getCurrentUserUserId();
-    System.out.println(userId);
     return postService.backLink(userId);
   }
 
