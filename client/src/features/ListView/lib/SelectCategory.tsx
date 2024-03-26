@@ -30,6 +30,10 @@ function SelectCategory({
       const promise = getCategoriesApi(myNickname);
       promise.then((categories) => {
         setMyCategories(categories);
+        // categories 배열이 비어 있지 않다면 첫 번째 카테고리를 기본값으로 설정
+        if (categories.length > 0) {
+          setCategory(categories[0].categoryId);
+        }
       });
     }
   }, []);
