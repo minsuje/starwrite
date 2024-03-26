@@ -69,12 +69,14 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   @Query("MATCH (u:Users)-[r:POSTED|HOLDS]->(p:Post) "
       + "WHERE u.nickname = $nickname AND p.tmpSave = false "
       + "MATCH (p)-[:IS_CHILD]-(c:Category) "
+      + "WITH p, c, u "
+      + "OPTIONAL MATCH (p)-[ar:AUTHOR]-(author:Users) "
       + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
       + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
       + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
       + "c.categoryId AS categoryId, c.name AS categoryName, "
-      + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
-      + "SKIP $skip LIMIT $limit ")
+      + "u.userId AS userId, u.nickname AS userNickname, author.userId AS originAuthorId, author.nickname AS originAuthor, EXISTS((p)<-[:AUTHOR]-()) AS scrap " + "ORDER BY p.updatedAt DESC "
+      + "SKIP $skip LIMIT 100 ")
   List<GetPosts> findAllPostsByUserNickname(@Param(value = "nickname") String nickname,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 
@@ -88,7 +90,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
           + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
           + "c.categoryId AS categoryId, c.name AS categoryName, "
           + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
-          + "SKIP $skip LIMIT $limit ")
+          + "SKIP $skip LIMIT 100 ")
   List<GetPosts> findScrapPosts(@Param(value = "userId") String userId,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 

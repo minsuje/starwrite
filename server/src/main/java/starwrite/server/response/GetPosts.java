@@ -24,4 +24,7 @@ public class GetPosts {
   private String categoryName;
   private String userId;
   private String userNickname;
+  private boolean scrap;
+  private String originAuthor;
+  private String originAuthorId;
 }
