@@ -9,16 +9,17 @@ import uuid
 from langchain.docstore.document import Document
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import Neo4jVector
-from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.graphs import Neo4jGraph
 from langchain.chains import GraphCypherQAChain
-
-
+from langchain_core.output_parsers import StrOutputParser
+from langchain.chains import RetrievalQAWithSourcesChain
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQAWithSourcesChain
-from langchain_openai import ChatOpenAI
-
+from langchain_core.runnables import RunnableLambda, RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 load_dotenv(".env", override=True)
 
@@ -72,28 +73,9 @@ search_results = neo4j_vector_search("웹툰에 대해서 알려줘")
 
 print("search_results > ", search_results)
 
-# # 검색 결과를 Document 객체로 변환
-# documents = []
-# for result in search_results:
-#     text = result["text"]
-#     score = result["score"]
-#     # 여기서 'source'는 적절한 출처 정보를 입력해야 합니다.
-#     doc = Document(
-#         text, metadata={"score": score, "source": "Your Source Information"}
-#     )
-#     documents.append(doc)
-
-# # LangChain 체인에 문서를 전달
-# # 예를 들어, 'RetrievalQAWithSourcesChain'을 사용한다고 가정
-# response = chain.invoke({"question": question, "documents": documents})
-
-# # 결과 처리
-# print("Response: ", response)
-
-
 kg.refresh_schema()
 
-print("kg.schema >>>>> ", kg.schema)
+# print("kg.schema >>>>> ", kg.schema)
 
 
 neo4j_vector_store = Neo4jVector.from_existing_graph(
