@@ -8,6 +8,7 @@ import {
 } from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
 import { Posts } from '../../../../shared/model';
+import Badge from '../../../../shared/Badge';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
@@ -107,7 +108,17 @@ function ListViewMainEnt() {
                           style={{ textDecoration: 'none' }}
                         >
                           <_postBox>
-                            <h1>{post.postTitle}</h1>
+                            <h1>
+                              {post.postTitle}
+                              {(categoryName === '스크랩' || post.scrap) && (
+                                <Badge>스크랩</Badge>
+                              )}
+                              {post.visible === 'false' ? (
+                                <Badge>비공개</Badge>
+                              ) : (
+                                <Badge>공개</Badge>
+                              )}
+                            </h1>
                             <p>{post.content}</p>
                           </_postBox>
                         </Link>
