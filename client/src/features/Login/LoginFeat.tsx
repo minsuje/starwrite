@@ -55,7 +55,7 @@ function LoginForm() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'test@navdfe.com',
+      email: 'test005@cc.cc',
       password: '1q2w3e4r!',
     },
   });
