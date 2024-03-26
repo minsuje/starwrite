@@ -71,7 +71,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "MATCH (p)-[:IS_CHILD]-(c:Category) "
       + "WITH p, c, u "
       + "OPTIONAL MATCH (p)-[ar:AUTHOR]-(author:Users) "
-      + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
+      + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.parsedContent, 0, 100) AS content,  "
       + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
       + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
       + "c.categoryId AS categoryId, c.name AS categoryName, "

@@ -25,11 +25,9 @@ public class JsonData {
 
     StringBuilder parsedContent = new StringBuilder();
     for (JsonItem item : items) {
-      if ("heading".equals(item.type) || "paragraph".equals(item.type) || "mention".equals(item.type)) {
-        for (JsonItem.Content content : item.content) {
-          if (content.text != null && !content.text.trim().isEmpty()) {
-            parsedContent.append(content.text).append(" ");
-          }
+      for (JsonItem.Content content : item.content) {
+        if (content.text != null && !content.text.trim().isEmpty()) {
+          parsedContent.append(content.text).append(" ");
         }
       }
     }
