@@ -37,8 +37,12 @@ def lambda_handler(event, context):
 
 
 
-
-    print('>>>>>>>>>>', NEO4J_URI)
+    
+    
+    VECTOR_INDEX_NAME = 'form_10k_chunks'
+    VECTOR_NODE_LABEL = 'Chunks'
+    VECTOR_SOURCE_PROPERTY = 'text'
+    VECTOR_EMBEDDING_PROPERTY = 'textEmbeddings'
 
 
     starPostId = event.get('starPostId')
@@ -49,6 +53,16 @@ def lambda_handler(event, context):
     print("postId >>>>>> ", starPostId)
     print("content >>>>>> ", content)
     print("type of content >>>>> ", type(content))
+    
+#     from openai import OpenAI
+#     client = OpenAI()
+
+#     client.embeddings.create(
+#     model="text-embedding-3-large",
+#     input="The food was delicious and the waiter...",
+#     encoding_format="float"
+# )
+
 
 
     def generate_unique_chunk_id():
@@ -68,38 +82,28 @@ def lambda_handler(event, context):
     #             result_text += obj["content"][0]["text"]
     
     
-    try:
-        data = json.loads(content)
-    except json.JSONDecodeError:
-        # JSON 파싱 오류 처리
-        print("Error: Unable to parse content as JSON.")
-        return {
-            "statusCode": 400,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "Content is not valid JSON"}),
-        }
 
-    # 이제 'data'는 파싱된 JSON 객체 또는 리스트
-    # 예를 들어, 'data'가 리스트인 경우
-    if isinstance(data, list):
-        result_text = ''
-        for obj in data:
-            if obj["type"] in ["paragraph", "mention", "heading", "link"]:
-                if "content" in obj and len(obj["content"]) > 0 and "text" in obj["content"][0]:
-                    result_text += obj["content"][0]["text"]
-        # 결과 처리
-    else:
-        # 'data'가 리스트가 아닌 다른 형태인 경우의 처리
-        print("Error: Parsed content is not a list.")
-        return {
-            "statusCode": 400,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "Parsed content format is invalid"}),
-        }
+    data = json.loads(content)
+
+    def extract_text(content):
+        """Recursively extracts text from the content field."""
+        if isinstance(content, dict):
+            if 'type' in content and content['type'] == 'text' and 'text' in content:
+                return content['text'].strip()
+            else:
+                return ''.join(extract_text(item) for item in content.values())
+        elif isinstance(content, list):
+            return ''.join(extract_text(item) for item in content)
+        else:
+            return ''
+
+    # Extracting all the text
+    all_text = ''.join(extract_text(item) for item in data)
+
+    print(all_text)
     
-    
-    
-    
+    result_text = all_text
+        
 
 
     print("파싱 완료 문자열 : ", result_text)
@@ -142,7 +146,7 @@ def lambda_handler(event, context):
 
     # 벡터 인덱스 생성 쿼리
     vector = kg.query("""
-        CREATE VECTOR INDEX `embeddedPost` IF NOT EXISTS
+        CREATE VECTOR INDEX `embeddedPosts` IF NOT EXISTS
         FOR (c:Chunks) ON (c.textEmbeddings)
         OPTIONS { indexConfig: {
             `vector.dimensions`: 1536,
@@ -155,6 +159,9 @@ def lambda_handler(event, context):
 
 
     print("벡터 인덱스 생성 완료")
+    
+    
+    
 
     # 벡터 인코딩 및 노드 연결 쿼리
     kg.query("""
@@ -168,7 +175,9 @@ def lambda_handler(event, context):
             }) AS vector
         CALL db.create.setNodeVectorProperty(chunks, "textEmbeddings", vector)
     """, 
-    params={"openAiApiKey":OPENAI_API_KEY, "openAiEndpoint": OPENAI_BASE_URL, "postId": starPostId})
+    params={"openAiApiKey":OPENAI_API_KEY, "openAiEndpoint": OPENAI_BASE_URL})
+
+
 
     # 결과 출력
     print("결과 : ", result_text)
