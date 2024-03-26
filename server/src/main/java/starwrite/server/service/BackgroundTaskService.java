@@ -12,6 +12,7 @@ public class BackgroundTaskService {
 
   @Async
   public void parsePostBackground(Long postId, String content) {
+    System.out.println("비동기 처리 시작");
     webClientService.post(postId, content);
   }
 }

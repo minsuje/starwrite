@@ -4,6 +4,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @EnableAsync
@@ -18,11 +19,20 @@ public class WebClientServiceImpl {
     System.out.println("post to lambda postId >>>>>> " + postId);
     System.out.println("post ot lambda content >>>>>> " + content);
 
+
+    ExchangeStrategies strategies = ExchangeStrategies.builder()
+        .codecs(clientCodecConfigurer -> {
+          clientCodecConfigurer.defaultCodecs().maxInMemorySize(64 * 1024 * 1024); // 16MB
+        })
+        .build();
+
+
     // webClient 기본 설정
     WebClient webClient =
         WebClient
             .builder()
             .baseUrl("https://eluaiy9gg5.execute-api.ap-northeast-2.amazonaws.com/ai/")
+            .exchangeStrategies(strategies)
             .build();
 
     // api 요청
@@ -33,6 +43,5 @@ public class WebClientServiceImpl {
         .retrieve()
         .bodyToMono(Map.class)
         .subscribe(response -> log.info(response.toString()));
-
   }
 }
