@@ -9,7 +9,6 @@ import {
   _emoji,
 } from '../../shared/CommonStyle';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useNavigate } from 'react-router';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 // import jwtDecode from 'jwt-decode';
@@ -154,7 +153,6 @@ function LoginForm() {
 
   //     const response = await axios.post(
   //       'http://localhost:8080/login/api/v1/oauth2/google',
-
 
   //     const response = await commonApi.post(
   //       '/login/api/v1/oauth2/google',

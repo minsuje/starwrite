@@ -11,7 +11,7 @@ import './NodeView.css';
 import { fetchData } from '../../features/NodeViewFeat/index';
 import { ExtendedCustomNode } from '../../features/NodeViewFeat/model/Types';
 import { useParams } from 'react-router';
-import { NoDataComponent } from '../../shared/NoDataComponent';
+
 import { PagesearchNode } from '../../pages/NodeView/NodeViewPage';
 
 export type SearchType = {
@@ -35,6 +35,8 @@ export const NodeView = ({
   // console.log('nodes', nodes);
   // console.log('links', links);
 
+  // 망각 곡선 ? Ebbinghaus S = opacity
+
   useEffect(() => {
     // axios 데이터 로딩
     const getData = async () => {
@@ -42,14 +44,29 @@ export const NodeView = ({
         const fetchedNodes = await fetchData(category);
 
         if (fetchedNodes !== '') {
-          let nodesData = fetchedNodes.posts.map((node: CustomNode) => ({
-            ...node,
-            id: node.postId, //22
-            label: node.title, //토마토
-            x: Math.random() * viewportSize.width,
-            y: Math.random() * viewportSize.height,
-            url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
-          }));
+          const nodesData = fetchedNodes.posts.map((node) => {
+            const currentTime = new Date(); // 현재 시간
+            const recentViewTime = new Date(node.recentView); // 각 노드의 recentView 시간
+            const timeDiff =
+              Math.abs(currentTime - recentViewTime) / (1000 * 60 * 60 * 24); // 현재 시간과의 차이 (일 단위)
+
+            // decayRate를 조절하여 투명도가 더 천천히 감소하도록 합니다.
+            // 이 값은 실험을 통해 최적화할 수 있습니다. 여기서는 시간 차이가 1일 때 투명도가 약 0.5가 되도록 설정합니다.
+            const decayRate = -Math.log(0.5); // 1일이 지날 때마다 투명도가 약 절반으로 감소
+
+            // Math.exp 함수를 사용하여 투명도 계산. 시간 차이가 클수록 투명도가 감소
+            const opacity = Math.exp(-decayRate * timeDiff);
+
+            return {
+              ...node,
+              id: node.postId,
+              label: node.title,
+              x: Math.random() * viewportSize.width,
+              y: Math.random() * viewportSize.height,
+              url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
+              opacity: Math.max(0.1, opacity), // 투명도가 너무 낮아지는 것을 방지하기 위한 최소값 설정
+            };
+          });
 
           // validLinks 설정 예시
           const validLinks = fetchedNodes.relation
@@ -67,11 +84,11 @@ export const NodeView = ({
               target: link.relatedPostId,
             }));
 
-          if (searchTerm.trim() !== '') {
-            nodesData = nodesData.filter((node: CustomNode) =>
-              node.label.toLowerCase().includes(searchTerm.toLowerCase()),
-            );
-          }
+          // if (searchTerm.trim() !== '') {
+          //   nodesData = nodesData.filter((node: CustomNode) =>
+          //     node.label.toLowerCase().includes(searchTerm.toLowerCase()),
+          //   );
+          // }
 
           setNodes(nodesData);
           setLoading(false);
@@ -153,30 +170,6 @@ export const NodeView = ({
 
     return visited;
   }
-  // function findAllConnectedNodes(nodeId: string, links: any) {
-  //   let visited = new Set<string>(); // 방문한 노드를 추적합니다.
-  //   let queue: string = [nodeId]; // BFS를 위한 큐
-
-  //   while (queue.length > 0) {
-  //     let currentId = queue.shift();
-  //     if (!visited.has(currentId)) {
-  //       visited.add(currentId);
-  //       links.forEach((link) => {
-  //         let sourceId =
-  //           typeof link.source === 'object' ? link.source.id : link.source;
-  //         let targetId =
-  //           typeof link.target === 'object' ? link.target.id : link.target;
-  //         if (sourceId === currentId && !visited.has(targetId)) {
-  //           queue.push(targetId);
-  //         } else if (targetId === currentId && !visited.has(sourceId)) {
-  //           queue.push(sourceId);
-  //         }
-  //       });
-  //     }
-  //   }
-
-  //   return visited;
-  // }
 
   useEffect(() => {
     // 작은 원의 데이터를 준비합니다.
@@ -264,6 +257,7 @@ export const NodeView = ({
       .attr('height', 35) // svg 높이
       .attr('transform', 'translate(-17.5, -17.5)') // 이미지를 중심으로 이동시켜 위치를 조정
       .attr('pointer-events', 'all')
+      .style('opacity', (d) => d.opacity)
       .call(
         drag(simulation) as unknown as d3.DragBehavior<
           SVGImageElement,
@@ -279,7 +273,7 @@ export const NodeView = ({
         const connectedNodes = findAllConnectedNodes(d.id, links);
 
         // 연결된 모든 노드의 opacity 조정
-        node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
+        // node.style('opacity', (n) => (connectedNodes.has(n.id) ? 1 : 0.1));
 
         // 연결된 모든 링크의 opacity 조정
         link.style('opacity', (l) => {
@@ -293,7 +287,7 @@ export const NodeView = ({
         });
       })
       .on('mouseout', function () {
-        node.style('opacity', 1);
+        // node.style('opacity', 1);
         link.style('opacity', 0.1); // 기본 opacity 값을 사용
       });
     // 텍스트 요소 추가
@@ -384,38 +378,40 @@ export const NodeView = ({
     });
   }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
+  console.log('>>>>>>>>>>>', nodes);
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-    const nodeSelection = svg
-      .selectAll('.nodes image')
-      .data<CustomNode>(nodes) // 여기서 data는 CustomNode 타입의 배열이어야 합니다.
-      .enter()
-      .append('g')
-      .classed('node', true);
-    //글 제목 깜빡깜빡
+    const nodeSelection = svg.selectAll('.nodes image').data<CustomNode>(nodes); // 여기서 data는 CustomNode 타입의 배열이어야 합니다.
 
     // 검색어가 있는 경우
     if (searchTerm.trim()) {
-      nodeSelection
-        .classed('blink-animation', (d: CustomNode) =>
-          d.label.toLowerCase().includes(searchTerm.toLowerCase()),
-        ) // boolean 값을 반환합니다.
-        .style('opacity', (d: CustomNode) =>
-          d.label.toLowerCase().includes(searchTerm.toLowerCase()) ? 1 : 0.2,
-        );
-    } else {
-      // 검색어가 없는 경우
-      nodeSelection
-        .classed('blink-animation', false) // 직접적으로 boolean 값을 제공합니다.
-        .style('opacity', 1);
-    }
-  }, [searchTerm]);
+      nodeSelection.each(function (d: CustomNode) {
+        const nodeElement = d3.select(this);
+        // d.label이 유효한지 확인
+        const isMatchSearchTerm =
+          d.label && d.label.toLowerCase().includes(searchTerm.toLowerCase());
 
-  if (nodes.length === 0 || nodes.every((node) => node.id === null)) {
-    // nodes 배열이 비어 있거나 모든 항목이 null일 때 렌더링할 컴포넌트
-    return <NoDataComponent />;
-  }
-  // console.log('>>>>>>>>>>>>>>>>>>', nodes);
+        // 검색어와 일치하는 노드에 대해 반짝임 효과 적용
+        nodeElement.classed('blink-animation', isMatchSearchTerm);
+
+        // 모든 노드의 투명도를 망각곡선에 따라 설정하되, 검색어와 일치하는 노드는 강조
+        const opacityBasedOnRecency = d.opacity; // 망각곡선에 따른 opacity 값
+        nodeElement.style(
+          'opacity',
+          isMatchSearchTerm ? 1 : opacityBasedOnRecency,
+        );
+      });
+    } else {
+      // 검색어가 없는 경우, 모든 노드의 반짝임 효과를 제거하고 망각곡선에 따른 투명도를 적용
+      nodeSelection
+        .classed('blink-animation', false)
+        .style('opacity', (d) => d.opacity);
+    }
+  }, [searchTerm, nodes]);
+
+  // if (nodes.length === 0 || nodes.every((node) => node.id === null)) {
+  //   return <NoDataComponent />;
+  // }
 
   return (
     <svg

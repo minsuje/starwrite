@@ -215,10 +215,10 @@ function RegisterForm() {
   };
 
   //  유효성 검사 error 확인 함수
-  //   const onInValid = (err: any) => {
-  //     console.log(typeof err);
-  //     console.log('onInValid', err);
-  //   };
+    // const onInValid = (err: any) => {
+    //   console.log(typeof err);
+    //   console.log('onInValid', err);
+    // };
 
   return (
     <>

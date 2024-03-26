@@ -26,7 +26,7 @@ interface SearchResult {
 export function GlobalSearch() {
   const [modal, setModal] = useState(false); // 모달 상태 관리
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResultBox, setSearchResultBox] = useState(false);
+  const [, setSearchResultBox] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchPerformed, setSearchPerformed] = useState(false); // 검색이 수행되었는지 여부
 

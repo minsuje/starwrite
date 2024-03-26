@@ -19,7 +19,7 @@ function ListViewMainEnt() {
       const promise = postListAllApi(nickname);
       promise
         .then((Posts) => {
-          console.log('Posts', Posts);
+          console.log('Posts>>>>>>', Posts);
           if (Posts) {
             setPostsList(Posts);
           } else {
