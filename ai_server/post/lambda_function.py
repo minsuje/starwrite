@@ -120,7 +120,7 @@ def lambda_handler(event, context):
         WITH mergedChunk
             MATCH (p:Post) WHERE ID(p) = $postId
             MERGE (mergedChunk)-[:EMBED]->(p)
-    RETURN mergedChunk
+    RETURN ID(mergedChunk)
     """
 
 
@@ -134,9 +134,21 @@ def lambda_handler(event, context):
 
 
 
-    kg.query(merge_chunk_node_query, 
+    generatedChunkId = kg.query(merge_chunk_node_query, 
         params={'chunkId': chunkId, 'chunkText': chunkText, 'postId': starPostId})
 
+
+    print("생성된 노드 ID : ", generatedChunkId[0])
+    
+    # merged_chunk_value = data['ID(mergedChunk)']
+    
+    # print("merged_chunk_value 값 출력 : ", merged_chunk_value)
+    
+    print("생성된 노드 ID 타입 : ", generatedChunkId[0].get('ID(mergedChunk)'))
+    
+    
+    merged_chunk_value = generatedChunkId[0].get('ID(mergedChunk)')
+    
 
     kg.query("""
     CREATE CONSTRAINT unique_chunks IF NOT EXISTS 
@@ -165,7 +177,7 @@ def lambda_handler(event, context):
 
     # 벡터 인코딩 및 노드 연결 쿼리
     kg.query("""
-        MATCH (chunks:Chunks) WHERE chunks.textEmbeddings IS NULL
+        MATCH (chunks:Chunks) WHERE ID(chunks) = $chunkId
         WITH chunks, genai.vector.encode(
             chunks.text, 
             "OpenAI", 
@@ -175,7 +187,7 @@ def lambda_handler(event, context):
             }) AS vector
         CALL db.create.setNodeVectorProperty(chunks, "textEmbeddings", vector)
     """, 
-    params={"openAiApiKey":OPENAI_API_KEY, "openAiEndpoint": OPENAI_BASE_URL})
+    params={"openAiApiKey":OPENAI_API_KEY, "openAiEndpoint": OPENAI_BASE_URL, "chunkId": merged_chunk_value})
 
 
 
