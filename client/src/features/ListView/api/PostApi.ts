@@ -25,6 +25,18 @@ export const postListAllApi = async (nickname: string | undefined) => {
   }
 };
 
+// 스크랩 해 온 글 리스트 불러오기
+export const postListScrapApi = async (nickname: string | undefined) => {
+  try {
+    const response = await baseApi.get(`/post/${nickname}/scrap`);
+    console.log('postListScrapApi', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('postListScrapApi Error', error);
+    throw error;
+  }
+};
+
 // 글 하나 선택시 내용 불러오기
 export const postDetailApi = async (postid: number) => {
   try {

@@ -10,6 +10,7 @@ function CommentList({
   selectedLine: MyBlock;
   annotations: Annotation[];
 }) {
+  // 여기서 재렌더링 값 변할 떄 마다  리스트 가져와서 setState 변경
   console.log(annotations);
   return (
     <>
