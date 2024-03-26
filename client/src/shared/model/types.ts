@@ -13,11 +13,14 @@ export interface Posts {
   updated_at?: Date;
   title: string;
   tmpSave: boolean;
-  public: string;
+  visible: string;
   recentView: Date;
   postTitle?: string;
   postIdentifier?: number;
   authorNickname?: string;
+  originAuthor?: string;
+  originAuthorId?: string;
+  scrap?: boolean;
 }
 
 export interface Annotation {
