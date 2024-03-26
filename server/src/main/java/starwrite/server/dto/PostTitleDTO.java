@@ -8,4 +8,7 @@ public class PostTitleDTO {
   private String title;
   private Long postId;
   private LocalDateTime recentView;
+  private String categoryId;
+  private String categoryName;
+  private boolean scrap;
 }
