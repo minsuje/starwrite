@@ -71,10 +71,10 @@ COPY --chown=gradle:gradle build.gradle settings.gradle /home/gradle/project/
 COPY --chown=gradle:gradle src /home/gradle/project/src
 
 # Build the project
-RUN gradle build --no-daemon
+RUN gradle buildy
 
 # Step 2: Use an OpenJDK image to run the compiled application
-FROM openjdk:17-slim
+FROM openjdk:17
 
 # Set a directory for the app
 WORKDIR /app
