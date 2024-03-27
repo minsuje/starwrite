@@ -35,14 +35,13 @@ def lambda_handler(event, context):
     VECTOR_SOURCE_PROPERTY = "text"
     VECTOR_EMBEDDING_PROPERTY = "textEmbeddings"
 
-    print("event > ", event)
-
     starPostId = event.get("starPostId")
 
     # 이벤트에서 postId와 content를 추출
     content = event.get("content")
 
     title = event.get("title")
+
 
     #     from openai import OpenAI
     #     client = OpenAI()

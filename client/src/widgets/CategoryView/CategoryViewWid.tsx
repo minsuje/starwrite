@@ -61,7 +61,7 @@ export function CategoryViewWid({
             }),
           );
 
-          console.log(categoryDataResponse);
+          console.log('>>>>>>', categoryDataResponse);
 
           if (searchTerm.trim() !== '') {
             // 검색어가 있을 경우 필터링을 적용
@@ -74,6 +74,8 @@ export function CategoryViewWid({
           setCategoryData(categoryDataResponse);
           // setCategoryDataNone(categoryDataResponse);
           // setCategoryDatas(processedCategoryData);
+        } else {
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching data:', error);

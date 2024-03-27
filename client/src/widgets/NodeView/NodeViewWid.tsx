@@ -34,8 +34,6 @@ export const NodeView = ({
   // console.log('nodes', nodes);
   // console.log('links', links);
 
-  // 망각 곡선 ? Ebbinghaus S = opacity
-
   useEffect(() => {
     // axios 데이터 로딩
     const getData = async () => {
@@ -48,11 +46,11 @@ export const NodeView = ({
             const recentViewTime = new Date(node.recentView); // 각 노드의 recentView 시간
             const timeDiff =
               Math.abs(currentTime.getTime() - recentViewTime.getTime()) /
-              (1000 * 60 * 60 * 20); // 현재 시간과의 차이 (일 단위)
+              (1000 * 60 * 60 * 24); // 현재 시간과의 차이 (일 단위)
 
             // decayRate를 조절하여 투명도가 더 천천히 감소하도록 합니다.
             // 이 값은 실험을 통해 최적화할 수 있습니다. 여기서는 시간 차이가 1일 때 투명도가 약 0.5가 되도록 설정합니다.
-            const decayRate = -Math.log(0.9); // 1일이 지날 때마다 투명도가 약 절반으로 감소
+            const decayRate = -Math.log(0.8); // 1일이 지날 때마다 투명도가 약 절반으로 감소
 
             // Math.exp 함수를 사용하여 투명도 계산. 시간 차이가 클수록 투명도가 감소
             const opacity = Math.exp(-decayRate * timeDiff);
@@ -295,20 +293,60 @@ export const NodeView = ({
         // node.style('opacity', 1);
         link.style('opacity', 0.1); // 기본 opacity 값을 사용
       });
-    // 텍스트 요소 추가
 
+    // 커스텀 툴팁을 위한 div를 준비합니다.
+
+    // 텍스트 요소 추가
     const text = group
       .append('g')
-      .attr('class', 'texts')
+      .attr('class', 'text')
       .selectAll('text')
       .data(nodes)
       .enter()
       .append('text')
-      // .attr('x', (d) => d.x ?? 50)
-      // .attr('y', (d) => d.y ?? 50) // 노드 위에 위치하도록 y 좌표 조정
-      .attr('text-anchor', 'middle') // 텍스트를 중앙 정렬
-      .attr('fill', '#ffffff'); // 텍스트 색상 설정
-    // .text((d) => d.label); // 각 노드의 라벨을 텍스트로 설정
+
+      .attr('text-anchor', 'middle')
+      .attr('fill', '#ffffff')
+      .text((d) => {
+        console.log(d.label); // 이 로그를 통해 d.label의 실제 값을 확인
+        return d.label.length > 5 ? `${d.label.substring(0, 5)}...` : d.label;
+      })
+      .on('mouseover', function (event, d) {
+        tooltip
+          .style('visibility', 'visible')
+          .text(d.label) // 전체 텍스트를 툴팁으로 설정합니다.
+          .style('top', event.pageY - 10 + 'px')
+          .style('left', event.pageX + 10 + 'px');
+      })
+
+      .on('mouseout', function () {
+        tooltip.style('visibility', 'hidden');
+      });
+
+    // 커스텀 툴팁을 위한 div 생성
+    const tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0)
+      .style('position', 'absolute')
+      .style('padding', '2px')
+      .style('background', 'lightgrey')
+      .style('border-radius', '5px')
+      .style('pointer-events', 'none'); // 툴팁이 마우스 이벤트를 방해하지 않도록 설정
+
+    // 마우스 오버 이벤트로 툴팁 보여주기
+    text
+      .on('mouseover', (event, d) => {
+        tooltip.transition().duration(200).style('opacity', 0.9);
+        tooltip
+          .html(d.label)
+          .style('left', event.pageX + 5 + 'px')
+          .style('top', event.pageY - 28 + 'px');
+      })
+      .on('mouseout', () => {
+        tooltip.transition().duration(500).style('opacity', 0);
+      });
 
     // 작은 원 그리기 위한 'g' 태그 추가
     const smallCircleGroups = group
@@ -361,7 +399,7 @@ export const NodeView = ({
       // 텍스트 위치 업데이트
 
       text
-        .text((d) => d.label) // 각 노드의 라벨을 텍스트로 설정
+        // .text((d) => d.label) // 각 노드의 라벨을 텍스트로 설정
         .attr('x', (d) => d.x ?? 0)
         .attr('y', (d) => (d.y ?? 0) - 30); // 노드 위에 위치하도록 y 좌표 조정
 
