@@ -78,32 +78,49 @@ kg.refresh_schema()
 # print("kg.schema >>>>> ", kg.schema)
 
 
-neo4j_vector_store = Neo4jVector.from_existing_graph(
+retrieval_query_window = """
+MATCH (c:Chunks)
+RETURN c.text as text,
+    c.source AS metadata
+"""
+
+
+neo4j_vector_store = Neo4jVector.from_existing_index(
     embedding=OpenAIEmbeddings(),
     url=NEO4J_URI,
     username=NEO4J_USERNAME,
     password=NEO4J_PASSWORD,
     index_name=VECTOR_INDEX_NAME,
-    node_label=VECTOR_NODE_LABEL,
-    text_node_properties=[VECTOR_SOURCE_PROPERTY],
-    embedding_node_property=VECTOR_EMBEDDING_PROPERTY,
+    # node_label=VECTOR_NODE_LABEL,
+    # text_node_properties=[VECTOR_SOURCE_PROPERTY],
+    text_node_property=VECTOR_SOURCE_PROPERTY,
+    # embedding_node_property=VECTOR_EMBEDDING_PROPERTY,
+    retrieval_query=retrieval_query_window,
 )
 retriever = neo4j_vector_store.as_retriever()
+
 
 chain = RetrievalQAWithSourcesChain.from_chain_type(
     ChatOpenAI(temperature=0), chain_type="stuff", retriever=retriever
 )
 
-
-def prettychain(question: str) -> str:
-    """Pretty print the chain's response to a question"""
-    response = chain(
-        {"question": question},
-        return_only_outputs=True,
-    )
-    print(textwrap.fill(response["answer"], 600))
+chain("Who is Netapp ?")
 
 
-question = "람다에 대해서 알려줘"
+# chain = RetrievalQAWithSourcesChain.from_chain_type(
+#     ChatOpenAI(temperature=0), chain_type="stuff", retriever=retriever
+# )
 
-print("prettyChain > ", prettychain(question))
+
+# def prettychain(question: str) -> str:
+#     """Pretty print the chain's response to a question"""
+#     response = chain(
+#         {"question": question},
+#         return_only_outputs=True,
+#     )
+#     print(textwrap.fill(response["answer"], 600))
+
+
+# question = "람다에 대해서 알려줘"
+
+# print("prettyChain > ", prettychain(question))
