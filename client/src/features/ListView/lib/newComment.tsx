@@ -53,6 +53,7 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
       // setText(selectedLine.content[0]?.text);
       setSelected(selectedLine.id);
     } else {
+      setSelected('none');
       // setText('선택된 내용 없음');
     }
   }, [selectedLine, selectedId]);

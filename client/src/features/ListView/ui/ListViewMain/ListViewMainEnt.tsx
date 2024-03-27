@@ -86,6 +86,11 @@ function ListViewMainEnt() {
                           {post.title}
                           {post.nickname !== nickname &&
                             post.nickname !== null && <Badge>스크랩</Badge>}
+                          {post.visible === 'false' ? (
+                            <Badge>비공개</Badge>
+                          ) : (
+                            <Badge>공개</Badge>
+                          )}
                         </h1>
                         <p>{post.content}</p>
                       </_postBox>
