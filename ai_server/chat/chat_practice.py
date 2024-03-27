@@ -72,7 +72,7 @@ def neo4j_vector_search(question):
             endpoint: $openAiEndpoint
         }) AS question_embedding
         CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node,    score
-        RETURN score, node.text AS text
+        RETURN score, node.text AS text, node.chunkId AS chunckId
     """
     similar = kg.query(
         vector_search_query,
@@ -89,9 +89,10 @@ def neo4j_vector_search(question):
 
 search_results = neo4j_vector_search(user_question)
 
-print("search_results > ", search_results)
+print("search_results > ", search_results[0])
 
 # kg.refresh_schema()
+
 
 # print("kg.schema >>>>> ", kg.schema)
 
