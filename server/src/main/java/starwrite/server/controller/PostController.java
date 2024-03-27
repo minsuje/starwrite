@@ -193,5 +193,12 @@ public class PostController {
     return postService.searchPosts(title);
   }
 
+  @GetMapping("recommendation/{postId}")
+  public String recommendation(@PathVariable(value = "postId") Long postId){
+    String nickname = SecurityUtil.getCurrentUserNickname();
+
+    postService.getPostIdWithChunks(postId, nickname);
+    return "성공";
+  }
 
 }

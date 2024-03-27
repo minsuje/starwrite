@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
-import starwrite.server.dto.PostDTO;
 import starwrite.server.entity.Post;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
@@ -312,6 +310,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "AND post.tmpSave = false "
       + "RETURN ID(post) AS searchPostId, post.title AS title, post.parsedContent AS content, user.userId AS userId, user.nickname AS nickName, post.createdAt AS createdAt")
   List<SearchPosts> searchPosts(@Param(value = "title") String title);
+
+
 
 
 

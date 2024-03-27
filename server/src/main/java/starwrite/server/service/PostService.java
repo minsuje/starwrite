@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -22,13 +20,13 @@ import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
-import starwrite.server.response.GetPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
 import starwrite.server.utils.PythonApi;
+import starwrite.server.utils.WebClientRecommendGet;
 import starwrite.server.utils.WebClientServiceImpl;
 
 @EnableAsync
@@ -51,6 +49,12 @@ public class PostService {
 
   @Autowired
   private BackgroundTaskService backgroundTaskService;
+
+  @Autowired
+  WebClientServiceImpl webClientService;
+
+  @Autowired
+  WebClientRecommendGet webClientRecommendGet;
 
 
   public PostService(VectorStore vectorStore) {
@@ -290,4 +294,10 @@ public class PostService {
     System.out.println("title >>>>> " + title);
     return postRepository.searchPosts(title);
   }
+
+  public List<Long> getPostIdWithChunks(Long postId, String nickname){
+
+    return (List<Long>) webClientRecommendGet.postIdWithNickname(postId, nickname);
+  }
+
 }
