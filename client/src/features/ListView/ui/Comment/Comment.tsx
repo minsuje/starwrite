@@ -1,25 +1,26 @@
 import styled from 'styled-components';
 
-const CommentBox = styled.div`
+const _CommentBox = styled.div`
   width: 100%;
-  background-color: var(--color-zinc-800);
+  border-radius: 2px;
+  border: 1px solid var(--color-zinc-100);
 `;
 
-function Comment() {
+const _CommentNickname = styled.div`
+  font-size: 12px;
+`;
+
+const _CommentContent = styled.div`
+  font-size: 18px;
+`;
+
+function Comment({ content, nickName }: { content: string; nickName: string }) {
   return (
     <>
-      <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
-      </CommentBox>
-      <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
-      </CommentBox>
-      <CommentBox>
-        <div>닉네임</div>
-        <div>댓글 내용</div>
-      </CommentBox>
+      <_CommentBox>
+        <_CommentContent>{content}</_CommentContent>
+        <_CommentNickname>{nickName}</_CommentNickname>
+      </_CommentBox>
     </>
   );
 }

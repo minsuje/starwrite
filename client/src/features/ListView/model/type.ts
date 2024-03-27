@@ -22,3 +22,12 @@ export type MyBlock = Block<
   typeof schema.inlineContentSchema,
   typeof schema.styleSchema
 >;
+
+export interface Annotation {
+  annotation: {
+    position: string | undefined;
+    content: string;
+    type: string;
+  };
+  postId: number;
+}

@@ -11,6 +11,7 @@ import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
+import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 
@@ -36,9 +37,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 //  GetPosts findAllPosts(@Param(value = "userId") String userId);
 
   // 백링크 정보 보내기 (send back link info )
-  @Query("MATCH (p:Post{tmpSave:false}) " + "MATCH (u:Users) where u.userId=$userId "
-      + "RETURN ID(p) AS postid, p.title AS title")
-  List<BackLink> backLink(@Param("userId") String userId);
+  @Query("MATCH (p:Post{tmpSave:false}) " +
+      "MATCH (u:Users) WHERE u.userId = $userId " +
+      "MATCH (u:Users)-[r:POSTED|HOLDS]->(p:Post) " +
+      "WHERE p.tmpSave = false AND u.userId = $userId " +
+      "RETURN ID(p) AS postid, p.title AS title")
+  List<BackLink> backLink(@Param(value = "userId") String userId);
 
   // 해당 카테고리의 모든 포스트 조회
 /*
@@ -64,30 +68,32 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
   @Query("MATCH (u:Users)-[r:POSTED|HOLDS]->(p:Post) "
       + "WHERE u.nickname = $nickname AND p.tmpSave = false "
       + "MATCH (p)-[:IS_CHILD]-(c:Category) "
-      + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
+      + "WITH p, c, u "
+      + "OPTIONAL MATCH (p)-[ar:AUTHOR]-(author:Users) "
+      + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.parsedContent, 0, 100) AS content,  "
       + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
       + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
       + "c.categoryId AS categoryId, c.name AS categoryName, "
-      + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
-      + "SKIP $skip LIMIT $limit ")
+      + "u.userId AS userId, u.nickname AS userNickname, author.userId AS originAuthorId, author.nickname AS originAuthor, EXISTS((p)<-[:AUTHOR]-()) AS scrap " + "ORDER BY p.updatedAt DESC "
+      + "SKIP $skip LIMIT 100 ")
   List<GetPosts> findAllPostsByUserNickname(@Param(value = "nickname") String nickname,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
 
 
-
   // 특정 유저의 스크랩한 글 조회. 10개씩 무한스크롤 조회
   @Query(
-      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.userId = $userId AND p.tmpSave = false "
+      "MATCH (u:Users)-[r:HOLDS]->(p:Post) " + "WHERE u.nickname = $nickname AND p.tmpSave = false "
           + "MATCH (p)-[:IS_CHILD]-(c:Category) "
-          + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.content, 0, 100) AS content,  "
+          + "WITH p, c, u "
+          + "OPTIONAL MATCH (p)-[ar:AUTHOR]-(author:Users) "
+          + "RETURN ID(p) AS postIdentifier, p.title AS postTitle, substring(p.parsedContent, 0, 100) AS content,  "
           + "p.visible AS visible, p.img AS img, p.recentView AS recentView, "
           + "p.createdAt AS createdAt, p.updatedAt AS updatedAt, "
           + "c.categoryId AS categoryId, c.name AS categoryName, "
-          + "u.userId AS userId, u.nickname AS userNickname " + "ORDER BY p.updatedAt DESC "
-          + "SKIP $skip LIMIT $limit ")
-  List<GetPosts> findScrapPosts(@Param(value = "userId") String userId,
+          + "u.userId AS userId, u.nickname AS userNickname, author.userId AS originAuthorId, author.nickname AS originAuthor " + "ORDER BY p.updatedAt DESC "
+          + "SKIP $skip LIMIT 100 ")
+  List<GetScrapPosts> findScrapPosts(@Param(value = "nickname") String nickname,
       @Param(value = "skip") int skip, @Param(value = "limit") int limit);
-
 
 
   // 임시 저장 글 모두 불러오기
@@ -131,19 +137,23 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
 
   // 글 상세
-  @Query("MATCH (p:Post) WHERE ID(p) = $postId " + "MATCH (u:Users) WHERE u.userId = $userId "
-      + "OPTIONAL MATCH (p)<-[:IS_CHILD]-(c:Category) " + "WITH p, u, c "
-      + "OPTIONAL MATCH (p)-[:POSTED]-(author:Users) " + "WITH p, author, c "
-      + "OPTIONAL MATCH (p)<-[:COMMENT]-(a:Annotation) "
-      + "OPTIONAL MATCH (a)-[:COMMENTED]-(annotationAuthor:Users) "
-      + "WHERE (p)-[:POSTED]-(author) AND a.type = 'comment' "
-      + "OR NOT (p)-[:POSTED]-(author) AND (a.type = 'comment' OR (p)-[:COMMENT]-(author)) "
-      + "WITH p, author, c, a, annotationAuthor "
-      + "ORDER BY a.createdAt DESC "
-      + "RETURN ID(p) as postIdentifier, p.title AS title, p.content AS content, p.visible AS visible, p.img AS img, p.tmpSave AS tmpSave, p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, author.userId AS authorUserId, author.nickname AS authorNickname, c.categoryId AS categoryId, c.name AS categoryName, "
-      + "collect({annotationId: ID(a), position: a.position, type: a.type,  content: a.content, createdAt: a.createdAt, updatedAt: a.updatedAt, userId: annotationAuthor.userId, nickName: annotationAuthor.nickname, parentAnnotation: a.parentAnnotation}) as annotations ")
-  PostDetail getPostDetail(@Param(value = "postId") Long postId,
-      @Param(value = "userId") String userId);
+  @Query("MATCH (p:Post) WHERE ID(p) = $postId " +
+      "MATCH (u:Users) WHERE u.userId = $userId " +
+      "OPTIONAL MATCH (p)<-[:IS_CHILD]-(c:Category) " +
+      "WITH p, u, c " +
+      "OPTIONAL MATCH (p)-[:POSTED]-(author:Users) " +
+      "WITH p, author, c, CASE WHEN author.userId = $userId THEN true ELSE false END as isAuthor " +
+      "OPTIONAL MATCH (p)<-[:COMMENT]-(a:Annotation) " +
+      "OPTIONAL MATCH (a)-[:COMMENTED]-(annotationAuthor:Users) " +
+      "WHERE (p)-[:POSTED]-(author) AND a.type = 'comment' " +
+      "OR NOT (p)-[:POSTED]-(author) AND (a.type = 'comment' OR (p)-[:COMMENT]-(author)) " +
+      "WITH p, author, c, a, annotationAuthor, isAuthor " +
+      "ORDER BY a.createdAt DESC " +
+      "WITH collect({annotationId: ID(a), position: a.position, type: a.type, content: a.content, createdAt: a.createdAt, updatedAt: a.updatedAt, userId: annotationAuthor.userId, nickName: annotationAuthor.nickname, parentAnnotation: a.parentAnnotation}) as annotations, p, author, c, isAuthor " +
+      "SET p.recentView = CASE WHEN isAuthor THEN localDateTime() ELSE p.recentView END " +
+      "RETURN ID(p) as postIdentifier, p.title AS title, p.content AS content, p.visible AS visible, p.img AS img, p.tmpSave AS tmpSave, p.recentView AS recentView, p.createdAt AS createdAt, p.updatedAt AS updatedAt, author.userId AS authorUserId, author.nickname AS authorNickname, c.categoryId AS categoryId, c.name AS categoryName, annotations")
+  PostDetail getPostDetail(@Param(value = "postId") Long postId, @Param(value = "userId") String userId);
+
 
 
   // 임시 저장글 하나 불러오기
@@ -295,7 +305,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "   WHEN (u)-[:AUTHOR]->(p) THEN 'Author' " + "   ELSE 'Proceed' "
       + "   END as ScrappingStatus " + "WHERE ScrappingStatus = 'Proceed' "
       + "MATCH (c:Category {categoryId: $categoryId}) " + "MATCH (author:Users)-[:POSTED]->(p) "
-      + "CREATE (copiedPost:Post {title: p.title, content: p.content, visible: p.visible, img: p.img, "
+      + "CREATE (copiedPost:Post {title: p.title, content: p.content, parsedContent: p.parsedContent, visible: p.visible, img: p.img, "
       + "tmpSave: p.tmpSave, recentView: localDateTime(), createdAt: localDateTime(), updatedAt: localDateTime()}) "
       + "CREATE (p)-[:COPY]->(copiedPost) " + "CREATE (u)-[:HOLDS]->(copiedPost) "
       + "CREATE (c)-[r:IS_CHILD]->(copiedPost) " + "CREATE (author)-[:AUTHOR]->(copiedPost) "

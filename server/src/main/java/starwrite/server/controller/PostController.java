@@ -21,6 +21,7 @@ import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
+import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.service.PostService;
@@ -43,9 +44,7 @@ public class PostController {
   // 글 작성 BackLink info 전달
   @GetMapping("write")
   public List<BackLink> getIdAndTitle() {
-    // 임시
     String userId = SecurityUtil.getCurrentUserUserId();
-    System.out.println(userId);
     return postService.backLink(userId);
   }
 
@@ -61,10 +60,10 @@ public class PostController {
 
 
   // 유저의 스크랩한 글 조회
-  @GetMapping("/scrap")
-  public List<GetPosts> getScrapPosts(@RequestParam(value = "skip", defaultValue = "0") int skip,
+  @GetMapping("{nickname}/scrap")
+  public List<GetScrapPosts> getScrapPosts(@PathVariable(value = "nickname") String nickname, @RequestParam(value = "skip", defaultValue = "0") int skip,
       @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    return postService.getScrapPosts(skip, limit);
+    return postService.getScrapPosts(nickname, skip, limit);
   }
 
 

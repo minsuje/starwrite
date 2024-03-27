@@ -4,9 +4,9 @@ import { NodeSearchFeat } from '../../features/NodeSearchFeat/index';
 // import { NodeData } from '../../features/NodeViewFeat/api/NodeviewApi';
 import { Spinner } from '../../shared/spinner';
 import { _Background } from '../../shared/CommonStyle';
-import { DataSpinnerSh } from '../../shared/DataSpinner';
 // import { CustomNode } from '../../features/NodeViewFeat';
 // import { searchNode } from '../../features/NodeViewFeat/model/Types';
+import { NoDataComponent } from '../../shared/NoDataComponent';
 
 interface Post {
   title: string;
@@ -38,28 +38,21 @@ export function NodeViewPage() {
     relation: [],
     NodeData: [], // Optional이지만 초기값으로 빈 배열 할당
   });
-  const [pageDataProp, setPageDataProp] = useState<boolean>(false);
+  const [pageDataProp, setPageDataProp] = useState<boolean>(false); // nonData 스피너 페이지
 
   // 검색어가 업데이트될 때 호출되는 함수
   const onSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm); // 검색어 상태 업데이트
   };
 
-  // 1번 페이지가 로딩될때 띄워줘야할 이미지
-  // 2번 데이터가 없을경우 띄워줘야할 페이지가 있어요
-
-  // if
-  // if (loading === true) {
-  //   <_Background>
-  //     <Spinner />
-  //   </_Background>;
-  // console.log('트루였니?', loading);
-  // setLoading(false);
-  // if (page === '') {
-  //   <DataSpinnerSh></DataSpinnerSh>;
-  // }
-  // }
   console.log('nodesData>>>>>>>>>>>>>', nodesData);
+  console.log('DataSpinnerSh', pageDataProp);
+
+  // if (nodesData.posts.length === 0 && nodesData.relation.length === 0) {
+  //   return <NoDataComponent />;
+  // }
+
+  const category = '노드';
   return (
     <>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
@@ -71,7 +64,7 @@ export function NodeViewPage() {
         setNodesData={setNodesData}
         setPageDataProp={setPageDataProp}
       />
-
+      {/* 
       {loading ? (
         <_Background>
           <Spinner />
@@ -80,7 +73,15 @@ export function NodeViewPage() {
         ''
       ) : (
         <DataSpinnerSh></DataSpinnerSh>
-      )}
+      )} */}
+
+      {loading ? (
+        <_Background>
+          <Spinner />
+        </_Background>
+      ) : nodesData.posts[0].title === null ? (
+        <NoDataComponent category={category} />
+      ) : null}
     </>
   );
 }

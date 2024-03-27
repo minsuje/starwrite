@@ -22,6 +22,7 @@ import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
+import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
@@ -83,10 +84,10 @@ public class PostService {
   }
 
   // 해당 유저의 스크랩한 글 조회
-  public List<GetPosts> getScrapPosts(int skip, int limit) {
+  public List<GetScrapPosts> getScrapPosts(String nickname ,int skip, int limit) {
     String userId = SecurityUtil.getCurrentUserUserId();
     postRepository.getPostDetail(1L, userId);
-    return postRepository.findScrapPosts(userId, skip, limit);
+    return postRepository.findScrapPosts(nickname, skip, limit);
   }
 
 
@@ -176,7 +177,7 @@ public class PostService {
 
 //    parsePostInBackground(createdPost.getIdentifier(), createdPost.getPost().getContent());
 
-    backgroundTaskService.parsePostBackground(createdPost.getIdentifier(), newPost.getContent());
+    backgroundTaskService.parsePostBackground(createdPost.getIdentifier(), newPost.getTitle(), newPost.getContent());
 
 
     System.out.println("service 리턴함? ");

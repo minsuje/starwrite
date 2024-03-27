@@ -3,8 +3,17 @@
    License: none (public domain)
 */
 
-html,
-body,
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
 div,
 span,
 applet,
@@ -19,7 +28,11 @@ h6,
 p,
 blockquote,
 pre,
-a,
+a {
+  text-decoration-line: none;
+  color: white;
+}
+,
 abbr,
 acronym,
 address,
@@ -97,6 +110,7 @@ html body {
   width: 100%;
   background-color: var(--color-zinc-900);
   color: white;
+  margin: 0;
 }
 
 article,
@@ -133,4 +147,7 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+#root {
+  height: 100%;
 }

@@ -44,7 +44,7 @@ function NewPostFeat() {
   const [saved, setSaved] = useState<string | undefined>();
   const [onValid, setOnValid] = useState<string>('true');
   const [titleList, setTitleList] = useState<Titles[]>([]);
-  const [tmpSaved, setTmpSaved] = useState<boolean>();
+  const [tmpSaved, setTmpSaved] = useState<boolean>(true);
 
   useEffect(() => {
     setRelatedPosts(checkLinking(content));

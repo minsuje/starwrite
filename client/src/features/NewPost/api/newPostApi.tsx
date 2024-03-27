@@ -4,20 +4,24 @@ import { NewPost } from '../model/types';
 // 글 저장 하기
 export const newPostApi = async (data: NewPost) => {
   try {
-    // const myNickname = localStorage.getItem('nickname');
+    const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.post(`/post`, data);
     console.log('newPostApi', response.data);
-    // window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
+    window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
     console.error(`newPostApi Error`, error);
     throw error;
   }
 };
+
+// 글 수정 or 다시 저장
 export const patchPostApi = async (data: NewPost, id: number) => {
   try {
+    const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.patch(`/post/${id}`, data);
     console.log('patchPostApi', response.data);
+    window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
     console.error(`patchPostApi Error`, error);

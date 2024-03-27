@@ -11,7 +11,8 @@ public class BackgroundTaskService {
   private WebClientServiceImpl webClientService;
 
   @Async
-  public void parsePostBackground(Long postId, String content) {
-    webClientService.post(postId, content);
+  public void parsePostBackground(Long postId, String title, String content) {
+    System.out.println("비동기 처리 시작");
+    webClientService.post(postId, title, content);
   }
 }

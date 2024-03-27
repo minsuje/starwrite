@@ -47,8 +47,7 @@ nodes.forEach((node) => {
   node.url = `/user/starwrite/nodeview/${node.userid_num}/${node.category}`;
 });
 
-const nickname = localStorage.getItem('nickname');
-export const fetchDataCategory = async (nickname) => {
+export const fetchDataCategory = async (nickname?: string) => {
   try {
     const response = await baseApi.get(`/category/user?nickname=${nickname}`);
     console.log('fetchDataCategory', response);

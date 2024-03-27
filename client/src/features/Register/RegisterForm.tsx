@@ -10,6 +10,7 @@ import {
   _RegisterBox,
   _ErrorMsg,
   _registerbtn,
+  _SuccessMsg,
 } from '../../shared/CommonStyle';
 import axios from 'axios';
 import { useState } from 'react';
@@ -78,6 +79,7 @@ function RegisterForm() {
   const [nicknameAvailabilityMessage, setNicknameAvailabilityMessage] =
     useState('');
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
 
   // react-hook-form
   const {
@@ -87,7 +89,7 @@ function RegisterForm() {
     formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
     trigger,
     getValues,
-  } = useForm({
+  } = useForm<RegisteringUser>({
     resolver: zodResolver(schema),
     mode: 'onChange', // 입력값이 변경될때마다 실시간으로 유효성 검사 (react hook form)
     defaultValues: {
@@ -118,7 +120,6 @@ function RegisterForm() {
       }
     }
   };
-
   const checkValidEmail = async (mail: string) => {
     setIsEmailInputDisabled(true); // Disable the email input
     setIsSendingEmail(true);
@@ -187,22 +188,27 @@ function RegisterForm() {
 
   const checkNicknameAvailability = async () => {
     const nickname = getValues('nickname');
-    console.log(nickname);
+    if (!nickname?.match(NicNamePattern)) {
+      setNicknameAvailabilityMessage(
+        '닉네임은 한글, 영문, 밑줄(_)만 사용할 수 있습니다.',
+      );
+      return; // 유효성 검사를 통과하지 못한 경우 함수 종료
+    }
+
+    // 서버에 중복 검사 요청
     try {
       const response = await commonApi.post(`/nickCheck?nickname=${nickname}`);
-      console.log(response);
-      if (response.data === 'available') {
-        setNicknameAvailabilityMessage('사용 가능한 닉네임입니다');
-      } else if (response.data === 'unavailable') {
+      if (response.data === 'unavailable') {
         setNicknameAvailabilityMessage('이미 사용중인 닉네임입니다');
+      } else if (response.data === 'available') {
+        // 유효하고 사용 가능한 닉네임인 경우
+        setSuccessMessage('사용 가능한 닉네임입니다.');
       }
-      // ... handle other cases if necessary ...
     } catch (error) {
       console.error('Error checking nickname:', error);
-      // handle errors appropriately
+      // 에러 처리
     }
   };
-
   // 이모지 표시 함수 수정
   const Emoji = (fieldName: keyof RegisteringUser) => {
     if (watch(fieldName) && !errors[fieldName]) {
@@ -215,10 +221,10 @@ function RegisterForm() {
   };
 
   //  유효성 검사 error 확인 함수
-  //   const onInValid = (err: any) => {
-  //     console.log(typeof err);
-  //     console.log('onInValid', err);
-  //   };
+  // const onInValid = (err: any) => {
+  //   console.log(typeof err);
+  //   console.log('onInValid', err);
+  // };
 
   return (
     <>
@@ -227,7 +233,7 @@ function RegisterForm() {
           <InputBox>
             <Label>
               E-MAIL
-              <_emoji>{Emoji('email')}</_emoji>
+              <_emoji>{Emoji('mail')}</_emoji>
             </Label>
             <Input
               disabled={isEmailInputDisabled}
@@ -239,13 +245,13 @@ function RegisterForm() {
               bgcolor="#1361d7"
               type="button"
               disabled={isEmailInputDisabled}
-              onClick={() => checkValidEmail(getValues('mail'))}
+              onClick={() => checkValidEmail(getValues('mail') ?? '')}
             >
               인증 메일 보내기
             </_registerbtn>
             {isSendingEmail && <span>전송중...</span>}
-            {errors.email && typeof errors.email.message === 'string' && (
-              <_ErrorMsg>{errors.email.message}</_ErrorMsg>
+            {errors.mail && typeof errors.mail.message === 'string' && (
+              <_ErrorMsg>{errors.mail.message}</_ErrorMsg>
             )}
           </InputBox>
 
@@ -269,7 +275,12 @@ function RegisterForm() {
             </Label>
             <Input
               {...register('nickname', {
-                onChange: async () => await trigger('nickname'),
+                onChange: async () => {
+                  // 닉네임 값 변경 시 유효성 검사 실행 및 성공 메시지 초기화
+                  await trigger('nickname');
+                  setSuccessMessage(''); // 여기에 성공 메시지 초기화 코드 추가
+                  setNicknameAvailabilityMessage(''); // 중복 메시지도 초기화
+                },
               })}
             ></Input>
             <_registerbtn
@@ -279,17 +290,18 @@ function RegisterForm() {
             >
               중복확인
             </_registerbtn>
-            {/* Display the nickname availability message */}
+            {successMessage && <_SuccessMsg>{successMessage}</_SuccessMsg>}
+            {/* 닉네임 중복/유효성 관련 메시지 */}
             {nicknameAvailabilityMessage && (
-              <div>{nicknameAvailabilityMessage}</div>
+              <_ErrorMsg>{nicknameAvailabilityMessage}</_ErrorMsg>
             )}
           </InputBox>
-
           <InputBox>
             <Label>
               비밀번호<_emoji>{Emoji('password')}</_emoji>
             </Label>
             <Input
+              type="password"
               disabled={!isEmailVerified}
               {...register('password', {
                 onChange: async () => await trigger('password'),
@@ -307,6 +319,7 @@ function RegisterForm() {
               <_emoji>{Emoji('checkPW')}</_emoji>
             </Label>
             <Input
+              type="password"
               disabled={!isEmailVerified}
               {...register('checkPW', {
                 onChange: async () => await trigger('checkPW'),

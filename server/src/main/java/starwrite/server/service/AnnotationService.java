@@ -28,8 +28,7 @@ public class AnnotationService {
   public String createAnnotation(CreateAnnotation annotation) {
     String userId = SecurityUtil.getCurrentUserUserId();
     annotationRepository.createAnnotation(annotation.getAnnotation().getContent(),
-        annotation.getAnnotation().getType(), LocalDateTime.now(), annotation.getPostId(), userId);
-
+        annotation.getAnnotation().getType(), LocalDateTime.now(), annotation.getAnnotation().getPosition(), annotation.getPostId(), userId);
     return "success";
   }
 
@@ -37,7 +36,7 @@ public class AnnotationService {
 
   // 어노테이션 수정
   public String updateAnnotation(UpdateAnnotation annotation) {
-    annotationRepository.updateAnnotation(annotation.getAnnotationId(), annotation.getContent());
+    annotationRepository.updateAnnotation(annotation.getAnnotationId(), annotation.getContent(), annotation.getPosition());
     return "success";
   }
 

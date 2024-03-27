@@ -13,8 +13,6 @@ export const CategorySearchFeat = ({
   const [searchTerm, setSearchTerm] = useState(''); // api 데이터 담을 예정
   const [toggleSearch, setToggleSearch] = useState(false); // li 검색창
   const searchRef = useRef(null);
-;
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
@@ -64,37 +62,44 @@ export const CategorySearchFeat = ({
           }}
           placeholder="노드를 입력해주세요"
         />
-        <SearchIcon></SearchIcon>
+
         {toggleSearch && searchTerm.length != 0 && (
-          <ul
-            style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              overflow: 'auto',
-              height: 'fit-content',
-              maxHeight: '250px',
-              zIndex: 1000,
-              backgroundColor: `rgba(0, 0, 0, 0.8)`,
-            }}
-          >
-            {filterSearch.length > 0 ? (
-              filterSearch.map((item, index) => (
-                <li
-                  key={index}
-                  style={{ padding: '15px', cursor: 'pointer', color: '#ffff' }}
-                  onClick={() => handleItemClick(item.name)}
-                  className="searchItem"
-                >
-                  {item.name}
+          <>
+            <ul
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                overflow: 'auto',
+                height: 'fit-content',
+                maxHeight: '250px',
+                zIndex: 1000,
+                backgroundColor: `rgba(0, 0, 0, 0.8)`,
+              }}
+            >
+              <SearchIcon></SearchIcon>
+              {filterSearch.length > 0 ? (
+                filterSearch.map((item, index) => (
+                  <li
+                    key={index}
+                    style={{
+                      padding: '15px',
+                      cursor: 'pointer',
+                      color: '#ffff',
+                    }}
+                    onClick={() => handleItemClick(item.name)}
+                    className="searchItem"
+                  >
+                    {item.name}
+                  </li>
+                ))
+              ) : (
+                <li style={{ padding: '15px', color: '#ffff' }}>
+                  검색 결과가 없습니다.
                 </li>
-              ))
-            ) : (
-              <li style={{ padding: '15px', color: '#ffff' }}>
-                검색 결과가 없습니다.
-              </li>
-            )}
-          </ul>
+              )}
+            </ul>
+          </>
         )}
       </div>
     </div>

@@ -16,11 +16,10 @@ import { useEffect, useState } from 'react';
 import { baseApi } from '../../shared/api/BaseApi';
 
 interface RegisteringUser {
-  email?: string;
-  nickname?: string;
-  qurrentPassword?: string;
-  newPassword?: string;
-  checkPassword?: string;
+  nickname: string;
+  qurrentPassword: string;
+  newPassword: string;
+  checkPassword: string;
 }
 
 const _emaliinput = styled.input`
@@ -46,6 +45,20 @@ const _InputFileButton = styled.label`
   position: absolute;
   right: 110px;
   // label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
+`;
+const _MypageBtn = styled.button`
+  min-width: 10%;
+  height: 22px;
+  color: white;
+  text-align: center;
+  border: none;
+  background-color: #1361d7;
+  &:hover {
+    background-color: #0353cb;
+  }
+  &:disabled {
+    background-color: gray;
+  }
 `;
 
 // 닉네임 유효성 검사
@@ -98,12 +111,13 @@ const schema = z
     message: '현재 비밀번호와 새 비밀번호는 같을 수 없습니다.',
   });
 
+type Schema = z.infer<typeof schema>;
 export function MyPgaeFeat() {
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [nickname] = useState('');
   const [nicknameAvailabilityMessage, setNicknameAvailabilityMessage] =
     useState('');
-  const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [, setNicknameChecked] = useState(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [isNicknameTouched, setIsNicknameTouched] = useState(false);
 
@@ -114,7 +128,7 @@ export function MyPgaeFeat() {
     reset,
     formState: { errors },
     trigger,
-  } = useForm({
+  } = useForm<Schema>({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: {
@@ -139,9 +153,17 @@ export function MyPgaeFeat() {
     fetchData();
   }, [reset]);
 
+  // let errorMessage = '';
+  // if (errors.nickname && isNicknameTouched) {
+  //   errorMessage = errors.nickname.message;
+  // } else if (isNicknameTouched && !isNicknameChecked) {
+  //   errorMessage = '중복 검사를 해주세요';
+  // } else if (nicknameAvailabilityMessage) {
+  //   errorMessage = nicknameAvailabilityMessage;
+  // }
   let errorMessage = '';
   if (errors.nickname && isNicknameTouched) {
-    errorMessage = errors.nickname.message;
+    errorMessage = errors.nickname?.message ?? '';
   } else if (isNicknameTouched && !isNicknameChecked) {
     errorMessage = '중복 검사를 해주세요';
   } else if (nicknameAvailabilityMessage) {
@@ -178,15 +200,15 @@ export function MyPgaeFeat() {
     }
   };
 
-  const getErrorMessage = () => {
-    if (errors.nickname && typeof errors.nickname.message === 'string') {
-      return errors.nickname.message;
-    }
-    if (!nicknameChecked && watch('nickname')) {
-      return '중복 검사를 해주세요';
-    }
-    return nicknameAvailabilityMessage;
-  };
+  // const getErrorMessage = () => {
+  //   if (errors.nickname && typeof errors.nickname.message === 'string') {
+  //     return errors.nickname.message;
+  //   }
+  //   if (!nicknameChecked && watch('nickname')) {
+  //     return '중복 검사를 해주세요';
+  //   }
+  //   return nicknameAvailabilityMessage;
+  // };
 
   const handleNicknameCheck = async () => {
     const currentNickname = watch('nickname');
@@ -210,7 +232,7 @@ export function MyPgaeFeat() {
   };
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((_, { name, type }) => {
       if (name === 'nickname' && type === 'change') {
         setNicknameChecked(false);
         setNicknameAvailabilityMessage('');
@@ -283,14 +305,13 @@ export function MyPgaeFeat() {
             })}
           ></Input>
           <InputBox>
-            <_registerbtn
+            <_MypageBtn
               type="button"
-              bgcolor="#1361d7"
               onClick={handleNicknameCheck}
               disabled={isNicknameInvalid} // Disable button if nickname is invalid
             >
               중복확인
-            </_registerbtn>
+            </_MypageBtn>
           </InputBox>
           {errorMessage && <_ErrorMsg>{errorMessage}</_ErrorMsg>}
         </InputBox>

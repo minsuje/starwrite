@@ -19,16 +19,15 @@ export const links: Link[] = [
 
 //52.79.228.200
 
-export const fetchData = async (category: string | unknown) => {
+export const fetchData = async (category: string | undefined) => {
   try {
     const response = await baseApi.get(
       `/category/getCategoryPostNode?categoryId=${category}`,
     );
     console.log('response', response);
     return response.data;
-
-    // API 응답으로 받은 데이터를 상태에 저장
   } catch (error) {
     console.error('API Error', error);
+    throw new Error('Failed to fetch data');
   }
 };

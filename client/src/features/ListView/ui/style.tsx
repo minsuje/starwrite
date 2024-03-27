@@ -123,4 +123,20 @@ export const _Title = styled.h1`
     width: fit-content;
   }
 `;
+
+// 댓글 생성
+// 댓글 입력창
+
+export const _NewCommentBox = styled.div`
+  width: 100%;
+  border: 1px solid var(--color-zinc-100);
+  padding: 10px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  input {
+    width: 60%;
+  }
+`;
+
 export { _headBox, _buttonBox, _CategoryNameInput };

@@ -3,7 +3,7 @@ import { CategorySearchFeat } from '../../features/CategorySearchFeat/index';
 import { useState } from 'react';
 import { _Background } from '../../shared/CommonStyle';
 import { Spinner } from '../../shared/spinner';
-import { DataSpinnerSh } from '../../shared/DataSpinner';
+import { NoDataComponent } from '../../shared/NoDataComponent';
 interface CategoryDataItem {
   name: string;
 }
@@ -16,8 +16,8 @@ export interface CategoryViewProps {
 export function CategoryViewPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [categoryData, setCategoryData] = useState([]);
-  const [categoryDataNone, setCategoryDataNone] = useState<boolean>(false);
+  const [categoryData, setCategoryData] = useState<CategoryDataItem[]>([]);
+  // const [categoryDataNone, setCategoryDataNone] = useState<boolean>(false);
 
   // 검색어가 업데이트될 때 호출되는 함수
   const onSearch = (newSearchTerm: string) => {
@@ -25,8 +25,9 @@ export function CategoryViewPage() {
   };
 
   // console.log('categoryData??', categoryDataNone);
-  console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
+  // console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
 
+  const category = '카테고리';
   return (
     <>
       <CategorySearchFeat onSearch={onSearch} categoryData={categoryData} />
@@ -41,11 +42,9 @@ export function CategoryViewPage() {
         <_Background>
           <Spinner></Spinner>
         </_Background>
-      ) : categoryData? (
-        ''
-      ) : (
-        <DataSpinnerSh></DataSpinnerSh>
-      )}
+      ) : categoryData.length === 0 ? (
+        <NoDataComponent category={category} />
+      ) : null}
     </>
   );
 }

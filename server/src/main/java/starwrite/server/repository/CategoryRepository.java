@@ -26,14 +26,11 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   List<UserCategories> getUserCategory(@Param(value = "nickname") String nickname);
 
 
-
   // 카테고리 수정
   @Query("MATCH (c:Category) WHERE c.categoryId = $categoryId " +
       "SET c.name = $name ")
   void updateCategory(@Param(value = "categoryId") String categoryId,
       @Param(value = "name") String name);
-
-
 
 
   // 카테고리 삭제
@@ -44,8 +41,6 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
   int deleteCategory(@Param(value = "categoryId") String categoryId);
 
 
-
-
   // 카테고리에 해당하는 모든 글 찾아오기
   // 스크랩 관계, 누가 썼는지에 대한 정보도 있어야함
   @Query("MATCH (c:Category) " +
@@ -53,16 +48,14 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
       "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
       "WHERE p.tmpSave = false OR p IS NULL " +
       "OPTIONAL MATCH (p)-[:POSTED|HOLDS]->(u:Users) " +
-      "OPTIONAL MATCH (p)-[:AUTHOR]->(author:Users) " +
+      "OPTIONAL MATCH (p)-[:AUTHOR]-(author:Users) " +
       "WITH c, p, author " +
       "ORDER BY p.createdAt DESC " +
-      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, content: substring(p.parsedContent, 0, 100), " +
+      "RETURN c.name AS categoryName, collect({postId: ID(p), title: p.title, visible: p.visible, content: substring(p.parsedContent, 0, 100), "
+      +
       "recentView: p.recentView, createdAt: p.createdAt, updatedAt: p.updatedAt, " +
       "userId: author.userId, nickname: author.nickname}) AS categoryPosts")
   CategoryPostResponse getCategoryPosts(@Param(value = "categoryId") String categoryId);
-
-
-
 
   // 카테고리 모든 글 가져오기. 무한 스크롤 추가
 //  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
@@ -77,10 +70,6 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 //      @Param(value = "skip") int skip,
 //      @Param(value = "limit") int limit);
 
-
-
-
-
   // 카테고리 안의 모든 글 제목과 관계 보내기
 //  @Query("MATCH (c:Category)-[]-(p:Post) " +
 //      "WHERE c.categoryId = $categoryId " +
@@ -90,15 +79,18 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 //      "RETURN posts, COLLECT(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) AS relation ")
 //  GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
 
+
+  // 특정 유저의 카테고리 노드뷰 조회
   @Query("MATCH (c:Category {categoryId: $categoryId}) " +
       "WITH c " +
       "OPTIONAL MATCH (c)-[:IS_CHILD]->(p:Post) " +
-      "WITH p " +
+      "WITH c, p " +
       "OPTIONAL MATCH (p)-[r:RELATED]->(related:Post) " +
-      "RETURN collect(DISTINCT{title: p.title, postId: ID(p), recentView: p.recentView}) as posts, " +
-      "       collect(DISTINCT{postId: r.postId, relatedPostId: r.relatedPostId}) as relation ")
+      "WITH c, p, r " +
+      "OPTIONAL MATCH (u:User)-[h:HOLDS]->(p) " +
+      "RETURN collect(DISTINCT {title: p.title, postId: ID(p), recentView: p.recentView, categoryName: c.name, categoryId: c.categoryId, scrap: EXISTS((p)<-[:AUTHOR]-()) }) as posts, " +
+      "       collect(DISTINCT {postId: r.postId, relatedPostId: r.relatedPostId}) as relation")
   GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
-
 
 //  @Query("MATCH (c:Category)-[:IS_CHILD]->(p:Post) " +
 //      "WHERE c.categoryId = $categoryId " +
@@ -117,14 +109,6 @@ public interface CategoryRepository extends Neo4jRepository<Category, String> {
 //      "WHERE ID(p) IN [post IN posts | post.postId] " +
 //      "RETURN posts, collect(DISTINCT {postId: ID(p), relatedPostId: ID(p2)}) AS relation")
 //  GetCategoryPosts getCategoryPostsNode(@Param(value = "categoryId") String categoryId);
-
-
-
-
-
-
-
-
 
   //  @Query("MATCH (n:posts{category: $categoryId})<-[r:POSTED]-(post:category) RETURN post")
 //  List<Post> findPostsByCategory(String categoryId);

@@ -8,6 +8,7 @@ public class CategoryPosts {
   private Long postId;
   private String title;
   private String content;
+  private String visible;
   private LocalDateTime recentView;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;

@@ -24,13 +24,13 @@ public class PythonApi {
         this.webClient = webClient;
     }
 
-    public Flux<String> parsePost(Long postId, String content) {
+    public Flux<String> parsePost(Long postId, String title, String content) {
 
         System.out.println("pythonApi >>> " + postId + " " + content);
 
         return webClient.post()
             .uri("/post")
-            .bodyValue(Map.of("starPostId", postId, "content", content))
+            .bodyValue(Map.of("starPostId", postId, "title", title, "content", content))
             .retrieve()
             .bodyToFlux(String.class);
     }

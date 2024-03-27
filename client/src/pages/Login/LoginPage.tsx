@@ -1,21 +1,12 @@
-import styled from 'styled-components';
 import LoginForm from '../../features/Login/LoginFeat';
-
-const PageLayout = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-`;
+import { _PageLayout } from '../../shared/CommonStyle';
 
 function LoginPage() {
   return (
     <>
-      <PageLayout>
+      <_PageLayout>
         <LoginForm />
-      </PageLayout>
+      </_PageLayout>
     </>
   );
 }

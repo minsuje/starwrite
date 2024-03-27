@@ -9,12 +9,12 @@ import {
   _emoji,
 } from '../../shared/CommonStyle';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useNavigate } from 'react-router';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 // import jwtDecode from 'jwt-decode';
 import { useEffect } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
+import { Link } from 'react-router-dom';
 
 // 타입 지정
 interface LoginInput {
@@ -27,7 +27,6 @@ const RegisterBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  transform: translateY(50%);
 `;
 
 const ErrorMsg = styled.p`
@@ -46,7 +45,7 @@ const schema = z.object({
 // RegisterForm
 function LoginForm() {
   const navigate = useNavigate();
-  const myNickname = localStorage.getItem('nickname');
+
   const {
     register, // input 할당, value 변경 감지
     handleSubmit, // form submit 이벤트 시 호출
@@ -56,8 +55,8 @@ function LoginForm() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'gogil@navdfe.com',
-      password: '1234',
+      email: 'test005@cc.cc',
+      password: '1q2w3e4r!',
     },
   });
 
@@ -70,6 +69,7 @@ function LoginForm() {
         mail: data.email,
         password: data.password,
       });
+
       localStorage.setItem('accessToken', response.data.accessToken);
 
       const cookie = await commonApi.get(`/cookie`, {
@@ -120,7 +120,7 @@ function LoginForm() {
     // 이 부분은 Google 로그인 후 리다이렉션된 URL에 'code' 파라미터가 있는 경우에만 실행됩니다.
   }, []);
 
-  const sendCodeToBackend = async (code) => {
+  const sendCodeToBackend = async (code: string) => {
     console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
@@ -154,7 +154,6 @@ function LoginForm() {
 
   //     const response = await axios.post(
   //       'http://localhost:8080/login/api/v1/oauth2/google',
-
 
   //     const response = await commonApi.post(
   //       '/login/api/v1/oauth2/google',
@@ -211,53 +210,49 @@ function LoginForm() {
   // };
 
   return (
-    <>
+    <RegisterBox>
       <form onSubmit={handleSubmit(onValid)}>
-        <RegisterBox>
-          <InputBox>
-            <Label>E-MAIL</Label>
-            <Input
-              {...register('email', {
-                onChange: async () => await trigger('email'),
-              })}
-            ></Input>
-            <_emoji>{Emoji('email')}</_emoji>
-            {errors.email && typeof errors.email.message === 'string' && (
-              <ErrorMsg>{errors.email.message}</ErrorMsg>
-            )}
-          </InputBox>
+        <InputBox>
+          <Label>
+            E-MAIL<_emoji>{Emoji('email')}</_emoji>
+          </Label>
 
-          <InputBox>
-            <Label>비밀번호</Label>
+          <Input
+            {...register('email', {
+              onChange: async () => await trigger('email'),
+            })}
+          ></Input>
 
-            <Input
-              type="password"
-              {...register('password', {
-                onChange: async () => await trigger('password'),
-              })}
-            ></Input>
-            <_emoji>{Emoji('password')}</_emoji>
-            {errors.password && typeof errors.password.message === 'string' && (
-              <ErrorMsg>{errors.password.message}</ErrorMsg>
-            )}
-          </InputBox>
+          {errors.email && typeof errors.email.message === 'string' && (
+            <ErrorMsg>{errors.email.message}</ErrorMsg>
+          )}
+        </InputBox>
 
-          <LargeButton type="submit">로그인</LargeButton>
-          {/* <LargeButton onClick={handleTempLogin}>임시 로그인</LargeButton> */}
-        </RegisterBox>
-        {/* <GoogleOAuthProvider clientId="547835898042-k7ltqkia6kdspu0fjenn79jaenbrj6nj.apps.googleusercontent.com">
-          <GoogleLogin
-            // /login/oauth/google/post
-            onSuccess={handleSuccess}
-            onError={() => {
-              console.log('Login Failed');
-            }}
-          />
-        </GoogleOAuthProvider> */}
+        <InputBox>
+          <Label>
+            비밀번호<_emoji>{Emoji('email')}</_emoji>
+          </Label>
+
+          <Input
+            type="password"
+            {...register('password', {
+              onChange: async () => await trigger('password'),
+            })}
+          ></Input>
+
+          {errors.password && typeof errors.password.message === 'string' && (
+            <ErrorMsg>{errors.password.message}</ErrorMsg>
+          )}
+        </InputBox>
+
+        <LargeButton type="submit" style={{ marginTop: '50px' }}>
+          로그인
+        </LargeButton>
       </form>
-      {/* <LargeButton onClick={handleGoogleLogin}>구글 로그인</LargeButton> */}
-      {/* <LargeButton onClick={extractCodeFromUrl}>테스트 </LargeButton> */}
-    </>
+      <Link to={`/register`}>
+        <LargeButton>회원가입</LargeButton>
+      </Link>
+    </RegisterBox>
   );
 }
 export default LoginForm;

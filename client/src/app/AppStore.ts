@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { categoriesReducer } from '../features/ListView/model/CategoriesSlice';
 import { categoryReducer } from '../features/ListView/model/CategorySlice';
 import { stateReducer } from '../features/ListView/model/StateSlice';
+import { commentStateReducer } from '../features/ListView/model/CommentSlice';
 
 const store = configureStore({
   reducer: {
@@ -9,6 +10,7 @@ const store = configureStore({
     categories: categoriesReducer,
     category: categoryReducer,
     state: stateReducer,
+    commentState: commentStateReducer,
   },
 });
 
