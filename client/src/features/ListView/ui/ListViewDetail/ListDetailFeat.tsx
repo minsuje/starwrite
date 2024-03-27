@@ -10,8 +10,10 @@ import { _Title } from '../style';
 import { redTheme } from '../../../NewPost/ui/style';
 import CommentList from '../Comment/CommentList';
 import SelectCategory from '../../lib/SelectCategory';
-
 import { Annotation, PostDetail } from '../../../../shared/model/types';
+import { getTitleApi } from '../../../NewPost/api/newPostApi';
+import { useAppSelector } from '../../../../shared/model';
+import { commentState } from '../../model/CommentSlice';
 
 export default function ListDetailFeat() {
   const { postId } = useParams();
@@ -27,10 +29,23 @@ export default function ListDetailFeat() {
   const [scrap, setScrap] = useState<boolean>(false);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
 
+  const reset = useAppSelector(commentState);
+
   function editPost(postid: number) {
     navigate(`/user/starwrite/writenewpost/${postid}`);
   }
   function openScrap() {
+    const promise = getTitleApi();
+    promise.then((titles) => {
+      console.log('titles', titles);
+      for (let i = 0; i < titles.length; i++) {
+        if (titles[i].title === title) {
+          alert('같은 제목의 글이 있습니다.');
+          return;
+        }
+      }
+    });
+
     setScrap(true);
   }
   async function deletePost(postid: number) {
@@ -49,6 +64,7 @@ export default function ListDetailFeat() {
 
   //글 상세 정보 불러오기
   useEffect(() => {
+    console.log('reset', reset);
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
@@ -63,7 +79,7 @@ export default function ListDetailFeat() {
       }
       setAnnotations(postDetail.annotations);
     });
-  }, [postId, myNickname]);
+  }, [postId, myNickname, reset]);
 
   // 에디터 생성
   const editor = useMemo(() => {
@@ -106,12 +122,11 @@ export default function ListDetailFeat() {
           </>
         )}
 
-        {isMine === 'true' ||
-          (isMine === 'scrap' && (
-            <>
-              <button onClick={() => deletePost(Number(postId))}>삭제</button>
-            </>
-          ))}
+        {isMine !== 'false' && (
+          <>
+            <button onClick={() => deletePost(Number(postId))}>삭제</button>
+          </>
+        )}
       </_Title>
       {scrap && (
         <SelectCategory
