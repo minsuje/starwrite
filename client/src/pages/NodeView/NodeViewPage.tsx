@@ -54,7 +54,7 @@ export function NodeViewPage() {
 
   const category = '노드';
   return (
-    <>
+    <div style={{ marginTop: '50px' }}>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
       {/* <NodeData></NodeData> */}
 
@@ -82,6 +82,6 @@ export function NodeViewPage() {
       ) : nodesData.posts[0].title === null ? (
         <NoDataComponent category={category} />
       ) : null}
-    </>
+    </div>
   );
 }
