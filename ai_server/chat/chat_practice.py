@@ -54,7 +54,7 @@ def neo4j_vector_search(question):
             endpoint: $openAiEndpoint
         }) AS question_embedding
         CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node,    score
-        RETURN score, node.text AS text
+        RETURN score, node.text AS text, node.chunkId AS chunckId
     """
     similar = kg.query(
         vector_search_query,
@@ -71,9 +71,10 @@ def neo4j_vector_search(question):
 
 search_results = neo4j_vector_search("웹툰에 대해서 알려줘")
 
-print("search_results > ", search_results)
+print("search_results > ", search_results[0])
 
 kg.refresh_schema()
+
 
 # print("kg.schema >>>>> ", kg.schema)
 
@@ -98,6 +99,12 @@ neo4j_vector_store = Neo4jVector.from_existing_index(
     retrieval_query=retrieval_query_window,
 )
 retriever = neo4j_vector_store.as_retriever()
+
+print("neo4j_vector_store node_label > ", neo4j_vector_store.node_label)
+print(
+    "neo4j_vector_store embedding_node_property > ",
+    neo4j_vector_store.embedding_node_property,
+)
 
 
 chain = RetrievalQAWithSourcesChain.from_chain_type(

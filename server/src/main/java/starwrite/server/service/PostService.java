@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -22,7 +20,6 @@ import starwrite.server.request.ScrapPost;
 import starwrite.server.response.BackLink;
 import starwrite.server.response.CreatePost;
 import starwrite.server.response.CreatedPost;
-import starwrite.server.response.GetPost;
 import starwrite.server.response.GetPosts;
 import starwrite.server.response.GetSavePost;
 import starwrite.server.response.GetScrapPosts;
@@ -30,7 +27,6 @@ import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
 import starwrite.server.utils.PythonApi;
-import starwrite.server.utils.WebClientServiceImpl;
 
 @EnableAsync
 @Service
@@ -173,7 +169,7 @@ public class PostService {
 
 //    parsePostInBackground(createdPost.getIdentifier(), createdPost.getPost().getContent());
 
-    backgroundTaskService.parsePostBackground(createdPost.getIdentifier(), newPost.getContent());
+    backgroundTaskService.parsePostBackground(createdPost.getIdentifier(), newPost.getTitle(), newPost.getContent());
 
 
     System.out.println("service 리턴함? ");

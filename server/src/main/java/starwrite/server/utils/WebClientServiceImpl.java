@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 @Slf4j
 public class WebClientServiceImpl {
-  public void post(Long postId, String content) {
+  public void post(Long postId, String title, String content) {
 //    Map<String, Object> bodyMap = new HashMap<>();
 //    bodyMap.put("starPostId", postId);
 //    bodyMap.put("content", content);
@@ -39,7 +39,7 @@ public class WebClientServiceImpl {
     webClient
         .post()
         .uri("user/post")
-        .bodyValue(Map.of("starPostId", postId, "content", content))
+        .bodyValue(Map.of("starPostId", postId, "title", title, "content", content))
         .retrieve()
         .bodyToMono(Map.class)
         .subscribe(response -> log.info(response.toString()));
