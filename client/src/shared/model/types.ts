@@ -21,6 +21,7 @@ export interface Posts {
   originAuthor?: string;
   originAuthorId?: string;
   scrap?: boolean;
+  nickname?: string;
 }
 
 export interface Annotation {

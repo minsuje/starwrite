@@ -3,7 +3,18 @@ import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { getCategoriesApi } from '../api/CategoryApi';
 import { Category } from '../../../shared/model';
 import { scrapPostApi } from '../api/PostApi';
+import { _ButtonBox, _Button } from '../ui/style';
+import styled from 'styled-components';
 
+const _ScrapBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  p {
+    font-size: 20px;
+  }
+`;
 function SelectCategory({
   close,
   postId,
@@ -41,22 +52,34 @@ function SelectCategory({
     <>
       <_ModalBg>
         <_Modal>
-          <p>안녕</p>
-          <select
-            onChange={(value) => {
-              setCategory(value.currentTarget.value);
-            }}
-          >
-            {myCategories.map((category) => {
-              return (
-                <option key={category.categoryId} value={category.categoryId}>
-                  {category.name}
-                </option>
-              );
-            })}
-          </select>
-          <button onClick={scrap}>스크랩</button>
-          <button onClick={close}>닫기</button>
+          <_ScrapBox>
+            <p>스크랩</p>
+            <div>
+              <span>카테고리 </span>
+              <select
+                onChange={(value) => {
+                  setCategory(value.currentTarget.value);
+                }}
+              >
+                {myCategories.map((category) => {
+                  return (
+                    <option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <_ButtonBox>
+              <_Button onClick={scrap}>스크랩</_Button>
+              <_Button color="#ffffff1d" onClick={close}>
+                닫기
+              </_Button>
+            </_ButtonBox>
+          </_ScrapBox>
         </_Modal>
       </_ModalBg>
     </>

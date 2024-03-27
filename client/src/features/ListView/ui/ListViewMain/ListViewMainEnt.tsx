@@ -82,7 +82,11 @@ function ListViewMainEnt() {
                       style={{ textDecoration: 'none' }}
                     >
                       <_postBox>
-                        <h1>{post.title}</h1>
+                        <h1>
+                          {post.title}
+                          {post.nickname !== nickname &&
+                            post.nickname !== null && <Badge>스크랩</Badge>}
+                        </h1>
                         <p>{post.content}</p>
                       </_postBox>
                     </Link>
