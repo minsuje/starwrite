@@ -29,7 +29,7 @@ export function CategoryViewPage() {
 
   const category = '카테고리';
   return (
-    <>
+    <div style={{ marginTop: '50px' }}>
       <CategorySearchFeat onSearch={onSearch} categoryData={categoryData} />
       <CategoryViewWid
         searchTerm={searchTerm}
@@ -45,6 +45,6 @@ export function CategoryViewPage() {
       ) : categoryData.length === 0 ? (
         <NoDataComponent category={category} />
       ) : null}
-    </>
+    </div>
   );
 }

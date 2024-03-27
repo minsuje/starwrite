@@ -13,7 +13,7 @@ const _StyledHeaderContainer = styled.div`
   align-items: center;
   /* background-color: #f8f8f8; */
   padding: 10px 50px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   border-bottom: 2px solid #a29e9e;
 `;
 
