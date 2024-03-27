@@ -53,7 +53,7 @@ export function HeaderWid() {
   const myNickname = localStorage.getItem('nickname');
 
   function handleNodeViewPage() {
-    if (category === 'all') {
+    if (category === 'all' || category === 'scrab') {
       navigate(`/user/starwrite/categoryview/${nickname}`);
     } else if (category && nickname) {
       navigate(`/user/starwrite/nodeview/${nickname}/${category}`);
