@@ -23,11 +23,15 @@ export const newCategoryApi = async (name: string) => {
     throw error;
   }
 };
+interface PatchName {
+  name: string | undefined;
+  categoryId: string | undefined;
+}
 
 // 카테고리 이름 수정 axios
-export const patchCategoryApi = async (id: string) => {
+export const patchCategoryApi = async (data: PatchName) => {
   try {
-    const response = await baseApi.put('/category', id);
+    const response = await baseApi.patch('/category', data);
     console.log('patchCategoryApi', response.data);
     return response.data;
   } catch (error) {
