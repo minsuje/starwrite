@@ -1,6 +1,7 @@
 package starwrite.server.utils;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,8 @@ public class WebClientServiceImpl {
     }
 
 
-    public void postChatAi(String userId, String question) {
+    public CompletableFuture<Map<String, Object>> postChatAi(String userId, String question) {
+        System.out.println("webservice postChatAI userId > " + userId + " / question > " + question);
 
         ExchangeStrategies strategies = ExchangeStrategies.builder()
             .codecs(clientCodecConfigurer -> {
@@ -61,6 +63,8 @@ public class WebClientServiceImpl {
                 .exchangeStrategies(strategies)
                 .build();
 
+        CompletableFuture<Map<String, Object>> future = new CompletableFuture<>();
+
         // api 요청
         webClient
             .post()
@@ -68,6 +72,10 @@ public class WebClientServiceImpl {
             .bodyValue(Map.of("userId", userId, "question", question))
             .retrieve()
             .bodyToMono(Map.class)
-            .subscribe(response -> log.info(response.toString()));
+            .subscribe(response -> {
+                future.complete(response);
+            });
+                //log.info(response.toString()));
+        return future;
     }
 }

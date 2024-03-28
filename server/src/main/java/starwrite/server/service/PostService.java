@@ -26,7 +26,7 @@ import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
-import starwrite.server.utils.PythonApi;
+//import starwrite.server.utils.PythonApi;
 import starwrite.server.utils.WebClientRecommendGet;
 import starwrite.server.utils.WebClientServiceImpl;
 
@@ -44,8 +44,8 @@ public class PostService {
   @Autowired
   VectorStore vectorStore;
 
-  @Autowired
-  PythonApi pythonApi;
+//  @Autowired
+//  PythonApi pythonApi;
 
 
   @Autowired
