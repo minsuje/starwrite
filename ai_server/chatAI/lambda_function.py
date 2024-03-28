@@ -45,6 +45,10 @@ from langchain.prompts import (
 def lambda_handler(event, context):
 
     user_question = event.get("question")
+    userId = event.get("userId")
+
+    print("user_question > ", user_question)
+    print("userId > ", userId)
 
     load_dotenv(".env", override=True)
 
@@ -67,32 +71,83 @@ def lambda_handler(event, context):
         database=NEO4J_DATABASE,
     )
 
-    def neo4j_vector_search(question):
-        """Search for similar nodes using the Neo4j vector index"""
+    # def neo4j_vector_search(question):
+    #     """Search for similar nodes using the Neo4j vector index"""
+    #     vector_search_query = """
+    #         WITH genai.vector.encode(
+    #         $question,
+    #         "OpenAI",
+    #         {
+    #             token: $openAiApiKey,
+    #             endpoint: $openAiEndpoint
+    #         }) AS question_embedding
+    #         CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node,    score
+    #         RETURN score, node.text AS text
+    #     """
+    #     similar = kg.query(
+    #         vector_search_query,
+    #         params={
+    #             "question": question,
+    #             "openAiApiKey": OPENAI_API_KEY,
+    #             "openAiEndpoint": OPENAI_BASE_URL,
+    #             "index_name": VECTOR_INDEX_NAME,
+    #             "top_k": 3,
+    #         },
+    #     )
+    #     return similar
+
+    def neo4j_vector_search(userId, question):
+        """Search for similar nodes connected to a specific user using the Neo4j vector index"""
+
+        # vector_search_query = """
+        #     MATCH (u:Users {userId: $userId})-[:POSTED]->()->[:EMBED]-(c:Chunks)
+        #     WITH genai.vector.encode(
+        #     $question,
+        #     "OpenAI",
+        #     {
+        #         token: $openAiApiKey,
+        #         endpoint: $openAiEndpoint
+        #     }) AS question_embedding, c
+        #     CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node, score
+        #     WHERE node = c
+        #     RETURN score, node.text AS text
+        # """
+
         vector_search_query = """
+            MATCH (u:Users {userId: $userId})-[:POSTED]->()-[:EMBED]-(c:Chunks)
             WITH genai.vector.encode(
             $question,
             "OpenAI",
             {
                 token: $openAiApiKey,
                 endpoint: $openAiEndpoint
-            }) AS question_embedding
-            CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node,    score
-            RETURN score, node.text AS text
+            }) AS question_embedding, c
+            CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) YIELD node, score
+            WHERE node = c
+            RETURN score, c.text AS text
         """
+
+        print(
+            "neo4j_vector_search userId > ",
+            userId,
+            " / user_question > ",
+            question,
+        )
+
         similar = kg.query(
             vector_search_query,
             params={
                 "question": question,
+                "userId": userId,
                 "openAiApiKey": OPENAI_API_KEY,
                 "openAiEndpoint": OPENAI_BASE_URL,
                 "index_name": VECTOR_INDEX_NAME,
-                "top_k": 1,
+                "top_k": 3,
             },
         )
         return similar
 
-    search_results = neo4j_vector_search(user_question)
+    search_results = neo4j_vector_search(userId, user_question)
 
     print("search_results > ", search_results)
 
