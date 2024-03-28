@@ -7,14 +7,16 @@ import {
   postListScrapApi,
 } from '../../api/PostApi';
 import { _listBox, _postBox } from '../style';
-import { Posts } from '../../../../shared/model';
+import { Posts, useAppSelector } from '../../../../shared/model';
 import Badge from '../../../../shared/Badge';
+import { resetState } from '../../model/StateSlice';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
   // 글 리스트
   const [postsList, setPostsList] = useState<Posts[]>([]);
   const [categoryName, setCategoryName] = useState<string>();
+  const reset = useAppSelector(resetState);
 
   useEffect(() => {
     if (category == 'all') {
@@ -65,7 +67,7 @@ function ListViewMainEnt() {
         }
       });
     }
-  }, [category, nickname]);
+  }, [category, nickname, reset]);
 
   if (postsList[0]) {
     if (postsList[0].title) {

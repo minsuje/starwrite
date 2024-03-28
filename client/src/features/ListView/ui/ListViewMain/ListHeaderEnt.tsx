@@ -7,6 +7,7 @@ import { deleteCategoryApi } from '../../api/CategoryApi';
 import { useAppDispatch, useAppSelector } from '../../../../shared/model';
 import { categoryActions, currentCategory } from '../../model/CategorySlice';
 import { resetState, stateActions } from '../../model/StateSlice';
+import { EditActions } from '../../model/EditSlice';
 
 function ListHeaderEnt({
   category,
@@ -40,8 +41,9 @@ function ListHeaderEnt({
   useEffect(() => {
     if (category) {
       dispatch(categoryActions.change(category));
+      dispatch(categoryActions.name(categoryName));
     }
-  }, [category, dispatch, selected]);
+  }, [category, dispatch, selected, categoryName]);
 
   return (
     <>
@@ -54,7 +56,11 @@ function ListHeaderEnt({
             <_buttonBox>
               {category != 'all' && category != 'scrab' && (
                 <>
-                  <button>
+                  <button
+                    onClick={() => {
+                      dispatch(EditActions.change(true));
+                    }}
+                  >
                     <LuPencilLine />
                   </button>
                   <button onClick={deleteCategory}>

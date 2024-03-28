@@ -1,4 +1,8 @@
-import { AddCategory, ListCategory } from '../../features/ListView';
+import {
+  AddCategory,
+  EditCategory,
+  ListCategory,
+} from '../../features/ListView';
 import { Outlet, useParams } from 'react-router';
 import {
   _AddCategoryButton,
@@ -7,6 +11,11 @@ import {
   _ListViewBox,
 } from './ListViewWidStyle';
 import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../shared/model';
+import {
+  EditActions,
+  EditState,
+} from '../../features/ListView/model/EditSlice';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
@@ -14,6 +23,9 @@ function ListViewWid() {
   const [myNickname, setMyNickname] = useState<string | null>();
   const [isMine, setIsMine] = useState<boolean>();
   const { category, nickname } = useParams();
+
+  const EditOpen = useAppSelector(EditState);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setMyNickname(localStorage.getItem('nickname'));
@@ -47,6 +59,14 @@ function ListViewWid() {
               setCategoryModal(false);
             }}
           ></AddCategory>
+        )}
+        {EditOpen && (
+          <EditCategory
+            category={category}
+            onclick={() => {
+              dispatch(EditActions.change(false));
+            }}
+          ></EditCategory>
         )}
       </_CategoryBar>
 

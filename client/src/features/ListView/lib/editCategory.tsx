@@ -3,18 +3,24 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { _ModalBg, _Modal } from '../../../shared/Modal/ModalStyle';
 import { z } from 'zod';
-import { newCategoryApi } from '../api/CategoryApi';
-import { Category, useAppSelector } from '../../../shared/model';
+import { patchCategoryApi } from '../api/CategoryApi';
+import {
+  Category,
+  useAppDispatch,
+  useAppSelector,
+} from '../../../shared/model';
 import { collectCategories } from '../model/CategoriesSlice';
+import { currentName } from '../model/CategorySlice';
+import { resetState, stateActions } from '../model/StateSlice';
 
 type closeModal = () => void;
 
-function AddCategory({
+function EditCategory({
   onclick,
-  setUpdateCategory,
+  category,
 }: {
   onclick: closeModal;
-  setUpdateCategory: closeModal;
+  category: string | undefined;
 }) {
   // 유효성 검사 schema
   const schema = z
@@ -35,7 +41,10 @@ function AddCategory({
       },
     );
   // store에서 가져온 카테고리 리스트
+  const dispatch = useAppDispatch();
   const categories = useAppSelector(collectCategories);
+  const categoryName = useAppSelector(currentName);
+  const reset = useAppSelector(resetState);
 
   const {
     register, // input 할당, value 변경 감지
@@ -47,9 +56,14 @@ function AddCategory({
 
   const onValid = async (data: { category?: string }) => {
     if (data.category) {
-      await newCategoryApi(data.category);
+      const body = {
+        name: data.category,
+        categoryId: category,
+      };
+      await patchCategoryApi(body);
       onclick();
-      setUpdateCategory();
+
+      dispatch(stateActions.reset(!reset));
     }
   };
 
@@ -58,8 +72,9 @@ function AddCategory({
       <_ModalBg>
         <_Modal>
           <_Box onSubmit={handleSubmit(onValid)}>
-            <label htmlFor="newCategory">카테고리 추가</label>
+            <label htmlFor="newCategory">카테고리 수정</label>
             <input
+              defaultValue={categoryName}
               style={{ color: 'var(--color-zinc-100)' }}
               placeholder="카테고리 명"
               {...register('category')}
@@ -70,7 +85,7 @@ function AddCategory({
               <_ErrorMsg></_ErrorMsg>
             )}
             <_ButtonBox>
-              <_Button type="submit">추가</_Button>
+              <_Button type="submit">수정</_Button>
               <_Button
                 color="#ffffff1d"
                 onClick={() => {
@@ -87,4 +102,4 @@ function AddCategory({
   );
 }
 
-export default AddCategory;
+export default EditCategory;
