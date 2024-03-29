@@ -25,14 +25,11 @@ function SelectCategory({
   const [myCategories, setMyCategories] = useState<Category[]>([]);
   const [category, setCategory] = useState<string>();
 
-  function scrap() {
-    console.log('why~~~!!!');
-
+  async function scrap() {
     if (category) {
-      const promise = scrapPostApi(Number(postId), category);
-      promise.then((result) => {
-        console.log('스크랩 result', result);
-      });
+      await scrapPostApi(Number(postId), category);
+      alert('스크랩 완료되었습니다.');
+      close();
     }
   }
   useEffect(() => {

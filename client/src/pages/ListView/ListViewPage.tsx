@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ListViewWid from '../../widgets/ListView/ListViewWid';
 
 const _ListViewPage = styled.div`
-  margin: 5% 0;
+  margin: 5% 10%;
   height: 85vh;
 `;
 
