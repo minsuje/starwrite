@@ -42,7 +42,6 @@ def lambda_handler(event, context):
 
     title = event.get("title")
 
-
     #     from openai import OpenAI
     #     client = OpenAI()
 
@@ -75,14 +74,15 @@ def lambda_handler(event, context):
             if "type" in content and content["type"] == "text" and "text" in content:
                 return content["text"].strip()
             else:
-                return "".join(extract_text(item) for item in content.values())
+                return " ".join(extract_text(item) for item in content.values())
         elif isinstance(content, list):
-            return "".join(extract_text(item) for item in content)
+            return " ".join(extract_text(item) for item in content)
         else:
-            return ""
+            return " "
 
     # Extracting all the text
-    all_text = "".join(extract_text(item) for item in data)
+    # all_text = "".join(extract_text(item) for item in data)
+    all_text = "".join(extract_text(item) + " " for item in data).strip()
 
     print(all_text)
 
