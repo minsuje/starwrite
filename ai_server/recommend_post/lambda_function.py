@@ -79,13 +79,12 @@ def lambda_handler(event, context):
     #
     #     print(find_title)
     #
-    #     find_other = """
-    #
-    #     MATCH (user)-[r]->(post:Post)<-[e:EMBED]-(chunk:Chunks)
-    #     WHERE user.nickname = $nickname
-    #     RETURN collect(chunk.text) AS text, collect(post.title) AS title, collect(ID(post)) AS postId
-    #     ORDER BY postId
-    #     """
+    find_other = """
+    MATCH (user)-[r]->(post:Post)<-[e:EMBED]-(chunk:Chunks)
+    WHERE user.nickname = $nickname
+    RETURN collect(chunk.text) AS text, collect(post.title) AS title, collect(ID(post)) AS postId
+    ORDER BY postId
+    """
 
     # Neo4j 그래프 초기화
     kg = Neo4jGraph(
@@ -97,7 +96,7 @@ def lambda_handler(event, context):
 
     chunks_data = kg.query(find_chunk, params={"postId": postId, "nickname": nickname})
     #     titles_data = kg.query(find_title, params={"postId": postId})
-    #     others_data = kg.query(find_other, params={"nickname": nickname})
+    others_data = kg.query(find_other, params={"nickname": nickname})
 
     # chunks_data가 비어 있을 경우에는 빈 리스트를 할당
     chunks = (
@@ -108,16 +107,16 @@ def lambda_handler(event, context):
     # titles_data가 비어 있을 경우에는 빈 리스트를 할당
     #     titles = [title for row in titles_data for title in row["title"]] if titles_data else None
     #     # others_data가 비어 있을 경우에는 빈 리스트를 할당
-    #     others = [
-    #         {"text": row["text"], "title": row["title"], "postId": row["postId"]}
-    #         for row in others_data
-    #     ] if others_data else None
+    others = [
+        {"text": row["text"], "title": row["title"], "postId": row["postId"]}
+        for row in others_data
+    ] if others_data else None
 
     print("find_chunks >>> ", chunks_data)
     #     print("find_titles >>> ", titles_data)
     #     print("find_other >>> ", others_data)
 
-    #     others = others[0]
+    others = others[0]
     #     titles = titles[0]
     chunks = chunks[0]
 
@@ -215,8 +214,10 @@ def lambda_handler(event, context):
     retriever = neo4j_vector_store.as_retriever()
 
 
+
+
     retriever = neo4j_vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 100})
-    relevant_docs = retriever.get_relevant_documents(f" (1). {chunks}의 text와 비슷한 내용을 가진 것들을 찾고 만약 찾아. (2). 내용들이 Category 의 categoryId = {categoryId} 인 곳에 속해 있다면 (1) 에서 찾은 것들의 Post 노드 title 과 {chunks}의 text 내용에 있는 단어가 같다면 해당하는 Post의 ID를 알려줘")
+    relevant_docs = retriever.get_relevant_documents(f"{chunks}의 text 내용과 비슷한 내용을 가진 {others}를 찾고, title 내용과 {chunks}의 text 내용의 단어가 같은 것을 찾아서 두 조건이 만족하는 {others}의 postId만 알려줘. 단, 중복된 값은 제외하고 알려줘")
 
     print("relevant_docs >>>>>>>>>>> ", relevant_docs)
 
