@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../../shared/model';
 import { commentState, commentStateActions } from '../model/CommentSlice';
+import { _ErrorMsg } from '../../../shared/CommonStyle';
 
 function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
   // const [text, setText] = useState<string>();
@@ -22,9 +23,9 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
   const reset = useAppSelector(commentState);
 
   const {
-    register, // input 할당, value 변경 감지
-    handleSubmit, // form submit 이벤트 시 호출
-    formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
+    register,
+    handleSubmit,
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
@@ -61,14 +62,16 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
     <>
       <_NewCommentBox>
         <form onSubmit={handleSubmit(onValid)}>
-          <h1>댓글 작성</h1>
-          {/* <div>{text}</div> */}
+          <h1>댓글 </h1>
           <div>
-            <input {...register('content')} />
+            <textarea
+              placeholder="댓글을 입력하세요"
+              {...register('content')}
+            />
             <button type="submit">작성</button>
           </div>
           {errors.content && typeof errors.content.message === 'string' ? (
-            <div>{errors.content.message}</div>
+            <_ErrorMsg>{errors.content.message}</_ErrorMsg>
           ) : (
             <div></div>
           )}

@@ -2,11 +2,11 @@ import styled from 'styled-components';
 //sidebar + contentBox
 const _ListViewBox = styled.div`
   display: flex;
-  height: 85vh;
+  height: 80vh;
 `;
 
 const _CategoryBar = styled.div`
-  width: 30%;
+  width: 20%;
   height: fit-content;
   display: flex;
   gap: 20px;
@@ -16,9 +16,8 @@ const _CategoryBar = styled.div`
 `;
 
 const _CategoryContent = styled.div`
-  width: 60%;
-  height: 100%;
-
+  width: 70%;
+  height: 85%;
   background-color: var(--color-zinc-900);
   padding: 20px 30px;
 `;
@@ -28,10 +27,10 @@ const _AddCategoryButton = styled.div`
   text-align: center;
   padding: 15px 0px;
   &:hover {
-    background-color: var(--color-zinc-800);
+    background-color: var(--color-zinc-700);
     cursor: pointer;
   }
-  background-color: var(--color-zinc-900);
+  background-color: var(--color-zinc-800);
   margin: 0;
 `;
 

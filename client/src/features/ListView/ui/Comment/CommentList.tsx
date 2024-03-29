@@ -25,8 +25,7 @@ function CommentList({
           return (
             <Comment
               key={annotation.annotationId}
-              content={annotation.content}
-              nickName={annotation.nickName}
+              annotation={annotation}
             ></Comment>
           );
         })}
