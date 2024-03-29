@@ -45,8 +45,10 @@ const Chat = styled(motion.div)`
   gap: 20px;
   right: 30px;
   bottom: 100px;
-  width: 300px;
-  height: 400px;
+  width: 30%;
+  min-width: 300px;
+  height: 60%;
+  min-height: 400px;
   background-color: #383838;
   border-radius: 8px;
   z-index: 2;
@@ -82,6 +84,7 @@ const _AiChat = styled(motion.p)`
   border-radius: 8px;
   background-color: #6f6f6f;
   line-height: 1.4;
+  align-self: flex-end;
 `;
 
 const _AiSource = styled(motion.a)`
@@ -108,6 +111,7 @@ const _MyChat = styled(motion.p)`
   border-radius: 8px;
   background-color: #3070d1;
   line-height: 1.4;
+  align-self: flex-start;
 `;
 
 const _LoadingContainer = styled(motion.div)`
@@ -132,7 +136,7 @@ const _LoadingChat = styled(motion.p)`
   margin: 8px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #606060;
+  background-color: #60606000;
 `;
 
 const _InputContainer = styled(motion.div)`
@@ -179,21 +183,21 @@ function Chatbot() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // 이벤트 타겟이 HTMLElement인지 확인
       const target = event.target as HTMLElement;
+      // ChatBtn이 클릭된 경우 함수를 종료
+      if (target.closest('#chat-button')) {
+        return;
+      }
       if (chatRef.current && !chatRef.current.contains(target)) {
         setChatWindow(false);
       }
     };
 
-    // document에 클릭 이벤트 리스너를 추가합니다.
     document.addEventListener('mousedown', handleClickOutside);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너를 정리합니다.
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []); // 의존성 배열에서 chatRef 제거
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -238,7 +242,8 @@ function Chatbot() {
     }
   };
 
-  function toggleChat() {
+  function toggleChat(event: React.MouseEvent) {
+    event.stopPropagation();
     setChatWindow(!chatWindow);
   }
 
@@ -251,7 +256,7 @@ function Chatbot() {
 
   return (
     <AnimatePresence>
-      <ChatBtn onClick={toggleChat}></ChatBtn>
+      <ChatBtn id="chat-button" onClick={toggleChat}></ChatBtn>
       {chatWindow ? (
         <Chat
           ref={chatRef}
