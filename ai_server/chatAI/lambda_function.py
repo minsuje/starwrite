@@ -114,17 +114,17 @@ def lambda_handler(event, context):
         # """
 
         vector_search_query = """
-            MATCH (u:Users {userId: $userId})-[:POSTED]->()-[:EMBED]-(c:Chunks)
+            MATCH (u:Users {userId: $userId})-[:POSTED]->(p:Post)-[:EMBED]-(c:Chunks)
             WITH genai.vector.encode(
             $question,
             "OpenAI",
             {
                 token: $openAiApiKey,
                 endpoint: $openAiEndpoint
-            }) AS question_embedding, c
+            }) AS question_embedding, c, p
             CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) YIELD node, score
             WHERE node = c
-            RETURN score, c.text AS text
+            RETURN score, c.text AS text, collect({postId: ID(p), title: p.title, content: substring(p.parsedContent, 0, 100)}) AS source
         """
 
         print(
@@ -199,5 +199,5 @@ def lambda_handler(event, context):
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json_data,
+        "body": {"ai": json_data, "source": search_results[0]["source"][0]},
     }
