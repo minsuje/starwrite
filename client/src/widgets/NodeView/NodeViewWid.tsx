@@ -191,8 +191,6 @@ export const NodeView = ({
     });
 
     // SVG 요소 선택 및 초기화
-
-    // SVG 요소 선택 및 초기화
     const svg = d3
       .select(svgRef.current as SVGSVGElement)
       .attr('width', '100%')
