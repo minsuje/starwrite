@@ -73,7 +73,7 @@ function ListHeaderEnt({
                   navigate(`/user/starwrite/writenewpost`);
                 }}
               >
-                글 추가하기
+                글쓰기
               </_Button>
             </_buttonBox>
           </>

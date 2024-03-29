@@ -114,7 +114,7 @@ export const _Button = styled.button`
   background-color: ${(props) => props.color || '#1361D7'};
 `;
 export const _Title = styled.h1`
-  font-size: 20px;
+  font-size: 2rem;
   padding: 18px;
   display: flex;
   flex-direction: row;
@@ -135,25 +135,28 @@ export const _Title = styled.h1`
 // 댓글 입력창
 
 export const _NewCommentBox = styled.div`
-  width: 100%;
-  height: 50px;
-
+  width: 90%;
   padding: 10px 0 10px 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  input {
-    width: 75%;
-    height: 30px;
-    margin: 10px;
+  textarea {
+    width: 100%;
+    height: 5rem;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-zinc-800);
+    color: white;
+    resize: none;
   }
   button {
-    width: 10%;
+    width: 100%;
     background-color: var(--color-primary-500);
     color: white;
     padding: 7px;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
   }
   h1 {
     font-size: 1.5rem;

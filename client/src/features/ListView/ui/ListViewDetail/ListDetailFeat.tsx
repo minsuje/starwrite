@@ -153,7 +153,7 @@ export default function ListDetailFeat() {
           slashMenu={false}
           editor={editor}
           editable={false}
-          theme={redTheme.dark}
+          theme={redTheme.light}
           onSelectionChange={() => {
             const selection = editor.getSelection();
             if (selection !== undefined) {
