@@ -429,8 +429,11 @@ export const NodeView = ({
       nodeSelection.each(function (d: CustomNode) {
         const nodeElement = d3.select(this);
         // d.label이 유효한지 확인
-        const isMatchSearchTerm =
-          d.label && d.label.toLowerCase().includes(searchTerm.toLowerCase());
+        // const isMatchSearchTerm = d.label ? d.label.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+
+        const isMatchSearchTerm = d.label
+          ? d.label.toLowerCase().includes(searchTerm.toLowerCase())
+          : false;
 
         // 검색어와 일치하는 노드에 대해 반짝임 효과 적용
         nodeElement.classed('blink-animation', isMatchSearchTerm);

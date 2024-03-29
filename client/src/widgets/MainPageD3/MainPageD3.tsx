@@ -1,8 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { SimulationNodeDatum, SimulationLinkDatum } from 'd3-force';
 
+interface Node extends SimulationNodeDatum {
+  id: string;
+  group: number;
+  label: string;
+  fx?: number;
+  fy?: number;
+  x?: number;
+  y?: number;
+  scrap?: boolean;
+}
+
+interface Link extends SimulationLinkDatum<Node> {
+  source: string | Node;
+  target: string | Node;
+  value: number;
+}
 // 초기 노드와 링크 데이터
-const initialNodes = [
+const initialNodes: Node[] = [
   { id: '1', group: 1, label: 'Node 1' },
   { id: '2', group: 1, label: 'Node 2' },
   { id: '3', group: 2, label: 'Node 3' },
@@ -33,7 +50,7 @@ const initialNodes = [
   { id: '28', group: 3, label: 'Node 6' },
 ];
 
-const initialLinks = [
+const initialLinks: Link[] = [
   { source: '1', target: '2', value: 1 },
   { source: '2', target: '3', value: 1 },
   { source: '3', target: '4', value: 1 },
@@ -49,11 +66,8 @@ const initialLinks = [
 ];
 
 export function MainPageD3() {
-  const svgRef = useRef(null);
-  const [viewportSize] = useState({
-    width: 1000,
-    height: 1000,
-  });
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [viewportSize] = useState({ width: 1000, height: 1000 });
 
   useEffect(() => {
     const svg = d3
@@ -64,28 +78,25 @@ export function MainPageD3() {
 
     const group = svg.append('g');
 
-    const zoomHandler = d3.zoom().on('zoom', (event) => {
-      group.attr('transform', event.transform);
-    });
-    svg.call(zoomHandler).call(zoomHandler.transform, d3.zoomIdentity.scale(1));
-
     const simulation = d3
       .forceSimulation(initialNodes)
       .force(
         'link',
-        d3.forceLink(initialLinks).id((d) => d.id),
+        d3
+          .forceLink(initialLinks)
+          .id((d: SimulationNodeDatum) => (d as Node).id),
       )
-      .force('charge', d3.forceManyBody().strength(-300))
+      .force('charge', d3.forceManyBody().strength(-500))
       .force(
         'center',
         d3.forceCenter(viewportSize.width / 2, viewportSize.height / 2),
       )
       .force(
         'radial',
-        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 2),
+        d3.forceRadial(10, viewportSize.width / 2, viewportSize.height / 2),
       )
-      .force('collide', d3.forceCollide().radius(5))
-      .alphaDecay(0.00008);
+      .force('collide', d3.forceCollide().radius(2))
+      .alphaDecay(0.00198);
 
     const link = group
       .append('g')
@@ -98,7 +109,7 @@ export function MainPageD3() {
 
     const node = group
       .append('g')
-      .selectAll('image')
+      .selectAll<SVGImageElement, Node>('image')
       .data(initialNodes)
       .enter()
       .append('image')
@@ -106,43 +117,61 @@ export function MainPageD3() {
       .attr('height', 35)
       .attr('href', (d) => (d.scrap ? '/star_scrap.svg' : '/star.svg'));
 
-    function drag(simulation) {
-      function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
-
-      function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-      }
-
-      function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
-
-      return d3
-        .drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended);
-    }
-
     node.call(drag(simulation));
 
     simulation.on('tick', () => {
       link
-        .attr('x1', (d) => d.source.x)
-        .attr('y1', (d) => d.source.y)
-        .attr('x2', (d) => d.target.x)
-        .attr('y2', (d) => d.target.y);
-
-      node.attr('x', (d) => d.x - 17.5).attr('y', (d) => d.y - 17.5);
+        .attr('x1', (d: Link) =>
+          typeof d.source === 'object' ? d.source.x || 0 : 0,
+        )
+        .attr('y1', (d: Link) =>
+          typeof d.source === 'object' ? d.source.y || 0 : 0,
+        )
+        .attr('x2', (d: Link) =>
+          typeof d.target === 'object' ? d.target.x || 0 : 0,
+        )
+        .attr('y2', (d: Link) =>
+          typeof d.target === 'object' ? d.target.y || 0 : 0,
+        );
+      node
+        .attr('x', (d) => (d.x ?? 0) - 17.5)
+        .attr('y', (d) => (d.y ?? 0) - 17.5);
     });
-  }, [viewportSize]); // 여기에서 빠진 부분을 닫습니다
+  }, [viewportSize]);
+
+  function drag(simulation: d3.Simulation<Node, undefined>) {
+    function dragstarted(
+      event: d3.D3DragEvent<SVGImageElement, Node, Node>,
+      d: Node,
+    ) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragged(
+      event: d3.D3DragEvent<SVGImageElement, Node, Node>,
+      d: Node,
+    ) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(
+      event: d3.D3DragEvent<SVGImageElement, Node, Node>,
+      d: Node,
+    ) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = undefined;
+      d.fy = undefined;
+    }
+
+    return d3
+      .drag<SVGImageElement, Node>()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended);
+  }
 
   return (
     <div

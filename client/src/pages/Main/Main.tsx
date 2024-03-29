@@ -17,6 +17,7 @@ export function MainPage() {
         <div>
           <h2>당신의 모든 것을 공유하고 기록하세요</h2>
           <p style={{}}>당신의 세컨 브레인을 그려보세요</p>
+          <button>어떠한 버튼을 만들어볼까요</button>
         </div>
 
         <div
@@ -35,7 +36,7 @@ export function MainPage() {
 
       <div
         style={{
-          height: '50%',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -44,9 +45,9 @@ export function MainPage() {
         }}
       >
         <h2> 주요기능</h2>
-
         <MainPageContent></MainPageContent>
       </div>
+
       {/* 주요기능 끝 */}
     </>
   );
