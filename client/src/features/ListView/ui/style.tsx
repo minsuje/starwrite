@@ -4,16 +4,14 @@ const _headBox = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 15px 10px 40px 10px;
+  align-items: end;
 
-  input {
+  div > h1 {
     color: var(--color-zinc-100);
-    background-color: var(--color-zinc-900);
     border: none;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 700;
-    &:focus {
-      outline: none; // 포커스 효과를 제거
-    }
+    margin-bottom: 0%;
   }
 `;
 
@@ -114,18 +112,19 @@ export const _Button = styled.button`
   background-color: ${(props) => props.color || '#1361D7'};
 `;
 export const _Title = styled.h1`
-  font-size: 20px;
-  padding: 18px;
+  font-size: 2rem;
+  padding-top: 18px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 10px;
   width: 90%;
 
-  div {
+  p {
     background-color: var(--color-zinc-100);
     color: var(--color-zinc-900);
-    font-size: 12px;
-    padding: 7px;
+    font-size: 0.9rem;
+    padding: 0.5rem;
     border-radius: 5px;
     width: fit-content;
   }
@@ -135,25 +134,28 @@ export const _Title = styled.h1`
 // 댓글 입력창
 
 export const _NewCommentBox = styled.div`
-  width: 100%;
-  height: 50px;
-
+  width: 90%;
   padding: 10px 0 10px 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  input {
-    width: 75%;
-    height: 30px;
-    margin: 10px;
+  textarea {
+    width: 100%;
+    height: 5rem;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-zinc-800);
+    color: white;
+    resize: none;
   }
   button {
-    width: 10%;
+    width: 100%;
     background-color: var(--color-primary-500);
     color: white;
     padding: 7px;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
   }
   h1 {
     font-size: 1.5rem;

@@ -16,18 +16,20 @@ import { useAppSelector } from '../../../../shared/model';
 import { commentState } from '../../model/CommentSlice';
 import styled from 'styled-components';
 
-const _DetailButton = styled.div`
-  width: 10%;
-  background-color: var(--color-primary-500);
-  color: white;
+const _DetailButton = styled.button`
+  width: fit-content;
+  background: none;
+  color: var(--color-primary-100);
   padding: 7px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  &:hover {
+    color: var(--color-primary-400);
+  }
 `;
 export default function ListDetailFeat() {
   const { nickname, postId } = useParams();
-  console.log('nickname', nickname);
   const myNickname = localStorage.getItem('nickname');
   const navigate = useNavigate();
   const [initialContent, setInitialContent] = useState<
@@ -49,7 +51,7 @@ export default function ListDetailFeat() {
   function openScrap() {
     const promise = getTitleApi();
     promise.then((titles) => {
-      console.log('titles', titles);
+      // 중복검사
       for (let i = 0; i < titles.length; i++) {
         if (titles[i].title === title) {
           alert('같은 제목의 글이 있습니다.');
@@ -116,10 +118,8 @@ export default function ListDetailFeat() {
     <>
       <_Title>
         {title}
-        <div>{visible === 'true' ? '공개' : '비공개'}</div>
-      </_Title>
+        <p>{visible === 'true' ? '공개' : '비공개'}</p>
 
-      <_Title>
         {isMine && isWriter && (
           <>
             <_DetailButton onClick={() => editPost(Number(postId))}>
@@ -142,6 +142,7 @@ export default function ListDetailFeat() {
           </>
         )}
       </_Title>
+      <hr style={{ borderColor: 'var(--color-zinc-600)' }}></hr>
       {scrap && (
         <SelectCategory
           postId={postId}
@@ -153,7 +154,7 @@ export default function ListDetailFeat() {
           slashMenu={false}
           editor={editor}
           editable={false}
-          theme={redTheme.dark}
+          theme={redTheme.light}
           onSelectionChange={() => {
             const selection = editor.getSelection();
             if (selection !== undefined) {
@@ -164,6 +165,7 @@ export default function ListDetailFeat() {
           }}
         />
       </div>
+      <hr style={{ borderColor: 'var(--color-zinc-600)' }}></hr>
       <div>
         <CommentList annotations={annotations} selectedLine={blocks[0]} />
       </div>

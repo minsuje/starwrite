@@ -84,8 +84,8 @@ const _PublcButton = styled.div`
 const lightRedTheme = {
   colors: {
     editor: {
-      text: '#222222',
-      background: '#ffeeee',
+      text: 'var(--color-zinc-100)',
+      background: 'var(--color-zinc-900)',
     },
     menu: {
       text: 'var(--color-zinc-100)',

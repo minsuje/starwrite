@@ -8,8 +8,20 @@ import { useAppDispatch, useAppSelector } from '../../../../shared/model';
 import { categoryActions, currentCategory } from '../../model/CategorySlice';
 import { resetState, stateActions } from '../../model/StateSlice';
 import { EditActions } from '../../model/EditSlice';
-import { _Button } from '../style';
+import styled from 'styled-components';
 
+const _writeButton = styled.button`
+  padding: 8px 1rem;
+  color: var(--color-primary-100);
+  border: none;
+  border-radius: 4px;
+  min-width: 40px;
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-700);
+  }
+  background-color: var(--color-primary-600);
+`;
 function ListHeaderEnt({
   category,
   categoryName,
@@ -48,34 +60,35 @@ function ListHeaderEnt({
   return (
     <>
       <_headBox>
-        <h1>{categoryName}</h1>
+        <div style={{ display: 'flex', gap: '2rem', alignItems: 'end' }}>
+          <h1>{categoryName}</h1>
+          <_buttonBox>
+            {category != 'all' && category != 'scrab' && (
+              <>
+                <button
+                  onClick={() => {
+                    dispatch(EditActions.change(true));
+                  }}
+                >
+                  <LuPencilLine />
+                </button>
+                <button onClick={deleteCategory}>
+                  <IoIosTrash />
+                </button>
+              </>
+            )}
+          </_buttonBox>
+        </div>
 
         {nickname === myNickname && (
           <>
-            <_buttonBox>
-              {category != 'all' && category != 'scrab' && (
-                <>
-                  <button
-                    onClick={() => {
-                      dispatch(EditActions.change(true));
-                    }}
-                  >
-                    <LuPencilLine />
-                  </button>
-                  <button onClick={deleteCategory}>
-                    <IoIosTrash />
-                  </button>
-                </>
-              )}
-
-              <_Button
-                onClick={() => {
-                  navigate(`/user/starwrite/writenewpost`);
-                }}
-              >
-                글 추가하기
-              </_Button>
-            </_buttonBox>
+            <_writeButton
+              onClick={() => {
+                navigate(`/user/starwrite/writenewpost`);
+              }}
+            >
+              글쓰기
+            </_writeButton>
           </>
         )}
       </_headBox>
