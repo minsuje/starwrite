@@ -19,7 +19,7 @@ public class ChatAiController {
 
     @PostMapping("user/chatAI")
     public Object chatAI(@RequestBody String requestBody) {
-        System.out.println("user/chatAI controller > " );
+        System.out.println("user/chatAI controller > " + requestBody);
 //        String userId = SecurityUtil.getCurrentUserUserId();
 //        webClientService.postChatAi(userId, question);
 

@@ -99,6 +99,7 @@ export const _Button = styled.button`
   color: white;
   border: none;
   border-radius: 4px;
+  min-width: 40px;
   &:hover {
     opacity: 0.8;
     cursor: pointer;
