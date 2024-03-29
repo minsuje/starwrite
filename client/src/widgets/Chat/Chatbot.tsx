@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { _Button } from '../../features/ListView/ui/style';
 import { baseApi } from '../../shared/api/BaseApi';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { IoMdDocument } from 'react-icons/io';
 
 const ChatBtn = styled.div`
   position: fixed;
@@ -41,7 +42,7 @@ const Chat = styled(motion.div)`
   position: fixed;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
   right: 30px;
   bottom: 100px;
   width: 300px;
@@ -60,12 +61,11 @@ const _ChatArea = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 10px;
   margin: 0;
   height: 100%;
   width: 100%;
+  padding-right: 8px;
   border-radius: 8px;
-  background-color: #515151;
   box-sizing: border-box;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -74,12 +74,30 @@ const _ChatArea = styled(motion.div)`
 
 const _AiChat = styled(motion.p)`
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: fit-content;
   padding: 12px;
   margin: 0;
   border-radius: 8px;
   background-color: #6f6f6f;
   line-height: 1.4;
+`;
+
+const _AiSource = styled(motion.a)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #3b3b3b;
+  &:hover {
+    cursor: pointer;
+    background-color: #5f5f5f;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
 `;
 
 const _MyChat = styled(motion.p)`
@@ -114,7 +132,7 @@ const _LoadingChat = styled(motion.p)`
   margin: 8px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #606060;
+  background-color: #6060600;
 `;
 
 const _InputContainer = styled(motion.div)`
@@ -129,6 +147,9 @@ const _Input = styled(motion.input)`
   display: flex;
   width: 100%;
   padding: 8px;
+  background-color: #515151;
+  border: none;
+  color: #cccccc;
   border-radius: 8px;
   box-sizing: border-box;
 `;
@@ -136,6 +157,8 @@ const _Input = styled(motion.input)`
 interface Message {
   text: string;
   role: 'user' | 'bot';
+  link?: string;
+  content?: string;
 }
 
 function Chatbot() {
@@ -144,8 +167,8 @@ function Chatbot() {
   const [input, setInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
 
-  const chatAreaRef = useRef(null);
-  const chatRef = useRef(null);
+  const chatAreaRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (chatAreaRef.current) {
@@ -155,8 +178,10 @@ function Chatbot() {
   }, [messages]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (chatRef.current && !chatRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      // 이벤트 타겟이 HTMLElement인지 확인
+      const target = event.target as HTMLElement;
+      if (chatRef.current && !chatRef.current.contains(target)) {
         setChatWindow(false);
       }
     };
@@ -168,7 +193,7 @@ function Chatbot() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [chatRef]);
+  }, []); // 의존성 배열에서 chatRef 제거
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -190,14 +215,22 @@ function Chatbot() {
           question: inputMsg,
         });
 
+        console.log(response);
+
         // API 응답을 채팅 메시지로 추가
         if (response.data) {
           const botMessage: Message = {
-            text: response.data.result,
+            text: response.data.ai.result,
             role: 'bot',
           };
+          const botSourceTitle: Message = {
+            text: response.data.source.title,
+            role: 'bot',
+            link: response.data.source.postId,
+            content: response.data.source.content,
+          };
           setChatLoading(false);
-          setMessages((messages) => [...messages, botMessage]);
+          setMessages((messages) => [...messages, botMessage, botSourceTitle]);
         }
       } catch (error) {
         console.error('Error sending message:', error);
@@ -209,8 +242,7 @@ function Chatbot() {
     setChatWindow(!chatWindow);
   }
 
-  const handleKeyDown = (e) => {
-    // 엔터 키가 눌렸을 때 전송 함수를 호출합니다.
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSendMessage();
@@ -235,7 +267,26 @@ function Chatbot() {
             {messages.map((message, index) => (
               <div key={index} className="message">
                 {message.role === 'bot' ? (
-                  <_AiChat className="bot-message">{message.text}</_AiChat>
+                  <_AiChat className="bot-message">
+                    {message.link ? (
+                      <_AiSource
+                        href={
+                          `/user/starwrite/listview/main/${localStorage.getItem('nickname')}/all/` +
+                          message.link
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <IoMdDocument />
+                        {message.text}
+                      </_AiSource>
+                    ) : (
+                      message.text
+                    )}
+                    {message.content && (
+                      <div className="message-content">{message.content}</div>
+                    )}
+                  </_AiChat>
                 ) : (
                   <_MyChat className="user-message">{message.text}</_MyChat>
                 )}
