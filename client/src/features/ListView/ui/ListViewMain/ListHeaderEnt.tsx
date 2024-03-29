@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../shared/model';
 import { categoryActions, currentCategory } from '../../model/CategorySlice';
 import { resetState, stateActions } from '../../model/StateSlice';
 import { EditActions } from '../../model/EditSlice';
+import { _Button } from '../style';
 
 function ListHeaderEnt({
   category,
@@ -19,7 +20,6 @@ function ListHeaderEnt({
   // 현재 선택된 카테고리를 저장
   const selected = useAppSelector(currentCategory);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
   const { nickname } = useParams();
   const reset = useAppSelector(resetState);
@@ -52,7 +52,6 @@ function ListHeaderEnt({
 
         {nickname === myNickname && (
           <>
-            {' '}
             <_buttonBox>
               {category != 'all' && category != 'scrab' && (
                 <>
@@ -69,13 +68,13 @@ function ListHeaderEnt({
                 </>
               )}
 
-              <button
+              <_Button
                 onClick={() => {
                   navigate(`/user/starwrite/writenewpost`);
                 }}
               >
                 글 추가하기
-              </button>
+              </_Button>
             </_buttonBox>
           </>
         )}

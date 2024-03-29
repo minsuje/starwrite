@@ -44,9 +44,8 @@ export default function ListDetailFeat() {
           return;
         }
       }
+      setScrap(true);
     });
-
-    setScrap(true);
   }
   async function deletePost(postid: number) {
     const promise = deletePostApi(postid);
@@ -138,6 +137,7 @@ export default function ListDetailFeat() {
         <BlockNoteView
           slashMenu={false}
           editor={editor}
+          editable={false}
           theme={redTheme.dark}
           onSelectionChange={() => {
             const selection = editor.getSelection();

@@ -49,7 +49,6 @@ function ListViewWid() {
             + 카테고리
           </_AddCategoryButton>
         )}
-
         {categoryModal && (
           <AddCategory
             setUpdateCategory={() => {
