@@ -132,7 +132,7 @@ const _LoadingChat = styled(motion.p)`
   margin: 8px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #6060600;
+  background-color: #606060;
 `;
 
 const _InputContainer = styled(motion.div)`
