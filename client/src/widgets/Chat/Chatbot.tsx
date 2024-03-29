@@ -3,9 +3,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
 import { _Button } from '../../features/ListView/ui/style';
 import { baseApi } from '../../shared/api/BaseApi';
+import SyncLoader from 'react-spinners/SyncLoader';
 
 const ChatBtn = styled.div`
   position: fixed;
+  z-index: 999;
   bottom: 30px;
   right: 30px;
   width: 50px;
@@ -73,27 +75,45 @@ const _ChatArea = styled(motion.div)`
 const _AiChat = styled(motion.p)`
   display: flex;
   width: fit-content;
-  padding: 8px;
+  padding: 12px;
   margin: 0;
   border-radius: 8px;
   background-color: #6f6f6f;
+  line-height: 1.4;
 `;
 
 const _MyChat = styled(motion.p)`
   display: flex;
   width: fit-content;
-  padding: 8px;
+  padding: 12px;
   margin: 0;
   border-radius: 8px;
   background-color: #3070d1;
+  line-height: 1.4;
+`;
+
+const _LoadingContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 20px 0;
+  align-items: center;
+  justify-content: center;
 `;
 
 const _LoadingChat = styled(motion.p)`
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
   width: fit-content;
-  padding: 12px;
+  padding: 12px 20px;
+  padding-bottom: 20px;
+  margin: 20px;
   margin: 8px;
-  border-radius: 50px;
+  font-size: 12px;
+  border-radius: 8px;
   background-color: #606060;
 `;
 
@@ -125,6 +145,7 @@ function Chatbot() {
   const [chatLoading, setChatLoading] = useState(false);
 
   const chatAreaRef = useRef(null);
+  const chatRef = useRef(null);
 
   useEffect(() => {
     if (chatAreaRef.current) {
@@ -132,6 +153,22 @@ function Chatbot() {
       chatAreaElement.scrollTop = chatAreaElement.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (chatRef.current && !chatRef.current.contains(event.target)) {
+        setChatWindow(false);
+      }
+    };
+
+    // document에 클릭 이벤트 리스너를 추가합니다.
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너를 정리합니다.
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [chatRef]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -172,47 +209,66 @@ function Chatbot() {
     setChatWindow(!chatWindow);
   }
 
-  return (
-    <div>
-      <AnimatePresence>
-        <ChatBtn onClick={toggleChat}></ChatBtn>
-        {chatWindow ? (
-          <Chat
-            key="chatWindow"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            exit={{ opacity: 0 }}
-          >
-            <h2>내 문서 기반 AI 대화</h2>
+  const handleKeyDown = (e) => {
+    // 엔터 키가 눌렸을 때 전송 함수를 호출합니다.
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
-            <_ChatArea ref={chatAreaRef}>
-              {messages.map((message, index) => (
-                <div key={index} className="message">
-                  {message.role === 'bot' ? (
-                    <_AiChat className="bot-message">{message.text}</_AiChat>
-                  ) : (
-                    <_MyChat className="user-message">{message.text}</_MyChat>
-                  )}
-                  {index === messages.length - 1 && chatLoading && (
-                    <_LoadingChat>답변을 생성하고 있습니다</_LoadingChat>
-                  )}
-                </div>
-              ))}
-            </_ChatArea>
-            <_InputContainer>
-              <_Input
-                value={input}
-                placeholder="검색어를 입력하세요"
-                type="text"
-                onChange={(e) => handleInputChange(e)}
-              />
-              <_Button onClick={handleSendMessage}>전송</_Button>
-            </_InputContainer>
-          </Chat>
-        ) : null}
-      </AnimatePresence>
-    </div>
+  return (
+    <AnimatePresence>
+      <ChatBtn onClick={toggleChat}></ChatBtn>
+      {chatWindow ? (
+        <Chat
+          ref={chatRef}
+          key="chatWindow"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0 }}
+        >
+          <h2>내 문서 기반 AI 대화</h2>
+
+          <_ChatArea ref={chatAreaRef}>
+            {messages.map((message, index) => (
+              <div key={index} className="message">
+                {message.role === 'bot' ? (
+                  <_AiChat className="bot-message">{message.text}</_AiChat>
+                ) : (
+                  <_MyChat className="user-message">{message.text}</_MyChat>
+                )}
+
+                {index === messages.length - 1 && chatLoading && (
+                  <_LoadingContainer>
+                    <_LoadingChat>
+                      답변을 생성하고 있습니다
+                      <SyncLoader
+                        color="#e3e3e3"
+                        speedMultiplier={0.2}
+                        size={6}
+                        margin={3}
+                      />
+                    </_LoadingChat>
+                  </_LoadingContainer>
+                )}
+              </div>
+            ))}
+          </_ChatArea>
+          <_InputContainer>
+            <_Input
+              value={input}
+              placeholder="검색어를 입력하세요"
+              type="text"
+              onChange={(e) => handleInputChange(e)}
+              onKeyDown={handleKeyDown}
+            />
+            <_Button onClick={handleSendMessage}>전송</_Button>
+          </_InputContainer>
+        </Chat>
+      ) : null}
+    </AnimatePresence>
   );
 }
 
