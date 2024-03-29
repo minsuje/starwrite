@@ -14,7 +14,17 @@ import { Annotation, PostDetail } from '../../../../shared/model/types';
 import { getTitleApi } from '../../../NewPost/api/newPostApi';
 import { useAppSelector } from '../../../../shared/model';
 import { commentState } from '../../model/CommentSlice';
+import styled from 'styled-components';
 
+const _DetailButton = styled.div`
+  width: 10%;
+  background-color: var(--color-primary-500);
+  color: white;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
 export default function ListDetailFeat() {
   const { postId } = useParams();
   const myNickname = localStorage.getItem('nickname');
@@ -63,7 +73,6 @@ export default function ListDetailFeat() {
 
   //글 상세 정보 불러오기
   useEffect(() => {
-    console.log('reset', reset);
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
@@ -111,19 +120,23 @@ export default function ListDetailFeat() {
       <_Title>
         {isMine === 'true' && (
           <>
-            <button onClick={() => editPost(Number(postId))}>수정</button>
+            <_DetailButton onClick={() => editPost(Number(postId))}>
+              수정
+            </_DetailButton>
           </>
         )}
 
         {isMine === 'false' && (
           <>
-            <button onClick={openScrap}>스크랩</button>
+            <_DetailButton onClick={openScrap}>스크랩</_DetailButton>
           </>
         )}
 
         {isMine !== 'false' && (
           <>
-            <button onClick={() => deletePost(Number(postId))}>삭제</button>
+            <_DetailButton onClick={() => deletePost(Number(postId))}>
+              삭제
+            </_DetailButton>
           </>
         )}
       </_Title>
@@ -149,7 +162,9 @@ export default function ListDetailFeat() {
           }}
         />
       </div>
-      <CommentList annotations={annotations} selectedLine={blocks[0]} />
+      <div>
+        <CommentList annotations={annotations} selectedLine={blocks[0]} />
+      </div>
     </>
   );
 }
