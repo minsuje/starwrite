@@ -1,5 +1,6 @@
 package starwrite.server.utils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +20,21 @@ public class WebClientRecommendGet {
             .baseUrl("https://eluaiy9gg5.execute-api.ap-northeast-2.amazonaws.com/ai/")
             .build();
 
+    Map<String, Object> requestBody = new HashMap<>();
+    requestBody.put("postId", postId);
+    requestBody.put("nickname", nickname);
+
     return webClient
-        .get()
-        .uri(uriBuilder -> uriBuilder.path("user/recommend")
-            .queryParam("postId", postId)
-            .queryParam("nickname", nickname)
-            .build()
-        )
+        .post()
+        .uri("user/recommend")
+        .body(Mono.just(requestBody), Map.class)
         .retrieve()
         .bodyToMono(Map.class)
-        .map(response -> {List<Long> result = (List<Long>) response.get("data");
-        return result;
-        }).doOnNext(resultList -> log.info("Received data : " + resultList));
+        .map(response -> {
+          List<Long> result = (List<Long>) response.get("data");
+          return result;
+        })
+        .doOnNext(resultList -> log.info("Received data : " + resultList));
 //        .subscribe(response -> log.info(response.toString()));
 
   }

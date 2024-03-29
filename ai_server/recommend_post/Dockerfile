@@ -4,6 +4,8 @@ COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
 COPY lambda_function.py ${LAMBDA_TASK_ROOT}
 
+RUN pip install langchain_community
+
 RUN pip install -r requirements.txt
 
 CMD ["lambda_function.lambda_handler"]
