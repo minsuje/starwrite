@@ -17,6 +17,8 @@ const _CategoryBar = styled.div`
 
 const _CategoryContent = styled.div`
   width: 60%;
+  height: 100%;
+
   background-color: var(--color-zinc-900);
   padding: 20px 30px;
 `;

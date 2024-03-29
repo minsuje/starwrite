@@ -23,9 +23,15 @@ const _buttonBox = styled.div`
   gap: 10px;
 
   button {
-    background-color: #3f3f3f;
+    background: none;
+    border: none;
     color: white;
     box-shadow: none;
+    font-size: 15px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -129,13 +135,27 @@ export const _Title = styled.h1`
 
 export const _NewCommentBox = styled.div`
   width: 100%;
-  border: 1px solid var(--color-zinc-100);
+  height: 50px;
+
   padding: 10px 0 10px 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
   input {
-    width: 60%;
+    width: 80%;
+    height: 30px;
+    margin: 10px;
+  }
+  button {
+    width: 10%;
+    background-color: var(--color-primary-500);
+    color: white;
+    padding: 7px;
+    border: none;
+    border-radius: 5px;
+  }
+  h1 {
+    font-size: 1.5rem;
   }
 `;
 

@@ -61,7 +61,7 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
     <>
       <_NewCommentBox>
         <form onSubmit={handleSubmit(onValid)}>
-          <div>댓글 작성</div>
+          <h1>댓글 작성</h1>
           {/* <div>{text}</div> */}
           <div>
             <input {...register('content')} />
