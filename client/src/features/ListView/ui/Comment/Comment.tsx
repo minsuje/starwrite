@@ -2,8 +2,6 @@ import styled from 'styled-components';
 
 const _CommentBox = styled.div`
   width: 100%;
-  border-radius: 2px;
-  border: 1px solid var(--color-zinc-100);
 `;
 
 const _CommentNickname = styled.div`

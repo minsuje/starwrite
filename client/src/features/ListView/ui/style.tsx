@@ -143,7 +143,7 @@ export const _NewCommentBox = styled.div`
   flex-direction: column;
   gap: 4px;
   input {
-    width: 80%;
+    width: 75%;
     height: 30px;
     margin: 10px;
   }
