@@ -4,16 +4,14 @@ const _headBox = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 15px 10px 40px 10px;
+  align-items: end;
 
-  input {
+  div > h1 {
     color: var(--color-zinc-100);
-    background-color: var(--color-zinc-900);
     border: none;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 700;
-    &:focus {
-      outline: none; // 포커스 효과를 제거
-    }
+    margin-bottom: 0%;
   }
 `;
 
@@ -115,17 +113,18 @@ export const _Button = styled.button`
 `;
 export const _Title = styled.h1`
   font-size: 2rem;
-  padding: 18px;
+  padding-top: 18px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 10px;
   width: 90%;
 
-  div {
+  p {
     background-color: var(--color-zinc-100);
     color: var(--color-zinc-900);
-    font-size: 12px;
-    padding: 7px;
+    font-size: 0.9rem;
+    padding: 0.5rem;
     border-radius: 5px;
     width: fit-content;
   }
