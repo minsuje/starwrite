@@ -26,7 +26,8 @@ const _DetailButton = styled.div`
   cursor: pointer;
 `;
 export default function ListDetailFeat() {
-  const { postId } = useParams();
+  const { nickname, postId } = useParams();
+  console.log('nickname', nickname);
   const myNickname = localStorage.getItem('nickname');
   const navigate = useNavigate();
   const [initialContent, setInitialContent] = useState<
@@ -34,7 +35,8 @@ export default function ListDetailFeat() {
   >('loading');
   const [title, setTitle] = useState<string>();
   const [visible, setVisible] = useState<string>();
-  const [isMine, setIsMine] = useState<string>('true');
+  const [isMine, setIsMine] = useState<boolean>(true);
+  const [isWriter, setIsWriter] = useState<boolean>();
   const [blocks, setBlocks] = useState<MyBlock[]>([]);
   const [scrap, setScrap] = useState<boolean>(false);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -73,21 +75,24 @@ export default function ListDetailFeat() {
 
   //글 상세 정보 불러오기
   useEffect(() => {
+    if (myNickname === nickname) {
+      setIsMine(true);
+    } else {
+      setIsMine(false);
+    }
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
       setTitle(postDetail.title);
       setVisible(postDetail.visible);
-      if (postDetail.authorNickname === myNickname) {
-        setIsMine('true');
-      } else if (postDetail.authorNickname === null) {
-        setIsMine('scrap');
-      } else {
-        setIsMine('false');
-      }
       setAnnotations(postDetail.annotations);
+      if (postDetail.authorNickname === nickname) {
+        setIsWriter(true);
+      } else {
+        setIsWriter(false);
+      }
     });
-  }, [postId, myNickname, reset]);
+  }, [postId, myNickname, reset, nickname]);
 
   // 에디터 생성
   const editor = useMemo(() => {
@@ -102,7 +107,7 @@ export default function ListDetailFeat() {
     return 'Loading content...';
   }
   // 내글이 아닐 때 + 비공개 글
-  if (isMine === 'false' && visible === 'false') {
+  if (!isMine && visible === 'false') {
     return <>비공개글입니다.</>;
   }
 
@@ -114,11 +119,8 @@ export default function ListDetailFeat() {
         <div>{visible === 'true' ? '공개' : '비공개'}</div>
       </_Title>
 
-      {/* 내글은 수정, 삭제 가능 
-      // 다른 사람글은 스크랩만 가능 
-      (스크랩할 때 중복검사) */}
       <_Title>
-        {isMine === 'true' && (
+        {isMine && isWriter && (
           <>
             <_DetailButton onClick={() => editPost(Number(postId))}>
               수정
@@ -126,13 +128,13 @@ export default function ListDetailFeat() {
           </>
         )}
 
-        {isMine === 'false' && (
+        {!isMine && isWriter && (
           <>
             <_DetailButton onClick={openScrap}>스크랩</_DetailButton>
           </>
         )}
 
-        {isMine !== 'false' && (
+        {isMine && (
           <>
             <_DetailButton onClick={() => deletePost(Number(postId))}>
               삭제

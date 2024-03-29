@@ -15,16 +15,22 @@ function CommentList({
   console.log(annotations);
   return (
     <>
-      <NewComment selectedLine={selectedLine} />
-      {annotations.map((annotation) => {
-        return (
-          <Comment
-            key={annotation.annotationId}
-            content={annotation.content}
-            nickName={annotation.nickName}
-          ></Comment>
-        );
-      })}
+      <div>
+        <NewComment selectedLine={selectedLine} />
+      </div>
+
+      {/* 댓글 리스트 */}
+      <div>
+        {annotations.map((annotation) => {
+          return (
+            <Comment
+              key={annotation.annotationId}
+              content={annotation.content}
+              nickName={annotation.nickName}
+            ></Comment>
+          );
+        })}
+      </div>
     </>
   );
 }
