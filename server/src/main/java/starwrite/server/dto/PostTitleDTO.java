@@ -11,4 +11,5 @@ public class PostTitleDTO {
   private String categoryId;
   private String categoryName;
   private boolean scrap;
+  private Long numberOfRelations;
 }
