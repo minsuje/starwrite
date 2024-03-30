@@ -12,6 +12,7 @@ import { MainPage } from '../pages/Main/Main';
 import Chatbot from '../widgets/Chat/Chatbot';
 // import { GoogleOAuth } from '../features/Login/google';
 // import { InterGratedSearchpage } from '../pages/IntergatedSerach/InterGratedSearchpage';
+import { Page404Error } from '../shared/404';
 
 export const AppRouter = createBrowserRouter([
   {
@@ -133,6 +134,14 @@ export const AppRouter = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: '*',
+        element: (
+          <>
+            <Page404Error></Page404Error>
+          </>
+        ),
       },
     ],
   },

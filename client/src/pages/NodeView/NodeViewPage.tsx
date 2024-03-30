@@ -7,6 +7,19 @@ import { _Background } from '../../shared/CommonStyle';
 // import { CustomNode } from '../../features/NodeViewFeat';
 // import { searchNode } from '../../features/NodeViewFeat/model/Types';
 import { NoDataComponent } from '../../shared/NoDataComponent';
+import { useNavigate } from 'react-router-dom';
+import { styled } from 'styled-components';
+const StyledButton = styled.div`
+  position: absolute;
+  left: 50%; // 부모 컨테이너에 대해 왼쪽에서 50% 떨어진 위치
+  bottom: 100px; // 하단에서 100px 떨어진 위치
+  transform: translateX(-50%); // X축 방향으로 -50% 이동하여 중앙 정렬
+  padding: 10px 20px;
+  background-color: #1361d7;
+  color: white;
+  text-align: center;
+  cursor: pointer; // 마우스 오버 시 커서 변경
+`;
 
 interface Post {
   title: string;
@@ -31,6 +44,11 @@ export interface NodeViewProps {
 }
 
 export function NodeViewPage() {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/user/starwrite/writenewpost'); // 여기에 이동하고 싶은 경로를 지정
+  };
+
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [nodesData, setNodesData] = useState<PagesearchNode>({
@@ -38,15 +56,15 @@ export function NodeViewPage() {
     relation: [],
     NodeData: [], // Optional이지만 초기값으로 빈 배열 할당
   });
-  const [pageDataProp, setPageDataProp] = useState<boolean>(false); // nonData 스피너 페이지
+  const [, setPageDataProp] = useState<boolean>(false); // nonData 스피너 페이지
 
   // 검색어가 업데이트될 때 호출되는 함수
   const onSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm); // 검색어 상태 업데이트
   };
 
-  console.log('nodesData>>>>>>>>>>>>>', nodesData);
-  console.log('DataSpinnerSh', pageDataProp);
+  // console.log('nodesData>>>>>>>>>>>>>', nodesData);
+  // console.log('DataSpinnerSh', pageDataProp);
 
   // if (nodesData.posts.length === 0 && nodesData.relation.length === 0) {
   //   return <NoDataComponent />;
@@ -82,6 +100,7 @@ export function NodeViewPage() {
       ) : nodesData.posts[0].title === null ? (
         <NoDataComponent category={category} />
       ) : null}
+      {!loading && <StyledButton onClick={handleClick}>별자리 생성하기</StyledButton>}
     </div>
   );
 }
