@@ -42,6 +42,7 @@ const passwordPattern =
 
 const passwordSchema = z
   .string()
+  .min(1, { message: '비밀번호를 입력해주세요.' })
   .min(8, {
     message:
       '비밀번호는 영문/숫자/특수문자 조합으로 8자리 이상 15자리 이하입니다',
@@ -58,12 +59,16 @@ const passwordSchema = z
 // 유효성 검사 schema
 const schema = z
   .object({
-    mail: z.string().email({ message: '이메일을 올바르게 입력해주세요.' }),
+    mail: z
+      .string()
+      .email({ message: '이메일을 올바르게 입력해주세요.' })
+      .min(1, { message: '빈 값을 제출할 수 없습니다.' }),
     nickname: nicknameSchema,
     role: z.string().optional().default('USER'),
     password: passwordSchema,
     checkPW: passwordSchema,
   })
+
   .refine((data) => data.password === data.checkPW, {
     path: ['checkPW'],
     message: '비밀번호가 일치하지 않습니다.',
@@ -80,6 +85,7 @@ function RegisterForm() {
     useState('');
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
+  const [emailErrorMessage, setEmailErrorMessage] = useState(''); // 이메일이 빈값이라면 막기
 
   // react-hook-form
   const {
@@ -94,6 +100,10 @@ function RegisterForm() {
     mode: 'onChange', // 입력값이 변경될때마다 실시간으로 유효성 검사 (react hook form)
     defaultValues: {
       role: 'USER', // 기본값으로 'USER' 설정
+      mail: '', // 이메일 필드에 대한 기본값으로 빈 문자열을 설정합니다.
+      nickname: '', // 닉네임 필드에 대한 기본값으로 빈 문자열을 설정합니다.
+      password: '', // 비밀번호 필드에 대한 기본값으로 빈 문자열을 설정합니다.
+      checkPW: '', // 비밀번호 확인 필드에 대한 기본값으로 빈 문자열을 설정합니다.
     },
   });
 
@@ -133,7 +143,6 @@ function RegisterForm() {
       if (response.status === 200) {
         console.log('이메일 유효성 검사 성공:', response.data);
         setIsVerificationEmailSent(true);
-        // 추가적인 성공 로직 (예: 메시지 표시 등)
       }
     } catch (error) {
       // 에러 처리
@@ -141,7 +150,6 @@ function RegisterForm() {
         // 중복된 이메일 에러 감지
         if (error.response.data.fail === 'duplicated Email') {
           console.log('중복된 이메일입니다.');
-          // 추가적인 중복 이메일 처리 로직 (예: 사용자에게 알림 등)
         } else {
           // 다른 서버 에러 메시지 처리
           console.log('이메일 유효성 검사 실패:', error.response.data);
@@ -225,7 +233,34 @@ function RegisterForm() {
   //   console.log(typeof err);
   //   console.log('onInValid', err);
   // };
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[A-Za-z]+$/; // 이메일 유효성검사
+  const emailValue = watch('mail');
+  // 이메일 형식 검사 함수
+  // 이메일 유효성 검사 함수
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[A-Za-z]+$/.test(email);
 
+  // 버튼 비활성화 조건
+  const isButtonDisabled =
+    isEmailInputDisabled || !isValidEmail(emailValue || '');
+
+  // 이메일이 빈값이라면 막기
+  const handleSendEmailClick = () => {
+    const email = getValues('mail');
+    // 이메일이 비어있는 경우
+    if (!email) {
+      // setEmailErrorMessage('이메일을 입력해주세요.');
+      return; // 여기서 함수 실행을 멈춤
+    }
+    // 이메일 형식이 유효하지 않은 경우
+    else if (!emailRegex.test(email)) {
+      // setEmailErrorMessage('올바른 이메일 주소를 입력해주세요.');
+      return; // 여기서 함수 실행을 멈춤
+    }
+    // 유효성 검증을 모두 통과한 경우
+    setEmailErrorMessage(''); // 에러 메시지 초기화
+    checkValidEmail(email); // 이메일 전송 함수 호출
+  };
   return (
     <>
       <form onSubmit={handleSubmit(onValid)}>
@@ -244,12 +279,13 @@ function RegisterForm() {
             <_registerbtn
               bgcolor="#1361d7"
               type="button"
-              disabled={isEmailInputDisabled}
-              onClick={() => checkValidEmail(getValues('mail') ?? '')}
+              disabled={isButtonDisabled}
+              onClick={handleSendEmailClick}
             >
               인증 메일 보내기
             </_registerbtn>
             {isSendingEmail && <span>전송중...</span>}
+            {emailErrorMessage && <_ErrorMsg>{emailErrorMessage}</_ErrorMsg>}
             {errors.mail && typeof errors.mail.message === 'string' && (
               <_ErrorMsg>{errors.mail.message}</_ErrorMsg>
             )}
