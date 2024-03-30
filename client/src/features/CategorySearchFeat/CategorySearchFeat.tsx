@@ -53,6 +53,7 @@ export const CategorySearchFeat = ({
             justifyContent: 'center',
             paddingTop: '50px',
             paddingBottom: '20px',
+            marginTop: '50px',
           }}
         >
           {NickName} 님의 카테고리뷰
