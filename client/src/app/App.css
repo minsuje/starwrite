@@ -71,12 +71,16 @@ applet,
 object,
 iframe,
 h1,
-h2,
+h2 {
+  margin: 0px;
+}
 h3,
 h4,
 h5,
 h6,
-p,
+p {
+  margin: 0px;
+}
 blockquote,
 pre,
 a {

@@ -13,6 +13,7 @@ export interface CustomNode extends SimulationNodeDatum {
   recentView: string;
   opacity: number;
   scrap: string;
+  numberOfRelations: string;
 }
 
 export interface Link extends SimulationLinkDatum<CustomNode> {

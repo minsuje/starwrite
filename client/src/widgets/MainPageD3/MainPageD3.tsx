@@ -67,7 +67,7 @@ const initialLinks: Link[] = [
 
 export function MainPageD3() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [viewportSize] = useState({ width: 1000, height: 1000 });
+  const [viewportSize] = useState({ width: 800, height: 800 });
 
   useEffect(() => {
     const svg = d3
@@ -86,7 +86,7 @@ export function MainPageD3() {
           .forceLink(initialLinks)
           .id((d: SimulationNodeDatum) => (d as Node).id),
       )
-      .force('charge', d3.forceManyBody().strength(-500))
+      .force('charge', d3.forceManyBody().strength(-300))
       .force(
         'center',
         d3.forceCenter(viewportSize.width / 2, viewportSize.height / 2),
@@ -95,8 +95,8 @@ export function MainPageD3() {
         'radial',
         d3.forceRadial(10, viewportSize.width / 2, viewportSize.height / 2),
       )
-      .force('collide', d3.forceCollide().radius(2))
-      .alphaDecay(0.00198);
+      .force('collide', d3.forceCollide().radius(0))
+      .alphaDecay(0.008);
 
     const link = group
       .append('g')
@@ -183,8 +183,8 @@ export function MainPageD3() {
     >
       <svg
         ref={svgRef}
-        style={{ width: '100%', height: '100%' }}
-        viewBox="0 0 1000 1000"
+        style={{ width: '100%', height: '100%', padding: '10px' }}
+        viewBox="0 0 800 800"
       ></svg>
     </div>
   );

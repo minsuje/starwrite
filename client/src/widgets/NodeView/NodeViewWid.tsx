@@ -63,6 +63,7 @@ export const NodeView = ({
               y: Math.random() * viewportSize.height,
               url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
               opacity: Math.max(0.2, opacity), // 투명도가 너무 낮아지는 것을 방지하기 위한 최소값 설정
+              isShared: node.numberOfRelations,
             };
           });
 
@@ -178,8 +179,8 @@ export const NodeView = ({
     // 작은 원의 데이터를 준비합니다.
     const smallCirclesData: SmallCircleData[] = [];
     nodes.forEach((node: ExtendedCustomNode) => {
-      // if(node.isShared => 만약 백링크가 걸려있다면 작동하게해라 )
-      if (node.isShared) {
+      if (!node.scrap && node.isShared) {
+        // d.scrap이 false이면서 isShared 속성이 있는 노드에 대해서만 작은 원을 추가
         for (let i = 0; i < node.isShared; i++) {
           smallCirclesData.push({
             parentNode: node,
@@ -306,7 +307,6 @@ export const NodeView = ({
       .attr('text-anchor', 'middle')
       .attr('fill', '#ffffff')
       .text((d) => {
-        console.log(d.label); // 이 로그를 통해 d.label의 실제 값을 확인
         return d.label.length > 5 ? `${d.label.substring(0, 5)}...` : d.label;
       })
       .on('mouseover', function (event, d) {
