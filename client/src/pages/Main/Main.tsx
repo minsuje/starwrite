@@ -13,12 +13,12 @@ export function MainPage() {
         <div>
           <h1>당신의 모든 것을 공유하고 기록하세요</h1>
           <p style={{ color: 'gray', paddingTop: '5px' }}>
-            - 당신의 세컨 브레인을 그려보세요
+            당신의 세컨 브레인을 만들어보세요
           </p>
 
-          <button>
+          <button style={{ margin: '30px 0px' }}>
             <a href="/user/starwrite/writenewpost" style={{ color: 'black' }}>
-              내 그래프 뷰 만들기
+              시작하기
             </a>
           </button>
         </div>
@@ -33,7 +33,7 @@ export function MainPage() {
       {/* 주요기능 */}
 
       <_styledMainPageFirstContentTitle>
-        <h1> 주요기능</h1>
+        <h1 style={{ marginTop: '300px' }}> STARWRITE 주요 기능</h1>
         <MainPageContent></MainPageContent>
       </_styledMainPageFirstContentTitle>
 

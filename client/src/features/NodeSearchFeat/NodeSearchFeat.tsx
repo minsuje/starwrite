@@ -32,10 +32,21 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
   const filterSearch = nodesData.posts.filter((post) =>
     (post.title || '').toLowerCase().includes(searchTerm.toLowerCase()),
   );
+  const NickName = localStorage.getItem('nickname');
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
       <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '50px',
+            paddingBottom: '20px',
+          }}
+        >
+          {NickName} 님의 노드뷰
+        </div>
         <input
           type="text"
           value={searchTerm}
@@ -51,9 +62,9 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
             background: '#212121',
             color: '#ffff',
           }}
-          placeholder="노드를 입력해주세요"
+          placeholder="검색할 노드를 입력해주세요"
         />
-        <SearchIcon></SearchIcon>
+
         {toggleSearch && searchTerm.length != 0 && (
           <ul
             style={{

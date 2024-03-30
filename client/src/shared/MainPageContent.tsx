@@ -46,14 +46,14 @@ const StyledLink = styled.div`
   }
 `;
 const StyledBox = styled.div`
-  height: 50%;
+  /* height: 50%; */
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* /* border: 1px solid #ffff; * */
+  /* border: 1px solid #ffff; */
 
   margin-top: 300px;
 `;
@@ -265,7 +265,7 @@ export function MainPageContent() {
       <GridContainer>
         <StyledLink>
           <GridItem>
-            <MainPageContentTitle>AI 백링크 연결 추천</MainPageContentTitle>
+            <MainPageContentTitle> 백링크 연결 </MainPageContentTitle>
             <p>
               백링크를 통해 지식을 서로 연관지어 보세요 처음이라 어려우시다면
               AI가 도와드립니다
@@ -312,48 +312,54 @@ export function MainPageContent() {
       <div style={{ height: '100%' }}>
         <StyledBox>
           <div ref={fristScrollRef}>
-            <h2>AI 백링크 연결</h2>
-          </div>
-          <MainPageSlider cotentImg={[]}></MainPageSlider>
-          <p>
-            백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
-            가장 연관있는 데이터를 추천해드립니다
-          </p>
-        </StyledBox>
-        <StyledBox>
-          <div ref={secondScrollRef}>
-            <h2>내 문서 기반 AI 챗봇</h2>
-          </div>
-          <MainPageSlider cotentImg={[]}></MainPageSlider>
-          <p>
-            백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
-            가장 연관있는 데이터를 추천해드립니다
-          </p>
-        </StyledBox>
-        <StyledBox>
-          <div ref={ThirdRef}>
-            <h2>노드뷰</h2>
+            <h1 style={{ padding: '30px' }}> 백링크 연결</h1>
           </div>
           <MainPageSlider
-            contentImg={['/MainPage2.png', '/star_fav_dark.svg']}
-          ></MainPageSlider>
-          <p>
-            모든 자료들에 연관성을 한눈에 파악하기 힘들때는 노드뷰에서
-            확인가능합니다!
-          </p>
+            contentImg={[
+              '/BackLink.png',
+              '/BackLinkNode.png',
+              '/BackLinkNode2.png',
+            ]}
+            contentText={[
+              '당신의 카테고리 데이터를 먼저 만드세요',
+              '카테고리 데이터 생성 후, 노드 데이터를 생성하세요',
+              '노드 생성 후, 글쓰기를 통해 본인의 별들을 만들어보세요.',
+            ]}
+          />
         </StyledBox>
+
+        <StyledBox>
+          <div ref={secondScrollRef}>
+            <h1 style={{ padding: '30px' }}>내 문서 기반 AI 챗봇</h1>
+          </div>
+          <MainPageSlider
+            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
+            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
+          />
+        </StyledBox>
+
+        <StyledBox>
+          <div ref={ThirdRef}>
+            <h1 style={{ padding: '30px' }}>노드뷰</h1>
+          </div>
+          <MainPageSlider
+            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
+            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
+          />
+        </StyledBox>
+
         <StyledBox>
           <div ref={FourthdRef}>
-            <h2>에디터</h2>
+            <h1 style={{ padding: '30px' }}>에디터</h1>
           </div>
-          <MainPageSlider cotentImg={[]}></MainPageSlider>
-          <p>
-            백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
-            가장 연관있는 데이터를 추천해드립니다
-          </p>
+          <MainPageSlider
+            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
+            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
+          />
         </StyledBox>
+
         <StyledBox>
-          <h2>자주 묻는 질문</h2>
+          <h1 style={{ padding: '30px' }}>자주 묻는 질문</h1>
 
           <div
             style={{
@@ -384,7 +390,18 @@ export function MainPageContent() {
                   }}
                 />
               </_QuestionBox>
-              {visibility.div1 && <_AnswerBox></_AnswerBox>}
+              {visibility.div1 && (
+                <_AnswerBox>
+                  <p>
+                    사용자들의 지식을 서로 공유하여 공유된 지식들을 서로
+                    연결하여 창의적인 아이디어를 얻을수 있도록 도와드립니다.
+                  </p>
+                  <p>
+                    당신의 지식을 작성하여 다른사람들과 공유하여 더 많은
+                    창의적인 아이디어를 얻어보세요.
+                  </p>
+                </_AnswerBox>
+              )}
 
               {/* 이하 동일한 패턴으로 div2, div3에 대한 부분 추가 */}
             </div>
@@ -438,7 +455,11 @@ export function MainPageContent() {
                   }}
                 />
               </_QuestionBox>
-              {visibility.div3 && <_AnswerBox>스크랩기능</_AnswerBox>}
+              {visibility.div3 && (
+                <_AnswerBox>
+                  <p>누군가가 당신의 매력적인 글을 스크랩 했다는 표시입니다.</p>
+                </_AnswerBox>
+              )}
 
               {/* 이하 동일한 패턴으로 div2, div3에 대한 부분 추가 */}
             </div>
@@ -447,6 +468,7 @@ export function MainPageContent() {
 
         <footer
           style={{
+            marginTop: '300px',
             display: 'flex',
             height: '50%',
             justifyContent: 'space-between',

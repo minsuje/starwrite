@@ -156,7 +156,20 @@ export const _Background = styled.div`
 // react-router Link 디자인
 export const _StyledLink = styled(Link)`
   display: block;
-  padding: 0px 15px;
+  padding: 0px 35px;
+  /* background-color: #212121; */
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+
+  &:hover {
+    background-color: #333;
+  }
+`;
+
+export const _StyledLinkOut = styled(Link)`
+  display: block;
+  padding: 13px 100px;
   /* background-color: #212121; */
   color: #ffffff;
   text-decoration: none;

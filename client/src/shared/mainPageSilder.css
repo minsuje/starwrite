@@ -19,29 +19,26 @@ body {
 
 .swiper {
   width: 90vw;
-  height: 100%;
 }
 
 .swiper-slide {
-  text-align: center;
   font-size: 18px;
-  background: var(--color-gray-50;); //배경
+  /* background: var(--color-gray-50;); //배경 */
   /* Center slide text vertically */
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+  /* align-items: center; */
+  /* width: 100%;*/
+  /* height: 100%;  */
 }
 
-/* .swiper-slide img {
+.swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  
 }
-
+/* 
 .autoplay-progress {
   position: absolute;
   right: 16px;
@@ -53,10 +50,9 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-}
-  
+} */
 
-.autoplay-progress svg {
+/* .autoplay-progress svg {
   --progress: 0;
   position: absolute;
   left: 0;

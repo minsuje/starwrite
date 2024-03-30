@@ -42,9 +42,21 @@ export const CategorySearchFeat = ({
     category.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  const NickName = localStorage.getItem('nickname');
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
       <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '50px',
+            paddingBottom: '20px',
+          }}
+        >
+          {NickName} 님의 카테고리뷰
+        </div>
         <input
           type="text"
           value={searchTerm}
@@ -60,7 +72,7 @@ export const CategorySearchFeat = ({
             background: '#212121',
             color: '#ffff',
           }}
-          placeholder="노드를 입력해주세요"
+          placeholder="검색할 카테고리를 입력해 주세요"
         />
 
         {toggleSearch && searchTerm.length != 0 && (

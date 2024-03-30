@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { TitleFeat } from '../../features/CategorySearchFeat/index';
 import { ProfileShard } from '../../shared/Profile';
-import { _StyledLink } from '../../shared/CommonStyle';
+import { _StyledLink, _StyledLinkOut } from '../../shared/CommonStyle';
 import { GlobalSearch } from '../../features/InterGratedSearchIconFeat/GlobalSearch';
 // import { InterGratedSearchIconFeat } from '../../features/InterGratedSearchIconFeat/InterGratedSearchIconFeat';
 
@@ -12,9 +12,14 @@ const _StyledHeaderContainer = styled.div`
   justify-content: space-between; // 컨테이너의 내용을 양 끝과 중앙으로 분배
   align-items: center;
   /* background-color: #f8f8f8; */
-  padding: 10px 50px;
+  width: 100%;
+  top: 0;
+  padding: 10px 20px;
   /* margin-bottom: 50px; */
+  position: fixed;
   border-bottom: 2px solid #a29e9e;
+  background-color: var(--color-zinc-900);
+  z-index: 9999;
 `;
 
 const _StyledNavigation = styled.div`
@@ -101,7 +106,7 @@ export function HeaderWid() {
           </div>
         </>
       ) : (
-        <_StyledLink to={`/login`}>LOGIN</_StyledLink>
+        <_StyledLinkOut to={`/login`}>LOGIN</_StyledLinkOut>
       )}
     </_StyledHeaderContainer>
   );
