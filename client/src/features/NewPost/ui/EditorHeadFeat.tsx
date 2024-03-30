@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { _ErrorMsg } from '../../../shared/CommonStyle';
 import { currentCategory } from '../../ListView/model/CategorySlice';
 import { _buttonBox } from '../../ListView/ui/style';
+import styled from 'styled-components';
 
+const _newBox = styled(_buttonBox)`
+  margin: 25px;
+`;
 function NewPostHeadFeat({
   onValid,
   data,
@@ -70,7 +74,7 @@ function NewPostHeadFeat({
 
   return (
     <>
-      <_buttonBox>
+      <_newBox>
         {tmpSaved && (
           <>
             <button onClick={openSaving}>불러오기</button>
@@ -78,7 +82,7 @@ function NewPostHeadFeat({
           </>
         )}
         <button onClick={() => publishPost()}>저장하기</button>
-      </_buttonBox>
+      </_newBox>
 
       <_TitleInput
         placeholder="제목을 입력하세요"

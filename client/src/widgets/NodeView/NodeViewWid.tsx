@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-// import { links } from '../../features/NodeViewFeat/index';
-
 import {
   SmallCircleData,
   CustomNode,
@@ -29,10 +27,6 @@ export const NodeView = ({
   const [nodes, setNodes] = useState<CustomNode[]>([]);
   const [links, setLink] = useState<Link[]>([]);
   const { nickname, category } = useParams<string>();
-
-  // console.log('categoryId>>?>>>>>', category);
-  // console.log('nodes', nodes);
-  // console.log('links', links);
 
   useEffect(() => {
     // axios 데이터 로딩
@@ -88,12 +82,6 @@ export const NodeView = ({
               target: link.relatedPostId,
             }));
 
-          // if (searchTerm.trim() !== '') {
-          //   nodesData = nodesData.filter((node: CustomNode) =>
-          //     node.label.toLowerCase().includes(searchTerm.toLowerCase()),
-          //   );
-          // }
-
           setNodes(nodesData);
           setLoading(false);
           setNodesData(fetchedNodes);
@@ -103,18 +91,6 @@ export const NodeView = ({
         } else if (fetchedNodes === '') {
           setLoading(false);
         }
-
-        // console.log('links>>>>>>>>>>>', links);
-
-        // const LinksData = fetchedNodes.relation.map((link: Link) => ({
-        //   ...link,
-        //   source: link.postId,
-        //   target: link.relatedPostId,
-        // }));
-
-        // console.log('LinksData>>>>>>>>', LinksData);
-
-        // setLink(fetchedNodes.relation);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -307,7 +283,11 @@ export const NodeView = ({
       .attr('text-anchor', 'middle')
       .attr('fill', '#ffffff')
       .text((d) => {
-        return d.label.length > 5 ? `${d.label.substring(0, 5)}...` : d.label;
+        // label 속성이 있는지 확인하고, 있다면 그 길이를 검사
+        const labelText =
+          d.label?.length > 5 ? `${d.label.substring(0, 5)}...` : d.label;
+        // label 속성이 없는 경우 (undefined)를 고려하여 빈 문자열을 반환하도록 처리
+        return labelText ?? '';
       })
       .on('mouseover', function (event, d) {
         tooltip
@@ -428,8 +408,6 @@ export const NodeView = ({
     if (searchTerm.trim()) {
       nodeSelection.each(function (d: CustomNode) {
         const nodeElement = d3.select(this);
-        // d.label이 유효한지 확인
-        // const isMatchSearchTerm = d.label ? d.label.toLowerCase().includes(searchTerm.toLowerCase()) : false;
 
         const isMatchSearchTerm = d.label
           ? d.label.toLowerCase().includes(searchTerm.toLowerCase())
@@ -451,11 +429,7 @@ export const NodeView = ({
         .classed('blink-animation', false)
         .style('opacity', (d) => d.opacity);
     }
-  }, [searchTerm, nodes]);
-
-  // if (nodes.length === 0 || nodes.every((node) => node.id === null)) {
-  //   return <NoDataComponent />;
-  // }
+  }, [searchTerm, nodes, links]);
 
   return (
     <svg

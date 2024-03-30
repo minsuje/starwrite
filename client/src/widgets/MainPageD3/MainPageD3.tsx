@@ -34,7 +34,7 @@ const initialNodes: Node[] = [
   { id: '12', group: 3, label: 'Node 6' },
   { id: '13', group: 3, label: 'Node 6' },
   { id: '14', group: 3, label: 'Node 6' },
-  { id: '15', group: 3, label: 'Node 6' },
+  { id: '15', group: 3, label: 'Node 6', scrap: true },
   { id: '16', group: 3, label: 'Node 6' },
   { id: '17', group: 3, label: 'Node 6' },
   { id: '18', group: 3, label: 'Node 6' },
@@ -43,11 +43,11 @@ const initialNodes: Node[] = [
   { id: '21', group: 3, label: 'Node 6' },
   { id: '22', group: 3, label: 'Node 6' },
   { id: '23', group: 3, label: 'Node 6' },
-  { id: '24', group: 3, label: 'Node 6' },
-  { id: '25', group: 3, label: 'Node 6' },
-  { id: '26', group: 3, label: 'Node 6' },
-  { id: '27', group: 3, label: 'Node 6' },
-  { id: '28', group: 3, label: 'Node 6' },
+  { id: '24', group: 3, label: 'Node 6', scrap: true },
+  { id: '25', group: 3, label: 'Node 6', scrap: true },
+  { id: '26', group: 3, label: 'Node 6', scrap: true },
+  { id: '27', group: 3, label: 'Node 6', scrap: true },
+  { id: '28', group: 3, label: 'Node 6', scrap: true },
 ];
 
 const initialLinks: Link[] = [
@@ -67,7 +67,7 @@ const initialLinks: Link[] = [
 
 export function MainPageD3() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [viewportSize] = useState({ width: 800, height: 800 });
+  const [viewportSize] = useState({ width: 600, height: 600 });
 
   useEffect(() => {
     const svg = d3
@@ -184,7 +184,7 @@ export function MainPageD3() {
       <svg
         ref={svgRef}
         style={{ width: '100%', height: '100%', padding: '10px' }}
-        viewBox="0 0 800 800"
+        viewBox="0 0 600 600"
       ></svg>
     </div>
   );
