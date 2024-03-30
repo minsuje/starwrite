@@ -43,6 +43,7 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
             justifyContent: 'center',
             paddingTop: '50px',
             paddingBottom: '20px',
+            marginTop: '50px',
           }}
         >
           {NickName} 님의 노드뷰
