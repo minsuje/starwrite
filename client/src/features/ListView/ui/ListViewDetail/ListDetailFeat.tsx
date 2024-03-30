@@ -15,6 +15,7 @@ import { getTitleApi } from '../../../NewPost/api/newPostApi';
 import { useAppSelector } from '../../../../shared/model';
 import { commentState } from '../../model/CommentSlice';
 import styled from 'styled-components';
+import { _buttonBox } from '../style';
 
 const _DetailButton = styled.button`
   width: fit-content;
@@ -35,13 +36,14 @@ export default function ListDetailFeat() {
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
-  const [title, setTitle] = useState<string>();
-  const [visible, setVisible] = useState<string>();
+  // const [title, setTitle] = useState<string>();
+  // const [visible, setVisible] = useState<string>();
   const [isMine, setIsMine] = useState<boolean>(true);
   const [isWriter, setIsWriter] = useState<boolean>();
   const [blocks, setBlocks] = useState<MyBlock[]>([]);
   const [scrap, setScrap] = useState<boolean>(false);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
+  const [post, setPost] = useState<PostDetail>();
 
   const reset = useAppSelector(commentState);
 
@@ -53,7 +55,7 @@ export default function ListDetailFeat() {
     promise.then((titles) => {
       // 중복검사
       for (let i = 0; i < titles.length; i++) {
-        if (titles[i].title === title) {
+        if (titles[i].title === post?.title) {
           alert('같은 제목의 글이 있습니다.');
           return;
         }
@@ -85,8 +87,9 @@ export default function ListDetailFeat() {
     const promise = postDetailApi(Number(postId));
     promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
-      setTitle(postDetail.title);
-      setVisible(postDetail.visible);
+      setPost(postDetail);
+      // setTitle(postDetail.title);
+      // setVisible(postDetail.visible);
       setAnnotations(postDetail.annotations);
       if (postDetail.authorNickname === nickname) {
         setIsWriter(true);
@@ -109,7 +112,7 @@ export default function ListDetailFeat() {
     return 'Loading content...';
   }
   // 내글이 아닐 때 + 비공개 글
-  if (!isMine && visible === 'false') {
+  if (!isMine && post?.visible === 'false') {
     return <>비공개글입니다.</>;
   }
 
@@ -117,9 +120,12 @@ export default function ListDetailFeat() {
   return (
     <>
       <_Title>
-        {title}
-        <p>{visible === 'true' ? '공개' : '비공개'}</p>
-
+        {post?.title}
+        <p>{post?.categoryName}</p>
+        {!isWriter && <p>스크랩</p>}
+        <p>{post?.visible === 'true' ? '공개' : '비공개'}</p>
+      </_Title>
+      <_buttonBox>
         {isMine && isWriter && (
           <>
             <_DetailButton onClick={() => editPost(Number(postId))}>
@@ -141,7 +147,8 @@ export default function ListDetailFeat() {
             </_DetailButton>
           </>
         )}
-      </_Title>
+      </_buttonBox>
+
       <hr style={{ borderColor: 'var(--color-zinc-600)' }}></hr>
       {scrap && (
         <SelectCategory
