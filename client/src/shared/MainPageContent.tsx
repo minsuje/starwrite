@@ -2,7 +2,7 @@ import { useRef, RefObject, useState } from 'react';
 import styled from 'styled-components';
 import { MainPageSlider } from './MainPageSlider';
 import { GoChevronDown } from 'react-icons/go';
-import { FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaFacebook } from 'react-icons/fa';
 import { FaSquareXTwitter } from 'react-icons/fa6';
 import { FaGithubAlt } from 'react-icons/fa';
 import { FaYoutube } from 'react-icons/fa';
@@ -16,12 +16,13 @@ const GridContainer = styled.div`
   gap: 20px; /* 그리드 아이템 간의 간격 설정 */
   width: 90%;
   height: 100%;
+  padding: 30px;
 `;
 
 // 그리드 아이템 스타일링
 const GridItem = styled.div`
-  /* border: 1px solid #ffff;  */
-  padding: 20px; /* 안쪽 여백 설정 */
+  /* border: 1px solid gray; */
+  padding: 50px; /* 안쪽 여백 설정 */
   text-align: center;
 `;
 
@@ -52,9 +53,39 @@ const StyledBox = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  border: 1px solid #ffff;
+  /* /* border: 1px solid #ffff; * */
 
   margin-top: 300px;
+`;
+
+const MainPageContentTitle = styled.h1`
+  padding-bottom: 30px;
+`;
+
+const _favicon = styled.div`
+  height: 15%;
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: start;
+  align-items: center;
+  /* border: 1px solid #ffff; */
+`;
+
+const _SnsBox = styled.div`
+  display: flex;
+  /* justify-content: ; */
+  align-items: center;
+  padding: 10px;
+  /* border: 1px solid #ffff; */
+`;
+
+const _sideFooterBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  /* border: 1px solid #ffff; */
 `;
 
 const _QuestionBox = styled.div`
@@ -91,6 +122,87 @@ const _AnswerBox = styled.div`
   color: #6d6868;
 `;
 
+const _Footercontent = styled.p`
+  /* border: 1px solid #ffff; */
+  margin: 14px;
+`;
+
+const _MainPageBtn = styled.button`
+  color: #fff;
+  line-height: 42px;
+  padding: 30px 30px;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &::before,
+  &::after {
+    position: absolute;
+    content: '';
+    height: 0%;
+    width: 2px;
+  }
+
+  &::before {
+    right: 0;
+    top: 0;
+    transition: all 500ms ease;
+  }
+
+  &::after {
+    left: 0;
+    bottom: 0;
+    transition: all 500ms ease;
+  }
+
+  &:hover {
+    color: #fff;
+    background: transparent;
+
+    &::before,
+    &::after {
+      height: 100%;
+    }
+  }
+`;
+
+const _MainPageBtnContent = styled.span`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  &::before,
+  &::after {
+    position: absolute;
+    content: '';
+    background: #ffff;
+  }
+
+  &::before {
+    left: 0;
+    top: 0;
+    width: 0%;
+    height: 2px;
+    transition: all 500ms ease;
+  }
+
+  &::after {
+    right: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    transition: all 500ms ease;
+  }
+
+  ${_MainPageBtn}:hover & {
+    &::before,
+    &::after {
+      width: 100%;
+    }
+  }
+`;
+
 export function MainPageContent() {
   const fristScrollRef: RefObject<HTMLDivElement> = useRef(null);
   const secondScrollRef: RefObject<HTMLDivElement> = useRef(null);
@@ -105,7 +217,8 @@ export function MainPageContent() {
 
   // console.log(scrollRef);
 
-  const toggleShowBox = (divKey) => {
+  type VisibilityKeys = 'div1' | 'div2' | 'div3';
+  const toggleShowBox = (divKey: VisibilityKeys) => {
     setVisibility((prevState) => ({
       ...prevState,
       [divKey]: !prevState[divKey],
@@ -152,46 +265,56 @@ export function MainPageContent() {
       <GridContainer>
         <StyledLink>
           <GridItem>
-            AI 백링크 연결 추천
+            <MainPageContentTitle>AI 백링크 연결 추천</MainPageContentTitle>
             <p>
               백링크를 통해 지식을 서로 연관지어 보세요 처음이라 어려우시다면
               AI가 도와드립니다
             </p>
-            <button onClick={scrollToFirstRef}>자세히보기</button>
+            <_MainPageBtn onClick={scrollToFirstRef}>
+              <_MainPageBtnContent>자세히 보기</_MainPageBtnContent>
+            </_MainPageBtn>
           </GridItem>
         </StyledLink>
 
         <StyledLink>
           <GridItem>
-            내 문서 기반 AI 챗봇
-            <p>내가 작성한 문서들과 대화해보세요.</p>
-            <button onClick={scrollSecondRef}>자세히보기</button>
+            <MainPageContentTitle>내 문서 기반 AI 챗봇</MainPageContentTitle>
+            <p>
+              내가 작성한 문서들을 참고하여 다양한 아이디어를 AI와 함께
+              만들어가세요.
+            </p>
+            <_MainPageBtn onClick={scrollSecondRef}>
+              <_MainPageBtnContent>자세히보기</_MainPageBtnContent>
+            </_MainPageBtn>
           </GridItem>
         </StyledLink>
 
         <StyledLink>
           <GridItem>
-            노드뷰
+            <MainPageContentTitle>노드뷰</MainPageContentTitle>
             <p>지식이 서로 어떻게 연결되어 있는지 확인해보세요</p>
-            <button onClick={scrollThirdRef}>자세히보기</button>
+            <_MainPageBtn onClick={scrollThirdRef}>
+              <_MainPageBtnContent>자세히보기</_MainPageBtnContent>
+            </_MainPageBtn>
           </GridItem>
         </StyledLink>
 
         <StyledLink>
           <GridItem>
-            에디터
+            <MainPageContentTitle>에디터</MainPageContentTitle>
             <p>마크다운을 지원하는 에디터로 손쉽게 글을 작성하세요</p>
-            <button onClick={scrollFourthRef}>자세히보기</button>
+            <_MainPageBtn onClick={scrollFourthRef}>
+              <_MainPageBtnContent>자세히보기</_MainPageBtnContent>
+            </_MainPageBtn>
           </GridItem>
         </StyledLink>
       </GridContainer>
-
       <div style={{ height: '100%' }}>
         <StyledBox>
           <div ref={fristScrollRef}>
             <h2>AI 백링크 연결</h2>
           </div>
-          <MainPageSlider></MainPageSlider>
+          <MainPageSlider cotentImg={[]}></MainPageSlider>
           <p>
             백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
             가장 연관있는 데이터를 추천해드립니다
@@ -201,7 +324,7 @@ export function MainPageContent() {
           <div ref={secondScrollRef}>
             <h2>내 문서 기반 AI 챗봇</h2>
           </div>
-          <MainPageSlider></MainPageSlider>
+          <MainPageSlider cotentImg={[]}></MainPageSlider>
           <p>
             백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
             가장 연관있는 데이터를 추천해드립니다
@@ -211,17 +334,19 @@ export function MainPageContent() {
           <div ref={ThirdRef}>
             <h2>노드뷰</h2>
           </div>
-          <MainPageSlider></MainPageSlider>
+          <MainPageSlider
+            contentImg={['/MainPage2.png', '/star_fav_dark.svg']}
+          ></MainPageSlider>
           <p>
-            백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
-            가장 연관있는 데이터를 추천해드립니다
+            모든 자료들에 연관성을 한눈에 파악하기 힘들때는 노드뷰에서
+            확인가능합니다!
           </p>
         </StyledBox>
         <StyledBox>
           <div ref={FourthdRef}>
             <h2>에디터</h2>
           </div>
-          <MainPageSlider></MainPageSlider>
+          <MainPageSlider cotentImg={[]}></MainPageSlider>
           <p>
             백링크 연결이 어려울땐 자비스를 불러보세요 여러분의 문서를 분석해서
             가장 연관있는 데이터를 추천해드립니다
@@ -250,7 +375,7 @@ export function MainPageContent() {
               }}
             >
               <_QuestionBox onClick={() => toggleShowBox('div1')}>
-                왜 별이 흐려지나요{' '}
+                STARWRITE는 무엇을 하는 사이트 인가요?
                 <GoChevronDown
                   style={{
                     transform: visibility.div1
@@ -259,7 +384,7 @@ export function MainPageContent() {
                   }}
                 />
               </_QuestionBox>
-              {visibility.div1 && <_AnswerBox>망각곡선을 이용한~~</_AnswerBox>}
+              {visibility.div1 && <_AnswerBox></_AnswerBox>}
 
               {/* 이하 동일한 패턴으로 div2, div3에 대한 부분 추가 */}
             </div>
@@ -273,7 +398,7 @@ export function MainPageContent() {
               }}
             >
               <_QuestionBox onClick={() => toggleShowBox('div2')}>
-                왜 별이 흐려지나요{' '}
+                별들의 색상이 점점 흐려지는 이유가 무엇인가요 ?
                 <GoChevronDown
                   style={{
                     transform: visibility.div2
@@ -282,7 +407,15 @@ export function MainPageContent() {
                   }}
                 />
               </_QuestionBox>
-              {visibility.div2 && <_AnswerBox>망각곡선을 이용한~~</_AnswerBox>}
+              {visibility.div2 && (
+                <_AnswerBox>
+                  <p>
+                    저희 STARWRITE는 여러분의 잊혀져가는 기억속에 메모를 다시
+                    상기시켜주기 위해 망각곡선을 사용하고있습니다.
+                  </p>
+                  <p>조회 날짜에 따라 노드뷰는 다시 밝아 질 수 있습니다.</p>
+                </_AnswerBox>
+              )}
 
               {/* 이하 동일한 패턴으로 div2, div3에 대한 부분 추가 */}
             </div>
@@ -296,7 +429,7 @@ export function MainPageContent() {
               }}
             >
               <_QuestionBox onClick={() => toggleShowBox('div3')}>
-                왜 별이 흐려지나요{' '}
+                제 별들 옆에 노란색은 무엇인가요 ?
                 <GoChevronDown
                   style={{
                     transform: visibility.div3
@@ -305,42 +438,98 @@ export function MainPageContent() {
                   }}
                 />
               </_QuestionBox>
-              {visibility.div3 && <_AnswerBox>망각곡선을 이용한~~</_AnswerBox>}
+              {visibility.div3 && <_AnswerBox>스크랩기능</_AnswerBox>}
 
               {/* 이하 동일한 패턴으로 div2, div3에 대한 부분 추가 */}
             </div>
           </div>
         </StyledBox>
-        <StyledBox>
-          <footer>
-            <div>
-              <p>주식회사: (주)파워레인저</p>
-              <p>전화번호: 010-5173-8080</p>
-              <p>이메일 주소: contact@powerrangers.com</p>
-              <p>주소 : 서울특별시 강남구 테헤란로 123, 45층</p>
-            </div>
 
-            <div className="social-media">
-              <p>Follow us</p>
+        <footer
+          style={{
+            display: 'flex',
+            height: '50%',
+            justifyContent: 'space-between',
+            borderTop: '1px solid gray',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'end',
+              justifyContent: 'center',
+            }}
+          >
+            <_favicon>
+              <img src="/star_fav_dark.svg" alt="favicon" />
+              <h2>STARWRITE</h2>
+            </_favicon>
+
+            <_SnsBox>
+              <p style={{ color: 'gray' }}>Follow us</p>
+            </_SnsBox>
+            <_SnsBox>
               <a href="https://www.facebook.com/yourpage" target="_blank">
-                <FaFacebook />
+                <FaFacebook
+                  style={{ marginRight: '10px', fontSize: '1.3rem' }}
+                />
               </a>
               <a href="https://www.twitter.com/yourpage" target="_blank">
-                <FaSquareXTwitter />
+                <FaSquareXTwitter
+                  style={{ marginRight: '10px', fontSize: '1.3rem' }}
+                />
               </a>
               <a href="https://www.instagram.com/yourpage" target="_blank">
-                <FaGithubAlt />
+                <FaGithubAlt
+                  style={{ marginRight: '10px', fontSize: '1.3rem' }}
+                />
               </a>
               <a href="https://www.instagram.com/" target="_black">
-                <FaInstagram />
+                <TiSocialInstagram
+                  style={{ marginRight: '10px', fontSize: '1.3rem' }}
+                />
               </a>
               <a href="https://www.youtube.com/" target="_black">
-                <FaYoutube />
+                <FaYoutube
+                  style={{ marginRight: '10px', fontSize: '1.3rem' }}
+                />
               </a>
+            </_SnsBox>
+
+            <_SnsBox>
               <p>@ 2024 Starwrite</p>
+            </_SnsBox>
+          </div>
+          <_sideFooterBox>
+            <div>
+              <_Footercontent>주식회사: (주)파워레인저</_Footercontent>
+              <_Footercontent>전화번호: 010-5173-8080</_Footercontent>
+              <_Footercontent>
+                이메일 주소: contact@powerrangers.com
+              </_Footercontent>
+              <_Footercontent>
+                주소 : 서울특별시 강남구 테헤란로 123, 45층
+              </_Footercontent>
             </div>
-          </footer>
-        </StyledBox>
+          </_sideFooterBox>
+          <_sideFooterBox>
+            <div>
+              <_Footercontent>
+                <a href="/terms">이용 약관</a>
+              </_Footercontent>
+              <_Footercontent>
+                <a href="/privacy">개인정보 처리방침</a>
+              </_Footercontent>
+              <_Footercontent>
+                <a href="/cookie-policy">쿠키 정책</a>
+              </_Footercontent>
+              {/* <_Footercontent>
+                주소 : 서울특별시 강남구 테헤란로 123, 45층
+              </_Footercontent> */}
+            </div>
+          </_sideFooterBox>
+        </footer>
       </div>
     </>
   );

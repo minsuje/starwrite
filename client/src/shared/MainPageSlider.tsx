@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -12,9 +11,7 @@ import './mainPageSilder.css';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
-export function MainPageSlider() {
-  const progressCircle = useRef(null);
-  const progressContent = useRef(null);
+export function MainPageSlider({ contentImg = [] }) {
   // const onAutoplayTimeLeft = (s, time, progress) => {
   //   progressCircle.current.style.setProperty('--progress', 1 - progress);
   //   progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
@@ -22,7 +19,7 @@ export function MainPageSlider() {
   return (
     <>
       <Swiper
-        spaceBetween={30}
+        spaceBetween={0}
         centeredSlides={true}
         autoplay={{
           delay: 2500,
@@ -36,16 +33,13 @@ export function MainPageSlider() {
         // onAutoplayTimeLeft={onAutoplayTimeLeft}
         className="mySwiper"
       >
-        <SwiperSlide>img</SwiperSlide>
-        <SwiperSlide>img</SwiperSlide>
-        <SwiperSlide>img</SwiperSlide>
-        <SwiperSlide>img</SwiperSlide>
-        <div className="autoplay-progress" slot="container-end">
-          <svg viewBox="0 0 48 48" ref={progressCircle}>
-            <circle cx="24" cy="24" r="20"></circle>
-          </svg>
-          <span ref={progressContent}></span>
-        </div>
+        {contentImg.map((imgSrc, index) => (
+          <SwiperSlide key={index}>
+            <img src={imgSrc} alt="콘텐츠 이미지" style={{ width: '70%', height: '100%' }} />
+          </SwiperSlide>
+        ))}
+        {/* <SwiperSlide>img</SwiperSlide>
+        <SwiperSlide>img</SwiperSlide> */}
       </Swiper>
     </>
   );
