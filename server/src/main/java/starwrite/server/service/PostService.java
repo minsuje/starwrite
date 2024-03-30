@@ -58,6 +58,8 @@ public class PostService {
   WebClientRecommendGet webClientRecommendGet;
 
 
+
+
 //  public PostService(VectorStore vectorStore) {
 //    this.vectorStore = vectorStore;
 //  }
@@ -296,9 +298,10 @@ public class PostService {
     return postRepository.searchPosts(title);
   }
 
-  public List<Long> getPostIdWithChunks(Long postId, String nickname){
+  public void getPostIdWithChunks(Long postId, String nickname, String userId, String categoryId){
 
-    return (List<Long>) webClientRecommendGet.postIdWithNickname(postId, nickname);
+
+    webClientService.postIdWithNickname(postId, nickname, userId, categoryId);
   }
 
 }
