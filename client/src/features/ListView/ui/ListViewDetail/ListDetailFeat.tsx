@@ -15,7 +15,7 @@ import { getTitleApi } from '../../../NewPost/api/newPostApi';
 import { useAppSelector } from '../../../../shared/model';
 import { commentState } from '../../model/CommentSlice';
 import styled from 'styled-components';
-import { _buttonBox } from '../style';
+import { _buttonBox, _NoneList } from '../style';
 
 const _DetailButton = styled.button`
   width: fit-content;
@@ -36,8 +36,6 @@ export default function ListDetailFeat() {
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
   >('loading');
-  // const [title, setTitle] = useState<string>();
-  // const [visible, setVisible] = useState<string>();
   const [isMine, setIsMine] = useState<boolean>(true);
   const [isWriter, setIsWriter] = useState<boolean>();
   const [blocks, setBlocks] = useState<MyBlock[]>([]);
@@ -88,8 +86,6 @@ export default function ListDetailFeat() {
     promise.then((postDetail: PostDetail) => {
       setInitialContent(JSON.parse(postDetail.content) as PartialBlock[]);
       setPost(postDetail);
-      // setTitle(postDetail.title);
-      // setVisible(postDetail.visible);
       setAnnotations(postDetail.annotations);
       if (postDetail.authorNickname === nickname) {
         setIsWriter(true);
@@ -109,7 +105,7 @@ export default function ListDetailFeat() {
 
   // editor 생성 X
   if (editor === undefined) {
-    return 'Loading content...';
+    return <_NoneList>Loading content...</_NoneList>;
   }
   // 내글이 아닐 때 + 비공개 글
   if (!isMine && post?.visible === 'false') {
