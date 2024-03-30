@@ -29,8 +29,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 
-user_question = "파이썬이 뭐야?"
-userId = "a555f3aa-317a-4dbf-8200-f5722a6153ff"
+user_question = "문자열이 뭐야?"
+userId = "a50cf644-51f2-4d72-b3d2-ff92e9b405c6"
 
 
 print("user_question > ", user_question)
