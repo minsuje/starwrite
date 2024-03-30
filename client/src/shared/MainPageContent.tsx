@@ -53,7 +53,7 @@ const StyledBox = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* border: 1px solid #ffff; */
+  /* /* border: 1px solid #ffff; * */
 
   margin-top: 300px;
 `;
