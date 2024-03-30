@@ -189,8 +189,9 @@ def lambda_handler(event, context):
         merge_chunk_node_query = """
         MERGE (mergedChunk:Chunks {chunkId: $chunkId})
             ON CREATE SET
-                mergedChunk.text = $chunkText
-            WITH mergedChunk
+                mergedChunk.text = $chunkText,
+                mergedChunk.source = toString($title) + " - " + $postId
+            WITH mergedChunk, $postId AS postId
                 MATCH (p:Post) WHERE ID(p) = $postId
                 MERGE (mergedChunk)-[:EMBED]->(p)
         RETURN ID(mergedChunk)
@@ -206,7 +207,12 @@ def lambda_handler(event, context):
 
         generatedChunkId = kg.query(
             merge_chunk_node_query,
-            params={"chunkId": chunkId, "chunkText": chunkText, "postId": starPostId},
+            params={
+                "chunkId": chunkId,
+                "chunkText": chunkText,
+                "postId": starPostId,
+                "title": title,
+            },
         )
 
         print("생성된 노드 ID : ", generatedChunkId[0])
