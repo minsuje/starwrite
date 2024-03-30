@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.vectorstore.VectorStore;
+//import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -41,8 +41,8 @@ public class PostService {
   CategoryRepository categoryRepository;
   @Autowired
   UsersRepository usersRepository;
-  @Autowired
-  VectorStore vectorStore;
+//  @Autowired
+//  VectorStore vectorStore;
 
 //  @Autowired
 //  PythonApi pythonApi;
@@ -58,9 +58,9 @@ public class PostService {
   WebClientRecommendGet webClientRecommendGet;
 
 
-  public PostService(VectorStore vectorStore) {
-    this.vectorStore = vectorStore;
-  }
+//  public PostService(VectorStore vectorStore) {
+//    this.vectorStore = vectorStore;
+//  }
 
 
   // BackLink Info (postId , title)

@@ -30,10 +30,10 @@ def lambda_handler(event, context):
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
 
-    VECTOR_INDEX_NAME = "form_10k_chunks"
-    VECTOR_NODE_LABEL = "Chunks"
+    VECTOR_INDEX_NAME = "embeddedPost"
+    VECTOR_NODE_LABEL = "Chunk"
     VECTOR_SOURCE_PROPERTY = "text"
-    VECTOR_EMBEDDING_PROPERTY = "textEmbeddings"
+    VECTOR_EMBEDDING_PROPERTY = "textEmbedding"
 
     starPostId = event.get("starPostId")
 
@@ -187,7 +187,7 @@ def lambda_handler(event, context):
         chunkId = generate_unique_chunk_id()
 
         merge_chunk_node_query = """
-        MERGE (mergedChunk:Chunks {chunkId: $chunkId})
+        MERGE (mergedChunk:Chunk {chunkId: $chunkId})
             ON CREATE SET
                 mergedChunk.text = $chunkText,
                 mergedChunk.source = toString($title) + " - " + $postId
@@ -229,8 +229,8 @@ def lambda_handler(event, context):
         # 벡터 인덱스 생성 쿼리
         vector = kg.query(
             """
-            CREATE VECTOR INDEX `embeddedPosts` IF NOT EXISTS
-            FOR (c:Chunks) ON (c.textEmbeddings)
+            CREATE VECTOR INDEX `embeddedPost` IF NOT EXISTS
+            FOR (c:Chunk) ON (c.textEmbedding)
             OPTIONS { indexConfig: {
                 `vector.dimensions`: 1536,
                 `vector.similarity_function`: 'cosine'    
@@ -245,7 +245,7 @@ def lambda_handler(event, context):
         # 벡터 인코딩 및 노드 연결 쿼리
         kg.query(
             """
-            MATCH (chunks:Chunks) WHERE ID(chunks) = $chunkId
+            MATCH (chunks:Chunk) WHERE ID(chunks) = $chunkId
             WITH chunks, genai.vector.encode(
                 chunks.text, 
                 "OpenAI", 
@@ -253,7 +253,7 @@ def lambda_handler(event, context):
                     token: $openAiApiKey, 
                     endpoint: $openAiEndpoint
                 }) AS vector
-            CALL db.create.setNodeVectorProperty(chunks, "textEmbeddings", vector)
+            CALL db.create.setNodeVectorProperty(chunks, "textEmbedding", vector)
         """,
             params={
                 "openAiApiKey": OPENAI_API_KEY,

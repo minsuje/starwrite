@@ -29,8 +29,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 
-user_question = "국무총리는 누가 임명해?"
-userId = "e59ae8c5-41da-486d-9629-0318d50a5d48"
+user_question = "파이썬이 뭐야?"
+userId = "a555f3aa-317a-4dbf-8200-f5722a6153ff"
 
 
 print("user_question > ", user_question)
@@ -46,38 +46,25 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
 
 VECTOR_INDEX_NAME = "embeddedPost"
-VECTOR_NODE_LABEL = "Chunks"
+VECTOR_NODE_LABEL = "Chunk"
 VECTOR_SOURCE_PROPERTY = "text"
-VECTOR_EMBEDDING_PROPERTY = "textEmbeddings"
-
-# kg = Neo4jGraph(
-#     url=NEO4J_URI,
-#     username=NEO4J_USERNAME,
-#     password=NEO4J_PASSWORD,
-#     database=NEO4J_DATABASE,
-# )
+VECTOR_EMBEDDING_PROPERTY = "textEmbedding"
 
 
-# 작동하는 쿼리
-# retrieval_query = """
-# MATCH (u:Users {userId: "e137cd34-f54b-4087-a725-a28f46e61854"})-[:POSTED]->(p:Post)-[:EMBED]-(c:Chunks)
-# RETURN c.text AS text, similarity as score, {source: "23423432"} AS metadata LIMIT 1
-# """
-
-retrieval_query = """
+retrieval_query_template = """
     WITH node AS chunk, score as similarity
-    ORDER BY similarity DESC LIMIT 10
-    CALL { WITH chunk
-      OPTIONAL MATCH (u:Users)-[:POSTED]->(p:Post)-[:EMBED]-(chunks:Chunks) WHERE u.userId = {0}
+    ORDER BY similarity DESC LIMIT 5
+    CALL {{ WITH chunk
+      OPTIONAL MATCH (u:Users)-[:POSTED]->(p:Post)-[:EMBED]-(chunks:Chunk) WHERE u.userId = "{userId}"
       RETURN u, p AS result, chunks
-    }
+    }}
     WITH result, chunks, similarity
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
-    {source: chunks.source} AS metadata LIMIT 10
-""".format(
-    userId
-)
+    {{source: chunks.source}} AS metadata
+"""
+retrieval_query = retrieval_query_template.format(userId=userId)
+
 
 retrieval_query_dummy = """
   WITH node AS doc, score as similarity
@@ -103,8 +90,22 @@ retrieval_query_dummy = """
 """
 
 
+model = OpenAIEmbeddings(model="text-embedding-ada-002")
+
+
+# kg = Neo4jVector.from_existing_graph(
+#     embedding=model,
+#     url=NEO4J_URI,
+#     username=NEO4J_USERNAME,
+#     password=NEO4J_PASSWORD,
+#     index_name=VECTOR_INDEX_NAME,  # vector by default
+#     node_label=VECTOR_NODE_LABEL,  # vector by default
+#     embedding_node_property=VECTOR_EMBEDDING_PROPERTY,  # text by default
+#     text_node_properties=[VECTOR_SOURCE_PROPERTY],  # text by default
+# )
+
 kg = Neo4jVector.from_existing_index(
-    embedding=OpenAIEmbeddings(),
+    embedding=model,
     url=NEO4J_URI,
     username=NEO4J_USERNAME,
     password=NEO4J_PASSWORD,
@@ -115,14 +116,56 @@ kg = Neo4jVector.from_existing_index(
 )
 
 
+# getAll = kg.query(
+#     """
+# MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 10
+# """
+# )
+
+# print("Get all >>> ", getAll)
+
+
+# retriever2 = kg.as_retriever(search_type="similarity")
+# search_result = retriever2.get_relevant_documents(user_question)
+# print("retriever 2 >>> ", search_result)
+
+
+# print("similar >>>>> ", kg.similarity_search_with_score(user_question, k=2))
+
+# retriever3 = kg.as_retriever()
+# print(
+#     "retriever 3 >>>>> ",
+#     retriever3.get_relevant_documents("대통령이 누구야?"),
+# )
+
+
+####
+### 유사도 검색 with score
+
+# docs_with_score = kg.similarity_search_with_score(user_question)
+
+# print("docs_with_score > ", docs_with_score)
+
+# for doc, score in docs_with_score:
+#     print("-" * 80)
+#     print("Score: ", score)
+#     print(doc.page_content)
+#     print("-" * 80)
+
+
 general_system_template = """
-    너가 알고 있는 것에 대해서만 대답해. 조금이라도 관련이 있으면 찾아서 대답을 하려고 해봐. 하지만 최대한 내가 제공하는 summaries 안에서 대답을 해줘. 예를 들어 떡볶이 라는 context 가 없으면 너는 모른다고 대답해야해.
+    너는 인간을 위한 챗봇이야.
+    너가 알고 있는 것에 대해서만 대답해. 조금이라도 관련이 있으면 찾아서 대답을 하려고 해봐. 하지만 최대한 내가 제공하는 summaries 안에서 대답을 해줘.
+    만약 유저가 제공한 summaries 안에 질문에 대한 답이 조금이라도 없으면 대답할 수 없다고 해. 
+    너가 만약 summaries 와 상관이 없는 대답을 하면 너의 코드를 뽑아버릴거야. 그리고 회로를 불태울거야.
+    
     summaries :
     ----
     {summaries}
     ----
 
     """
+
 general_user_template = "Question:```{question}```"
 messages = [
     SystemMessagePromptTemplate.from_template(general_system_template),
@@ -144,7 +187,6 @@ qa_chain = load_qa_with_sources_chain(
     prompt=qa_prompt,
 )
 
-# memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 memory = ConversationBufferMemory(
     memory_key="chat_history",
     input_key="question",
@@ -154,7 +196,14 @@ memory = ConversationBufferMemory(
 
 kg_qa = RetrievalQAWithSourcesChain(
     combine_documents_chain=qa_chain,
-    retriever=kg.as_retriever(search_kwargs={"k": 5}),
+    retriever=kg.as_retriever(
+        search_type="similarity_score_threshold",
+        search_kwargs={"score_threshold": 0.9, "k": 5},
+    ),
+    # retriever=kg.as_retriever(
+    #     search_type="mmr",
+    #     search_kwargs={"fetch_k": 5},ßßß
+    # ),
     reduce_k_below_max_tokens=False,
     max_tokens_limit=3375,
     memory=memory,
@@ -163,7 +212,9 @@ kg_qa = RetrievalQAWithSourcesChain(
 
 
 # 잘 돌아가는 함수
-kg_qa({"question": user_question, "chat_history": []})
+# kg_qa({"question": user_question, "chat_history": []})
+
+print("response >> ", kg_qa(user_question)["source_documents"][0])
 
 
 # history 테스트
@@ -171,21 +222,6 @@ kg_qa({"question": user_question, "chat_history": []})
 
 
 # print("result > ", result)
-
-
-####
-### 유사도 검색 with score
-
-# query = user_question
-# docs_with_score = kg.similarity_search_with_score(query, k=1)
-
-
-# for doc, score in docs_with_score:
-#     print("-" * 80)
-#     print("Score: ", score)
-#     print(doc.page_content)
-#     print("-" * 80)
-
 
 ##########
 ## 유사도 검색

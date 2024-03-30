@@ -31,9 +31,9 @@ def lambda_handler(event, context):
     OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
 
     VECTOR_INDEX_NAME = "embeddedPost"
-    VECTOR_NODE_LABEL = "Chunks"
+    VECTOR_NODE_LABEL = "Chunk"
     VECTOR_SOURCE_PROPERTY = "text"
-    VECTOR_EMBEDDING_PROPERTY = "textEmbeddings"
+    VECTOR_EMBEDDING_PROPERTY = "textEmbedding"
 
     kg = Neo4jGraph(
         url=NEO4J_URI,
