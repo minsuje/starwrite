@@ -29,6 +29,7 @@ const _buttonBox = styled.div`
 
     &:hover {
       cursor: pointer;
+      color: var(--color-primary-500);
     }
   }
 `;
@@ -113,7 +114,7 @@ export const _Button = styled.button`
 `;
 export const _Title = styled.h1`
   font-size: 2rem;
-  padding-top: 18px;
+  padding-top: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -160,6 +161,13 @@ export const _NewCommentBox = styled.div`
   h1 {
     font-size: 1.5rem;
   }
+`;
+
+// 리스트에 글 없을 때
+export const _NoneList = styled.div`
+  width: 100%;
+  text-align: center;
+  padding-top: 100px;
 `;
 
 export { _headBox, _buttonBox, _CategoryNameInput };

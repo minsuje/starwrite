@@ -6,21 +6,23 @@ export interface Category {
 }
 
 export interface Posts {
-  postId: number;
-  categoryId: string;
+  categoryId?: string;
+  categoryName?: string;
   content: string;
-  created_at?: Date;
-  updated_at?: Date;
-  title: string;
-  tmpSave: boolean;
-  visible: string;
-  recentView: Date;
-  postTitle?: string;
-  postIdentifier?: number;
-  authorNickname?: string;
+  createdAt: Date;
+  img?: string;
   originAuthor?: string;
   originAuthorId?: string;
+  postId?: number;
+  postIdentifier?: number;
+  postTitle?: string;
+  recentView: Date;
   scrap?: boolean;
+  updatedAt: Date;
+  userId: string;
+  userNickname?: string;
+  visible: string;
+  title?: string;
   nickname?: string;
 }
 

@@ -6,7 +6,8 @@ const _ListViewBox = styled.div`
 `;
 
 const _CategoryBar = styled.div`
-  width: 20%;
+  margin-top: 5rem;
+  width: 150px;
   height: fit-content;
   display: flex;
   gap: 20px;
@@ -16,7 +17,7 @@ const _CategoryBar = styled.div`
 `;
 
 const _CategoryContent = styled.div`
-  width: 70%;
+  width: 80%;
   height: 85%;
   background-color: var(--color-zinc-900);
   padding: 20px 30px;

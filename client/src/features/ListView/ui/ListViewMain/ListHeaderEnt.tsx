@@ -63,20 +63,22 @@ function ListHeaderEnt({
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'end' }}>
           <h1>{categoryName}</h1>
           <_buttonBox>
-            {category != 'all' && category != 'scrab' && (
-              <>
-                <button
-                  onClick={() => {
-                    dispatch(EditActions.change(true));
-                  }}
-                >
-                  <LuPencilLine />
-                </button>
-                <button onClick={deleteCategory}>
-                  <IoIosTrash />
-                </button>
-              </>
-            )}
+            {category != 'all' &&
+              category != 'scrab' &&
+              nickname === myNickname && (
+                <>
+                  <button
+                    onClick={() => {
+                      dispatch(EditActions.change(true));
+                    }}
+                  >
+                    <LuPencilLine />
+                  </button>
+                  <button onClick={deleteCategory}>
+                    <IoIosTrash />
+                  </button>
+                </>
+              )}
           </_buttonBox>
         </div>
 

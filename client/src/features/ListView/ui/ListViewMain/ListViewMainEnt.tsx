@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { ListHeaderEnt } from '../..';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   postListApi,
   postListAllApi,
   postListScrapApi,
 } from '../../api/PostApi';
-import { _listBox, _postBox } from '../style';
 import { Posts, useAppSelector } from '../../../../shared/model';
-import Badge from '../../../../shared/Badge';
 import { resetState } from '../../model/StateSlice';
+import ListViewAllFeat from './ListViewAllFeat';
+import ListViewScrapFeat from './ListViewScrapFeat';
+import ListViewSelectFeat from './ListViewSelectFeat';
 
 function ListViewMainEnt() {
   const { nickname, category } = useParams();
@@ -68,93 +69,25 @@ function ListViewMainEnt() {
     }
   }, [category, nickname, reset]);
 
-  if (postsList[0]) {
-    if (postsList[0].title) {
-      return (
-        <>
-          <ListHeaderEnt categoryName={categoryName} category={category} />
-          <_listBox>
-            {!(postsList?.length === 0) &&
-              postsList?.map((post, idx) => {
-                return (
-                  <div key={idx}>
-                    <Link
-                      to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postId}`}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <_postBox>
-                        <h1>
-                          {post.title}
-                          {post.nickname !== nickname &&
-                            post.nickname !== null && <Badge>스크랩</Badge>}
-                          {post.visible === 'false' ? (
-                            <Badge>비공개</Badge>
-                          ) : (
-                            <Badge>공개</Badge>
-                          )}
-                        </h1>
-                        <p>{post.content}</p>
-                      </_postBox>
-                    </Link>
-                  </div>
-                );
-              })}
-          </_listBox>
-        </>
-      );
-    } else if (categoryName === '전체' || categoryName === '스크랩') {
-      if (postsList[0]) {
-        return (
-          <>
-            <ListHeaderEnt categoryName={categoryName} category={category} />
-            <_listBox>
-              {!(postsList?.length === 0) &&
-                postsList?.map((post, idx) => {
-                  return (
-                    <div key={idx}>
-                      <Link
-                        to={`/user/starwrite/listview/main/${nickname}/${category}/${post.postIdentifier}`}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <_postBox>
-                          <h1>
-                            {post.postTitle}
-                            {(categoryName === '스크랩' || post.scrap) && (
-                              <Badge>스크랩</Badge>
-                            )}
-                            {post.visible === 'false' ? (
-                              <Badge>비공개</Badge>
-                            ) : (
-                              <Badge>공개</Badge>
-                            )}
-                          </h1>
-                          <p>{post.content}</p>
-                        </_postBox>
-                      </Link>
-                    </div>
-                  );
-                })}
-            </_listBox>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <ListHeaderEnt categoryName={categoryName} category={category} />
-            <_listBox style={{ textAlign: 'center', paddingTop: '20px' }}>
-              등록된 글이 없습니다.
-            </_listBox>
-          </>
-        );
-      }
-    }
+  if (categoryName === '전체') {
+    return (
+      <>
+        <ListHeaderEnt categoryName={categoryName} category={category} />
+        <ListViewAllFeat postListAll={postsList}></ListViewAllFeat>
+      </>
+    );
+  } else if (categoryName === '스크랩') {
+    return (
+      <>
+        <ListHeaderEnt categoryName={categoryName} category={category} />
+        <ListViewScrapFeat postListScrap={postsList}></ListViewScrapFeat>
+      </>
+    );
   } else {
     return (
       <>
         <ListHeaderEnt categoryName={categoryName} category={category} />
-        <_listBox style={{ textAlign: 'center', paddingTop: '20px' }}>
-          등록된 글이 없습니다.
-        </_listBox>
+        <ListViewSelectFeat postListSelect={postsList}></ListViewSelectFeat>
       </>
     );
   }
