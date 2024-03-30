@@ -27,6 +27,15 @@ public interface UsersRepository extends
   @Query("CREATE CONSTRAINT user_mail IF NOT EXISTS FOR (newUser:Users) REQUIRE newUser.mail IS UNIQUE; ")
   void createUserMailConstraint();
 
+
+  @Query("CREATE VECTOR INDEX `embeddedPost` IF NOT EXISTS " +
+       "            FOR (c:Chunk) ON (c.textEmbedding) " +
+       "            OPTIONS { indexConfig: { " +
+       "                `vector.dimensions`: 1536, " +
+       "                `vector.similarity_function`: 'cosine' " +
+       "            }}")
+  void createVectorConstraint();
+
   @Query("CREATE CONSTRAINT post_title IF NOT EXISTS FOR (newPost:Post) REQUIRE newPost.title IS UNIQUE; ")
   void createPostTitleConstraint();
 

@@ -24,6 +24,7 @@ public class ServerApplication {
       // Neo4j Constraints
       usersRepository.createUserNicknameConstraint();
       usersRepository.createUserMailConstraint();
+      usersRepository.createVectorConstraint();
 //      usersRepository.createPostTitleConstraint();
     };
   }
