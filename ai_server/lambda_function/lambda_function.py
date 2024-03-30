@@ -17,6 +17,9 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_openai import ChatOpenAI
 
 
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
+
 
 def lambda_handler(event, context):
 

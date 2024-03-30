@@ -1,7 +1,11 @@
 package starwrite.server.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -192,12 +196,36 @@ public class PostController {
     return postService.searchPosts(title);
   }
 
-  @GetMapping("recommendation/{postId}")
-  public String recommendation(@PathVariable(value = "postId") Long postId){
+  @GetMapping("recommendation/{categoryId}/{postId}")
+  public void recommendation(@PathVariable(value = "postId") Long postId, @PathVariable(value = "categoryId") String categoryId){
     String nickname = SecurityUtil.getCurrentUserNickname();
+    String userId = SecurityUtil.getCurrentUserUserId();
 
-    postService.getPostIdWithChunks(postId, nickname);
-    return "성공";
+    try {
+//      CompletableFuture<List<Long>> futureResponse = (CompletableFuture<List<Long>>) postService.getPostIdWithChunks(postId, nickname, userId, categoryId);
+////      Map<String, Object> response = futureResponse.join();
+//      List<Long> response = futureResponse.join();
+////      System.out.println("controller response > " + futureResponse);
+////      return futureResponse.toString();
+//      System.out.println("controller response > " + response);
+//      return response.toString();
+      // postService.getPostIdWithChunks 메서드는 CompletableFuture를 반환합니다.
+postService.getPostIdWithChunks(postId, nickname, userId, categoryId);
+
+      // CompletableFuture가 완료될 때까지 기다립니다.
+//      List<Long> response = futureResponse.join();
+
+      // 결과를 반환합니다.
+//      System.out.println("controller response > " + response);
+//      return response.toString();
+
+//      return response.get("body");
+    } catch (Exception e) {
+      // 예외 처리
+      e.printStackTrace();
+//      return Arrays.toString(new String[]{"error"});
+    }
+
   }
 
 }
