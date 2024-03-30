@@ -4,6 +4,7 @@ import { _EditorHead, _TitleInput, _PublcButton } from './style';
 import { useEffect, useState } from 'react';
 import { _ErrorMsg } from '../../../shared/CommonStyle';
 import { currentCategory } from '../../ListView/model/CategorySlice';
+import { _buttonBox } from '../../ListView/ui/style';
 
 function NewPostHeadFeat({
   onValid,
@@ -65,20 +66,19 @@ function NewPostHeadFeat({
     } else if (categories[0]) {
       setCategory(categories[0].categoryId);
     }
-  }, [categories]);
+  }, [categories, category, setCategory, selected]);
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'end', gap: '10px' }}>
+      <_buttonBox>
         {tmpSaved && (
           <>
-            <button onClick={openSaving}>임시저장 불러오기</button>
+            <button onClick={openSaving}>불러오기</button>
             <button onClick={savePost}>임시저장 </button>
           </>
         )}
-
-        <button onClick={() => publishPost()}>저장</button>
-      </div>
+        <button onClick={() => publishPost()}>저장하기</button>
+      </_buttonBox>
 
       <_TitleInput
         placeholder="제목을 입력하세요"
@@ -97,42 +97,39 @@ function NewPostHeadFeat({
             : ''}
       </_ErrorMsg>
 
-      <_EditorHead content={'start'}>
-        <p>카테고리</p>
-        <select
-          value={category}
-          onChange={(value) => {
-            setCategory(value.currentTarget.value);
-          }}
+      <_EditorHead content={'space-between'}>
+        <div
           style={{
-            // width: '50%',
-            width: 'fit-content',
-            padding: '0px 5%',
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            color: 'white',
-            border: 'none',
-            fontSize: '0.9rem',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'start',
+            width: '50%',
           }}
         >
-          {categories.map((category, idx) => {
-            return (
-              <option
-                style={{
-                  padding: '10px 10px',
-                  backgroundColor: 'rgba(0,0,0,1)',
-                  color: 'white',
-                  border: 'none',
-                }}
-                key={idx}
-                value={category.categoryId}
-              >
-                {category.name}
-              </option>
-            );
-          })}
-        </select>
-
-        <p>공개설정</p>
+          <p>카테고리</p>
+          <select
+            value={category}
+            onChange={(value) => {
+              setCategory(value.currentTarget.value);
+            }}
+            style={{
+              width: '10rem',
+              padding: '0px 5%',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              color: 'white',
+              border: 'none',
+              fontSize: '0.9rem',
+            }}
+          >
+            {categories.map((category, idx) => {
+              return (
+                <option key={idx} value={category.categoryId}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
         <div style={{ display: 'flex', gap: '20px' }}>
           <_PublcButton

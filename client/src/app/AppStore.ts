@@ -11,7 +11,7 @@ const store = configureStore({
     category: categoryReducer, // 글 생성 시 현재 카테고리 전달
     state: stateReducer, // 카테고리 리스트 재렌더링
     commentState: commentStateReducer, // 댓글 재렌더링
-    EditState: EditReducer,
+    EditState: EditReducer, // 카테고리 수정
   },
 });
 

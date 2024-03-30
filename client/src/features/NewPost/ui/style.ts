@@ -39,7 +39,7 @@ const _EditorHead = styled.div`
   align-items: center;
   gap: 10px;
   p {
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: 800;
     width: 50%;
     text-align: center;
@@ -49,7 +49,7 @@ const _EditorHead = styled.div`
 const _TitleInput = styled(Input)`
   width: 100%;
   background-color: var(--color-zinc-900);
-  font-size: 20px;
+  font-size: 1.7rem;
 `;
 
 const _EditorBox = styled.div`
@@ -69,7 +69,7 @@ const _EditorDiv = styled.div`
 
 const _PublcButton = styled.div`
   border: 1px solid var(--color-zinc-600);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border-radius: 4px;
   width: 5em;
   text-align: center;
