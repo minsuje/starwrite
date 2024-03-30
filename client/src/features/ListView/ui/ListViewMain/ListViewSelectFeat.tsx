@@ -18,7 +18,7 @@ import Badge from '../../../../shared/Badge';
 function ListViewSelectFeat({ postListSelect }: { postListSelect: Posts[] }) {
   const { nickname, category } = useParams();
 
-  if (postListSelect && postListSelect[0].postId) {
+  if (postListSelect[0] && postListSelect[0].postId) {
     return (
       <div>
         <_listBox>
