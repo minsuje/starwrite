@@ -46,7 +46,7 @@ function ListViewWid() {
         ></ListCategory>
         {isMine && (
           <_AddCategoryButton onClick={() => setCategoryModal(true)}>
-            + 카테고리
+            +
           </_AddCategoryButton>
         )}
         {categoryModal && (

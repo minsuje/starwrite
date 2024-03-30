@@ -24,14 +24,16 @@ const _CategoryContent = styled.div`
 `;
 
 const _AddCategoryButton = styled.div`
-  width: 72%;
+  width: fit-content;
+  border-radius: 10px;
   text-align: center;
-  padding: 15px 0px;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
   &:hover {
-    background-color: var(--color-zinc-700);
+    color: var(--color-zinc-300);
     cursor: pointer;
   }
-  background-color: var(--color-zinc-800);
+  color: var(--color-zinc-200);
   margin: 0;
 `;
 
