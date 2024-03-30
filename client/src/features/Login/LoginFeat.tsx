@@ -213,6 +213,10 @@ function LoginForm() {
     <RegisterBox>
       <form onSubmit={handleSubmit(onValid)}>
         <InputBox>
+          <div style={{ fontSize: '10px' }}>
+            <p>테스트 계정 : user001@naver.com</p>
+            <p>패스워드 : 1q2w3e4r!</p>
+          </div>
           <Label>
             E-MAIL<_emoji>{Emoji('email')}</_emoji>
           </Label>
