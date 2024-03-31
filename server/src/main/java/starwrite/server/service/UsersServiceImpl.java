@@ -121,13 +121,13 @@ public class UsersServiceImpl implements UsersService {
 
             // 사용자가 존재하지 않는 경우 예외 처리
             log.error("Authentication failed: {}", e.getMessage());
-            throw new RuntimeException("Authentication failed: User not found");
+            throw e;
         } catch (AuthenticationException e) {
             System.out.println("AuthenticationException e > " + e);
 
             // 잘못된 비밀번호를 입력한 경우 예외 처리
             log.error("Authentication failed: {}", e.getMessage());
-            throw new RuntimeException("Authentication failed: Invalid password");
+            throw e;
         } catch (Exception e) {
             // 다른 예외 상황 처리
             log.error("An unexpected error occurred during authentication: {}", e.getMessage());
