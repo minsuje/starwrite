@@ -437,6 +437,7 @@ export const NodeView = ({
       height={viewportSize.height}
       style={{
         justifyContent: 'center',
+        marginTop: '950px',
         position: 'fixed',
         width: '100%',
       }}

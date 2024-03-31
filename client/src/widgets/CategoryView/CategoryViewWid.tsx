@@ -181,6 +181,7 @@ export function CategoryViewWid({
       style={{
         display: 'flex',
         justifyContent: 'center',
+        marginTop: '950px',
         position: 'fixed',
         width: '100%',
       }}

@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 // import { nodes } from '../../widgets/NodeView/index';
-import { SearchIcon } from '../../shared/Search';
 import './NodeSearchFeat.css';
 import { NodeViewProps } from '../../pages/NodeView/NodeViewPage';
 
@@ -41,9 +40,7 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
           style={{
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '50px',
             paddingBottom: '20px',
-            marginTop: '50px',
           }}
         >
           {NickName} 님의 노드뷰
