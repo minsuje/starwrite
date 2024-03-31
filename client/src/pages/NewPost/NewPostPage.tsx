@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { NewPostFeat } from '../../features/NewPost';
 
 const _NewPostPage = styled.div`
-  margin: 2% 10% 0;
+  /* margin: 2% 10% 0; */
+  width: 100%;
 `;
 function NewPostPage() {
   return (

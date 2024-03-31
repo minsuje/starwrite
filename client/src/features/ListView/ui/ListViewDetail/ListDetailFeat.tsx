@@ -16,6 +16,7 @@ import { useAppSelector } from '../../../../shared/model';
 import { commentState } from '../../model/CommentSlice';
 import styled from 'styled-components';
 import { _buttonBox, _NoneList } from '../style';
+import './ListDetailFeat.css';
 
 const _DetailButton = styled.button`
   width: fit-content;
@@ -144,7 +145,6 @@ export default function ListDetailFeat() {
           </>
         )}
       </_buttonBox>
-
       <hr style={{ borderColor: 'var(--color-zinc-600)' }}></hr>
       {scrap && (
         <SelectCategory
@@ -156,6 +156,7 @@ export default function ListDetailFeat() {
         <BlockNoteView
           slashMenu={false}
           editor={editor}
+          data-theming-css-demo
           editable={false}
           theme={redTheme.light}
           onSelectionChange={() => {

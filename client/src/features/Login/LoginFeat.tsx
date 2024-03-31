@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
   Input,
   InputBox,
+  InputLabelBox,
   Label,
   LargeButton,
   _emoji,
@@ -15,6 +16,8 @@ import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
 import { Link } from 'react-router-dom';
+import { MdError } from 'react-icons/md';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 // 타입 지정
 interface LoginInput {
@@ -27,12 +30,27 @@ const RegisterBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 24px;
+  box-shadow: #00000026 0px 5px 20px;
+  animation: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s 1 normal both
+    running;
+  border-radius: 8px;
+  background-color: #16171a;
+`;
+
+const _Form = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 const ErrorMsg = styled.p`
-  color: #ffafaf;
-  font-size: 12px;
-  padding-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ff8587;
+  font-size: 14px;
+  line-height: 1.5;
 `;
 
 // 유효성 검사 schema
@@ -103,10 +121,10 @@ function LoginForm() {
   // 이모지 표시 함수 수정
   const Emoji = (fieldName: keyof LoginInput) => {
     if (watch(fieldName) && !errors[fieldName]) {
-      return '✅';
+      return <BsCheckCircleFill color="#666666" />;
     }
     if (errors[fieldName]) {
-      return '❌';
+      return;
     }
     return '';
   };
@@ -213,10 +231,6 @@ function LoginForm() {
     <RegisterBox>
       <form onSubmit={handleSubmit(onValid)}>
         <InputBox>
-          <div style={{ fontSize: '10px' }}>
-            <p>테스트 계정 : user001@naver.com</p>
-            <p>패스워드 : 1q2w3e4r!</p>
-          </div>
           <Label>
             E-MAIL<_emoji>{Emoji('email')}</_emoji>
           </Label>
@@ -249,7 +263,7 @@ function LoginForm() {
           )}
         </InputBox>
 
-        <LargeButton type="submit" style={{ marginTop: '50px' }}>
+        <LargeButton type="submit" style={{ marginTop: '40px' }}>
           로그인
         </LargeButton>
       </form>

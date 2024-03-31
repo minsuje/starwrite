@@ -8,8 +8,18 @@ import { _buttonBox } from '../../ListView/ui/style';
 import styled from 'styled-components';
 
 const _newBox = styled(_buttonBox)`
-  margin: 25px;
+  /* margin: 25px; */
+  display: flex;
+  width: fit-content;
 `;
+
+const _newPostHeader = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  margin-bottom: 16px;
+`;
+
 function NewPostHeadFeat({
   onValid,
   data,
@@ -74,32 +84,32 @@ function NewPostHeadFeat({
 
   return (
     <>
-      <_newBox>
-        {tmpSaved && (
-          <>
-            <button onClick={openSaving}>불러오기</button>
-            <button onClick={savePost}>임시저장 </button>
-          </>
-        )}
-        <button onClick={() => publishPost()}>저장하기</button>
-      </_newBox>
-
-      <_TitleInput
-        placeholder="제목을 입력하세요"
-        defaultValue={title ? title : undefined}
-        onChange={(value) => {
-          setTitle(value.currentTarget.value);
-          setOnValid();
-        }}
-      />
-
-      <_ErrorMsg>
-        {onValid === 'false'
-          ? '제목은 1자 이상 50자 이하로 작성해주세요'
-          : onValid === 'duplicate'
-            ? '이미 존재하는 제목입니다.'
-            : ''}
-      </_ErrorMsg>
+      <_newPostHeader>
+        <_TitleInput
+          placeholder="제목을 입력하세요"
+          defaultValue={title ? title : undefined}
+          onChange={(value) => {
+            setTitle(value.currentTarget.value);
+            setOnValid();
+          }}
+        />
+        <_ErrorMsg>
+          {onValid === 'false'
+            ? '제목은 1자 이상 50자 이하로 작성해주세요'
+            : onValid === 'duplicate'
+              ? '이미 존재하는 제목입니다.'
+              : ''}
+        </_ErrorMsg>
+        <_newBox>
+          {tmpSaved && (
+            <>
+              <button onClick={openSaving}>불러오기</button>
+              <button onClick={savePost}>임시저장 </button>
+            </>
+          )}
+          <button onClick={() => publishPost()}>저장하기</button>
+        </_newBox>
+      </_newPostHeader>
 
       <_EditorHead content={'space-between'}>
         <div
@@ -107,7 +117,7 @@ function NewPostHeadFeat({
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'start',
-            width: '50%',
+            // width: '50%',
           }}
         >
           <p>카테고리</p>
@@ -117,11 +127,12 @@ function NewPostHeadFeat({
               setCategory(value.currentTarget.value);
             }}
             style={{
-              width: '10rem',
-              padding: '0px 5%',
+              // width: '10rem',
+              padding: '8px 16px',
               backgroundColor: 'rgba(0, 0, 0, 0.3)',
               color: 'white',
               border: 'none',
+              borderRadius: '4px',
               fontSize: '0.9rem',
             }}
           >
@@ -135,7 +146,7 @@ function NewPostHeadFeat({
           </select>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', gap: '12px' }}>
           <_PublcButton
             color={toggleButton ? 'var(--color-zinc-600)' : undefined}
             onClick={() => {

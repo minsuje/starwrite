@@ -17,7 +17,7 @@ const _StyledHeaderContainer = styled.div`
   padding: 10px 20px;
   /* margin-bottom: 50px; */
   position: fixed;
-  border-bottom: 2px solid #a29e9e;
+  border-bottom: 1px solid #2d2d2d;
   background-color: var(--color-zinc-900);
   z-index: 9999;
 `;
