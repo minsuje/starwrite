@@ -7,7 +7,7 @@
   background-color: blue;
 }
 
-.bn-editor[data-theming-css-demo] {
+.bn-editor {
   padding: 0 !important;
   background: #00000000 !important;
   gap: 20px !important;
