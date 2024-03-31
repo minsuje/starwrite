@@ -1,3 +1,4 @@
 .idea
 .DS_Store
 .env
+server/src/main/resources/intellij-java-google-style.xml

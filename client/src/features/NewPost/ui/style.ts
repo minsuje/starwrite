@@ -129,7 +129,7 @@ const lightRedTheme = {
     highlights: lightDefaultTheme.colors!.highlights,
   },
   borderRadius: 4,
-  // fontFamily: 'Helvetica Neue, sans-serif',
+  fontFamily: 'Helvetica Neue, sans-serif',
 } satisfies Theme;
 
 // The theme for dark mode,
