@@ -32,9 +32,14 @@ export const _registerbtn = styled.button<ButtonProps>`
   color: white;
   text-align: center;
   border: none;
+  border-radius: 4px;
   background-color: ${(props) => props.bgcolor || 'blue'};
+  transition: all 0.3s ease;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
   &:hover {
     background-color: #0353cb;
+    transition: all 0.3s ease;
   }
   &:disabled {
     background-color: gray;
@@ -44,47 +49,75 @@ export const _registerbtn = styled.button<ButtonProps>`
 // 버튼 스타일
 export const _SmallButton = styled.button<ButtonProps>`
   width: 100px;
-  height: 40px;
+  padding: 14px;
   background-color: ${(props) => props.bgcolor || 'blue'};
   color: white;
   border: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
   &:hover {
     background-color: #0353cb;
+    transition: all 0.3s ease;
   }
 `;
 
 export const MediumButton = styled.button<ButtonProps>`
   width: 200px;
-  height: 40px;
+  padding: 14px;
   background-color: ${(props) => props.bgcolor || 'blue'};
   color: white;
   border: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
   &:hover {
     background-color: #0353cb;
+    transition: all 0.3s ease;
   }
 `;
 
 export const LargeButton = styled.button`
   width: 300px;
-  height: 40px;
+  padding: 14px;
   background-color: #1361d7;
   color: white;
   border: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  -webkit-app-region: no-drag;
+  cursor: pointer;
   &:hover {
     background-color: #0353cb;
+    transition: all 0.3s ease;
   }
 `;
 // input 스타일
 export const Input = styled.input`
-  height: 30px;
+  padding: 12px;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 300px;
-  background-color: #616161;
-  border: none;
-  color: #ffffff;
-  opacity: 0.6;
-  border-radius: 3px;
+  /* max-width: 300px; */
+  background-color: #1a1b1e;
+  border: 1px solid #313339;
+  color: #e3e4e8;
+  -webkit-app-region: no-drag;
+  outline-offset: -1px;
+  font-size: 15px;
+  line-height: 1.5;
   display: flex;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  &:hover {
+    border: 1px solid #3f4452;
+    transition: all 0.3s ease;
+  }
+  &:focus {
+    border: 1px solid #0353cb;
+    transition: all 0.3s ease;
+  }
 
   /* flex-direction: row; */
 `;
@@ -93,17 +126,23 @@ export const Input = styled.input`
 export const Label = styled.label`
   display: flex;
   /* flex-direction: column; */
-  color: #c0c0c0;
+  color: #e3e4e8;
   padding: 10px 0px;
   width: 100%;
+  gap: 4px;
 `;
 
 // input + label 박스 스타일
 export const InputBox = styled.div`
-  /* display: flex; */
-  /* flex-direction: column; */
-  gap: 2px;
-  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const InputLabelBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 // 메인 뷰 Title

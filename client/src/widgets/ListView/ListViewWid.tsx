@@ -16,6 +16,7 @@ import {
   EditActions,
   EditState,
 } from '../../features/ListView/model/EditSlice';
+import { FiPlus } from 'react-icons/fi';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
@@ -46,9 +47,11 @@ function ListViewWid() {
         ></ListCategory>
         {isMine && (
           <_AddCategoryButton onClick={() => setCategoryModal(true)}>
-            +
+            <FiPlus color="#fff" />
+            카테고리 추가
           </_AddCategoryButton>
         )}
+
         {categoryModal && (
           <AddCategory
             setUpdateCategory={() => {

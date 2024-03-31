@@ -5,75 +5,91 @@ import { Theme, darkDefaultTheme, lightDefaultTheme } from '@blocknote/react';
 import { _Modal } from '../../../shared/Modal/ModalStyle';
 // 스타일
 const OneCategory = styled.div`
-  width: 80%;
+  width: 100%;
   margin: 0px auto;
   text-align: center;
   padding: 15px 0px;
+  border-radius: 6px;
   background-color: var(--color-zinc-700);
+  transition: all 0.3s ease;
   opacity: ${(props) => props.color || '0.6'};
   &:hover {
     opacity: 1;
+    transition: all 0.3s ease;
     cursor: pointer;
   }
 `;
 
 const ListCategories = styled.div`
-  width: 90%;
-  height: 100%;
-  margin: auto;
-  padding-top: 10px;
+  width: 100%;
+  /* height: 100%; */
+  /* margin: auto; */
+  /* padding-top: 10px; */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 `;
 
 const _EditorHead = styled.div`
-  width: 90%;
+  width: 100%;
+  box-sizing: border-box;
   background-color: var(--color-zinc-900);
-  border: 1px solid;
+  /* border: 1px solid; */
   border-color: rgba(255, 255, 255, 0.3);
   border-radius: 7px;
-  padding: 2% 5%;
+  padding: 16px;
   display: flex;
   justify-content: ${(props) => props.content || 'space-between'};
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   p {
     font-size: 1rem;
-    font-weight: 800;
-    width: 50%;
-    text-align: center;
+    padding: 8px 16px;
+    font-weight: 500;
+    width: 100%;
+    /* text-align: center; */
   }
 `;
 
 const _TitleInput = styled(Input)`
+  display: flex;
   width: 100%;
-  background-color: var(--color-zinc-900);
+  border: none;
+  background-color: #f1f1f100;
   font-size: 1.7rem;
+  padding: 0;
+
+  &:hover {
+    border: none;
+  }
+
+  &:focus {
+    border: none;
+  }
 `;
 
 const _EditorBox = styled.div`
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 120px);
   flex-direction: column;
-  margin: 5vh auto;
-  gap: 20px;
+  /* margin: 5vh auto; */
+  gap: 12px;
 `;
 const _EditorDiv = styled.div`
   width: 100%;
-  height: 70vh;
-  background-color: var(--color-zinc-800);
-  padding: 25px 0;
+  height: 100%;
+  background-color: var(--color-zinc-900);
+  padding: 24px 0;
   overflow-y: auto;
+  border-radius: 8px;
 `;
 
 const _PublcButton = styled.div`
   border: 1px solid var(--color-zinc-600);
   font-size: 0.9rem;
   border-radius: 4px;
-  width: 5em;
   text-align: center;
-  padding: 4px 0;
+  padding: 8px 20px;
   background-color: ${(props) => props.color || 'none'};
   &:hover {
     cursor: pointer;
@@ -113,7 +129,7 @@ const lightRedTheme = {
     highlights: lightDefaultTheme.colors!.highlights,
   },
   borderRadius: 4,
-  fontFamily: 'Helvetica Neue, sans-serif',
+  // fontFamily: 'Helvetica Neue, sans-serif',
 } satisfies Theme;
 
 // The theme for dark mode,
@@ -124,7 +140,7 @@ const darkRedTheme = {
     ...lightRedTheme.colors,
     editor: {
       text: 'var(--color-zinc-100)',
-      background: 'var(--color-zinc-800)',
+      background: 'var(--color-zinc-900)',
     },
     sideMenu: 'var(--color-zinc-100)',
     highlights: darkDefaultTheme.colors!.highlights,

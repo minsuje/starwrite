@@ -36,34 +36,36 @@ const _buttonBox = styled.div`
 
 const _CategoryNameInput = styled.input`
   position: absolute;
-  left: 35%;
+  /* left: 35%; */
   z-index: 100;
 `;
 
 export const _listBox = styled.div`
   overflow: auto;
-  height: 90%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 `;
 
 export const _postBox = styled.div`
-  padding: 25px 20px;
+  padding: 20px 20px;
   background-color: var(--color-zinc-800);
-  border-radius: 3px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   text-decoration: none;
   text-decoration-line: none;
+
   h1 {
     font-size: 20px;
     color: var(--color-zinc-300);
   }
   p {
-    font-size: 13px;
-    color: var(--color-zinc-500);
+    line-height: 1.5;
+    font-size: 14px;
+    color: var(--color-zinc-400);
   }
   &:hover {
     opacity: 0.8;

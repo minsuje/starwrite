@@ -2,13 +2,18 @@ import styled from 'styled-components';
 //sidebar + contentBox
 const _ListViewBox = styled.div`
   display: flex;
-  height: 80vh;
+  /* height: calc(100vh); */
+  height: 100%;
+
+  /* background-color: #fff; */
+  /* height: 80vh; */
 `;
 
 const _CategoryBar = styled.div`
-  margin-top: 5rem;
-  width: 150px;
-  height: fit-content;
+  /* margin-top: 5rem; */
+  width: 240px;
+  padding: 20px;
+  /* height: 100%; */
   display: flex;
   gap: 20px;
   flex-direction: column;
@@ -17,24 +22,34 @@ const _CategoryBar = styled.div`
 `;
 
 const _CategoryContent = styled.div`
-  width: 80%;
-  height: 85%;
-  background-color: var(--color-zinc-900);
-  padding: 20px 30px;
+  width: 100%;
+  border-radius: 6px;
+  padding: 24px;
+  background: linear-gradient(
+    90deg,
+    rgba(24, 24, 24, 1) 0%,
+    rgba(14, 14, 14, 1) 100%
+  );
+  overflow-y: scroll;
 `;
 
 const _AddCategoryButton = styled.div`
-  width: fit-content;
-  border-radius: 10px;
+  width: calc(100% - 28px);
+  padding: 16px;
+  border-radius: 4px;
   text-align: center;
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* font-size: 1.5rem; */
+  color: var(--color-zinc-200);
+  background-color: var(--color-zinc-700);
+
   &:hover {
     color: var(--color-zinc-300);
     cursor: pointer;
   }
-  color: var(--color-zinc-200);
-  margin: 0;
 `;
 
 export { _AddCategoryButton, _CategoryBar, _CategoryContent, _ListViewBox };

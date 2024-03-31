@@ -10,16 +10,32 @@ import LoginPage from '../pages/Login/LoginPage';
 import { MyPage } from '../pages/MyPage/MyPage';
 import { MainPage } from '../pages/Main/Main';
 import Chatbot from '../widgets/Chat/Chatbot';
+import styled from 'styled-components';
 // import { GoogleOAuth } from '../features/Login/google';
 // import { InterGratedSearchpage } from '../pages/IntergatedSerach/InterGratedSearchpage';
 import { Page404Error } from '../shared/404';
+
+const _Container = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0 40px;
+  /* margin-top: 40px; */
+  padding-top: 90px;
+  align-items: center;
+  max-width: 880px;
+  /* height: calc(100vh); */
+`;
 
 export const AppRouter = createBrowserRouter([
   {
     element: (
       <>
+        {/* <HeaderWid /> */}
         <Chatbot />
-        <Outlet />
+        <_Container>
+          <Outlet />
+        </_Container>
       </>
     ),
     children: [
