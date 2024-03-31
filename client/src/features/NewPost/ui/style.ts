@@ -79,7 +79,7 @@ const _EditorDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: var(--color-zinc-900);
-  padding: 24px 0;
+  padding: 24px 40px;
   overflow-y: auto;
   border-radius: 8px;
 `;

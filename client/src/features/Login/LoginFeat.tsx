@@ -65,7 +65,7 @@ function LoginForm() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'user005@naver.com',
+      email: 'user001@naver.com',
       password: '1q2w3e4r!',
     },
   });
