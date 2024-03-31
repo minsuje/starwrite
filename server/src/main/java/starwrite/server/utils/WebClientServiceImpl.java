@@ -1,6 +1,7 @@
 package starwrite.server.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +83,7 @@ public class WebClientServiceImpl {
     }
 
 
-    public void postIdWithNickname(Long postId, String nickname, String userId, String categoryId) {
+    public CompletableFuture<Map<String, Object>> postIdWithNickname(Long postId, String nickname, String userId, String categoryId) {
         System.out.println(">>>>>> POST ID " + postId + " >>>>>>> Content " + nickname);
 
         ExchangeStrategies strategies = ExchangeStrategies.builder()
@@ -107,7 +108,7 @@ public class WebClientServiceImpl {
 
         webClient
             .post()
-            .uri("user/recommend/")
+            .uri("user/recommend")
             .body(Mono.just(requestBody), Map.class)
             .retrieve()
             .bodyToMono(Map.class)
@@ -121,8 +122,9 @@ public class WebClientServiceImpl {
                 System.out.println("response > " +  response);
             });
 //        .subscribe(response -> log.info(response.toString()));
-
-
+        future.join();
+        System.out.println(">> future" + future);
+        return future;
 //        webClient
 //            .post()
 //            .uri("user/chatAI")
