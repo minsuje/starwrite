@@ -202,11 +202,11 @@ export const NodeView = ({
       .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2),
+        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2.5),
       )
       .force(
         'radial',
-        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 2),
+        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 3),
       )
 
       .alphaDecay(0.00028); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
@@ -371,8 +371,8 @@ export const NodeView = ({
           }
         });
       node
-        .attr('x', (d) => d.x ?? -0.5) // 이미지의 중앙이 노드 위치에 오도록 x 조정
-        .attr('y', (d) => d.y ?? -0.5); // 이미지의 중앙이 노드 위치에 오도록 y 조정
+        .attr('x', (d) => d.x ?? -17.5) // 이미지의 중앙이 노드 위치에 오도록 x 조정
+        .attr('y', (d) => d.y ?? -17.5); // 이미지의 중앙이 노드 위치에 오도록 y 조정
 
       // 텍스트 위치 업데이트
 
