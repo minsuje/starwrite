@@ -6,6 +6,7 @@ import {
   filterSuggestionItems,
 } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
+import '@mantine/core/styles.css';
 import {
   BlockNoteView,
   DefaultReactSuggestionItem,
