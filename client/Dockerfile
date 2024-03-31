@@ -11,5 +11,8 @@ RUN npm install
 COPY . ./
 EXPOSE 3000
 
+# React 애플리케이션을 빌드합니다.
+RUN npm run build
+
 # npm start 스크립트 실행
 CMD ["npm", "run", "dev"]
