@@ -152,35 +152,6 @@ def lambda_handler(event, context):
 
     response = kg_qa(user_question)["source_documents"][0]
 
-    # def neo4j_vector_search(question):
-    #     """Search for similar nodes using the Neo4j vector index"""
-    #     vector_search_query = """
-    #         WITH genai.vector.encode(
-    #         $question,
-    #         "OpenAI",
-    #         {
-    #             token: $openAiApiKey,
-    #             endpoint: $openAiEndpoint
-    #         }) AS question_embedding
-    #         CALL db.index.vector.queryNodes($index_name, $top_k, question_embedding) yield node,    score
-    #         RETURN score, node.text AS text
-    #     """
-    #     similar = kg.query(
-    #         vector_search_query,
-    #         params={
-    #             "question": question,
-    #             "openAiApiKey": OPENAI_API_KEY,
-    #             "openAiEndpoint": OPENAI_BASE_URL,
-    #             "index_name": VECTOR_INDEX_NAME,
-    #             "top_k": 5,
-    #         },
-    #     )
-    #     return similar
-
-    # search_results = neo4j_vector_search(user_question)
-
-    # print("search_results > ", search_results)
-
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
