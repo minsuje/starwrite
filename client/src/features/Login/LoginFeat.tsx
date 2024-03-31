@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 // import jwtDecode from 'jwt-decode';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
 import { Link } from 'react-router-dom';
 import { BsCheckCircleFill } from 'react-icons/bs';
@@ -70,6 +70,8 @@ function LoginForm() {
     },
   });
 
+  const [loginErrorMessage, setLoginErrorMessage] = useState('');
+
   const onValid = async (data: LoginInput) => {
     console.log('onValid', data);
     //여기에 회원가입 axios 작성
@@ -89,6 +91,7 @@ function LoginForm() {
       });
 
       if (cookie.data.value == null) {
+        setLoginErrorMessage(response.data);
         alert('로그인 실패');
         return;
       }

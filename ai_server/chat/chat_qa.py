@@ -29,8 +29,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 
-user_question = "문자열이 뭐야?"
-userId = "a50cf644-51f2-4d72-b3d2-ff92e9b405c6"
+user_question = "react 에 대해 알려줘"
+userId = "9062f869-a0a8-4a45-890d-89c05c367a33"
 
 
 print("user_question > ", user_question)
@@ -62,9 +62,26 @@ retrieval_query_template = """
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
     {{source: chunks.source}} AS metadata
+    LIMIT 10
 """
 retrieval_query = retrieval_query_template.format(userId=userId)
 
+
+get_relevant_nodes_template = """
+CALL db.index.vector.queryNodes($index, $k, $embedding) 
+    YIELD node, score 
+WITH node AS chunk, score as similarity
+    ORDER BY similarity DESC LIMIT 5
+    CALL {{ WITH chunk
+      OPTIONAL MATCH (u:Users)-[:POSTED]->(p:Post)-[:EMBED]-(chunks:Chunk) WHERE u.userId = "{userId}"
+      RETURN u, p AS result, chunks
+    }}
+    WITH result, chunks, similarity
+    RETURN coalesce(chunks.text,'') as text,
+    similarity as score,
+    {{source: chunks.source}} AS metadata LIMIT 5
+"""
+get_relevant_nodes = get_relevant_nodes_template.format(userId=userId)
 
 retrieval_query_dummy = """
   WITH node AS doc, score as similarity
@@ -116,13 +133,13 @@ kg = Neo4jVector.from_existing_index(
 )
 
 
-# getAll = kg.query(
-#     """
-# MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 10
-# """
-# )
+getAll = kg.query(
+    """
+MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 100
+"""
+)
 
-# print("Get all >>> ", getAll)
+print("Get all >>> ", len(getAll))
 
 
 # retriever2 = kg.as_retriever(search_type="similarity")
@@ -198,7 +215,7 @@ kg_qa = RetrievalQAWithSourcesChain(
     combine_documents_chain=qa_chain,
     retriever=kg.as_retriever(
         search_type="similarity_score_threshold",
-        search_kwargs={"score_threshold": 0.9, "k": 5},
+        search_kwargs={"score_threshold": 0.9, "k": 1},
     ),
     # retriever=kg.as_retriever(
     #     search_type="mmr",
