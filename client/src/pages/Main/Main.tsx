@@ -9,6 +9,7 @@ import styled from 'styled-components';
 const _MainContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 export function MainPage() {
@@ -23,7 +24,7 @@ export function MainPage() {
               당신의 세컨 브레인을 만들어보세요
             </p>
             <button style={{ margin: '30px 0px' }}>
-              <a href="/user/starwrite/writenewpost" style={{ color: 'black' }}>
+              <a href="/login" style={{ color: 'black' }}>
                 시작하기
               </a>
             </button>

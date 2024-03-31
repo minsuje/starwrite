@@ -4,7 +4,6 @@ import { z } from 'zod';
 import {
   Input,
   InputBox,
-  InputLabelBox,
   Label,
   LargeButton,
   _emoji,
@@ -16,7 +15,6 @@ import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
 import { Link } from 'react-router-dom';
-import { MdError } from 'react-icons/md';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
 // 타입 지정
@@ -36,12 +34,6 @@ const RegisterBox = styled.div`
     running;
   border-radius: 8px;
   background-color: #16171a;
-`;
-
-const _Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
 `;
 
 const ErrorMsg = styled.p`
