@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/star_fav.svg" id="faviconTag" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starwrite - build your knowledge graph</title>
+  <script type="module" crossorigin src="/assets/index-DPsbPXJh.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BNIY9ee7.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+<script>
+  const faviconTag = document.getElementById("faviconTag");
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const changeFavicon = () => {
+    if (isDark.matches) faviconTag.href = "./star_fav_dark.svg";
+    else faviconTag.href = "./star_fav_light.svg";
+  };
+
+  changeFavicon();
+
+  setInterval(changeFavicon, 1000)
+</script>
+
+</html>
