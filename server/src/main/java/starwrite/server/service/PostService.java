@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 //import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -298,10 +300,10 @@ public class PostService {
     return postRepository.searchPosts(title);
   }
 
+
   public void getPostIdWithChunks(Long postId, String nickname, String userId, String categoryId){
 
-
-    webClientService.postIdWithNickname(postId, nickname, userId, categoryId);
+    System.out.println(">>>>> " + webClientService.postIdWithNickname(postId, nickname, userId, categoryId));
   }
 
 }

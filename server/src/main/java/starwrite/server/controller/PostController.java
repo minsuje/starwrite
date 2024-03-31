@@ -203,14 +203,14 @@ public class PostController {
 
     try {
 //      CompletableFuture<List<Long>> futureResponse = (CompletableFuture<List<Long>>) postService.getPostIdWithChunks(postId, nickname, userId, categoryId);
-////      Map<String, Object> response = futureResponse.join();
+//      Map<String, Object> response = futureResponse.join();
 //      List<Long> response = futureResponse.join();
 ////      System.out.println("controller response > " + futureResponse);
 ////      return futureResponse.toString();
 //      System.out.println("controller response > " + response);
 //      return response.toString();
       // postService.getPostIdWithChunks 메서드는 CompletableFuture를 반환합니다.
-postService.getPostIdWithChunks(postId, nickname, userId, categoryId);
+      postService.getPostIdWithChunks(postId, nickname, userId, categoryId);
 
       // CompletableFuture가 완료될 때까지 기다립니다.
 //      List<Long> response = futureResponse.join();

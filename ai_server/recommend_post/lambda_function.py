@@ -77,7 +77,6 @@ def lambda_handler(event, context):
         database=NEO4J_DATABASE,
     )
 
-
     retrieval_query_template = """
             WITH node AS chunk, score as similarity
             CALL {{ WITH chunk
@@ -89,10 +88,9 @@ def lambda_handler(event, context):
             similarity as score,
             {{source: chunks.source}} AS metadata
         """
-    retrieval_query= retrieval_query_template.format(userId=userId, categoryId=categoryId)
-
-
-
+    retrieval_query = retrieval_query_template.format(
+        userId=userId, categoryId=categoryId
+    )
 
     kgs = Neo4jVector.from_existing_index(
         embedding=OpenAIEmbeddings(),
@@ -103,7 +101,7 @@ def lambda_handler(event, context):
         index_name=VECTOR_INDEX_NAME,
         node_label=VECTOR_NODE_LABEL,
         embedding_node_property=VECTOR_EMBEDDING_PROPERTY,
-        retrieval_query=retrieval_query
+        retrieval_query=retrieval_query,
     )
 
     # print(chunks["text"])
@@ -112,7 +110,6 @@ def lambda_handler(event, context):
     MATCH (post:Post) WHERE ID(post) = $postId
     RETURN post.parsedContent
     """
-
 
     find_relevant_post = """
     MATCH (post:Post)-[:EMBED]-(chunk:Chunk) WHERE ID(post) = $postId
@@ -127,27 +124,25 @@ def lambda_handler(event, context):
     ORDER BY score DESC
     """
 
-
-
-    relevant_nodes = kg.query(find_relevant_post, params={"postId":postId})
+    relevant_nodes = kg.query(find_relevant_post, params={"postId": postId})
     print("relevant_nodes >>>>> ", relevant_nodes)
 
     Ids = []
     for node in relevant_nodes:
-        title = node['title']
+        title = node["title"]
 
         find_post = """
         OPTIONAL MATCH (post:Post)-[:EMBED]-(chunk:Chunk)
         WHERE ID(post) = $postId AND post.parsedContent =~ ('.*' + $title + '.*')
         RETURN ID(post)
         """
-        ids = kg.query(find_post, params={"postId":postId,"title":title})
+        ids = kg.query(find_post, params={"postId": postId, "title": title})
 
         if ids:
-          Ids.append(node['relatedPostId'])
+            Ids.append(node["relatedPostId"])
     #     titles.append(node['title'])
-    print("Ids >>>>>>" , Ids)
-
+    print("Ids >>>>>>", Ids)
+    print("완료")
 
     return {
         "statusCode": 200,
