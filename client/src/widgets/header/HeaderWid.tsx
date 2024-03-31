@@ -70,8 +70,13 @@ export function HeaderWid() {
   function handleNodeViewListPage() {
     if (category) {
       navigate(`/user/starwrite/listview/main/${nickname}/${category}`);
-    } else if (nickname) {
-      navigate(`/user/starwrite/listview/main/${nickname}/all`);
+    }
+    // 기존코드
+    // else if (nickname) {
+    //   navigate(`/user/starwrite/listview/main/${nickname}/all`);
+    // }
+    else if (nickname) {
+      navigate(`/user/starwrite/listview/main/${myNickname}/all`);
     } else {
       navigate(`/user/starwrite/listview/main/${myNickname}/all`);
     }
