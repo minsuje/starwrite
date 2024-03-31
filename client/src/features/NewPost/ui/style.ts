@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Input } from '../../../shared/CommonStyle';
-import { Theme, darkDefaultTheme, lightDefaultTheme } from '@blocknote/react';
+import { Theme, darkDefaultTheme } from '@blocknote/react';
 
 import { _Modal } from '../../../shared/Modal/ModalStyle';
 // 스타일
@@ -126,7 +126,7 @@ const lightRedTheme = {
     shadow: '#000000',
     border: '#000000',
     sideMenu: 'var(--color-zinc-100)',
-    highlights: lightDefaultTheme.colors!.highlights,
+    highlights: darkDefaultTheme.colors!.highlights,
   },
   borderRadius: 4,
   fontFamily: 'Helvetica Neue, sans-serif',

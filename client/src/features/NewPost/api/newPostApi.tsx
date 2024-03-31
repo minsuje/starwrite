@@ -34,6 +34,7 @@ export const newSavingApi = async (data: NewPost) => {
   try {
     const response = await baseApi.post(`/post/save`, data);
     console.log('newSavingApi', response.data);
+    alert('임시저장 완료되었습니다.');
     return response.data;
   } catch (error) {
     console.error(`newSavingApi Error`, error);
