@@ -9,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,22 +85,55 @@ public class IndexController {
 //  }
 
     @PostMapping("/login/post")
-    public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
-        System.out.println("signin" + logInDTO);
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Expires", "0");
+    public ResponseEntity<Object> signIn(@RequestBody LogInDTO logInDTO) {
+        try {
+            System.out.println("signin" + logInDTO);
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Expires", "0");
 
-        String username = logInDTO.getMail();
-        String password = logInDTO.getPassword();
-        JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
-//        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
-//        log.info("request username = {}, password = {}", username, password);
-//        log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
-            jwtDTO.getRefreshToken();
+            String username = logInDTO.getMail();
+            String password = logInDTO.getPassword();
+            JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
+            System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
 
-        return jwtDTO;
+            return ResponseEntity.ok(jwtDTO);
+        } catch (UsernameNotFoundException e) {
+            // 사용자가 존재하지 않는 경우 예외 처리
+            e.printStackTrace(); // 혹은 로그에 출력
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 아이디입니다.");
+        } catch (AuthenticationException e) {
+            // 잘못된 비밀번호를 입력한 경우 예외 처리
+            e.printStackTrace(); // 혹은 로그에 출력
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 틀렸습니다. 입력하신 내용을 다시 확인해주세요.");
+        } catch (RuntimeException e) {
+            // 기타 예외 상황 처리
+            e.printStackTrace(); // 혹은 로그에 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("로그인 과정 중에 오류가 발생했습니다. 다시 한 번 시도해주세요.");
+        }
     }
+//    public JwtDTO signIn(@RequestBody LogInDTO logInDTO) {
+//        System.out.println("signin" + logInDTO);
+//        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+//        response.setHeader("Pragma", "no-cache");
+//        response.setHeader("Expires", "0");
+//
+//        String username = logInDTO.getMail();
+//        String password = logInDTO.getPassword();
+//        JwtDTO jwtDTO = usersServiceimpl.signIn(username, password);
+//        System.out.println("jwtDTO >>>>>>>>>" + jwtDTO);
+////        log.info("request username = {}, password = {}", username, password);
+////        log.info("jwtDTO accessToken = {}, refreshToken = {}", jwtDTO.getAccessToken(),
+//            jwtDTO.getRefreshToken();
+//
+//            // 로그인 성공
+//        // signinLogInDTO(mail=user001@naver.com, password=1q2w3e4r!)
+//
+//        // 로그인 실패
+//
+//
+//        return jwtDTO;
+//    }
 
     @GetMapping("/cookie")
     public Cookie setCookie(Authentication authentication) {
