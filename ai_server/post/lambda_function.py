@@ -91,7 +91,7 @@ def lambda_handler(event, context):
     print("파싱 완료 문자열 : ", result_text)
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
+        chunk_size=700,
         chunk_overlap=200,
         length_function=len,
         is_separator_regex=False,
@@ -221,8 +221,8 @@ def lambda_handler(event, context):
 
         kg.query(
             """
-        CREATE CONSTRAINT unique_chunks IF NOT EXISTS 
-            FOR (c:Chunks) REQUIRE c.chunkId IS UNIQUE
+        CREATE CONSTRAINT unique_chunk IF NOT EXISTS 
+            FOR (c:Chunk) REQUIRE c.chunkId IS UNIQUE
         """
         )
 
