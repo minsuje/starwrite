@@ -1,0 +1,15 @@
+.bn-container[viewMode] .bn-editor * {
+  color: blue;
+}
+
+/* Makes slash menu hovered items blue */
+.bn-container[viewMode] .bn-slash-menu .mantine-Menu-item[data-hovered] {
+  background-color: blue;
+}
+
+.bn-editor[data-theming-css-demo] {
+  padding: 0 !important;
+  background: #00000000 !important;
+  gap: 20px !important;
+  line-height: 2 !important;
+}
