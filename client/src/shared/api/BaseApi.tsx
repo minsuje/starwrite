@@ -13,7 +13,7 @@ tried();
 import axios from 'axios';
 //Minsu's
 export const baseApi = axios.create({
-  baseURL: 'http://localhost:8080/user/',
+  baseURL: 'http://54.180.103.144:8080/user/',
 });
 
 baseApi.interceptors.request.use(
@@ -28,7 +28,7 @@ baseApi.interceptors.request.use(
 );
 
 export const commonApi = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://54.180.103.144:8080/',
 });
 
 //Seejin's
