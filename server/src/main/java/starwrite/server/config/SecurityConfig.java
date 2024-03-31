@@ -1,7 +1,6 @@
 package starwrite.server.config;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import starwrite.server.auth.JwtAuthenticationFilter;
 import starwrite.server.auth.JwtTokenProvider;
 import starwrite.server.service.UsersDetailService;
@@ -37,17 +34,19 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOriginPatterns(
-                Collections.singletonList("http://localhost:5173")); // 허용할 origin
-            config.setAllowCredentials(true);
-            return config;
-        };
-    }
+// cors 설정 삭제
+
+//    CorsConfigurationSource corsConfigurationSource() {
+//        return request -> {
+//            CorsConfiguration config = new CorsConfiguration();
+//            config.setAllowedHeaders(Collections.singletonList("*"));
+//            config.setAllowedMethods(Collections.singletonList("*"));
+//            config.setAllowedOriginPatterns(
+//                Collections.singletonList("http://localhost:5173")); // 허용할 origin
+//            config.setAllowCredentials(true);
+//            return config;
+//        };
+//    }
 
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
@@ -62,7 +61,7 @@ public class SecurityConfig {
             // Basic 인증 사용하지 않음
             .httpBasic(AbstractHttpConfigurer::disable)
             // cors 설정
-            .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
+//            .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
             // cross-site request forgery -> 사이트 간 재위조 방지 기술
             .csrf(AbstractHttpConfigurer::disable)
             // JWT 를 사용하기 때문에 세션을 사용하지 않음
