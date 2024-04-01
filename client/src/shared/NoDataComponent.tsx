@@ -41,7 +41,7 @@ interface NoDataComponentProps {
 export function NoDataComponent({ category }: NoDataComponentProps) {
   const nickName = localStorage.getItem('nickname');
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div>
       <DataSpinnerSh></DataSpinnerSh>
       <_CenteredComponent>
         <p>{category}가 존재하지 않습니다.</p>

@@ -23,11 +23,11 @@ export function MainPage() {
             <p style={{ color: 'gray', paddingTop: '5px' }}>
               당신의 세컨 브레인을 만들어보세요
             </p>
-            <button style={{ margin: '30px 0px' }}>
+            {/* <button style={{ margin: '30px 0px' }}>
               <a href="/login" style={{ color: 'black' }}>
                 시작하기
               </a>
-            </button>
+            </button> */}
           </div>
           <div>
             <MainPageD3></MainPageD3>

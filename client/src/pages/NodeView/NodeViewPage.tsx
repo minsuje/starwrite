@@ -74,7 +74,6 @@ export function NodeViewPage() {
   return (
     <>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
-      {/* <NodeData></NodeData> */}
 
       <NodeView
         searchTerm={searchTerm}
@@ -82,25 +81,17 @@ export function NodeViewPage() {
         setNodesData={setNodesData}
         setPageDataProp={setPageDataProp}
       />
-      {/* 
-      {loading ? (
-        <_Background>
-          <Spinner />
-        </_Background>
-      ) : pageDataProp ? (
-        ''
-      ) : (
-        <DataSpinnerSh></DataSpinnerSh>
-      )} */}
 
       {loading ? (
         <_Background>
           <Spinner />
         </_Background>
-      ) : nodesData.posts[0].title === null ? (
-        <NoDataComponent category={category} />
-      ) : null}
-      {!loading && (
+      ) : nodesData.posts.length === 0 || nodesData.posts[0].title === null ? (
+        <_Background>
+          <NoDataComponent category={category} />
+        </_Background>
+      ) : (
+        // 로딩이 완료되고, 데이터가 유효한 경우에만 StyledButton을 표시합니다.
         <StyledButton onClick={handleClick}>별자리 생성하기</StyledButton>
       )}
     </>

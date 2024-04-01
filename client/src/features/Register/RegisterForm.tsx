@@ -86,6 +86,7 @@ function RegisterForm() {
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
   const [emailErrorMessage, setEmailErrorMessage] = useState(''); // 이메일이 빈값이라면 막기
+  const [emailSentSuccess, setEmailSentSuccess] = useState(false); // 성공 이모지 변경하기
 
   // react-hook-form
   const {
@@ -93,10 +94,12 @@ function RegisterForm() {
     handleSubmit, // form submit 이벤트 시 호출
     watch,
     formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
+    setError,
     trigger,
     getValues,
   } = useForm<RegisteringUser>({
     resolver: zodResolver(schema),
+
     mode: 'onChange', // 입력값이 변경될때마다 실시간으로 유효성 검사 (react hook form)
     defaultValues: {
       role: 'USER', // 기본값으로 'USER' 설정
@@ -140,24 +143,27 @@ function RegisterForm() {
       });
 
       // 성공 응답 처리
-      if (response.status === 200) {
+      console.log(response);
+
+      // if (response.data.fail === 'duplicate email') {
+      //   console.log('중복이메일');
+      // }
+
+      if (response.data.fail === 'duplicate email') {
+        setError('mail', {
+          type: 'manual',
+          message: '이미 사용 중인 이메일입니다.',
+        });
+        console.log('중복된 이메일입니다.');
+      } else {
+        // 다른 서버 에러 메시지 처리
         console.log('이메일 유효성 검사 성공:', response.data);
         setIsVerificationEmailSent(true);
+        setEmailSentSuccess(true); // 여기에 추가
       }
     } catch (error) {
       // 에러 처리
-      if (axios.isAxiosError(error) && error.response) {
-        // 중복된 이메일 에러 감지
-        if (error.response.data.fail === 'duplicated Email') {
-          console.log('중복된 이메일입니다.');
-        } else {
-          // 다른 서버 에러 메시지 처리
-          console.log('이메일 유효성 검사 실패:', error.response.data);
-        }
-      } else {
-        // 기타 에러 처리
-        console.log('에러:', error);
-      }
+      console.log(error);
     }
     setIsSendingEmail(false);
   };
