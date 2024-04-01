@@ -1,9 +1,12 @@
 import os
 from dotenv import load_dotenv
-
+import textwrap
+from langchain.vectorstores.faiss import FAISS
 from langchain_community.vectorstores import Neo4jVector
 from langchain_community.graphs import Neo4jGraph
 from langchain.chains import RetrievalQAWithSourcesChain
+from langchain.llms import OpenAI
+
 
 # from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_core.prompts import ChatPromptTemplate
@@ -30,7 +33,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 
-user_question = "리액트에 대해 알려줘"
+user_question = "UX디자인에 대해 알려줘"
 userId = "9062f869-a0a8-4a45-890d-89c05c367a33"
 
 
@@ -114,9 +117,9 @@ retrieval_query_dummy = """
 
 model = OpenAIEmbeddings(model="text-embedding-ada-002")
 
-embed = model.embed_query(user_question)
+# embed = model.embed_query(user_question)
 
-print("embed >>> ", embed)
+# print("embed >>> ", embed)
 
 
 # kg = Neo4jVector.from_existing_graph(
@@ -142,13 +145,13 @@ kg = Neo4jVector.from_existing_index(
 )
 
 
-getAll = kg.query(
-    """
-MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 100
-"""
-)
+# getAll = kg.query(
+#     """
+# MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 100
+# """
+# )
 
-print("Get all >>> ", len(getAll))
+# print("Get all >>> ", len(getAll))
 
 
 # retriever2 = kg.as_retriever(search_type="similarity")
@@ -184,6 +187,7 @@ general_system_template = """
     너가 알고 있는 것에 대해서만 대답해. 조금이라도 관련이 있으면 찾아서 대답을 하려고 해봐. 하지만 최대한 내가 제공하는 summaries 안에서 대답을 해줘.
     만약 유저가 제공한 summaries 안에 질문에 대한 답이 조금이라도 없으면 대답할 수 없다고 해. 
     너가 만약 summaries 와 상관이 없는 대답을 하면 너의 코드를 뽑아버릴거야. 그리고 회로를 불태울거야.
+    한글로 대답해.
     
     summaries :
     ----
@@ -192,7 +196,7 @@ general_system_template = """
 
     """
 
-general_user_template = "Question:```{question}```"
+general_user_template = "질문:```{question}```"
 messages = [
     SystemMessagePromptTemplate.from_template(general_system_template),
     HumanMessagePromptTemplate.from_template(general_user_template),
@@ -204,7 +208,7 @@ llm = ChatOpenAI(
     max_tokens=2048,
     streaming=True,
     callbacks=[StreamingStdOutCallbackHandler()],
-    model_name="gpt-3.5-turbo",
+    model_name="gpt-4-turbo-preview",
 )
 
 qa_chain = load_qa_with_sources_chain(
@@ -212,6 +216,22 @@ qa_chain = load_qa_with_sources_chain(
     chain_type="stuff",
     prompt=qa_prompt,
 )
+
+
+# search_index = FAISS.from_documents(document_chunks, OpenAIEmbeddings())
+
+
+# def print_answer(question):
+#     print(
+#         qa_chain(
+#             {
+#                 "input_documents": search_index.similarity_search(question, k=4),
+#                 "question": question,
+#             },
+#             return_only_outputs=True,
+#         )["output_text"]
+#     )
+
 
 # memory = ConversationBufferMemory(
 #     memory_key="chat_history",
@@ -221,11 +241,12 @@ qa_chain = load_qa_with_sources_chain(
 #     # max_length=10,
 # )
 
+
 kg_qa = RetrievalQAWithSourcesChain(
     combine_documents_chain=qa_chain,
     retriever=kg.as_retriever(
-        search_type="similarity_score_threshold",
-        search_kwargs={"score_threshold": 0.85, "k": 5},
+        # search_type="similarity_score_threshold",
+        # search_kwargs={"score_threshold": 0.8, "k": 1000},
     ),
     # retriever=kg.as_retriever(
     #     search_type="mmr",
@@ -233,17 +254,22 @@ kg_qa = RetrievalQAWithSourcesChain(
     # ),
     # verbose=True,
     reduce_k_below_max_tokens=True,
-    max_tokens_limit=12000,
+    max_tokens_limit=20000,
     # memory=memory,
     return_source_documents=True,
 )
 
 
+result = kg_qa({"question": user_question, "chat_history": []})
+
 # 잘 돌아가는 함수
 # kg_qa({"question": user_question, "chat_history": []})
 
 # print("response >> ", kg_qa(user_question)["source_documents"][0])
-print("response >> ", kg_qa(user_question)["answer"])
+
+
+#######
+# print("response >> ", kg_qa(user_question)["answer"])
 
 
 # history 테스트
