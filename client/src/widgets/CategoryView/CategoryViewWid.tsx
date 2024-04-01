@@ -28,7 +28,7 @@ export function CategoryViewWid({
   const svgRef = useRef<SVGSVGElement>(null);
   const [viewportSize] = useState<{ width: number; height: number }>({
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: 1200,
   });
   const [category, setCategory] = useState<CategoryItem[]>([]);
   // const [categoryDatas, setCategoryDatas] = useState([]);
@@ -105,7 +105,7 @@ export function CategoryViewWid({
   // 각각 노드들 중앙 정렬
   simulation.force(
     'center',
-    d3.forceCenter(viewportSize.width / 1.2, viewportSize.height / 1.5),
+    d3.forceCenter(viewportSize.width / 1.2, viewportSize.height / 4),
   );
   useEffect(() => {
     const svg = d3.select(svgRef.current as SVGSVGElement);
@@ -181,7 +181,7 @@ export function CategoryViewWid({
       style={{
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '950px',
+        marginTop: '1500px',
         position: 'fixed',
         width: '100%',
       }}
