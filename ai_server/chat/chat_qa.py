@@ -63,6 +63,7 @@ retrieval_query_template = """
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
     {{source: chunks.source}} AS metadata
+    LIMIT 20
 """
 retrieval_query = retrieval_query_template.format(userId=userId)
 
