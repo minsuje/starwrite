@@ -5,6 +5,7 @@ import './CategorySearchFeat.css';
 // import { baseApi } from '../../shared/api/BaseApi';
 import { SearchIcon } from '../../shared/Search';
 import { CategoryViewProps } from '../../pages/CartegoryView/CategoryViewPage';
+import { useParams } from 'react-router-dom';
 
 export const CategorySearchFeat = ({
   onSearch,
@@ -42,7 +43,7 @@ export const CategorySearchFeat = ({
     category.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const NickName = localStorage.getItem('nickname');
+  const { nickname } = useParams();
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
@@ -54,7 +55,7 @@ export const CategorySearchFeat = ({
             paddingBottom: '20px',
           }}
         >
-          {NickName} 님의 카테고리뷰
+          {nickname} 님의 카테고리뷰
         </div>
         <input
           type="text"
