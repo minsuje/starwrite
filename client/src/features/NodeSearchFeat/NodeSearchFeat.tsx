@@ -36,7 +36,12 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
-      <div style={{ position: 'relative' }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+        }}
+      >
         <div
           style={{
             display: 'flex',
