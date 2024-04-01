@@ -122,7 +122,7 @@ function NewPostHeadFeat({
         >
           <p>카테고리</p>
           <select
-            value={category}
+            defaultValue={category}
             onChange={(value) => {
               setCategory(value.currentTarget.value);
             }}

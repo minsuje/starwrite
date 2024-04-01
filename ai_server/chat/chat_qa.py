@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from langchain_community.vectorstores import Neo4jVector
 from langchain_community.graphs import Neo4jGraph
 from langchain.chains import RetrievalQAWithSourcesChain
-from langchain.chains import RetrievalQAWithSourcesChain
+
+# from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.chains import RetrievalQA
@@ -62,7 +63,6 @@ retrieval_query_template = """
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
     {{source: chunks.source}} AS metadata
-    LIMIT 10
 """
 retrieval_query = retrieval_query_template.format(userId=userId)
 
@@ -204,12 +204,13 @@ qa_chain = load_qa_with_sources_chain(
     prompt=qa_prompt,
 )
 
-memory = ConversationBufferMemory(
-    memory_key="chat_history",
-    input_key="question",
-    output_key="answer",
-    return_messages=True,
-)
+# memory = ConversationBufferMemory(
+#     memory_key="chat_history",
+#     input_key="question",
+#     output_key="answer",
+#     return_messages=True,
+#     # max_length=10,
+# )
 
 kg_qa = RetrievalQAWithSourcesChain(
     combine_documents_chain=qa_chain,
@@ -221,9 +222,10 @@ kg_qa = RetrievalQAWithSourcesChain(
     #     search_type="mmr",
     #     search_kwargs={"fetch_k": 5},ßßß
     # ),
+    verbose=True,
     reduce_k_below_max_tokens=False,
     max_tokens_limit=3375,
-    memory=memory,
+    # memory=memory,
     return_source_documents=True,
 )
 

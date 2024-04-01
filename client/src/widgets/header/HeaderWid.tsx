@@ -106,7 +106,8 @@ export function HeaderWid() {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <GlobalSearch />
             <_StyledLink to={`/user/starwrite/mypage/${myNickname}/`}>
-              <ProfileShard />
+              {/* <ProfileShard /> */}
+              {myNickname} 님
             </_StyledLink>
           </div>
         </>
