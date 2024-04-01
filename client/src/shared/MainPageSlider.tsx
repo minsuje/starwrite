@@ -57,7 +57,7 @@ export function MainPageSlider({
               <img
                 src={imgSrc}
                 alt="콘텐츠 이미지"
-                style={{ width: '80%', height: 'auto' }}
+                style={{ width: '50%', height: '510x', paddingTop: '30px' }}
               />
             </div>
           </SwiperSlide>

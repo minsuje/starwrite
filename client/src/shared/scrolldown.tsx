@@ -6,12 +6,12 @@ export function PageScrolldown() {
     <>
       <Lottie
         style={{
-          marginTop: '200px',
+          marginTop: '150px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-          height: '30px',
+          height: '40px',
         }}
         animationData={scrolldown}
       />
