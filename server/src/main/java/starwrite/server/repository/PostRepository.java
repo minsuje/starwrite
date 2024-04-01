@@ -255,9 +255,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "       ON CREATE SET newR.postId = ID(post), newR.postTitle = post.title, newR.relatedPostId = ID(relatedPost), newR.relatedPostTitle = relatedPost.title, newR.relatedBack = false) "
       + "WITH post " + "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) "
       + "DELETE oldCatRel " + "WITH post "
+      + "MATCH (post)<-[:EMBED]-(c:Chunk) "
+      + "DETACH DELETE c "
+      + "WITH post "
       + "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier "
-      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN count(newRel)")
-  int updatePost(@Param(value = "postId") Long postId, @Param(value = "newTitle") String newTitle,
+      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN post AS post, ID(post) AS identifier")
+  CreatedPost updatePost(@Param(value = "postId") Long postId, @Param(value = "newTitle") String newTitle,
       @Param(value = "img") String img, @Param(value = "newContent") String newContent,
       @Param(value = "rel") List<Long> rel, @Param(value = "visible") String visible,
       @Param(value = "categoryIdentifier") String categoryId);
@@ -272,9 +275,12 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "SET oldRelBack.relatedBack = CASE WHEN oldRelBack.relatedBack = true THEN false ELSE null END "
       + "WITH post " + "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) "
       + "DELETE oldCatRel " + "WITH post "
+      + "MATCH (post)<-[:EMBED]-(c:Chunk) "
+      + "DETACH DELETE c "
+      + "WITH post "
       + "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier "
-      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN count(newRel)")
-  int updatePostNull(@Param(value = "postId") Long postId,
+      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN post AS post, ID(post) AS identifier")
+  CreatedPost updatePostNull(@Param(value = "postId") Long postId,
       @Param(value = "newTitle") String newTitle, @Param(value = "img") String img,
       @Param(value = "newContent") String newContent, @Param(value = "visible") String visible,
       @Param(value = "categoryIdentifier") String categoryId);
