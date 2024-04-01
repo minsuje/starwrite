@@ -311,6 +311,18 @@ export function MainPageContent() {
       </GridContainer>
       <div style={{ height: '100%' }}>
         <StyledBox>
+          <div ref={FourthdRef}>
+            <h1 style={{ padding: '30px' }}>에디터</h1>
+          </div>
+          <MainPageSlider
+            contentImg={['EditorMainpage.png']}
+            contentText={[
+              '우리는 강력한 에디터를 지원합니다. 당신만의 노트를 만들고 백링크를 통해 지식을 연관지어보세요 ',
+            ]}
+          />
+        </StyledBox>
+
+        <StyledBox>
           <div ref={fristScrollRef}>
             <h1 style={{ padding: '30px' }}> 백링크 연결</h1>
           </div>
@@ -329,32 +341,26 @@ export function MainPageContent() {
         </StyledBox>
 
         <StyledBox>
-          <div ref={secondScrollRef}>
-            <h1 style={{ padding: '30px' }}>내 문서 기반 AI 챗봇</h1>
-          </div>
-          <MainPageSlider
-            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
-            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
-          />
-        </StyledBox>
-
-        <StyledBox>
           <div ref={ThirdRef}>
             <h1 style={{ padding: '30px' }}>노드뷰</h1>
           </div>
           <MainPageSlider
-            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
-            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
+            contentImg={['/MainPage2.png']}
+            contentText={[
+              '사용자들의 많은 데이터를 한눈에 보기 쉽게 우리는 강력한 UI를 제공합니다.',
+            ]}
           />
         </StyledBox>
 
         <StyledBox>
-          <div ref={FourthdRef}>
-            <h1 style={{ padding: '30px' }}>에디터</h1>
+          <div ref={secondScrollRef}>
+            <h1 style={{ padding: '30px' }}>내 문서 기반 AI 챗봇</h1>
           </div>
           <MainPageSlider
-            contentImg={['/path/to/image1.jpg', '/path/to/image2.jpg']}
-            contentText={['첫 번째 이미지 설명', '두 번째 이미지 설명']}
+            contentImg={['/MainPageAI.png']}
+            contentText={[
+              '당신의 많은 자료들은 우리의 AI "헤이민수"가 도와드립니다. ',
+            ]}
           />
         </StyledBox>
 

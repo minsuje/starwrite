@@ -13,7 +13,12 @@ const ChatBtn = styled.div`
   right: 30px;
   width: 50px;
   height: 50px;
-  background-color: #8a8a8a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  background: rgb(48, 48, 48);
+  background: linear-gradient(90deg, #444444 0%, #282828 100%);
   border-radius: 50px;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -258,7 +263,9 @@ function Chatbot() {
 
   return (
     <AnimatePresence>
-      <ChatBtn id="chat-button" onClick={toggleChat}></ChatBtn>
+      <ChatBtn id="chat-button" onClick={toggleChat}>
+        <img src="/robot.svg"></img>
+      </ChatBtn>
       {chatWindow ? (
         <Chat
           ref={chatRef}
