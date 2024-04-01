@@ -27,15 +27,15 @@ const _CommentContent = styled.div`
 
 function Comment({ annotation }: { annotation: Annotation }) {
   // const myNickname = localStorage.getItem('nickname');
-  console.log('annotation', annotation);
+  // console.log('annotation', annotation);
   return (
     <>
-      {annotation == null ? (
+      {annotation != null && (
         <_CommentBox>
-          <_CommentNickname> {annotation.nickName}</_CommentNickname>
+          <_CommentNickname>{annotation.nickName}</_CommentNickname>
           <_CommentContent>{annotation.content}</_CommentContent>
         </_CommentBox>
-      ) : null}
+      )}
     </>
   );
 }
