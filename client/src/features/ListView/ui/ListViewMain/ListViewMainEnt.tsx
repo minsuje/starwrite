@@ -19,6 +19,8 @@ function ListViewMainEnt() {
   const reset = useAppSelector(resetState);
 
   useEffect(() => {
+    setPostsList([]);
+
     if (category == 'all') {
       setCategoryName('전체');
       const promise = postListAllApi(nickname);

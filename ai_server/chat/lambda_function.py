@@ -28,7 +28,7 @@ def lambda_handler(event, context):
     load_dotenv(".env", override=True)
 
     userId = event.get("userId")
-    user_question = event.get("user_question")
+    user_question = event.get("question")
 
     NEO4J_URI = os.getenv("NEO4J_URI")
     NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
@@ -150,10 +150,10 @@ def lambda_handler(event, context):
     # 잘 돌아가는 함수
     # kg_qa({"question": user_question, "chat_history": []})
 
-    response = kg_qa(user_question)["source_documents"][0]
+    response = kg_qa(user_question)["answer"]
 
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(response),
+        "body": json.dumps({"response": response}),
     }

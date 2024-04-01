@@ -14,6 +14,7 @@ import {
   _Globalname,
   _Globaldate,
 } from '../../shared/Modal/ModalStyle';
+import { IoIosSearch } from 'react-icons/io';
 
 interface SearchResult {
   nickName: string;
@@ -74,8 +75,9 @@ export function GlobalSearch() {
   }
   return (
     <>
-      <div onClick={handleGlobalSearch}>
-        <InterGratedSearchIcon />
+      <div onClick={handleGlobalSearch} style={{ cursor: 'pointer' }}>
+        <IoIosSearch size={24} />
+        {/* <InterGratedSearchIcon /> */}
       </div>
       {modal && (
         <_GlobalModalBg onClick={closeModal}>

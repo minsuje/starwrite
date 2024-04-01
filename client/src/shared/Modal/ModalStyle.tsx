@@ -1,34 +1,39 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-export const _ModalBg = styled.div`
+export const _ModalBg = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.75);
   position: fixed;
-  right: 0%;
+  left: 0;
+  right: 0;
+  top: 0;
   bottom: 0;
   z-index: 10;
-  width: 100vw;
-  height: 100vh;
+  /* width: 100vw; */
+  /* height: 100vh; */
 `;
 
-export const _Modal = styled.div`
+export const _Modal = styled(motion.div)`
+  position: fixed;
+  bottom: 40%;
+  left: calc(50% - 117px);
+  transform: translate(-50%, -50%);
   background-color: var(--color-zinc-800);
   padding-bottom: 10px;
   display: flex;
+  box-shadow: 0px 0px 24px 8px rgba(0, 0, 0, 0.24);
+  -webkit-box-shadow: 0px 0px 24px 8px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0px 0px 24px 8px rgba(0, 0, 0, 0.24);
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: absolute;
+  padding: 32px;
   z-index: 100;
-  width: 360px;
-  height: 270px;
-  bottom: 40%;
-  left: 50%;
-  border-radius: 10px;
-  transform: translateX(-50%);
+  border-radius: 8px;
 `;
 
-export const _GlobalModalBg = styled.div`
+export const _GlobalModalBg = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0;
@@ -42,7 +47,7 @@ export const _GlobalModalBg = styled.div`
 `;
 
 // 통합검색 모달창
-export const _GlobalSearchModal = styled.input`
+export const _GlobalSearchModal = styled(motion.input)`
   background-color: var(--color-zinc-800);
   line-height: 16px;
   padding: 16px 20px;
@@ -66,7 +71,7 @@ export const _GlobalSearchModal = styled.input`
   position: relative;
 `;
 
-export const _GlovalSearchBox = styled.div`
+export const _GlovalSearchBox = styled(motion.div)`
   background-color: #ffff;
   max-height: 70vh; /* 뷰포트 높이의 70%로 최대 높이를 제한 */
   width: 100%;
@@ -76,11 +81,11 @@ export const _GlovalSearchBox = styled.div`
   overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
 `;
 
-export const _GlovalSearchResult = styled.div`
+export const _GlovalSearchResult = styled(motion.div)`
   margin-bottom: 20px;
 `;
 
-export const _GlovalSearchTitle = styled.div`
+export const _GlovalSearchTitle = styled(motion.div)`
   display: flex;
   align-items: end;
   font-weight: bold;
@@ -89,7 +94,7 @@ export const _GlovalSearchTitle = styled.div`
   width: 100%;
 `;
 
-export const _GlovalSearchContnet = styled.div`
+export const _GlovalSearchContnet = styled(motion.div)`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

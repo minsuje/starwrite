@@ -224,17 +224,19 @@ function Chatbot() {
         // API 응답을 채팅 메시지로 추가
         if (response.data) {
           const botMessage: Message = {
-            text: response.data.ai.result,
+            // text: response.data.ai.result,
+            text: response.data.response,
             role: 'bot',
           };
-          const botSourceTitle: Message = {
-            text: response.data.source.title,
-            role: 'bot',
-            link: response.data.source.postId,
-            content: response.data.source.content,
-          };
+          // const botSourceTitle: Message = {
+          //   text: response.data.source.title,
+          //   role: 'bot',
+          //   link: response.data.source.postId,
+          //   content: response.data.source.content,
+          // };
           setChatLoading(false);
-          setMessages((messages) => [...messages, botMessage, botSourceTitle]);
+          // setMessages((messages) => [...messages, botMessage, botSourceTitle]);
+          setMessages((messages) => [...messages, botMessage]);
         }
       } catch (error) {
         console.error('Error sending message:', error);

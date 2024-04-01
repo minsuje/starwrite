@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 const _MainTitle = styled.h1`
   font-size: 15px;
   font-weight: 700;
+  padding: 0;
 `;
 export function TitleFeat() {
   return (
