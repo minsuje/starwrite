@@ -67,6 +67,7 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
             <textarea
               placeholder="댓글을 입력하세요"
               {...register('content')}
+              style={{ padding: '10px' }}
             />
             <button type="submit">작성</button>
           </div>

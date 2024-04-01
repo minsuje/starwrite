@@ -86,7 +86,6 @@ function RegisterForm() {
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지 상태 추가
   const [emailErrorMessage, setEmailErrorMessage] = useState(''); // 이메일이 빈값이라면 막기
-  const [emailSentSuccess, setEmailSentSuccess] = useState(false); // 성공 이모지 변경하기
 
   // react-hook-form
   const {
@@ -159,7 +158,6 @@ function RegisterForm() {
         // 다른 서버 에러 메시지 처리
         console.log('이메일 유효성 검사 성공:', response.data);
         setIsVerificationEmailSent(true);
-        setEmailSentSuccess(true); // 여기에 추가
       }
     } catch (error) {
       // 에러 처리

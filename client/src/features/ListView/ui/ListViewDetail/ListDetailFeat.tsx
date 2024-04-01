@@ -17,6 +17,7 @@ import { commentState } from '../../model/CommentSlice';
 import styled from 'styled-components';
 import { _buttonBox, _NoneList } from '../style';
 import './ListDetailFeat.css';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const _DetailButton = styled.button`
   width: fit-content;
@@ -106,7 +107,11 @@ export default function ListDetailFeat() {
 
   // editor 생성 X
   if (editor === undefined) {
-    return <_NoneList>Loading content...</_NoneList>;
+    return (
+      <_NoneList>
+        <CircularProgress />
+      </_NoneList>
+    );
   }
   // 내글이 아닐 때 + 비공개 글
   if (!isMine && post?.visible === 'false') {
