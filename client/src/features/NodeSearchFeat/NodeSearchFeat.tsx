@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 // import { nodes } from '../../widgets/NodeView/index';
 import './NodeSearchFeat.css';
 import { NodeViewProps } from '../../pages/NodeView/NodeViewPage';
+import { useParams } from 'react-router';
 
 export const NodeSearchFeat: React.FC<NodeViewProps> = ({
   onSearch,
@@ -31,7 +32,7 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
   const filterSearch = nodesData.posts.filter((post) =>
     (post.title || '').toLowerCase().includes(searchTerm.toLowerCase()),
   );
-  const NickName = localStorage.getItem('nickname');
+  const { nickname } = useParams();
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
@@ -43,7 +44,7 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
             paddingBottom: '20px',
           }}
         >
-          {NickName} 님의 노드뷰
+          {nickname} 님의 노드뷰
         </div>
         <input
           type="text"

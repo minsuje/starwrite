@@ -160,13 +160,20 @@ export const _Box = styled(_Modal)`
   display: flex;
   width: 80%;
   height: 80%;
-  top: 0;
+  top: calc((100vh - 80%) / 2);
   flex-direction: column;
   gap: 30px;
   color: #adadad;
 
-  label {
-    font-size: 20px;
+  button {
+    background-color: var(--color-primary-600);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+    &:hover {
+      background-color: var(--color-primary-700);
+    }
   }
 `;
 
