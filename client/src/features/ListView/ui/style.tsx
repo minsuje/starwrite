@@ -1,4 +1,9 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const shine = keyframes`
+  0% { background-position: 0px 0 }
+  100% { background-position: 468px 0 }
+`;
 
 const _headBox = styled.div`
   display: flex;
@@ -70,6 +75,25 @@ export const _postBox = styled.div`
   &:hover {
     opacity: 0.8;
   }
+`;
+
+export const _SkeletonPostBox = styled.div`
+  ${_postBox};
+  border-radius: 6px;
+  animation-duration: 1.6s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: ${shine};
+  animation-timing-function: linear;
+  background: var(--color-zinc-800);
+  background: linear-gradient(
+    to right,
+    #27272ad7 0%,
+    #333336 50%,
+    #27272ad7 100%
+  );
+  background-size: 800px 104px;
+  height: 120px;
 `;
 
 // style 정의

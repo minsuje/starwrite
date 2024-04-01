@@ -77,6 +77,7 @@ function ListCategory({
             if (oneCategory.categoryId !== category) {
               return (
                 <OneCategory
+                  whileTap={{ scale: 0.98, opacity: 0.9 }}
                   key={idx}
                   onClick={() => {
                     selected(oneCategory.categoryId);
@@ -88,7 +89,8 @@ function ListCategory({
             } else {
               return (
                 <OneCategory
-                  color={'1'}
+                  whileTap={{ scale: 0.98, opacity: 0.9 }}
+                  color={'#c0c0c02a'}
                   key={idx}
                   onClick={() => {
                     selected(oneCategory.categoryId);

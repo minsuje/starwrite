@@ -303,7 +303,7 @@ public class PostService {
 
   public void getPostIdWithChunks(Long postId, String nickname, String userId, String categoryId){
 
-    System.out.println(">>>>> " + webClientService.postIdWithNickname(postId, nickname, userId, categoryId));
+//    System.out.println(">>>>> " + webClientService.postIdWithNickname(postId, nickname, userId, categoryId));
   }
 
 }

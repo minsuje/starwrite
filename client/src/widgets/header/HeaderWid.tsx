@@ -7,6 +7,11 @@ import { _StyledLink, _StyledLinkOut } from '../../shared/CommonStyle';
 import { GlobalSearch } from '../../features/InterGratedSearchIconFeat/GlobalSearch';
 // import { InterGratedSearchIconFeat } from '../../features/InterGratedSearchIconFeat/InterGratedSearchIconFeat';
 
+interface StyledButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  isActive?: boolean;
+}
+
 const _StyledHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between; // 컨테이너의 내용을 양 끝과 중앙으로 분배
@@ -14,11 +19,12 @@ const _StyledHeaderContainer = styled.div`
   /* background-color: #f8f8f8; */
   width: 100%;
   top: 0;
-  padding: 10px 20px;
+
+  padding: 4px 32px;
   /* margin-bottom: 50px; */
   position: fixed;
-  border-bottom: 1px solid #2d2d2d;
-  background-color: var(--color-zinc-900);
+  /* border-bottom: 1px solid #2d2d2d; */
+  /* background-color: var(--color-zinc-900); */
   z-index: 9999;
 `;
 
@@ -26,19 +32,27 @@ const _StyledNavigation = styled.div`
   display: flex;
   justify-content: center; // 네비게이션 요소를 중앙에 위치
   align-items: center;
-  gap: 15px;
-  padding-right: 0px;
+  gap: 8px;
+  padding: 8px;
+  background-color: #0000002e;
+  border-radius: 16px;
 `;
 
-const _StyledButton = styled.button`
-  padding: 8px 20px;
-  border-radius: 4px;
+const _StyledButton = styled.button<StyledButtonProps>`
+  padding: 12px 20px;
+  border-radius: 8px;
   border: none;
-  background-color: #18181b;
-  color: #ffffff;
+  background-color: ${(props) =>
+    props.isActive ? '#76767632' : 'transparent'};
+  color: ${(props) => (props.isActive ? '#f3f3f3' : '#a0a0a0')};
+  font-weight: bold;
+  transition: all 0.3s ease;
+  -webkit-app-region: no-drag;
   cursor: pointer;
+
   &:hover {
-    background-color: #333;
+    background-color: #76767632;
+    transition: all 0.3s ease;
   }
 `;
 
@@ -56,6 +70,16 @@ export function HeaderWid() {
   const { nickname, category } = useParams();
   const navigate = useNavigate();
   const myNickname = localStorage.getItem('nickname');
+
+  // 현재 경로가 '/user/starwrite/categoryview' 인지 확인
+  const isCategoryView = location.pathname.startsWith(
+    '/user/starwrite/categoryview',
+  );
+
+  // 현재 경로가 '/user/starwrite/listview/main/' 인지 확인
+  const isListViewMain = location.pathname.startsWith(
+    '/user/starwrite/listview/main/',
+  );
 
   function handleNodeViewPage() {
     if (category === 'all' || category === 'scrab') {
@@ -89,8 +113,16 @@ export function HeaderWid() {
         {/* 중앙 정렬 */}
         {location.pathname !== '/' && (
           <>
-            <_StyledButton onClick={handleNodeViewPage}>노드 뷰</_StyledButton>
-            <_StyledButton onClick={handleNodeViewListPage}>
+            <_StyledButton
+              onClick={handleNodeViewPage}
+              isActive={isCategoryView}
+            >
+              노드 뷰
+            </_StyledButton>
+            <_StyledButton
+              onClick={handleNodeViewListPage}
+              isActive={isListViewMain}
+            >
               리스트뷰
             </_StyledButton>
           </>
@@ -103,7 +135,7 @@ export function HeaderWid() {
       </_StyledNavigation>
       {myNickname ? (
         <>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <GlobalSearch />
             <_StyledLink to={`/user/starwrite/mypage/${myNickname}/`}>
               {/* <ProfileShard /> */}

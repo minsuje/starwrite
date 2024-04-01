@@ -1,20 +1,24 @@
 import styled from 'styled-components';
 import { Input } from '../../../shared/CommonStyle';
 import { Theme, darkDefaultTheme } from '@blocknote/react';
+import { motion } from 'framer-motion';
 
 import { _Modal } from '../../../shared/Modal/ModalStyle';
 // 스타일
-const OneCategory = styled.div`
+const OneCategory = styled(motion.div)`
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
   width: 100%;
   margin: 0px auto;
   text-align: center;
-  padding: 15px 0px;
-  border-radius: 6px;
+  padding: 16px 0px;
+  border-radius: 4px;
   background-color: var(--color-zinc-700);
   transition: all 0.3s ease;
-  opacity: ${(props) => props.color || '0.6'};
+  background-color: ${(props) => props.color || '#4242422a'};
   &:hover {
-    opacity: 1;
+    background-color: #c0c0c02a;
     transition: all 0.3s ease;
     cursor: pointer;
   }
@@ -27,7 +31,7 @@ const ListCategories = styled.div`
   /* padding-top: 10px; */
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `;
 
 const _EditorHead = styled.div`

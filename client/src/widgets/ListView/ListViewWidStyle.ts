@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+
 //sidebar + contentBox
 const _ListViewBox = styled.div`
   display: flex;
@@ -9,19 +11,19 @@ const _ListViewBox = styled.div`
   /* height: 80vh; */
 `;
 
-const _CategoryBar = styled.div`
+const _CategoryBar = styled(motion.div)`
   /* margin-top: 5rem; */
   width: 240px;
-  padding: 20px;
+  padding: 16px;
   /* height: 100%; */
   display: flex;
-  gap: 20px;
+  gap: 16px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
 `;
 
-const _CategoryContent = styled.div`
+const _CategoryContent = styled(motion.div)`
   width: 100%;
   border-radius: 6px;
   padding: 24px;
@@ -33,8 +35,8 @@ const _CategoryContent = styled.div`
   overflow-y: scroll;
 `;
 
-const _AddCategoryButton = styled.div`
-  width: calc(100% - 28px);
+const _AddCategoryButton = styled(motion.div)`
+  width: calc(100%);
   padding: 16px;
   border-radius: 4px;
   text-align: center;
@@ -42,9 +44,13 @@ const _AddCategoryButton = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
+
   /* font-size: 1.5rem; */
   color: var(--color-zinc-200);
-  background-color: var(--color-zinc-700);
+  background-color: #ffffff20;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 
   &:hover {
     color: var(--color-zinc-300);

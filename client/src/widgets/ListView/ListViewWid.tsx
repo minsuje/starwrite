@@ -17,6 +17,7 @@ import {
   EditState,
 } from '../../features/ListView/model/EditSlice';
 import { FiPlus } from 'react-icons/fi';
+import { AnimatePresence } from 'framer-motion';
 
 function ListViewWid() {
   const [categoryModal, setCategoryModal] = useState<boolean>(false);
@@ -46,22 +47,27 @@ function ListViewWid() {
           nickname={nickname}
         ></ListCategory>
         {isMine && (
-          <_AddCategoryButton onClick={() => setCategoryModal(true)}>
+          <_AddCategoryButton
+            whileTap={{ scale: 0.98, opacity: 0.9 }}
+            onClick={() => setCategoryModal(true)}
+          >
             <FiPlus color="#fff" />
             카테고리 추가
           </_AddCategoryButton>
         )}
 
-        {categoryModal && (
-          <AddCategory
-            setUpdateCategory={() => {
-              setUpdateCategory(!updateCategory);
-            }}
-            onclick={() => {
-              setCategoryModal(false);
-            }}
-          ></AddCategory>
-        )}
+        <AnimatePresence>
+          {categoryModal && (
+            <AddCategory
+              setUpdateCategory={() => {
+                setUpdateCategory(!updateCategory);
+              }}
+              onclick={() => {
+                setCategoryModal(false);
+              }}
+            ></AddCategory>
+          )}
+        </AnimatePresence>
         {EditOpen && (
           <EditCategory
             category={category}

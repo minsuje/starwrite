@@ -21,6 +21,7 @@ import Badge from '../../../../shared/Badge';
 
 function ListViewScrapFeat({ postListScrap }: { postListScrap: Posts[] }) {
   const { nickname, category } = useParams();
+
   if (postListScrap.length !== 0) {
     return (
       <div>

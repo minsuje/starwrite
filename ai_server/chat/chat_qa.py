@@ -234,7 +234,8 @@ kg_qa = RetrievalQAWithSourcesChain(
 # 잘 돌아가는 함수
 # kg_qa({"question": user_question, "chat_history": []})
 
-print("response >> ", kg_qa(user_question)["source_documents"][0])
+# print("response >> ", kg_qa(user_question)["source_documents"][0])
+print("response >> ", kg_qa(user_question)["answer"])
 
 
 # history 테스트
