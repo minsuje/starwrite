@@ -151,9 +151,10 @@ def lambda_handler(event, context):
     # kg_qa({"question": user_question, "chat_history": []})
 
     result = kg_qa({"question": user_question, "chat_history": []})
+    # print("result >>>>>>> ", result["source"])
 
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({"response": result}),
+        "body": json.dumps({"ai": result["answer"]}),
     }
