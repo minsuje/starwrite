@@ -68,6 +68,7 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(registry -> {
+
 //                registry.requestMatchers("/**").permitAll(); // 일단 다 개방 - 나중에 밑에 3개로 변경\
                 registry.requestMatchers("/home", "/register/**", "/login/**", "/h2-console/**", "/cookie", "/token/**", "/mail/**", "/nickCheck/**").permitAll();  // 홈은 누구나 접근할 수 있다는 의미
 //                registry.requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN");
