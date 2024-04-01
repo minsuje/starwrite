@@ -6,11 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
-//import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import starwrite.server.auth.SecurityUtil;
@@ -28,7 +25,6 @@ import starwrite.server.response.GetScrapPosts;
 import starwrite.server.response.PostDetail;
 import starwrite.server.response.SearchPosts;
 import starwrite.server.utils.JsonData;
-//import starwrite.server.utils.PythonApi;
 import starwrite.server.utils.WebClientRecommendGet;
 import starwrite.server.utils.WebClientServiceImpl;
 
@@ -243,22 +239,29 @@ public class PostService {
 
     List<Long> rel = new ArrayList<>();
 
-    if (!post.getRelatedPosts().isEmpty()) {
-      List<String> related = post.getRelatedPosts();
-      related.forEach(item -> rel.add(Long.parseLong(item)));
-    }
+//    // 백링크 글이 있으면
+//    if (!post.getRelatedPosts().isEmpty()) {
+//      List<String> related = post.getRelatedPosts();
+//      related.forEach(item -> rel.add(Long.parseLong(item)));
+//    }
 
-    int result;
+    // 이미 청크가 있으면 청크 날리기
+//    int result;
+    CreatedPost result;
     if (!post.getRelatedPosts().isEmpty()) {
       // 관련 글이 있는 경우
-      result = postRepository.updatePost(postId, newTitle, img, newContent, rel, newVisible,
-          categoryId);
+        result = postRepository.updatePost(postId, newTitle, img, newContent, rel, newVisible,
+            categoryId);
+        Post updatedPost = result.getPost();
+        backgroundTaskService.parsePostBackground(result.getIdentifier(), updatedPost.getTitle(), updatedPost.getContent());
     } else {
       // 관련 글이 없는 경우
       result = postRepository.updatePostNull(postId, newTitle, img, newContent, newVisible,
           categoryId);
+      Post updatedPost = result.getPost();
+      backgroundTaskService.parsePostBackground(result.getIdentifier(), updatedPost.getTitle(), updatedPost.getContent());
     }
-    if (result == 0) {
+    if (result == null) {
       return "edit failed";
     }
     return "success";
