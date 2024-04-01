@@ -14,9 +14,10 @@ const StyledButton = styled.div`
   left: 50%; // 부모 컨테이너에 대해 왼쪽에서 50% 떨어진 위치
   bottom: 60px; // 하단에서 100px 떨어진 위치
   transform: translateX(-50%); // X축 방향으로 -50% 이동하여 중앙 정렬
-  padding: 10px 20px;
+  padding: 16px 20px;
   background-color: #1361d7;
   color: white;
+  border-radius: 4px;
   text-align: center;
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;

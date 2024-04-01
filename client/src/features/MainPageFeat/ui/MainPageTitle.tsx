@@ -5,8 +5,22 @@ export const _styledMainPageTitle = styled.div`
   height: 100%;
   margin-top: 50px;
   display: flex;
-  justify-content: center;
   align-items: center;
+
+  div {
+    width: 100%;
+  }
+
+  h1 {
+    line-height: 1.3;
+    font-size: 2.3rem;
+    letter-spacing: -0.05rem;
+  }
+
+  p {
+    line-height: 1.3;
+    font-size: 1.2rem;
+  }
 `;
 
 // 페이지 첫번째 주요기능 컨텐츠

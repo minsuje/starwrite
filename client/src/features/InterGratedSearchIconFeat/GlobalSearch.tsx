@@ -80,25 +80,39 @@ export function GlobalSearch() {
         {/* <InterGratedSearchIcon /> */}
       </div>
       {modal && (
-        <_GlobalModalBg onClick={closeModal}>
-          <div style={{ width: '60%' }}>
-            <div style={{ position: 'relative' }}>
+        <_GlobalModalBg
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={closeModal}
+        >
+          <div style={{ width: '100%', maxWidth: '500px' }}>
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'end',
+                alignItems: 'center',
+              }}
+            >
               <_GlobalSearchModal
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onClick={stopPropagation}
                 value={searchTerm}
                 placeholder="검색어를 입력하세요"
+              ></_GlobalSearchModal>
+              <IoIosSearch
+                size={24}
+                style={{ position: 'absolute', marginRight: '14px' }}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '0px',
-                }}
-              >
-                <InterGratedSearchIcon />
-              </div>
+
+              {/* <InterGratedSearchIcon /> */}
             </div>
             {searchPerformed && (
               <_GlovalSearchBox>
@@ -113,6 +127,8 @@ export function GlobalSearch() {
                           style={{
                             backgroundColor: '#363535',
                             padding: '20px',
+                            width: '100%',
+                            borderRadius: '4px',
                             // display: 'flex',
                           }}
                         >

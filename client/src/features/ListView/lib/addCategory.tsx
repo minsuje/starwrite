@@ -65,9 +65,9 @@ function AddCategory({
       <_Modal
         key="modal"
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.85 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       >
         <_Box onSubmit={handleSubmit(onValid)}>
           <label htmlFor="newCategory">카테고리 추가</label>
@@ -78,9 +78,7 @@ function AddCategory({
           ></input>
           {errors.category && typeof errors.category.message === 'string' ? (
             <_ErrorMsg>{errors.category.message}</_ErrorMsg>
-          ) : (
-            <_ErrorMsg></_ErrorMsg>
-          )}
+          ) : null}
           <_ButtonBox>
             <_Button type="submit">추가</_Button>
             <_Button

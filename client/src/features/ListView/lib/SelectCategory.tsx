@@ -46,48 +46,55 @@ function SelectCategory({
     }
   }, []);
   return (
-    <>
-      <_ModalBg>
-        <_Modal>
-          <_ScrapBox>
-            <p>스크랩</p>
-            <div>
-              <span>카테고리 </span>
-              <select
-                style={{
-                  backgroundColor: 'var(--color-zinc-500)',
-                  border: 'none',
-                  padding: '3px',
-                  borderRadius: '7px',
-                  marginLeft: '5px',
-                  textAlign: 'center',
-                }}
-                onChange={(value) => {
-                  setCategory(value.currentTarget.value);
-                }}
-              >
-                {myCategories.map((category) => {
-                  return (
-                    <option
-                      key={category.categoryId}
-                      value={category.categoryId}
-                    >
-                      {category.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <_ButtonBox>
-              <_Button onClick={scrap}>스크랩</_Button>
-              <_Button color="#ffffff1d" onClick={close}>
-                닫기
-              </_Button>
-            </_ButtonBox>
-          </_ScrapBox>
-        </_Modal>
-      </_ModalBg>
-    </>
+    <_ModalBg
+      key="modalBg"
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <_Modal
+        key="modal"
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <_ScrapBox>
+          <p>스크랩</p>
+          <div>
+            <span>카테고리 </span>
+            <select
+              style={{
+                backgroundColor: 'var(--color-zinc-500)',
+                border: 'none',
+                padding: '3px',
+                borderRadius: '7px',
+                marginLeft: '5px',
+                textAlign: 'center',
+              }}
+              onChange={(value) => {
+                setCategory(value.currentTarget.value);
+              }}
+            >
+              {myCategories.map((category) => {
+                return (
+                  <option key={category.categoryId} value={category.categoryId}>
+                    {category.name}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <_ButtonBox>
+            <_Button onClick={scrap}>스크랩</_Button>
+            <_Button color="#ffffff1d" onClick={close}>
+              닫기
+            </_Button>
+          </_ButtonBox>
+        </_ScrapBox>
+      </_Modal>
+    </_ModalBg>
   );
 }
 

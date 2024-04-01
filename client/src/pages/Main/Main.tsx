@@ -20,7 +20,9 @@ export function MainPage() {
         {/* 상단 */}
         <_styledMainPageTitle>
           <div>
-            <h1>당신의 모든 것을 공유하고 기록하세요</h1>
+            <h1>
+              당신의 모든 것을 <br /> 공유하고 기록하세요
+            </h1>
             <p style={{ color: 'gray', paddingTop: '5px' }}>
               당신의 세컨 브레인을 만들어보세요
             </p>

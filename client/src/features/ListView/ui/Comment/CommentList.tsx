@@ -15,21 +15,21 @@ function CommentList({
   //console.log(annotations);
   return (
     <>
-      <div>
-        <NewComment selectedLine={selectedLine} />
-      </div>
+      <NewComment selectedLine={selectedLine} />
 
       {/* 댓글 리스트 */}
-      <div>
-        {annotations.map((annotation) => {
+      {annotations.length === 0 ? (
+        <div>댓글이 없습니다.</div>
+      ) : (
+        annotations.map((annotation) => {
           return (
             <Comment
               key={annotation.annotationId}
               annotation={annotation}
             ></Comment>
           );
-        })}
-      </div>
+        })
+      )}
     </>
   );
 }
