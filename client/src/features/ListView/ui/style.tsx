@@ -100,12 +100,13 @@ export const _SkeletonPostBox = styled.div`
 export const _Box = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 24px;
   color: #adadad;
   input {
     background-color: #3b3d41;
     border: none;
-    padding: 10px;
+    padding: 12px;
+    border-radius: 4px;
   }
   label {
     font-size: 20px;
@@ -121,7 +122,7 @@ export const _ErrorMsg = styled.p`
 export const _ButtonBox = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 9px;
+  gap: 8px;
 `;
 
 export const _Button = styled.button`
@@ -161,26 +162,33 @@ export const _Title = styled.h1`
 // 댓글 입력창
 
 export const _NewCommentBox = styled.div`
-  width: 90%;
-  padding: 10px 0 10px 0;
+  display: flex;
+  width: 100%;
+  padding: 16px 0 16px 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 24px;
+  div {
+    display: flex;
+    gap: 12px;
+  }
   textarea {
+    display: flex;
     width: 100%;
-    height: 5rem;
-    margin: 10px 0;
+    box-sizing: border-box;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: var(--color-zinc-800);
     color: white;
     resize: none;
   }
   button {
-    width: 100%;
+    display: flex;
     background-color: var(--color-primary-500);
+    justify-content: center;
+    align-items: center;
     color: white;
-    padding: 7px;
+    padding: 20px;
     border: none;
     border-radius: 2px;
   }

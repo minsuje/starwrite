@@ -175,9 +175,8 @@ export default function ListDetailFeat() {
         />
       </div>
       <hr style={{ borderColor: 'var(--color-zinc-600)' }}></hr>
-      <div>
-        <CommentList annotations={annotations} selectedLine={blocks[0]} />
-      </div>
+
+      <CommentList annotations={annotations} selectedLine={blocks[0]} />
     </>
   );
 }

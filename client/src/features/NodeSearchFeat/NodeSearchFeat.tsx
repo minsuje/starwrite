@@ -58,13 +58,15 @@ export const NodeSearchFeat: React.FC<NodeViewProps> = ({
           onFocus={handleInputClick}
           // onBlur={handleoutClick}
           style={{
-            paddingRight: '30px',
             position: 'relative',
-            height: '40px',
-            width: '500px',
-            paddingLeft: '10px',
+            padding: '12px 16px',
+            width: '100%',
+            minWidth: '300px',
+            maxWidth: '500px',
             background: '#212121',
             color: '#ffff',
+            borderRadius: '6px',
+            border: 'none',
           }}
           placeholder="검색할 노드를 입력해주세요"
         />

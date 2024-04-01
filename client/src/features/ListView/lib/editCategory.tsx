@@ -68,37 +68,47 @@ function EditCategory({
   };
 
   return (
-    <>
-      <_ModalBg>
-        <_Modal>
-          <_Box onSubmit={handleSubmit(onValid)}>
-            <label htmlFor="newCategory">카테고리 수정</label>
-            <input
-              defaultValue={categoryName}
-              style={{ color: 'var(--color-zinc-100)' }}
-              placeholder="카테고리 명"
-              {...register('category')}
-            ></input>
-            {errors.category && typeof errors.category.message === 'string' ? (
-              <_ErrorMsg>{errors.category.message}</_ErrorMsg>
-            ) : (
-              <_ErrorMsg></_ErrorMsg>
-            )}
-            <_ButtonBox>
-              <_Button type="submit">수정</_Button>
-              <_Button
-                color="#ffffff1d"
-                onClick={() => {
-                  onclick();
-                }}
-              >
-                취소
-              </_Button>
-            </_ButtonBox>
-          </_Box>
-        </_Modal>
-      </_ModalBg>
-    </>
+    <_ModalBg
+      key="modalBg"
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <_Modal
+        key="modal"
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <_Box onSubmit={handleSubmit(onValid)}>
+          <label htmlFor="newCategory">카테고리 수정</label>
+          <input
+            defaultValue={categoryName}
+            style={{ color: 'var(--color-zinc-100)' }}
+            placeholder="카테고리 명"
+            {...register('category')}
+          ></input>
+          {errors.category && typeof errors.category.message === 'string' ? (
+            <_ErrorMsg>{errors.category.message}</_ErrorMsg>
+          ) : (
+            <_ErrorMsg></_ErrorMsg>
+          )}
+          <_ButtonBox>
+            <_Button type="submit">수정</_Button>
+            <_Button
+              color="#ffffff1d"
+              onClick={() => {
+                onclick();
+              }}
+            >
+              취소
+            </_Button>
+          </_ButtonBox>
+        </_Box>
+      </_Modal>
+    </_ModalBg>
   );
 }
 

@@ -13,6 +13,7 @@ const _ListViewBox = styled.div`
 
 const _CategoryBar = styled(motion.div)`
   /* margin-top: 5rem; */
+  position: relative;
   width: 240px;
   padding: 16px;
   /* height: 100%; */

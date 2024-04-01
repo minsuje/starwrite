@@ -160,12 +160,14 @@ export function CategoryViewWid({
       })
       .call(dragHandler);
 
-    node.append('circle').attr('r', 56).attr('fill', '#A6A6A6');
+    node.append('circle').attr('r', 56).attr('fill', '#8a8a8a');
     // //console.log('nodes', nodes);
     node
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('fill', '#ffffff')
+      .style('font-size', '20px')
+      .style('font-weight', 'bolder')
       .text((d) => d.name)
       .attr('y', 4);
 

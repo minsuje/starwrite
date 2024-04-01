@@ -60,24 +60,22 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
   }, [selectedLine, selectedId]);
   return (
     <>
-      <_NewCommentBox>
-        <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onValid)}>
+        <_NewCommentBox>
           <h1>댓글 </h1>
           <div>
             <textarea
               placeholder="댓글을 입력하세요"
               {...register('content')}
-              style={{ padding: '10px' }}
+              style={{ padding: '16px' }}
             />
             <button type="submit">작성</button>
           </div>
           {errors.content && typeof errors.content.message === 'string' ? (
             <_ErrorMsg>{errors.content.message}</_ErrorMsg>
-          ) : (
-            <div></div>
-          )}
-        </form>
-      </_NewCommentBox>
+          ) : null}
+        </_NewCommentBox>
+      </form>
     </>
   );
 }

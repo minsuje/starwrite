@@ -15,7 +15,7 @@ const _StyledHeaderContainer = styled.div`
   width: 100%;
   top: 0;
 
-  padding: 4px 32px;
+  padding: 16px 32px;
   /* margin-bottom: 50px; */
   position: fixed;
   /* border-bottom: 1px solid #2d2d2d; */
@@ -25,15 +25,20 @@ const _StyledHeaderContainer = styled.div`
 
 const _StyledNavigation = styled.div`
   display: flex;
+  position: fixed;
   justify-content: center; // 네비게이션 요소를 중앙에 위치
   align-items: center;
   gap: 8px;
   padding: 8px;
   background-color: #0000002e;
   border-radius: 16px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const _StyledButton = styled.button<StyledButtonProps>`
+  display: flex;
+  width: 100%;
   padding: 12px 20px;
   border-radius: 8px;
   border: none;

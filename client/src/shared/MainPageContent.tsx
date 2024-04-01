@@ -14,7 +14,6 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2개의 컬럼으로 설정 */
   gap: 20px; /* 그리드 아이템 간의 간격 설정 */
-  width: 90%;
   height: 100%;
   padding: 30px;
 `;
@@ -24,6 +23,12 @@ const GridItem = styled.div`
   /* border: 1px solid gray; */
   padding: 50px; /* 안쪽 여백 설정 */
   text-align: center;
+
+  p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #c0c0c0;
+  }
 `;
 
 const StyledLink = styled.div`
@@ -37,6 +42,7 @@ const StyledLink = styled.div`
 
   &:hover {
     border: 1px solid;
+    margin: -1px;
     box-shadow:
       inset 0 0 20px rgba(255, 255, 255, 0.5),
       0 0 20px rgba(255, 255, 255, 0.2);
@@ -60,6 +66,7 @@ const StyledBox = styled.div`
 
 const MainPageContentTitle = styled.h1`
   padding-bottom: 30px;
+  width: 100%;
 `;
 
 const _favicon = styled.div`

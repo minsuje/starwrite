@@ -46,13 +46,17 @@ export const CategorySearchFeat = ({
   const { nickname } = useParams();
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }} ref={searchRef}>
+    <div
+      style={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+      ref={searchRef}
+    >
       <div style={{ position: 'relative' }}>
         <div
           style={{
             display: 'flex',
             justifyContent: 'center',
             paddingBottom: '20px',
+            width: '100%',
           }}
         >
           {nickname} 님의 카테고리뷰
@@ -64,13 +68,15 @@ export const CategorySearchFeat = ({
           onFocus={handleInputClick}
           onBlur={() => setTimeout(() => setToggleSearch(false), 100)}
           style={{
-            paddingRight: '30px',
             position: 'relative',
-            height: '40px',
-            width: '500px',
-            paddingLeft: '10px',
+            padding: '12px 16px',
+            width: '100%',
+            minWidth: '300px',
+            maxWidth: '500px',
             background: '#212121',
             color: '#ffff',
+            borderRadius: '6px',
+            border: 'none',
           }}
           placeholder="검색할 카테고리를 입력해 주세요"
         />

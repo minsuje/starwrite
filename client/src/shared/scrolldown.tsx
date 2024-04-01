@@ -12,6 +12,7 @@ export function PageScrolldown() {
           alignItems: 'center',
           width: '100%',
           height: '40px',
+          opacity: '0.3',
         }}
         animationData={scrolldown}
       />
