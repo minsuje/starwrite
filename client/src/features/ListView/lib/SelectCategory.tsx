@@ -54,6 +54,14 @@ function SelectCategory({
             <div>
               <span>카테고리 </span>
               <select
+                style={{
+                  backgroundColor: 'var(--color-zinc-500)',
+                  border: 'none',
+                  padding: '3px',
+                  borderRadius: '7px',
+                  marginLeft: '5px',
+                  textAlign: 'center',
+                }}
                 onChange={(value) => {
                   setCategory(value.currentTarget.value);
                 }}

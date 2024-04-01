@@ -17,7 +17,7 @@ export const _ModalBg = styled(motion.div)`
 export const _Modal = styled(motion.div)`
   position: fixed;
   bottom: 40%;
-  left: calc(50% - 117px);
+  left: calc(50% - 100px);
   transform: translate(-50%, -50%);
   background-color: var(--color-zinc-800);
   padding-bottom: 10px;
