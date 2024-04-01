@@ -7,11 +7,6 @@ import { _StyledLink, _StyledLinkOut } from '../../shared/CommonStyle';
 import { GlobalSearch } from '../../features/InterGratedSearchIconFeat/GlobalSearch';
 // import { InterGratedSearchIconFeat } from '../../features/InterGratedSearchIconFeat/InterGratedSearchIconFeat';
 
-interface StyledButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  isActive?: boolean;
-}
-
 const _StyledHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between; // 컨테이너의 내용을 양 끝과 중앙으로 분배
@@ -55,6 +50,11 @@ const _StyledButton = styled.button<StyledButtonProps>`
     transition: all 0.3s ease;
   }
 `;
+
+interface StyledButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  isActive?: boolean;
+}
 
 // const _StyledLink = styled(Link)`
 //   padding: 0 30px;

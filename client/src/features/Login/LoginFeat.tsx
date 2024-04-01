@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 // import jwtDecode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { commonApi } from '../../shared/api/BaseApi';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
@@ -61,6 +62,7 @@ function LoginForm() {
     handleSubmit, // form submit 이벤트 시 호출
     watch,
     formState: { errors }, // 폼 상태 객체 (그 안에 에러 객체)
+    setError,
     trigger,
   } = useForm({
     resolver: zodResolver(schema),
@@ -82,6 +84,8 @@ function LoginForm() {
         password: data.password,
       });
 
+      console.log('>>>>>>>>', response);
+
       localStorage.setItem('accessToken', response.data.accessToken);
 
       const cookie = await commonApi.get(`/cookie`, {
@@ -96,15 +100,30 @@ function LoginForm() {
         return;
       }
 
-      console.log(`cookie >>>>>> ${document.cookie}`);
-
       localStorage.setItem('nickname', cookie.data.value);
-      console.log(`cookie >>>>>>> ${cookie.data.value}`);
+
       alert('로그인 완료');
       navigate(`/user/starwrite/categoryview/${cookie.data.value}`);
     } catch (error) {
-      alert('로그인 실패');
       console.error(error);
+
+      // Axios 에러이고, 응답이 있는 경우
+      if (axios.isAxiosError(error) && error.response) {
+        // HTTP 상태 코드가 401인 경우
+        if (error.response.status === 401) {
+          // 서버로부터 받은 에러 메시지를 사용자에게 표시
+          setError('email', {
+            type: 'manual',
+            message: `${error.response.data}`,
+          });
+        } else {
+          // 다른 HTTP 에러 코드에 대한 처리
+          alert('로그인 처리 중 예상치 못한 에러가 발생했습니다.');
+        }
+      } else {
+        // Axios 외의 다른 네트워크 에러 처리
+        alert('로그인 실패');
+      }
     }
   };
 
