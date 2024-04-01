@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { newCategoryApi } from '../api/CategoryApi';
 import { Category, useAppSelector } from '../../../shared/model';
 import { collectCategories } from '../model/CategoriesSlice';
-import { AnimatePresence } from 'framer-motion';
+// import { AnimatePresence } from 'framer-motion';
 
 type closeModal = () => void;
 
