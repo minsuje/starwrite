@@ -63,8 +63,8 @@ export function NodeViewPage() {
     setSearchTerm(newSearchTerm); // 검색어 상태 업데이트
   };
 
-  // console.log('nodesData>>>>>>>>>>>>>', nodesData);
-  // console.log('DataSpinnerSh', pageDataProp);
+  // //console.log('nodesData>>>>>>>>>>>>>', nodesData);
+  // //console.log('DataSpinnerSh', pageDataProp);
 
   // if (nodesData.posts.length === 0 && nodesData.relation.length === 0) {
   //   return <NoDataComponent />;

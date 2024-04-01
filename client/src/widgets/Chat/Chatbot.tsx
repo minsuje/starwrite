@@ -224,7 +224,7 @@ function Chatbot() {
           question: inputMsg,
         });
 
-        console.log(response);
+        //console.log(response);
 
         // API 응답을 채팅 메시지로 추가
         if (response.data) {

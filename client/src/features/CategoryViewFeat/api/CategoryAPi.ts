@@ -6,7 +6,7 @@ export const CategoryApi = async (category: string) => {
     const response = await baseApi.get(
       `/category/${category}/getCategoryPostNode`,
     );
-    console.log('CategoryApi', response.data);
+    //console.log('CategoryApi', response.data);
     return response.data;
   } catch (error) {
     console.error('CategoryApi Error', error);
@@ -50,7 +50,7 @@ nodes.forEach((node) => {
 export const fetchDataCategory = async (nickname?: string) => {
   try {
     const response = await baseApi.get(`/category/user?nickname=${nickname}`);
-    console.log('fetchDataCategory', response);
+    //console.log('fetchDataCategory', response);
     return response.data;
 
     // API 응답으로 받은 데이터를 상태에 저장

@@ -26,12 +26,12 @@ function ListViewMainEnt() {
       const promise = postListAllApi(nickname);
       promise
         .then((Posts) => {
-          console.log('Posts>>>>>>', Posts);
+          //console.log('Posts>>>>>>', Posts);
           if (Posts) {
             setPostsList(Posts);
           } else {
             setPostsList([]);
-            console.log('데이터에 categoryPosts 없음');
+            //console.log('데이터에 categoryPosts 없음');
           }
         })
         .catch(() => {
@@ -46,7 +46,7 @@ function ListViewMainEnt() {
             setPostsList(Posts);
           } else {
             setPostsList([]);
-            console.log('데이터에 categoryPosts 없음');
+            //console.log('데이터에 categoryPosts 없음');
           }
         })
         .catch(() => {
@@ -59,13 +59,13 @@ function ListViewMainEnt() {
           setPostsList(Posts.categoryPosts);
         } else {
           setPostsList([]);
-          console.log('데이터에 categoryPosts 없음');
+          //console.log('데이터에 categoryPosts 없음');
         }
         if (Posts.categoryName) {
           setCategoryName(Posts.categoryName);
         } else {
           setCategoryName('찾을 수 없음');
-          console.log('데이터에 categoryName 없음');
+          //console.log('데이터에 categoryName 없음');
         }
       });
     }

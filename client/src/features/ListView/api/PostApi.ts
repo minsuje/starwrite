@@ -6,7 +6,7 @@ export const postListApi = async (category: string | undefined) => {
     const response = await baseApi.get(
       `/category/posts?categoryId=${category}`,
     );
-    console.log('postListApi', response.data);
+    //console.log('postListApi', response.data);
     return response.data;
   } catch (error) {
     console.error('postListApi Error', error);
@@ -17,7 +17,7 @@ export const postListApi = async (category: string | undefined) => {
 export const postListAllApi = async (nickname: string | undefined) => {
   try {
     const response = await baseApi.get(`/post/${nickname}/all`);
-    console.log('postListAllApi', response.data);
+    //console.log('postListAllApi', response.data);
     return response.data;
   } catch (error) {
     console.error('postListApiAll Error', error);
@@ -29,7 +29,7 @@ export const postListAllApi = async (nickname: string | undefined) => {
 export const postListScrapApi = async (nickname: string | undefined) => {
   try {
     const response = await baseApi.get(`/post/${nickname}/scrap`);
-    console.log('postListScrapApi', response.data);
+    //console.log('postListScrapApi', response.data);
     return response.data;
   } catch (error) {
     console.error('postListScrapApi Error', error);
@@ -41,7 +41,7 @@ export const postListScrapApi = async (nickname: string | undefined) => {
 export const postDetailApi = async (postid: number) => {
   try {
     const response = await baseApi.get(`post/detail/${postid}`);
-    console.log('postDetailApi', response.data);
+    //console.log('postDetailApi', response.data);
     return response.data;
   } catch (error) {
     console.error('postDetailApi Error', error);
@@ -53,7 +53,7 @@ export const postDetailApi = async (postid: number) => {
 export const deletePostApi = async (postid: number) => {
   try {
     const response = await baseApi.delete(`/post/delete/${postid}`);
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('deletePostApi Error', error);
@@ -68,7 +68,7 @@ export const scrapPostApi = async (postid: number, category: string) => {
       postId: postid,
       category: category,
     });
-    console.log('scrapPostApi', response);
+    //console.log('scrapPostApi', response);
     return response.data;
   } catch (error) {
     console.error('scrapPostApi', error);

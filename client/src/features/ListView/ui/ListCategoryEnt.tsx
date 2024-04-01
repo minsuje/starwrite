@@ -35,10 +35,10 @@ function ListCategory({
       localStorage.removeItem('accessToken');
 
       try {
-        const response = await baseApi.post(`/logout`);
-        console.log(response.data);
+        await baseApi.post(`/logout`);
+        //console.log(response.data);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
 
       navigate(`/`);
@@ -66,7 +66,7 @@ function ListCategory({
         { name: '로그아웃', categoryId: 'logout' },
       ]);
     }
-    console.log('리스트', reset);
+    //console.log('리스트', reset);
   }, [sort, nickname, updateCategory, dispatch, reset]);
 
   return (

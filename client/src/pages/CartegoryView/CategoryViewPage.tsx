@@ -24,8 +24,8 @@ export function CategoryViewPage() {
     setSearchTerm(newSearchTerm); // 검색어 상태 업데이트
   };
 
-  // console.log('categoryData??', categoryDataNone);
-  // console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
+  // //console.log('categoryData??', categoryDataNone);
+  // //console.log('categoryData ????>>>>>>>>>>>>>>', categoryData);
 
   const category = '카테고리';
   return (

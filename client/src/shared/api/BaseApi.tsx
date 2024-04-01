@@ -2,9 +2,9 @@
 const tried = async () => {
   try {
     const data = await fs.readFile("./text.txt");
-    console.log(data);
+    //console.log(data);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };
 tried();

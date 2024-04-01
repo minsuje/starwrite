@@ -167,7 +167,7 @@ export function MyPgaeFeat() {
           nickname: response.data.nickname,
         });
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     };
     fetchData();
@@ -199,18 +199,18 @@ export function MyPgaeFeat() {
   };
 
   const changeValid = async (data: RegisteringUser) => {
-    console.log('changeValid', data);
+    //console.log('changeValid', data);
     try {
       // 서버로 요청을 보냅니다. 여기서는 POST 요청을 예시로 들었습니다.
       // URL과 요청 본문은 실제 서버 API에 맞게 수정해야 합니다.
-      const response = await baseApi.patch('/mypage', {
+      await baseApi.patch('/mypage', {
         nickname: data.nickname,
         originPassword: data.qurrentPassword,
         newPassword: data.newPassword,
       });
 
       // 응답 처리
-      console.log('Response:', response.data);
+      //console.log('Response:', response.data);
       alert('회원정보 수정 완료');
       // 여기서는 응답에 따른 사용자 인터페이스 업데이트나 경고 메시지 표시 등의 처리를 추가할 수 있습니다.
     } catch (error) {
@@ -237,7 +237,7 @@ export function MyPgaeFeat() {
         `mypage/nickCheck?nickname=${currentNickname}`,
       );
       setIsNicknameChecked(true);
-      console.log(response.data);
+      //console.log(response.data);
       if (response.data === 'no change') {
         setNicknameAvailabilityMessage('현재 사용중인 닉네임입니다');
       } else if (response.data === 'unavailable') {
@@ -263,10 +263,10 @@ export function MyPgaeFeat() {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await baseApi.delete('/mypage');
+      await baseApi.delete('/mypage');
       localStorage.removeItem('nickname');
       localStorage.removeItem('accessToken');
-      console.log(response.data);
+      //console.log(response.data);
       alert('회원 탈퇴 완료');
       window.location.href = '/';
     } catch (error) {
@@ -276,7 +276,7 @@ export function MyPgaeFeat() {
   };
 
   // const onInvalid = (data: RegisteringUser) => {
-  //   console.log('통과 못한 data', data);
+  //   //console.log('통과 못한 data', data);
   // };
   // 이모지 표시 함수
   const Emoji = (fieldName: keyof RegisteringUser) => {

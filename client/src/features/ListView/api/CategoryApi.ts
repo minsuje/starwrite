@@ -4,7 +4,7 @@ import { baseApi } from '../../../shared/api/BaseApi';
 export const getCategoriesApi = async (nickname: string) => {
   try {
     const response = await baseApi.get(`/category/user?nickname=${nickname}`);
-    console.log('getCategoriesApi', response.data);
+    //console.log('getCategoriesApi', response.data);
     return response.data;
   } catch (error) {
     console.error('getCategories Error', error);
@@ -16,7 +16,7 @@ export const getCategoriesApi = async (nickname: string) => {
 export const newCategoryApi = async (name: string) => {
   try {
     const response = await baseApi.post('/category', { name: name });
-    console.log('newCategoryApi', response.data);
+    //console.log('newCategoryApi', response.data);
     return response.data;
   } catch (error) {
     console.error('newCategoryApi Error', error);
@@ -32,7 +32,7 @@ interface PatchName {
 export const patchCategoryApi = async (data: PatchName) => {
   try {
     const response = await baseApi.patch('/category', data);
-    console.log('patchCategoryApi', response.data);
+    //console.log('patchCategoryApi', response.data);
     return response.data;
   } catch (error) {
     console.error('patchCategoryApiError', error);
@@ -44,7 +44,7 @@ export const patchCategoryApi = async (data: PatchName) => {
 export const deleteCategoryApi = async (id: string) => {
   try {
     const response = await baseApi.delete(`/category?categoryId=${id}`);
-    console.log('deleteCategoryApi', response.data);
+    //console.log('deleteCategoryApi', response.data);
     alert('카테고리 삭제가 완료되었습니다.');
     return response.data;
   } catch (error) {

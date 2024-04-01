@@ -6,7 +6,7 @@ export const newPostApi = async (data: NewPost) => {
   try {
     const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.post(`/post`, data);
-    console.log('newPostApi', response.data);
+    //console.log('newPostApi', response.data);
     window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
@@ -20,7 +20,7 @@ export const patchPostApi = async (data: NewPost, id: number) => {
   try {
     const myNickname = localStorage.getItem('nickname');
     const response = await baseApi.patch(`/post/${id}`, data);
-    console.log('patchPostApi', response.data);
+    //console.log('patchPostApi', response.data);
     window.location.href = `/user/starwrite/listview/main/${myNickname}/all`;
     return response.data;
   } catch (error) {
@@ -33,7 +33,7 @@ export const patchPostApi = async (data: NewPost, id: number) => {
 export const newSavingApi = async (data: NewPost) => {
   try {
     const response = await baseApi.post(`/post/save`, data);
-    console.log('newSavingApi', response.data);
+    //console.log('newSavingApi', response.data);
     alert('임시저장 완료되었습니다.');
     return response.data;
   } catch (error) {
@@ -44,7 +44,7 @@ export const newSavingApi = async (data: NewPost) => {
 export const patchSavingApi = async (data: NewPost, postid: number) => {
   try {
     const response = await baseApi.patch(`/post/save/${postid}`, data);
-    console.log('patchSavingApi', response.data);
+    //console.log('patchSavingApi', response.data);
     return response.data;
   } catch (error) {
     console.error(`patchSavingApi Error`, error);
@@ -56,7 +56,7 @@ export const patchSavingApi = async (data: NewPost, postid: number) => {
 export const savingsApi = async () => {
   try {
     const response = await baseApi.get(`/post/all/save`);
-    console.log(`savingsApi`, response.data);
+    //console.log(`savingsApi`, response.data);
     return response.data;
   } catch (error) {
     console.error(`savingsApi Error`, error);
@@ -68,7 +68,7 @@ export const savingsApi = async () => {
 export const getsavingApi = async (id: number) => {
   try {
     const response = await baseApi.get(`/post/all/save/${id}`);
-    console.log(`getsavingApi`, response);
+    //console.log(`getsavingApi`, response);
     return response.data;
   } catch (error) {
     console.error(`getsavingApi Error`, error);
@@ -80,7 +80,7 @@ export const getsavingApi = async (id: number) => {
 export const getTitleApi = async () => {
   try {
     const response = await baseApi.get(`/post/write`);
-    console.log(`getTitleApi`, response.data);
+    //console.log(`getTitleApi`, response.data);
     return response.data;
   } catch (error) {
     console.error(`getTitleApi Error`, error);

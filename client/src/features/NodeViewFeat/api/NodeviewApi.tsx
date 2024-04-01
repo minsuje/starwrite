@@ -24,7 +24,7 @@ export const fetchData = async (category: string | undefined) => {
     const response = await baseApi.get(
       `/category/getCategoryPostNode?categoryId=${category}`,
     );
-    console.log('response', response);
+    //console.log('response', response);
     return response.data;
   } catch (error) {
     console.error('API Error', error);

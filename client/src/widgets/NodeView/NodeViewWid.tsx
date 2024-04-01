@@ -399,7 +399,7 @@ export const NodeView = ({
     });
   }, [nodes, links]); // nodes와 links가 변경될 때마다 useEffect를 다시 실행
 
-  console.log('>>>>>>>>>>>', nodes);
+  //console.log('>>>>>>>>>>>', nodes);
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const nodeSelection = svg.selectAll('.nodes image').data<CustomNode>(nodes); // 여기서 data는 CustomNode 타입의 배열이어야 합니다.

@@ -62,7 +62,7 @@ export function GlobalSearch() {
           setSearchResultBox(isMatch);
 
           if (!isMatch) {
-            console.log('존재하지 않은 게시글');
+            //console.log('존재하지 않은 게시글');
             setSearchResultBox(false);
           }
         } catch (error) {
