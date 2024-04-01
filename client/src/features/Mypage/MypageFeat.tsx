@@ -20,20 +20,20 @@ interface RegisteringUser {
   checkPassword: string;
 }
 
-const _emaliinput = styled.input`
-  height: 30px;
-  width: 100%;
-  max-width: 300px;
-  background-color: #616161;
-  border: none;
-  color: #ffffff;
-  opacity: 0.6;
-  border-radius: 3px;
-  display: inline;
-  &::placeholder {
-    color: #ffffff; /* 이 부분을 수정 */
-  }
-`;
+// const _emaliinput = styled.input`
+//   height: 30px;
+//   width: 100%;
+//   max-width: 300px;
+//   background-color: #616161;
+//   border: none;
+//   color: #ffffff;
+//   opacity: 0.6;
+//   border-radius: 3px;
+//   display: inline;
+//   &::placeholder {
+//     color: #ffffff; /* 이 부분을 수정 */
+//   }
+// `;
 
 // const _InputFileButton = styled.label`
 //   padding: 6px 25px;
@@ -45,17 +45,39 @@ const _emaliinput = styled.input`
 // label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
 // `;
 const _MypageBtn = styled.button`
-  min-width: 10%;
-  height: 22px;
+  width: 100%;
+  height: fit-content;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
   color: white;
   text-align: center;
   border: none;
-  background-color: #1361d7;
+  border-radius: 4px;
+  background-color: var(--color-primary-600);
   &:hover {
-    background-color: #0353cb;
+    background-color: var(--color-primary-700);
   }
   &:disabled {
-    background-color: gray;
+    background-color: var(--color-zinc-500);
+  }
+`;
+
+const _OutBtn = styled.button`
+  width: 50%;
+  height: fit-content;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  margin-left: 50%;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-zinc-700);
+  &:hover {
+    background-color: var(--color-zinc-800);
+  }
+  &:disabled {
+    opacity: 0.6;
   }
 `;
 
@@ -285,11 +307,11 @@ export function MyPgaeFeat() {
 
         <InputBox>
           <Label>이메일</Label>
-          <_emaliinput
+          <Input
             placeholder="이메일"
             value={email} // Set the value to the state variable
             disabled
-          ></_emaliinput>
+          ></Input>
         </InputBox>
 
         <InputBox>
@@ -364,11 +386,11 @@ export function MyPgaeFeat() {
               <_ErrorMsg>{errors.checkPassword.message}</_ErrorMsg>
             )}
         </InputBox>
-        <button type="submit">회원 정보 수정</button>
+        <_MypageBtn type="submit">회원 정보 수정</_MypageBtn>
       </form>
-      <button type="button" onClick={handleDeleteAccount}>
+      <_OutBtn type="button" onClick={handleDeleteAccount}>
         회원 탈퇴
-      </button>
+      </_OutBtn>
     </>
   );
 }
