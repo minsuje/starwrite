@@ -225,7 +225,7 @@ function Chatbot() {
         if (response.data) {
           const botMessage: Message = {
             // text: response.data.ai.result,
-            text: response.data.response,
+            text: response.data.ai,
             role: 'bot',
           };
           // const botSourceTitle: Message = {
