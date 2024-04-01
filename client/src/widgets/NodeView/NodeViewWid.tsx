@@ -102,7 +102,7 @@ export const NodeView = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [viewportSize] = useState({
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: 1200,
   });
   function drag(
     simulation: d3.Simulation<CustomNode, Link>,
@@ -202,7 +202,7 @@ export const NodeView = ({
       .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 2.5),
+        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 4),
       )
       .force(
         'radial',
@@ -437,7 +437,7 @@ export const NodeView = ({
       height={viewportSize.height}
       style={{
         justifyContent: 'center',
-        marginTop: '950px',
+        marginTop: '1500px',
         position: 'fixed',
         width: '100%',
       }}
