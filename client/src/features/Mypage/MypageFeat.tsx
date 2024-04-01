@@ -7,9 +7,7 @@ import {
   _emoji,
   _ErrorMsg,
   InputBox,
-  _registerbtn,
 } from '../../shared/CommonStyle';
-import { ProfileShard } from '../../shared/Profile';
 import './mypage.css';
 import { styled } from 'styled-components';
 import { useEffect, useState } from 'react';
@@ -37,15 +35,15 @@ const _emaliinput = styled.input`
   }
 `;
 
-const _InputFileButton = styled.label`
-  padding: 6px 25px;
-  background-color: #464647;
-  color: #c0c0c0;
-  cursor: pointer;
-  position: absolute;
-  right: 110px;
-  // label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
-`;
+// const _InputFileButton = styled.label`
+//   padding: 6px 25px;
+//   background-color: #464647;
+//   color: #c0c0c0;
+//   cursor: pointer;
+//   position: absolute;
+//   right: 110px;
+// label이 inline 요소이기 때문에, 필요에 따라 display 값을 조정할 수 있습니다.
+// `;
 const _MypageBtn = styled.button`
   min-width: 10%;
   height: 22px;

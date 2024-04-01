@@ -70,7 +70,7 @@ function LoginForm() {
     },
   });
 
-  const [loginErrorMessage, setLoginErrorMessage] = useState('');
+  const [, setLoginErrorMessage] = useState('');
 
   const onValid = async (data: LoginInput) => {
     console.log('onValid', data);

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { TitleFeat } from '../../features/CategorySearchFeat/index';
-import { ProfileShard } from '../../shared/Profile';
+// import { ProfileShard } from '../../shared/Profile';
 import { _StyledLink, _StyledLinkOut } from '../../shared/CommonStyle';
 import { GlobalSearch } from '../../features/InterGratedSearchIconFeat/GlobalSearch';
 // import { InterGratedSearchIconFeat } from '../../features/InterGratedSearchIconFeat/InterGratedSearchIconFeat';
