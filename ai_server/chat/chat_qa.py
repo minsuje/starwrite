@@ -254,13 +254,14 @@ kg_qa = RetrievalQAWithSourcesChain(
     # ),
     # verbose=True,
     reduce_k_below_max_tokens=True,
-    max_tokens_limit=20000,
+    max_tokens_limit=30000,
     # memory=memory,
     return_source_documents=True,
 )
 
 
 result = kg_qa({"question": user_question, "chat_history": []})
+print("result >>>>>>> ", result[0])
 
 # 잘 돌아가는 함수
 # kg_qa({"question": user_question, "chat_history": []})
