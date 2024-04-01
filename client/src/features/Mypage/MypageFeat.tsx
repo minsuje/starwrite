@@ -272,7 +272,7 @@ export function MyPgaeFeat() {
   return (
     <>
       <form onSubmit={handleSubmit(changeValid)}>
-        <InputBox>
+        {/* <InputBox>
           <Label>프로필 사진</Label>
           <ProfileShard />
           <_InputFileButton>
@@ -283,7 +283,7 @@ export function MyPgaeFeat() {
               style={{ display: 'none' }}
             ></input>
           </_InputFileButton>
-        </InputBox>
+        </InputBox> */}
 
         <InputBox>
           <Label>이메일</Label>
