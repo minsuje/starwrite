@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { InterGratedSearchIcon } from '../../shared/IntegratedSearchIcon';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { fetchDataGlobalSearch } from './api/GlobalSearch';
