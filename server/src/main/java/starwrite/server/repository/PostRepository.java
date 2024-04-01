@@ -243,7 +243,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
   // 글 수정 - 관련 글이 있는 경우
   @Query("MATCH (post:Post) " + "WHERE ID(post) = $postId "
-      + "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
+      + "SET post.title = $newTitle, post.content = $newContent, post.parsedContent = $newParsedContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
       + "WITH post "
       + "UNWIND (CASE WHEN SIZE($rel) > 0 THEN $rel ELSE [null] END) AS relatedPostId "
       + "   OPTIONAL MATCH (relatedPost:Post) WHERE relatedPost IS NOT NULL AND ID(relatedPost) = relatedPostId "
@@ -256,16 +256,21 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "WITH post " + "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) "
       + "DELETE oldCatRel " + "WITH post "
       + "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier "
-      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN count(newRel)")
-  int updatePost(@Param(value = "postId") Long postId, @Param(value = "newTitle") String newTitle,
-      @Param(value = "img") String img, @Param(value = "newContent") String newContent,
+      + "MERGE (category)-[newRel:IS_CHILD]->(post) "
+      + "WITH post "
+      + "MATCH (post)<-[:EMBED]-(c:Chunk) "
+      + "DETACH DELETE c "
+      + "WITH post "
+      + "RETURN post AS post, ID(post) AS identifier LIMIT 1")
+  CreatedPost updatePost(@Param(value = "postId") Long postId, @Param(value = "newTitle") String newTitle,
+      @Param(value = "img") String img, @Param(value = "newContent") String newContent, @Param(value="newParsedContent") String extractedText,
       @Param(value = "rel") List<Long> rel, @Param(value = "visible") String visible,
       @Param(value = "categoryIdentifier") String categoryId);
 
 
   // 글 수정 - 관련 글이 없는 경우
   @Query("MATCH (post:Post) " + "WHERE ID(post) = $postId "
-      + "SET post.title = $newTitle, post.content = $newContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
+      + "SET post.title = $newTitle, post.content = $newContent, post.parsedContent = $newParsedContent, post.img = $img, post.updatedAt = localDateTime(), post.visible = $visible, post.tmpSave = false "
       + "WITH post " + "OPTIONAL MATCH (post)-[oldRel:RELATED]->(relatedPost:Post) "
       + "DELETE oldRel " + "WITH post "
       + "OPTIONAL MATCH (post)<-[oldRelBack:RELATED]-(relatedPost:Post) "
@@ -273,10 +278,15 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       + "WITH post " + "OPTIONAL MATCH (post)<-[oldCatRel:IS_CHILD]-(oldCategory:Category) "
       + "DELETE oldCatRel " + "WITH post "
       + "MATCH (category:Category) WHERE category.categoryId = $categoryIdentifier "
-      + "MERGE (category)-[newRel:IS_CHILD]->(post) " + "RETURN count(newRel)")
-  int updatePostNull(@Param(value = "postId") Long postId,
+      + "MERGE (category)-[newRel:IS_CHILD]->(post) "
+      + "WITH post "
+      + "MATCH (post)<-[:EMBED]-(c:Chunk) "
+      + "DETACH DELETE c "
+      + "WITH post "
+      + "RETURN post AS post, ID(post) AS identifier LIMIT 1")
+  CreatedPost updatePostNull(@Param(value = "postId") Long postId,
       @Param(value = "newTitle") String newTitle, @Param(value = "img") String img,
-      @Param(value = "newContent") String newContent, @Param(value = "visible") String visible,
+      @Param(value = "newContent") String newContent, @Param(value="newParsedContent") String extractedText, @Param(value = "visible") String visible,
       @Param(value = "categoryIdentifier") String categoryId);
 
 

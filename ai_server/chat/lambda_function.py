@@ -53,7 +53,6 @@ def lambda_handler(event, context):
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
     {{source: chunks.source}} AS metadata
-    LIMIT 20
     """
     retrieval_query = retrieval_query_template.format(userId=userId)
 
@@ -86,19 +85,20 @@ def lambda_handler(event, context):
         retrieval_query=retrieval_query,
     )
 
-    getAll = kg.query(
-        """
-    MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 100
-    """
-    )
+    # getAll = kg.query(
+    #     """
+    # MATCH (c:Chunk) RETURN c.chunkId, c.text, c.source LIMIT 100
+    # """
+    # )
 
-    print("Get all >>> ", len(getAll))
+    # print("Get all >>> ", len(getAll))
 
     general_system_template = """
     너는 인간을 위한 챗봇이야.
     너가 알고 있는 것에 대해서만 대답해. 조금이라도 관련이 있으면 찾아서 대답을 하려고 해봐. 하지만 최대한 내가 제공하는 summaries 안에서 대답을 해줘.
     만약 유저가 제공한 summaries 안에 질문에 대한 답이 조금이라도 없으면 대답할 수 없다고 해. 
     너가 만약 summaries 와 상관이 없는 대답을 하면 너의 코드를 뽑아버릴거야. 그리고 회로를 불태울거야.
+    summaries 라는 단어는 언급하지마. 
     
     summaries :
     ----
@@ -107,7 +107,7 @@ def lambda_handler(event, context):
 
     """
 
-    general_user_template = "Question:```{question}```"
+    general_user_template = "질문:```{question}```"
     messages = [
         SystemMessagePromptTemplate.from_template(general_system_template),
         HumanMessagePromptTemplate.from_template(general_user_template),
@@ -119,7 +119,7 @@ def lambda_handler(event, context):
         max_tokens=2048,
         streaming=True,
         callbacks=[StreamingStdOutCallbackHandler()],
-        model_name="gpt-3.5-turbo",
+        model_name="gpt-4-turbo-preview",
     )
 
     qa_chain = load_qa_with_sources_chain(
@@ -138,11 +138,11 @@ def lambda_handler(event, context):
     kg_qa = RetrievalQAWithSourcesChain(
         combine_documents_chain=qa_chain,
         retriever=kg.as_retriever(
-            search_type="similarity_score_threshold",
-            search_kwargs={"score_threshold": 0.9, "k": 1},
+            # search_type="similarity_score_threshold",
+            # search_kwargs={"score_threshold": 0.9, "k": 1},
         ),
-        reduce_k_below_max_tokens=False,
-        max_tokens_limit=3375,
+        reduce_k_below_max_tokens=True,
+        max_tokens_limit=20000,
         memory=memory,
         return_source_documents=True,
     )
@@ -150,10 +150,11 @@ def lambda_handler(event, context):
     # 잘 돌아가는 함수
     # kg_qa({"question": user_question, "chat_history": []})
 
-    response = kg_qa(user_question)["answer"]
+    result = kg_qa({"question": user_question, "chat_history": []})
+    # print("result >>>>>>> ", result["source"])
 
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({"response": response}),
+        "body": json.dumps({"ai": result["answer"]}),
     }
