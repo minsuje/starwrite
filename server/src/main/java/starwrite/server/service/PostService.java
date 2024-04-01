@@ -247,16 +247,26 @@ public class PostService {
 
     // 이미 청크가 있으면 청크 날리기
 //    int result;
+
+    String extractedText = "";
+
+    try {
+      extractedText = JsonData.parseJson(post.getPost().getContent());
+    } catch (IOException e) {
+      log.error("Error parsing JSON content", e);
+      // 필요한 경우 추가적인 예외 처리
+    }
+
     CreatedPost result;
     if (!post.getRelatedPosts().isEmpty()) {
       // 관련 글이 있는 경우
-        result = postRepository.updatePost(postId, newTitle, img, newContent, rel, newVisible,
+        result = postRepository.updatePost(postId, newTitle, img, newContent, extractedText, rel, newVisible,
             categoryId);
         Post updatedPost = result.getPost();
         backgroundTaskService.parsePostBackground(result.getIdentifier(), updatedPost.getTitle(), updatedPost.getContent());
     } else {
       // 관련 글이 없는 경우
-      result = postRepository.updatePostNull(postId, newTitle, img, newContent, newVisible,
+      result = postRepository.updatePostNull(postId, newTitle, img, newContent, extractedText, newVisible,
           categoryId);
       Post updatedPost = result.getPost();
       backgroundTaskService.parsePostBackground(result.getIdentifier(), updatedPost.getTitle(), updatedPost.getContent());
