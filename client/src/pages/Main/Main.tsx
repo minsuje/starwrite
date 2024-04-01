@@ -5,6 +5,7 @@ import {
   _styledMainPageFirstContentTitle,
 } from '../../features/MainPageFeat/ui/MainPageTitle';
 import styled from 'styled-components';
+import { PageScrolldown } from '../../shared/scrolldown';
 
 const _MainContainer = styled.div`
   display: flex;
@@ -34,6 +35,9 @@ export function MainPage() {
           </div>
         </_styledMainPageTitle>
         {/* 상단 끝 */}
+
+        <PageScrolldown></PageScrolldown>
+
         {/* 주요기능 */}
         <_styledMainPageFirstContentTitle>
           <h1 style={{ marginTop: '300px' }}> STARWRITE 주요 기능</h1>
