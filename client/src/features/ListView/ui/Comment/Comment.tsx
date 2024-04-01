@@ -3,7 +3,7 @@ import { Annotation } from '../../../../shared/model/types';
 
 const _CommentBox = styled.div`
   width: 90%;
-  height: 5rem;
+  height: fit-content;
   border: 1px solid var(--color-zinc-700);
   margin-bottom: 10px;
   border-radius: 7px;
@@ -15,12 +15,14 @@ const _CommentBox = styled.div`
 const _CommentNickname = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
+  padding: 0.5rem 0;
   color: var(--color-zinc-500);
 `;
 
 const _CommentContent = styled.div`
   font-size: 1.3rem;
   color: var(--color-zinc-200);
+  padding: 0.5rem 0;
 `;
 
 function Comment({ annotation }: { annotation: Annotation }) {
@@ -29,8 +31,8 @@ function Comment({ annotation }: { annotation: Annotation }) {
   return (
     <>
       <_CommentBox>
-        <_CommentContent>{annotation.content}</_CommentContent>
         <_CommentNickname> {annotation.nickName}</_CommentNickname>
+        <_CommentContent>{annotation.content}</_CommentContent>
       </_CommentBox>
     </>
   );
