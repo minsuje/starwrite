@@ -164,7 +164,10 @@ export const _Box = styled(_Modal)`
   display: flex;
   width: 80%;
   height: 80%;
-  top: calc((100vh - 80%) / 2);
+  /* top: calc((100vh - 80%) / 2);
+   */
+  top: 50%;
+  left: 50%;
   flex-direction: column;
   gap: 30px;
   color: #adadad;
