@@ -24,7 +24,7 @@ export const Mention = createReactInlineContentSpec(
       <>
         <a
           className="backlinking"
-          style={{ color: 'white' }}
+          style={{ color: 'white', backgroundColor: 'var(--color-zinc-700)' }}
           href={`/user/starwrite/listview/main/${props.inlineContent.props.nickname}/all/${props.inlineContent.props.postid}`}
         >
           @{props.inlineContent.props.title}
