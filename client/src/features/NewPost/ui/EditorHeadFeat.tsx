@@ -76,11 +76,10 @@ function NewPostHeadFeat({
     console.log('category', category);
     if (selected !== '' && selected !== 'all' && selected !== 'scrab') {
       setCategory(selected);
-      console.log('category2', category);
     } else if (categories[0]) {
       setCategory(categories[0].categoryId);
     }
-  }, [categories, category, setCategory, selected]);
+  }, [categories, selected]);
 
   return (
     <>
@@ -122,7 +121,7 @@ function NewPostHeadFeat({
         >
           <p>카테고리</p>
           <select
-            defaultValue={category}
+            value={category}
             onChange={(value) => {
               setCategory(value.currentTarget.value);
             }}
