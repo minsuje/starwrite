@@ -61,7 +61,7 @@ export function CategoryViewWid({
             }),
           );
 
-          console.log('>>>>>>', categoryDataResponse);
+          //console.log('>>>>>>', categoryDataResponse);
 
           if (searchTerm.trim() !== '') {
             // 검색어가 있을 경우 필터링을 적용
@@ -83,11 +83,11 @@ export function CategoryViewWid({
     };
 
     getDataCategory();
-    // console.log('categoryDatas>>', categoryDatas);
-    console.log();
+    // //console.log('categoryDatas>>', categoryDatas);
+    //console.log();
   }, [nickname]);
 
-  // console.log('Processed category Data:', category);
+  // //console.log('Processed category Data:', category);
 
   const simulation = d3
     .forceSimulation<CategoryItem>(category)
@@ -161,7 +161,7 @@ export function CategoryViewWid({
       .call(dragHandler);
 
     node.append('circle').attr('r', 56).attr('fill', '#A6A6A6');
-    // console.log('nodes', nodes);
+    // //console.log('nodes', nodes);
     node
       .append('text')
       .attr('text-anchor', 'middle')

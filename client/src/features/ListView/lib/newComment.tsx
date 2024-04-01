@@ -31,7 +31,7 @@ function NewComment({ selectedLine }: { selectedLine: MyBlock | undefined }) {
   });
 
   const onValid = async (comment: { content?: string }) => {
-    console.log('data', comment);
+    //console.log('data', comment);
     if (comment.content) {
       const data = {
         annotation: {

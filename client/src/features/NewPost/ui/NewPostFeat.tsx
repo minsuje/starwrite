@@ -21,7 +21,7 @@ function NewPostFeat() {
     if (postId) {
       const promise = getsavingApi(Number(postId));
       promise.then((saving: Saving) => {
-        console.log('saving data: ', saving);
+        //console.log('saving data: ', saving);
         setTitle(saving.posts.title);
         setSaved(saving.posts.content);
         setIsPublic(saving.posts.visible);
@@ -64,8 +64,8 @@ function NewPostFeat() {
     }
 
     if (!postId && titleList.find((ontitle) => ontitle.title === title)) {
-      console.log('!!');
-      console.log(titleList.find(({ title }) => title == title));
+      //console.log('!!');
+      //console.log(titleList.find(({ title }) => title == title));
       setOnValid('duplicate');
       return;
     } else {
@@ -79,7 +79,7 @@ function NewPostFeat() {
         },
         relatedPosts: relatedPosts,
       };
-      console.log('data', postData);
+      //console.log('data', postData);
       if (postId) {
         patchPostApi(postData, Number(postId));
       } else {
@@ -98,7 +98,7 @@ function NewPostFeat() {
       },
       relatedPosts: [],
     };
-    console.log('postData', postData);
+    //console.log('postData', postData);
     if (postId) {
       patchSavingApi(postData, Number(postId));
     } else {

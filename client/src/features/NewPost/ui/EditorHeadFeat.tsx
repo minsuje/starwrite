@@ -73,7 +73,7 @@ function NewPostHeadFeat({
   }, [selected]);
 
   useEffect(() => {
-    console.log('category', category);
+    //console.log('category', category);
     if (selected !== '' && selected !== 'all' && selected !== 'scrab') {
       setCategory(selected);
     } else if (categories[0]) {

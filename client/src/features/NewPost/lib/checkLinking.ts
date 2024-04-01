@@ -23,7 +23,7 @@ export default function checkLinking(check: string | undefined) {
 
   if (check) {
     const array = JSON.parse(check) as ArrayObject[];
-    console.log('array >>>>>>>>>> ', array);
+    //console.log('array >>>>>>>>>> ', array);
 
     for (let i = 0; i < array.length; i++) {
       for (let j = 0; j < array[i].content?.length; j++) {

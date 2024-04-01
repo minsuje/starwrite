@@ -5,7 +5,7 @@ import { Annotation } from '../model/type';
 export const newCommentApi = async (data: Annotation) => {
   try {
     const response = await baseApi.post('/annotation', data);
-    console.log('newCommentApi', response.data);
+    //console.log('newCommentApi', response.data);
     return response.data;
   } catch (error) {
     console.error('newCommentApi', error);

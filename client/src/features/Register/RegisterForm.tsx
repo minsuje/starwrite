@@ -117,7 +117,7 @@ function RegisterForm() {
       // 성공 응답 처리
       if (response.status === 200) {
         // 여기에 성공 시 로직 추가 (예: 로그인 페이지로 리다이렉트)
-        console.log('회원가입 성공:', response.data);
+        //console.log('회원가입 성공:', response.data);
         alert('회원가입 성공');
         navigate('/login');
       }
@@ -125,10 +125,10 @@ function RegisterForm() {
       // 에러 처리
       if (axios.isAxiosError(error) && error.response) {
         // 서버에서 받은 에러 메시지 출력
-        console.log('회원가입 실패:', error.response.data);
+        //console.log('회원가입 실패:', error.response.data);
       } else {
         // 기타 에러 처리
-        console.log('에러:', error);
+        //console.log('에러:', error);
       }
     }
   };
@@ -142,10 +142,10 @@ function RegisterForm() {
       });
 
       // 성공 응답 처리
-      console.log(response);
+      //console.log(response);
 
       // if (response.data.fail === 'duplicate email') {
-      //   console.log('중복이메일');
+      //   //console.log('중복이메일');
       // }
 
       if (response.data.fail === 'duplicate email') {
@@ -153,15 +153,15 @@ function RegisterForm() {
           type: 'manual',
           message: '이미 사용 중인 이메일입니다.',
         });
-        console.log('중복된 이메일입니다.');
+        //console.log('중복된 이메일입니다.');
       } else {
         // 다른 서버 에러 메시지 처리
-        console.log('이메일 유효성 검사 성공:', response.data);
+        //console.log('이메일 유효성 검사 성공:', response.data);
         setIsVerificationEmailSent(true);
       }
     } catch (error) {
       // 에러 처리
-      console.log(error);
+      //console.log(error);
     }
     setIsSendingEmail(false);
   };
@@ -176,7 +176,7 @@ function RegisterForm() {
 
       // 인증 성공 처리
       if (response.status === 200) {
-        console.log('인증 결과:', response.data);
+        //console.log('인증 결과:', response.data);
         if (response.data === true) {
           setIsEmailInputDisabled(false);
           alert('이메일 인증 성공');
@@ -191,9 +191,9 @@ function RegisterForm() {
     } catch (error) {
       // 인증 실패 처리
       if (axios.isAxiosError(error) && error.response) {
-        console.log('인증 실패:', error.response.data);
+        //console.log('인증 실패:', error.response.data);
       } else {
-        console.log('에러:', error);
+        //console.log('에러:', error);
       }
     }
   };
@@ -234,8 +234,8 @@ function RegisterForm() {
 
   //  유효성 검사 error 확인 함수
   // const onInValid = (err: any) => {
-  //   console.log(typeof err);
-  //   console.log('onInValid', err);
+  //   //console.log(typeof err);
+  //   //console.log('onInValid', err);
   // };
   const emailRegex = /^[^\s@]+@[^\s@]+\.[A-Za-z]+$/; // 이메일 유효성검사
   const emailValue = watch('mail');

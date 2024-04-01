@@ -215,7 +215,7 @@ export function MainPageContent() {
     div3: false,
   });
 
-  // console.log(scrollRef);
+  // //console.log(scrollRef);
 
   type VisibilityKeys = 'div1' | 'div2' | 'div3';
   const toggleShowBox = (divKey: VisibilityKeys) => {

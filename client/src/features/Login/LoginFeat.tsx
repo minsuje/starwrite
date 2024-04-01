@@ -75,7 +75,7 @@ function LoginForm() {
   const [, setLoginErrorMessage] = useState('');
 
   const onValid = async (data: LoginInput) => {
-    console.log('onValid', data);
+    //console.log('onValid', data);
     //여기에 회원가입 axios 작성
 
     try {
@@ -84,7 +84,7 @@ function LoginForm() {
         password: data.password,
       });
 
-      console.log('>>>>>>>>', response);
+      //console.log('>>>>>>>>', response);
 
       localStorage.setItem('accessToken', response.data.accessToken);
 
@@ -129,8 +129,8 @@ function LoginForm() {
 
   //  유효성 검사 error 확인 함수
   //   const onInValid = (err: any) => {
-  //     console.log(typeof err);
-  //     console.log('onInValid', err);
+  //     //console.log(typeof err);
+  //     //console.log('onInValid', err);
   //   };
   // 이모지 표시 함수 수정
   const Emoji = (fieldName: keyof LoginInput) => {
@@ -153,21 +153,21 @@ function LoginForm() {
   }, []);
 
   const sendCodeToBackend = async (code: string) => {
-    console.log('code > ', code);
+    //console.log('code > ', code);
     try {
       // 백엔드에 code를 전송하는 로직...
-      const response = await commonApi.get('/login/oauth', {
+      await commonApi.get('/login/oauth', {
         params: {
           code: code, // 이렇게 `params` 객체 안에 전송하려는 데이터를 넣습니다.
         },
       });
-      console.log(
-        'Authorization code sent to backend. Response:',
-        response.data,
-      );
+      //console.log(
+      // 'Authorization code sent to backend. Response:',
+      // response.data,
+      // );
       // 백엔드 응답에 따라 추가적인 처리...
     } catch (error) {
-      console.error('Error sending authorization code to backend:', error);
+      // console.error('Error sending authorization code to backend:', error);
     }
   };
 
@@ -178,7 +178,7 @@ function LoginForm() {
   //       'http://54.180.103.144:8080/login/api/v1/oauth2/google',
   //     );
   //     const googleLoginUrl = response.data;
-  //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
+  //     //console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
 
   // async function handleGoogleLogin() {
   //   try {
@@ -192,7 +192,7 @@ function LoginForm() {
 
   //     );
   //     const googleLoginUrl = response.data;
-  //     console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
+  //     //console.log(`<>>>>>>>>>>>>>>>,${googleLoginUrl}`);
 
   // //     // 사용자를 Google 로그인 페이지로 리다이렉트합니다.
   // //     window.location.href = googleLoginUrl;
@@ -214,13 +214,13 @@ function LoginForm() {
   // }
 
   // const handleSuccess = async (credentialResponse) => {
-  //   console.log(credentialResponse);
+  //   //console.log(credentialResponse);
   //   try {
   //     // credential이 존재하는지 확인합니다.
   //     if (credentialResponse.credential) {
   //       // JWT 토큰 디코드
   //       const decodedToken = jwtDecode(credentialResponse.credential);
-  //       console.log('>>>>>>>>', decodedToken);
+  //       //console.log('>>>>>>>>', decodedToken);
 
   //       // 서버에 POST 요청 보내기
   //       const response = await axios.post(
@@ -232,9 +232,9 @@ function LoginForm() {
   //       );
 
   //       // 서버 응답 처리
-  //       console.log(response);
+  //       //console.log(response);
   //     } else {
-  //       console.log('No credentials returned from Google');
+  //       //console.log('No credentials returned from Google');
   //     }
   //   } catch (error) {
   //     console.error('Login Failed', error);

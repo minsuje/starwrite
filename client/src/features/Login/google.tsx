@@ -12,11 +12,11 @@
 //           onSuccess={(credentialResponse) => {
 //             // credential이 존재하는지 확인합니다.
 //             if (credentialResponse.credential) {
-//               console.log(jwtDecode(credentialResponse.credential));
+//               //console.log(jwtDecode(credentialResponse.credential));
 //             }
 //           }}
 //           onError={() => {
-//             console.log('Login Failed');
+//             //console.log('Login Failed');
 //           }}
 //         />
 //       </GoogleOAuthProvider>

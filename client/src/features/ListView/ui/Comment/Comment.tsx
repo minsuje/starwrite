@@ -27,7 +27,7 @@ const _CommentContent = styled.div`
 
 function Comment({ annotation }: { annotation: Annotation }) {
   // const myNickname = localStorage.getItem('nickname');
-  console.log('annotation', annotation);
+  //console.log('annotation', annotation);
   return (
     <>
       <_CommentBox>
