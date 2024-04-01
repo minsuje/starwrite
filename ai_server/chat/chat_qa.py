@@ -30,7 +30,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 
 
-user_question = "react 에 대해 알려줘"
+user_question = "리액트에 대해 알려줘"
 userId = "9062f869-a0a8-4a45-890d-89c05c367a33"
 
 
@@ -52,6 +52,11 @@ VECTOR_SOURCE_PROPERTY = "text"
 VECTOR_EMBEDDING_PROPERTY = "textEmbedding"
 
 
+# read_query = (
+#     "CALL db.index.vector.queryNodes($index, $k, $embedding) " "YIELD node, score "
+# ) + retrieval_query
+
+
 retrieval_query_template = """
     WITH node AS chunk, score as similarity
     ORDER BY similarity DESC LIMIT 5
@@ -63,9 +68,8 @@ retrieval_query_template = """
     RETURN coalesce(chunks.text,'') as text,
     similarity as score,
     {{source: chunks.source}} AS metadata
-    LIMIT 20
 """
-retrieval_query = retrieval_query_template.format(userId=userId)
+retrieval_query = retrieval_query_template.format(userId=userId, question=user_question)
 
 
 get_relevant_nodes_template = """
@@ -109,6 +113,10 @@ retrieval_query_dummy = """
 
 
 model = OpenAIEmbeddings(model="text-embedding-ada-002")
+
+embed = model.embed_query(user_question)
+
+print("embed >>> ", embed)
 
 
 # kg = Neo4jVector.from_existing_graph(
@@ -217,15 +225,15 @@ kg_qa = RetrievalQAWithSourcesChain(
     combine_documents_chain=qa_chain,
     retriever=kg.as_retriever(
         search_type="similarity_score_threshold",
-        search_kwargs={"score_threshold": 0.9, "k": 1},
+        search_kwargs={"score_threshold": 0.85, "k": 5},
     ),
     # retriever=kg.as_retriever(
     #     search_type="mmr",
     #     search_kwargs={"fetch_k": 5},ßßß
     # ),
-    verbose=True,
-    reduce_k_below_max_tokens=False,
-    max_tokens_limit=3375,
+    # verbose=True,
+    reduce_k_below_max_tokens=True,
+    max_tokens_limit=12000,
     # memory=memory,
     return_source_documents=True,
 )

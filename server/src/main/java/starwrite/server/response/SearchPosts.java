@@ -11,4 +11,5 @@ public class SearchPosts {
   public String userId;
   public String nickName;
   public LocalDateTime createdAt;
+  public boolean scraped;
 }

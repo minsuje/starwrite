@@ -314,12 +314,20 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
       @Param(value = "categoryId") String categoryId);
 
 
+  // TODO
   // 글 검색
-  @Query("MATCH (post:Post)<-[r:POSTED|AUTHOR]-(user:Users) "
-      + "WHERE post.title =~ ('.*' + $title + '.*') " + "AND post.visible = 'true' "
-      + "AND post.tmpSave = false "
-      + "RETURN ID(post) AS searchPostId, post.title AS title, post.parsedContent AS content, user.userId AS userId, user.nickname AS nickName, post.createdAt AS createdAt")
+  @Query("MATCH (post:Post)<-[r:POSTED]-(user:Users) "
+      + "WHERE post.title =~ ('.*' + $title + '.*') AND post.visible = 'true' AND post.tmpSave = false "
+      + "OPTIONAL MATCH (post)<-[scrap:HOLDS]-(scrapUser:Users) "
+      + "RETURN ID(post) AS searchPostId, post.title AS title, post.parsedContent AS content, "
+      + "user.userId AS userId, "
+      + "CASE WHEN r IS NOT NULL THEN user.nickname ELSE scrapUser.nickname END AS nickName, "
+      + "CASE WHEN scrap IS NULL THEN false ELSE true END AS scraped, "
+      + "post.createdAt AS createdAt")
   List<SearchPosts> searchPosts(@Param(value = "title") String title);
+
+
+
 
 
 
