@@ -98,20 +98,147 @@
 
 | 아키텍처 (Architecture) | 
 | --- |
-| |
+| ![스타라이트 아키텍처](https://github.com/KwonKuwhi/starwrite/assets/128135999/e9eb69dc-f9aa-497b-affc-f30e440f64fd) |
+
+<br>
 
 | 개체 관계 모델 (ERD) | 
 | --- |
-| |
+| <img width="1197" alt="starwrite erd" src="https://github.com/KwonKuwhi/starwrite/assets/128135999/80f1a86f-5baf-4b3b-b2d2-a2710d514d52"> |
 
-| 클라이언트 폴더 구조 | 
-| --- |
-| |
+<br>
+
+#### 폴더 구조 (client)
+```jsx
+client
+├─ node_modules
+├─ public
+├─ src
+│   ├─ app
+│   ├─ features
+│   │     ├─ CategorySearchFeat
+│   │     │         └─ model
+│   │     ├─ CategoryViewFeat
+│   │     │         ├─ api
+│   │     │         └─ model
+│   │     ├─ InterGratedSearchIconFeat
+│   │     │         └─ api
+│   │     ├─────── ListView
+│   │     │         ├─ api
+│   │     │         ├─ lib
+│   │     │         ├─ model
+│   │     │         └─ ui
+│   │     │             ├─ Comment
+│   │     │             ├─ ListViewDetail
+│   │     │             └─ ListViewMain
+│   │     ├─────── Login
+│   │     ├─────── MainPageFeat
+│   │     │           └─ ui
+│   │     ├─────── MyPage
+│   │     ├─────── NewPost
+│   │     │           ├─ api
+│   │     │           ├─ lib
+│   │     │           ├─ model
+│   │     │           └─ ui
+│   │     ├─────── NodeSearchFeat
+│   │     │           └─ model
+│   │     ├─────── NodeViewFeat
+│   │     │           ├─ api
+│   │     │           └─ model
+│   │     ├─────── Register
+│   │     └─────── Title
+│   ├── pages
+│   │     ├─ CategoryView
+│   │     ├─ ListView
+│   │     ├─ Login
+│   │     ├─ Main
+│   │     ├─ Mypage
+│   │     ├─ NewPost
+│   │     ├─ NodeView
+│   │     └─ Register
+│   ├── shared
+│   │     ├─ api
+│   │     ├─ Modal
+│   │     └─ Model
+│   ├── types
+│   └── widgets
+│         ├─ CategoryView
+│         ├─ Chat
+│         ├─ Header
+│         ├─ ListView
+│         ├─ MainPageD3
+│         ├─ MyPageWid
+│         └─ nodeView
+│               └─ model
+├─ .gitignore
+└─ package.json
+
+```
+
+<br>
+
+#### 폴더 구조 (server)
+
+```jsx
+ai_server
+│   ├─ chat
+│   ├─ chatAI
+│   ├─ Iambda_function
+│   ├─ post
+│   ├─ recommend_post
+│   └─ recommend_update
+│		
+│
+server
+├─ gradle/wrapper
+├─ src
+│   ├─ main
+│   │   ├─ generated
+│   │   ├─ java/starwrite/server
+│   │   │          ├─ auth
+│   │   │          ├─ config
+│   │   │          ├─ controller
+│   │   │          ├─ dto
+│   │   │          ├─ entity
+│   │   │          ├─ enums
+│   │   │          ├─ relationship
+│   │   │          ├─ respository
+│   │   │          ├─ request
+│   │   │          ├─ response
+│   │   │          ├─ service
+│   │   │          └─ utils
+│   │   └─ resources
+│   └─ test/java/starwrite/server
+│
+├─ build.gradle
+├─ Dockerfile
+├─ .gitignore
+└─ package.json
+```
+
+<br><br><br>
+
+## 🎥 데모 영상
+🔗 서비스 소개 영상 바로가기 Click ! 👈
 
 
+<br><br><br>
+
+## 개발 팀 소개
 
 
+| ![KakaoTalk_Image_2024-04-09-23-37-20](https://github.com/KwonKuwhi/starwrite/assets/128135999/84f3d166-0c86-42d0-9bee-7181b5c8d69c) | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148741796?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
+| :---: | :---: | :---: | :---: | :---: |
+| [권구휘<br>(Front-end, 팀장)]() | [김시진<br>(Back-end)](https://github.com/seejnn) | [김예원<br>(Back-end)]() | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
 
+
+| 이름 | 역할 | 개발 내용 |
+| :---: | :---: | --- |
+| 권구휘 | Front-end, 팀장 | - Redux-toolkit를 이용한 상태관리<br>- 리스트뷰 페이지 구현<br>- 카테고리 생성, 수정, 삭제 기능 구현<br>&nbsp;&nbsp;&nbsp;- 컴포넌트 재렌더링<br>- 다른 사람 글 스크랩 기능 구현<br>- BlockNote 라이브러리를 이용한 백링크 기능 구현<br>&nbsp;&nbsp;&nbsp;- mention 기능<br>- React-hook-form, zod를 이용한 유효성 검사 |
+| 김시진 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- Post 도메인 개발<br>&nbsp;&nbsp;&nbsp;- Category 도메일 개발<br>&nbsp;&nbsp;&nbsp;- Comment 도메인 개발<br>- Lambda, ECR, Langchain RAG 을 이용한 챗봇 구현<br>- UI 디자인 |
+| 김예원 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 로그인 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원가입 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 비밀번호 재설정 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원 정보 조회 및 수정 도메인 개발<br>- SMTP Server 를 이용한 이메일 인증 기능 구현<br>- Spring Security, JWT, Redis 를 이용한 인증 구현<br>- Lambda, ECR, Langchain RAG 을 이용한 챗봇 구현 |
+| 성룡 | Front-end | - 랜딩 페이지 구현<br>- 노드뷰 페이지 구현<br>&nbsp;&nbsp;&nbsp;- 데이터 시각화를 위한 D3.js 라이브러리 사용<br>&nbsp;&nbsp;&nbsp;- 데이터 연결 시각화 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 횟수를 이용한 인공위성 UI 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 포스트와 일반 포스트를 구별하여 구현<br>- 망각 곡선을 이용한 노드별 색상 변경<br>&nbsp;&nbsp;&nbsp;- 망각 곡선을 사용하여 각각의 노드별 조회날짜 마다 색상 변경 (오래된 게시글은 흐리게)<br>- React-hook-form, zod를 이용한 유효성 검사<br>- 게시글 전체 검색 기능 |
+| 정민수 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 포스트 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 포스트 임시저장 및 불러오기 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 망각곡선 기능 관련 도메인 개발<br>- Docker와 Jenkins를 이용한 CI/CD 개발<br>- AWS EC2 관리 |
 
 
 
