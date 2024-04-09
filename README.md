@@ -126,7 +126,7 @@
 <br>
 
 #### 폴더 구조 (client)
-```jsx
+```
 client
 ├─ node_modules
 ├─ public
@@ -196,7 +196,7 @@ client
 
 #### 폴더 구조 (server)
 
-```jsx
+```
 ai_server
 │   ├─ chat
 │   ├─ chatAI
