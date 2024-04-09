@@ -65,14 +65,14 @@
 
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white"> <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
 
-**BUILD** <br>
+**- BUILD** <br>
 
 <img src="https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white" />
 
-**LIBRARAY** <br>
+**- LIBRARAY** <br>
 <img src="https://img.shields.io/badge/D3-F9A03C.svg?style=for-the-badge&logo=d3dotjs&logoColor=white" /> <img src="https://img.shields.io/badge/Zod-3E67B1.svg?style=for-the-badge&logo=zod&logoColor=white" /> <img src="https://img.shields.io/badge/ReactHookForm-EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white" /> <img src="https://img.shields.io/badge/blocknote-black.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iOTEiIGhlaWdodD0iODgiIHZpZXdCb3g9IjAgMCA5MSA4OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTg2LjIwOTggNTAuMjkwN0w3MS4wNDI4IDQxLjUzNEM3MC4wNDggNDAuOTU5NyA2OS43MDk5IDQxLjE1NDkgNjkuNzA5OSA0Mi4zMDM2VjQ2Ljk2MTFDNjkuNzA5OSA0OC4yNDU5IDcwLjM5NTMgNDkuNDMzIDcxLjUwNzkgNTAuMDc1M0w4Mi42Mjc2IDU2LjQ5NTNDODMuMjUzNCA1Ni44NTY2IDgzLjY0MiA1Ny41Mjk5IDgzLjY0MjEgNTguMjUyN1Y2OC42OTA4TDY1LjgzMjEgNTguNDA4Mkw2NS44MzIgNDAuNTkzOEw2NS44MzE5IDE1Ljg5MTFDNjUuODMxOSAxMi42MTY3IDY0LjA3MDUgOS41NjYwMSA2MS4yMzUyIDcuOTI5MjNMNDkuNjI3OCAxLjIyNzdDNDYuNzkyNCAtMC40MDkwMiA0My4yNjk1IC0wLjQwOTQ0OCA0MC40MzQyIDEuMjI3N0wyOC44MjY2IDcuOTI5MjNDMjUuOTgyMSA5LjU3MTUxIDI0LjIyOTggMTIuNjA2NiAyNC4yMjk4IDE1Ljg5MTJWMzIuNTA5QzI0LjIyOTggMzMuNjU3NyAyNC41Njc5IDMzLjg1MjkgMjUuNTYyNyAzMy4yNzg1TDI5LjU5NjMgMzAuOTQ5N0MzMC43MDg4IDMwLjMwNzQgMzEuMzk0MiAyOS4xMjAzIDMxLjM5NDIgMjcuODM1NVYxNS44OTExQzMxLjM5NDIgMTUuMTY4NSAzMS43ODMgMTQuNDk1MyAzMi40MDkgMTQuMTMzOUw0MS40NDg3IDguOTE0NzFMNDEuNDQ4OCAyOC41ODQ0TDI2LjAyMSAzNy40OTE1TDUuNDAzNDQgNDkuMzk1M0MyLjU2Nzc0IDUxLjAzMjUgMC44MDY0NTggNTQuMDgzMyAwLjgwNjY0MSA1Ny4zNTcxVjcwLjc2MDJDMC44MDY4MjUgNzQuMDM0IDIuNTY3OTMgNzcuMDg1MiA1LjQwMzQ0IDc4LjcyMjFMMTcuMDEwOCA4NS40MjM3QzE5Ljg1NTQgODcuMDY2MSAyMy4zNTk5IDg3LjA2NjEgMjYuMjA0NSA4NS40MjM4TDM5LjgyMDMgNzcuNTYyNkM0MC44MTUxIDc2Ljk4ODMgNDAuODE1MSA3Ni41OTc5IDM5LjgyMDMgNzYuMDIzNkwzNS43ODY4IDczLjY5NDhDMzQuNjc0MiA3My4wNTI1IDMzLjMwMzQgNzMuMDUyNSAzMi4xOTA4IDczLjY5NDhMMjIuNjIyMiA3OS4yMTkyQzIxLjk5NjQgNzkuNTgwNSAyMS4yMTkgNzkuNTgwNSAyMC41OTMgNzkuMjE5MUwxMS41NTMyIDczLjk5OTlMMjcuODEyMiA2NC42MTI4TDQzLjIzOTkgNzMuNTJMNjUuNDA4OCA4Ni4zMTkyQzY4LjI0NDUgODcuOTU2NCA3MS43NjcyIDg3Ljk1NjMgNzQuNjAyMyA4Ni4zMTkyTDg2LjIwOTcgNzkuNjE3N0M4OS4wNDQ4IDc3Ljk4MDYgOTAuODA2NyA3NC45Mjk4IDkwLjgwNjUgNzEuNjU1OEw5MC44MDY2IDU4LjI1MjZDOTAuODA2NiA1NC45NjgxIDg5LjA1NDMgNTEuOTMzIDg2LjIwOTggNTAuMjkwN1pNNzEuMDE5NyA4MC4xMTQ4QzcwLjM5NDMgODAuNDc1OSA2OS42MTY4IDgwLjQ3NiA2OC45OTEgODAuMTE0Nkw0Ni44MjIxIDY3LjMxNTRMMzEuMzk0NCA1OC40MDgyVjQ4LjY3ODlDMzEuMzk0NCA0Ny41MzAzIDMxLjA1NjMgNDcuMzM1MSAzMC4wNjE1IDQ3LjkwOTRMMjYuMDI4IDUwLjIzODJDMjQuOTE1NCA1MC44ODA2IDI0LjIzIDUyLjA2NzcgMjQuMjMgNTMuMzUyNFY1OC40MDgyTDcuOTcxMDcgNjcuNzk1Mkw3Ljk3MTE5IDU3LjM1NjhDNy45NzExOSA1Ni42MzQ2IDguMzU5ODYgNTUuOTYxMiA4Ljk4NTY1IDU1LjU5OTlMMzEuMTU0NSA0Mi44MDA3TDQ1LjAzMSAzNC43ODlMNTMuNDU2OSAzOS42NTM2QzU0LjQ1MTYgNDAuMjI3OSA1NC43ODk4IDQwLjAzMjcgNTQuNzg5OCAzOC44ODQxVjM0LjIyNjVDNTQuNzg5OCAzMi45NDE3IDU0LjEwNDMgMzEuNzU0NiA1Mi45OTE3IDMxLjExMjNMNDguNjEzMiAyOC41ODQzVjguOTE0NzFMNTcuNjUzMiAxNC4xMzQxQzU4LjI3ODYgMTQuNDk1MiA1OC42Njc1IDE1LjE2ODUgNTguNjY3NSAxNS44OTExVjQxLjQ4OTZMNTguNjY3NyA1OC40MDgzTDUwLjI0MTkgNjMuMjcyOUM0OS4yNDcxIDYzLjg0NzMgNDkuMjQ3MSA2NC4yMzc2IDUwLjI0MTkgNjQuODEyTDU0LjI3NTUgNjcuMTQwOEM1NS4zODgxIDY3Ljc4MzEgNTYuNzU4OCA2Ny43ODMxIDU3Ljg3MTQgNjcuMTQwN0w2Mi4yNDk5IDY0LjYxMjhMODAuMDYgNzQuODk1NUw3MS4wMTk3IDgwLjExNDhaIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMTUyM18xMzcxKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzE1MjNfMTM3MSIgeDE9Ijc2LjUxMDEiIHkxPSIxMS4wNjEyIiB4Mj0iMjguNjI0MiIgeTI9IjkzLjUzMTMiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzAwRUJFNyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2OTIzQkEiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K" />
 
-**NPM** <br>
+**- NPM** <br>
 <img src="https://img.shields.io/badge/Axios-5A29E4.svg?style=for-the-badge&logo=axios&logoColor=white" />
 <img src="https://img.shields.io/badge/styledComponents-DB7093.svg?style=for-the-badge&logo=styledcomponents&logoColor=white" />
 <img src="https://img.shields.io/badge/Redux-764ABC.svg?style=for-the-badge&logo=redux&logoColor=white" />
@@ -83,8 +83,14 @@
 
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000.svg?style=for-the-badge&logo=jsonwebtokens&logoColor=white" /> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> <img src="https://img.shields.io/badge/neo4j-4581C3.svg?style=for-the-badge&logo=neo4j&logoColor=white" /> <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
 
-**DevOps** <br>
-<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/jenkins-D24939.svg?style=for-the-badge&logo=jenkins&logoColor=white" /> <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20API%20Gateway-FF4F8B.svg?style=for-the-badge&logo=amazonapigateway&logoColor=white" /> <img src="https://img.shields.io/badge/Amazon%20Lambda-FF9900.svg?style=for-the-badge&logo=awslambda&logoColor=white" /> <img src="https://img.shields.io/badge/amazon%20ecr-orange.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNjUiIGhlaWdodD0iNzQiIHZpZXdCb3g9IjAgMCA2NSA3NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYxLjMzMzMgMjcuMDc5NFY1NC4zNDZMMzcuMzMzMyA2OC4yMTI3VjU3Ljg2NjFMNTAuNjY2NyA1MC4xNzI3QzUxLjAyMzQgNDkuOTcyMyA1MS4zMjkxIDQ5LjY5MjQgNTEuNTYwNCA0OS4zNTQ5QzUxLjc5MTYgNDkuMDE3MyA1MS45NDIgNDguNjMxMSA1MiA0OC4yMjZDNTIuMDI3MSA0Ny44Nzk5IDUyLjAyNzEgNDcuNTMyMiA1MiA0Ny4xODZWMzIuMDEyN0w2MS4zMzMzIDI2LjY3OTRWMjcuMDc5NFpNNjMuMjEzMyAyMi42Nzk0QzYzLjA3ODYgMjIuNjc2OSA2Mi45NDU0IDIyLjcwOSA2Mi44MjY3IDIyLjc3MjdMNTAuMDkzMyAzMC4xMzI3QzQ5Ljg1MzMgMzAuMjY2IDQ5LjMzMzMgMzAuNTA2MSA0OS4zMzMzIDMwLjgxMjdWNDcuMTg2QzQ5LjM0NzggNDcuNDEyNSA0OS4zNDc4IDQ3LjYzOTYgNDkuMzMzMyA0Ny44NjYxTDM1LjA2NjcgNTYuMDkyN0MzNC45NDk0IDU2LjE2MzUgMzQuODUyMyA1Ni4yNjMyIDM0Ljc4NDYgNTYuMzgyMkMzNC43MTY5IDU2LjUwMTMgMzQuNjgwOSA1Ni42MzU4IDM0LjY4IDU2Ljc3MjdWNzEuNDM5NEMzNC42OCA3MS41NDI3IDM0LjcwMDQgNzEuNjQ1IDM0LjczOTkgNzEuNzQwNEMzNC43Nzk0IDcxLjgzNTkgMzQuODM3NCA3MS45MjI2IDM0LjkxMDQgNzEuOTk1NkMzNC45ODM1IDcyLjA2ODcgMzUuMDcwMiA3Mi4xMjY2IDM1LjE2NTYgNzIuMTY2MkMzNS4yNjExIDcyLjIwNTcgMzUuMzYzNCA3Mi4yMjYgMzUuNDY2NyA3Mi4yMjZDMzUuNjAyNSA3Mi4yMjM5IDM1LjczNTYgNzIuMTg3MiAzNS44NTMzIDcyLjExOTRMNjMuNjI2NyA1Ni4xMTk0QzYzLjc0MzkgNTYuMDQ4NiA2My44NDExIDU1Ljk0ODkgNjMuOTA4OCA1NS44Mjk5QzYzLjk3NjUgNTUuNzEwOCA2NC4wMTI1IDU1LjU3NjQgNjQuMDEzMyA1NS40Mzk0VjIzLjM1OTRDNjQuMDEzMyAyMy4yNTY3IDYzLjk5MjkgMjMuMTU1IDYzLjk1MzIgMjMuMDYwM0M2My45MTM1IDIyLjk2NTYgNjMuODU1NCAyMi44Nzk4IDYzLjc4MjEgMjIuODA3OEM2My43MDg5IDIyLjczNTggNjMuNjIyMSAyMi42NzkxIDYzLjUyNjcgMjIuNjQxQzYzLjQzMTMgMjIuNjAzIDYzLjMyOTMgMjIuNTg0MyA2My4yMjY3IDIyLjU4NjFMNjMuMjEzMyAyMi42Nzk0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI5Ljg5MzMgNzMuNTg2QzI5LjUyMzcgNzMuNTg2NyAyOS4xNjA1IDczLjQ5MDIgMjguODQgNzMuMzA2TDEuMDUzMzMgNTcuMzA2QzAuNzMyNzUyIDU3LjEyMDkgMC40NjY1OTkgNTYuODU0NyAwLjI4MTY4MSA1Ni41MzRDMC4wOTY3NjI3IDU2LjIxMzMgLTAuMDAwMzkyMjYzIDU1Ljg0OTUgMS4xOTAzZS0wNiA1NS40Nzk0VjIwLjE1OTRDLTAuMDAwMzkyMjYzIDE5Ljc4OTIgMC4wOTY3NjI3IDE5LjQyNTUgMC4yODE2ODEgMTkuMTA0OEMwLjQ2NjU5OSAxOC43ODQxIDAuNzMyNzUyIDE4LjUxNzggMS4wNTMzMyAxOC4zMzI3TDMxLjYxMzMgMC42OTI3MDdDMzEuOTM0MiAwLjUwMjYzMyAzMi4zMDA0IDAuNDAyMzQ0IDMyLjY3MzMgMC40MDIzNDRDMzMuMDQ2MyAwLjQwMjM0NCAzMy40MTI0IDAuNTAyNjMzIDMzLjczMzMgMC42OTI3MDdMNjEuNTA2NyAxNi42OTI3QzYxLjgyNjMgMTYuODc4OCA2Mi4wOTE4IDE3LjE0NTMgNjIuMjc2NSAxNy40NjU4QzYyLjQ2MTMgMTcuNzg2MiA2Mi41NTkgMTguMTQ5NSA2Mi41NiAxOC41MTk0QzYyLjU1ODcgMTguODkxIDYyLjQ2MSAxOS4yNTYgNjIuMjc2MyAxOS41Nzg1QzYyLjA5MTcgMTkuOTAxIDYxLjgyNjUgMjAuMTcwMSA2MS41MDY3IDIwLjM1OTRMMzIgMzcuNDI2VjcxLjQ3OTRDMzIuMDAzMSA3MS44NTAxIDMxLjkwNzIgNzIuMjE0OSAzMS43MjIgNzIuNTM2MUMzMS41MzY4IDcyLjg1NzIgMzEuMjY5MSA3My4xMjMxIDMwLjk0NjcgNzMuMzA2QzMwLjYyNjIgNzMuNDkwMiAzMC4yNjI5IDczLjU4NjcgMjkuODkzMyA3My41ODZWNzMuNTg2Wk0yLjY2NjY3IDU1LjExOTRMMjkuMzMzMyA3MC41MDZWMzcuMTA2QzI5LjMzMzMgMzYuNzM0MSAyOS40MzA1IDM2LjM2ODcgMjkuNjE1MiAzNi4wNDU5QzI5LjggMzUuNzIzMiAzMC4wNjU5IDM1LjQ1NDMgMzAuMzg2NyAzNS4yNjZMNTkuMzMzMyAxOC41NzI3TDMyLjY2NjcgMy4xNzI3MUwyLjY4IDIwLjUwNkwyLjY2NjY3IDU1LjExOTRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" /> <img src="https://img.shields.io/badge/Redis-DC382D.svg?style=for-the-badge&logo=redis&logoColor=white" /> <img src="https://img.shields.io/badge/OpenAI-412991.svg?style=for-the-badge&logo=openai&logoColor=white" />
+**- DevOps** <br>
+<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/jenkins-D24939.svg?style=for-the-badge&logo=jenkins&logoColor=white" /> <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20API%20Gateway-FF4F8B.svg?style=for-the-badge&logo=amazonapigateway&logoColor=white" /> <img src="https://img.shields.io/badge/Amazon%20Lambda-FF9900.svg?style=for-the-badge&logo=awslambda&logoColor=white" /> <img src="https://img.shields.io/badge/amazon%20ecr-orange.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNjUiIGhlaWdodD0iNzQiIHZpZXdCb3g9IjAgMCA2NSA3NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYxLjMzMzMgMjcuMDc5NFY1NC4zNDZMMzcuMzMzMyA2OC4yMTI3VjU3Ljg2NjFMNTAuNjY2NyA1MC4xNzI3QzUxLjAyMzQgNDkuOTcyMyA1MS4zMjkxIDQ5LjY5MjQgNTEuNTYwNCA0OS4zNTQ5QzUxLjc5MTYgNDkuMDE3MyA1MS45NDIgNDguNjMxMSA1MiA0OC4yMjZDNTIuMDI3MSA0Ny44Nzk5IDUyLjAyNzEgNDcuNTMyMiA1MiA0Ny4xODZWMzIuMDEyN0w2MS4zMzMzIDI2LjY3OTRWMjcuMDc5NFpNNjMuMjEzMyAyMi42Nzk0QzYzLjA3ODYgMjIuNjc2OSA2Mi45NDU0IDIyLjcwOSA2Mi44MjY3IDIyLjc3MjdMNTAuMDkzMyAzMC4xMzI3QzQ5Ljg1MzMgMzAuMjY2IDQ5LjMzMzMgMzAuNTA2MSA0OS4zMzMzIDMwLjgxMjdWNDcuMTg2QzQ5LjM0NzggNDcuNDEyNSA0OS4zNDc4IDQ3LjYzOTYgNDkuMzMzMyA0Ny44NjYxTDM1LjA2NjcgNTYuMDkyN0MzNC45NDk0IDU2LjE2MzUgMzQuODUyMyA1Ni4yNjMyIDM0Ljc4NDYgNTYuMzgyMkMzNC43MTY5IDU2LjUwMTMgMzQuNjgwOSA1Ni42MzU4IDM0LjY4IDU2Ljc3MjdWNzEuNDM5NEMzNC42OCA3MS41NDI3IDM0LjcwMDQgNzEuNjQ1IDM0LjczOTkgNzEuNzQwNEMzNC43Nzk0IDcxLjgzNTkgMzQuODM3NCA3MS45MjI2IDM0LjkxMDQgNzEuOTk1NkMzNC45ODM1IDcyLjA2ODcgMzUuMDcwMiA3Mi4xMjY2IDM1LjE2NTYgNzIuMTY2MkMzNS4yNjExIDcyLjIwNTcgMzUuMzYzNCA3Mi4yMjYgMzUuNDY2NyA3Mi4yMjZDMzUuNjAyNSA3Mi4yMjM5IDM1LjczNTYgNzIuMTg3MiAzNS44NTMzIDcyLjExOTRMNjMuNjI2NyA1Ni4xMTk0QzYzLjc0MzkgNTYuMDQ4NiA2My44NDExIDU1Ljk0ODkgNjMuOTA4OCA1NS44Mjk5QzYzLjk3NjUgNTUuNzEwOCA2NC4wMTI1IDU1LjU3NjQgNjQuMDEzMyA1NS40Mzk0VjIzLjM1OTRDNjQuMDEzMyAyMy4yNTY3IDYzLjk5MjkgMjMuMTU1IDYzLjk1MzIgMjMuMDYwM0M2My45MTM1IDIyLjk2NTYgNjMuODU1NCAyMi44Nzk4IDYzLjc4MjEgMjIuODA3OEM2My43MDg5IDIyLjczNTggNjMuNjIyMSAyMi42NzkxIDYzLjUyNjcgMjIuNjQxQzYzLjQzMTMgMjIuNjAzIDYzLjMyOTMgMjIuNTg0MyA2My4yMjY3IDIyLjU4NjFMNjMuMjEzMyAyMi42Nzk0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI5Ljg5MzMgNzMuNTg2QzI5LjUyMzcgNzMuNTg2NyAyOS4xNjA1IDczLjQ5MDIgMjguODQgNzMuMzA2TDEuMDUzMzMgNTcuMzA2QzAuNzMyNzUyIDU3LjEyMDkgMC40NjY1OTkgNTYuODU0NyAwLjI4MTY4MSA1Ni41MzRDMC4wOTY3NjI3IDU2LjIxMzMgLTAuMDAwMzkyMjYzIDU1Ljg0OTUgMS4xOTAzZS0wNiA1NS40Nzk0VjIwLjE1OTRDLTAuMDAwMzkyMjYzIDE5Ljc4OTIgMC4wOTY3NjI3IDE5LjQyNTUgMC4yODE2ODEgMTkuMTA0OEMwLjQ2NjU5OSAxOC43ODQxIDAuNzMyNzUyIDE4LjUxNzggMS4wNTMzMyAxOC4zMzI3TDMxLjYxMzMgMC42OTI3MDdDMzEuOTM0MiAwLjUwMjYzMyAzMi4zMDA0IDAuNDAyMzQ0IDMyLjY3MzMgMC40MDIzNDRDMzMuMDQ2MyAwLjQwMjM0NCAzMy40MTI0IDAuNTAyNjMzIDMzLjczMzMgMC42OTI3MDdMNjEuNTA2NyAxNi42OTI3QzYxLjgyNjMgMTYuODc4OCA2Mi4wOTE4IDE3LjE0NTMgNjIuMjc2NSAxNy40NjU4QzYyLjQ2MTMgMTcuNzg2MiA2Mi41NTkgMTguMTQ5NSA2Mi41NiAxOC41MTk0QzYyLjU1ODcgMTguODkxIDYyLjQ2MSAxOS4yNTYgNjIuMjc2MyAxOS41Nzg1QzYyLjA5MTcgMTkuOTAxIDYxLjgyNjUgMjAuMTcwMSA2MS41MDY3IDIwLjM1OTRMMzIgMzcuNDI2VjcxLjQ3OTRDMzIuMDAzMSA3MS44NTAxIDMxLjkwNzIgNzIuMjE0OSAzMS43MjIgNzIuNTM2MUMzMS41MzY4IDcyLjg1NzIgMzEuMjY5MSA3My4xMjMxIDMwLjk0NjcgNzMuMzA2QzMwLjYyNjIgNzMuNDkwMiAzMC4yNjI5IDczLjU4NjcgMjkuODkzMyA3My41ODZWNzMuNTg2Wk0yLjY2NjY3IDU1LjExOTRMMjkuMzMzMyA3MC41MDZWMzcuMTA2QzI5LjMzMzMgMzYuNzM0MSAyOS40MzA1IDM2LjM2ODcgMjkuNjE1MiAzNi4wNDU5QzI5LjggMzUuNzIzMiAzMC4wNjU5IDM1LjQ1NDMgMzAuMzg2NyAzNS4yNjZMNTkuMzMzMyAxOC41NzI3TDMyLjY2NjcgMy4xNzI3MUwyLjY4IDIwLjUwNkwyLjY2NjY3IDU1LjExOTRaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" /> <img src="https://img.shields.io/badge/Redis-DC382D.svg?style=for-the-badge&logo=redis&logoColor=white" /> <img src="https://img.shields.io/badge/OpenAI-412991.svg?style=for-the-badge&logo=openai&logoColor=white" /> <img src="https://img.shields.io/badge/%F0%9F%A6%9C%F0%9F%94%97%20%20langchain-208371.svg?style=for-the-badge" />
+
+<br><br>
+
+### # Cooperation Tools
+
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 
 <br><br><br>
 
@@ -235,13 +241,14 @@ server
 
 <br><br><br>
 
-## 개발 팀 소개
+## 👫🏻 개발 팀 소개
 
 
-| <img src="https://avatars.githubusercontent.com/u/148730840?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="" width=100px height=100px> | <img src="" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
+| <img src="https://avatars.githubusercontent.com/u/148730840?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/128135999?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148741796?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
 | :---: | :---: | :---: | :---: | :---: |
 | [권구휘<br>(Front-end, 팀장)](https://github.com/KwonKuwhi) | [김시진<br>(Back-end)](https://github.com/seejnn) | [김예원<br>(Back-end)](https://github.com/yewonkim301) | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
 
+<br>
 
 | 이름 | 역할 | 개발 내용 |
 | :---: | :---: | --- |
@@ -252,4 +259,96 @@ server
 | 정민수 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 포스트 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 포스트 임시저장 및 불러오기 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 망각곡선 기능 관련 도메인 개발<br>- Docker와 Jenkins를 이용한 CI/CD 개발<br>- AWS EC2 관리 |
 
 
+<br><br><br>
 
+## 💻 실행 방법
+
+### Client 실행
+
+1. **원격 저장소 복제**
+
+```
+$ git clone https://github.com/KwonKuwhi/starwrite.git
+```
+
+2. **프로젝트 폴더로 이동**
+
+```
+$ cd client
+```
+
+3. **필요한 node_modules 설치**
+
+```
+$ npm install
+```
+
+4. **개발 서버 실행**
+
+```
+$ npm run dev
+```
+
+<br>
+
+### Main Server 실행
+
+1. **원격 저장소 복제**
+
+```
+$ git clone https://github.com/KwonKuwhi/starwrite.git
+```
+
+2. **프로젝터 폴더 > src > main > resources 이동**
+
+```
+$ cd server
+$ cd src
+$ cd main
+$ cd resources
+```
+
+3. **프로젝트 실행을 위한 properties 파일 작성**
+
+```
+# neo4j
+spring.ai.openai.api-key=[비밀키]
+db.temporal.timezone=+09:00
+spring.neo4j.uri=[neo4j aura 주소]
+spring.neo4j.authentication.username=[아이디]
+spring.neo4j.authentication.password=[비밀번호]
+
+# mail authenticate
+spring.mail.host=[메일 호스트]
+spring.mail.port=[포트번호]
+spring.mail.username=[발신자 이메일]
+spring.mail.password=[비밀번호]
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# JWT
+jwt.secret.key=[비밀키]
+
+#Redis설정
+spring.cache.type=redis
+spring.data.redis.host=[호스트 주소]
+spring.data.redis.port=[포트 번호]
+spring.data.redis.password=[비밀번호]
+```
+
+4. **프로젝트 폴더 루트 경로로 이동**
+
+```
+$ cd server
+```
+
+5. **프로젝트 빌드**
+
+```
+$ ./gradlew build
+```
+
+6. build.gradle 이 있는 폴더에서 serverApplication 실행
+
+`$ ./gradlew bootRun`
