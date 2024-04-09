@@ -131,7 +131,7 @@
 
 | 개체 관계 모델 (ERD) | 
 | --- |
-| <img width="1197" alt="starwrite erd" src="https://github.com/KwonKuwhi/starwrite/assets/128135999/80f1a86f-5baf-4b3b-b2d2-a2710d514d52"> |
+| ![SCR-20240410-chez](https://github.com/KwonKuwhi/starwrite/assets/128135999/0e5c57f6-a3cc-487e-8d52-6aafac6ef9de) |
 
 <br>
 
