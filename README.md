@@ -252,7 +252,7 @@ server
 
 | 이름 | 역할 | 개발 내용 |
 | :---: | :---: | --- |
-| 권구휘 | Front-end, 팀장 | - Redux-toolkit를 이용한 상태관리<br>- 리스트뷰 페이지 구현<br>- 카테고리 생성, 수정, 삭제 기능 구현<br>&nbsp;&nbsp;&nbsp;- 컴포넌트 재렌더링<br>- 다른 사람 글 스크랩 기능 구현<br>- BlockNote 라이브러리를 이용한 백링크 기능 구현<br>&nbsp;&nbsp;&nbsp;- mention 기능<br>- React-hook-form, zod를 이용한 유효성 검사 |
+| 권구휘 | Front-end,<br>팀장 | - Redux-toolkit를 이용한 상태관리<br>- 리스트뷰 페이지 구현<br>- 카테고리 생성, 수정, 삭제 기능 구현<br>&nbsp;&nbsp;&nbsp;- 컴포넌트 재렌더링<br>- 다른 사람 글 스크랩 기능 구현<br>- BlockNote 라이브러리를 이용한 백링크 기능 구현<br>&nbsp;&nbsp;&nbsp;- mention 기능<br>- React-hook-form, zod를 이용한 유효성 검사 |
 | 김시진 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- Post 도메인 개발<br>&nbsp;&nbsp;&nbsp;- Category 도메일 개발<br>&nbsp;&nbsp;&nbsp;- Comment 도메인 개발<br>- Lambda, ECR, Langchain RAG 을 이용한 챗봇 구현<br>- UI 디자인 |
 | 김예원 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 로그인 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원가입 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 비밀번호 재설정 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원 정보 조회 및 수정 도메인 개발<br>- SMTP Server 를 이용한 이메일 인증 기능 구현<br>- Spring Security, JWT, Redis 를 이용한 인증 구현<br>- Lambda, ECR, Langchain RAG 을 이용한 챗봇 구현 |
 | 성룡 | Front-end | - 랜딩 페이지 구현<br>- 노드뷰 페이지 구현<br>&nbsp;&nbsp;&nbsp;- 데이터 시각화를 위한 D3.js 라이브러리 사용<br>&nbsp;&nbsp;&nbsp;- 데이터 연결 시각화 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 횟수를 이용한 인공위성 UI 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 포스트와 일반 포스트를 구별하여 구현<br>- 망각 곡선을 이용한 노드별 색상 변경<br>&nbsp;&nbsp;&nbsp;- 망각 곡선을 사용하여 각각의 노드별 조회날짜 마다 색상 변경 (오래된 게시글은 흐리게)<br>- React-hook-form, zod를 이용한 유효성 검사<br>- 게시글 전체 검색 기능 |
