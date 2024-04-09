@@ -3,19 +3,30 @@
 <br><br><br>
 
 ## 목차
-  1. 웹 서비스 소개
-  2. 주제 선정 이유
-  3. 기술 스택
-  4. 주요 기능
-  5. 프로젝트 구성도
-  6. 데모 영상
-  7. 개발 팀 소개
-  8. 개발 기간 및 일정
-  9. 실행 방법
-      
+  1. 프로젝트 소개
+  2. 웹 서비스 소개 
+  3. 주제 선정 이유
+  4. 기술 스택
+  5. 주요 기능
+  6. 프로젝트 구성도
+  7. 데모 영상
+  8. 개발 팀 소개
+  9. 개발 기간 및 일정
+  10. 실행 방법
+
 <br><br><br>
 
-## 💁🏻 웹 서비스 소개
+## 💁🏻‍♀️ 프로젝트 소개
+| 프로젝트 명 | 스타라이트(Starwrite) |
+| --- | --- |
+| 진행 기간 | 2024. 02. 29 ~ 2024. 04. 02 (34일) |
+| 팀명 / 팀원 | II / 5명 ( 프론트 2명, 백 3명) |
+| github 주소 | https://github.com/KwonKuwhi/starwrite.git |
+| 배포 주소 | http://54.180.103.144/ |
+
+<br><br><br>
+
+## 💁🏻‍♂️ 웹 서비스 소개
 
 **스타라이트** 는 지식 사이의 연결을 시각화하여 학습을 도와주는 메모 어플리케이션입니다.
 
@@ -227,9 +238,9 @@ server
 ## 개발 팀 소개
 
 
-| ![KakaoTalk_Image_2024-04-09-23-37-20](https://github.com/KwonKuwhi/starwrite/assets/128135999/84f3d166-0c86-42d0-9bee-7181b5c8d69c) | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148741796?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
+| <img src="https://avatars.githubusercontent.com/u/148730840?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="" width=100px height=100px> | <img src="" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
 | :---: | :---: | :---: | :---: | :---: |
-| [권구휘<br>(Front-end, 팀장)]() | [김시진<br>(Back-end)](https://github.com/seejnn) | [김예원<br>(Back-end)]() | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
+| [권구휘<br>(Front-end, 팀장)](https://github.com/KwonKuwhi) | [김시진<br>(Back-end)](https://github.com/seejnn) | [김예원<br>(Back-end)](https://github.com/yewonkim301) | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
 
 
 | 이름 | 역할 | 개발 내용 |
