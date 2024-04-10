@@ -22,7 +22,7 @@
 | --- | --- |
 | 진행 기간 | 2024. 02. 29 ~ 2024. 04. 02 (34일) |
 | 팀명 / 팀원 | II / 5명 ( 프론트 2명, 백 3명) |
-| github 주소 | https://github.com/KwonKuwhi/starwrite.git |
+| github 주소 | https://github.com/KwonKuwhi/starwrite |
 | 배포 주소 | http://54.180.103.144/ |
 
 <br><br><br>
