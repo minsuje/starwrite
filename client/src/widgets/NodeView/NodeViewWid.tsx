@@ -53,8 +53,8 @@ export const NodeView = ({
               ...node,
               id: node.postId,
               label: node.title,
-              x: Math.random() * viewportSize.width,
-              y: Math.random() * viewportSize.height,
+              // x: Math.random() * viewportSize.width,
+              // y: Math.random() * viewportSize.height,
               url: `/user/starwrite/listview/main/${nickname}/${category}/${node.postId}`,
               opacity: Math.max(0.2, opacity), // 투명도가 너무 낮아지는 것을 방지하기 위한 최소값 설정
               isShared: node.numberOfRelations,
@@ -100,10 +100,10 @@ export const NodeView = ({
   }, []);
 
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [viewportSize] = useState({
-    width: window.innerWidth,
-    height: 1200,
-  });
+  // const [viewportSize] = useState({
+  //   // width: window.innerWidth,
+  //   // height: 1200,
+  // });
   function drag(
     simulation: d3.Simulation<CustomNode, Link>,
   ): d3.DragBehavior<Element, CustomNode, CustomNode | d3.SubjectPosition> {
@@ -168,11 +168,15 @@ export const NodeView = ({
     });
 
     // SVG 요소 선택 및 초기화
-    const svg = d3
-      .select(svgRef.current as SVGSVGElement)
-      .attr('width', '100%')
-      .attr('height', viewportSize.height);
+
+    const svg = d3.select(svgRef.current as SVGSVGElement),
+      width = window.innerWidth,
+      height = window.innerHeight;
+    // .attr('viewBox', `0 0 ${width} ${height}`);
+    // .attr('width', '100%')
+    // .attr('height', '100%');
     svg.selectAll('*').remove(); // 기존의 모든 SVG 요소 제거
+    svg.attr('width', width).attr('height', height);
 
     const group = svg.append('g');
 
@@ -202,11 +206,13 @@ export const NodeView = ({
       .force('collide', d3.forceCollide().radius(50))
       .force(
         'center',
-        d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 4),
+        // d3.forceCenter(window.innerWidth / 1.55, window.innerHeight / 4),
+        d3.forceCenter(window.innerWidth / 1.58, window.innerHeight / 2),
       )
       .force(
         'radial',
-        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 3),
+        // d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 3),
+        d3.forceRadial(10, window.innerWidth / 2, window.innerHeight / 2),
       )
 
       .alphaDecay(0.00028); // 시뮬레이션의 속도 조절 (기본값은 0.0228)
@@ -285,7 +291,7 @@ export const NodeView = ({
       .text((d) => {
         // label 속성이 있는지 확인하고, 있다면 그 길이를 검사
         const labelText =
-          d.label?.length > 5 ? `${d.label.substring(0, 5)}...` : d.label;
+          d.label?.length > 12 ? `${d.label.substring(0, 12)}...` : d.label;
         // label 속성이 없는 경우 (undefined)를 고려하여 빈 문자열을 반환하도록 처리
         return labelText ?? '';
       })
@@ -308,8 +314,8 @@ export const NodeView = ({
       .attr('class', 'tooltip')
       .style('opacity', 0)
       .style('position', 'absolute')
-      .style('padding', '2px')
-      .style('background', 'lightgrey')
+      .style('padding', '6px')
+      .style('background', '#363636')
       .style('border-radius', '5px')
       .style('pointer-events', 'none'); // 툴팁이 마우스 이벤트를 방해하지 않도록 설정
 
@@ -433,11 +439,12 @@ export const NodeView = ({
 
   return (
     <svg
+      preserveAspectRatio="xMidYMid meet"
       ref={svgRef}
-      height={viewportSize.height}
+      // height={viewportSize.height}
       style={{
-        justifyContent: 'center',
-        marginTop: '1500px',
+        // justifyContent: 'center',
+        // marginTop: '1000px',
         position: 'fixed',
         width: '100%',
       }}

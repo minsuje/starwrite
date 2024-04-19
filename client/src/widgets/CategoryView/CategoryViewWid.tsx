@@ -105,7 +105,7 @@ export function CategoryViewWid({
   // 각각 노드들 중앙 정렬
   simulation.force(
     'center',
-    d3.forceCenter(viewportSize.width / 1.2, viewportSize.height / 4),
+    d3.forceCenter(viewportSize.width / 1.2, viewportSize.height / 2),
   );
   useEffect(() => {
     const svg = d3.select(svgRef.current as SVGSVGElement);
@@ -160,7 +160,11 @@ export function CategoryViewWid({
       })
       .call(dragHandler);
 
-    node.append('circle').attr('r', 56).attr('fill', '#8a8a8a');
+    node
+      .append('circle')
+      .attr('r', 56)
+      .attr('fill', '#3636363d')
+      .attr('stroke', '#ffffff54');
     // //console.log('nodes', nodes);
     node
       .append('text')
@@ -183,7 +187,7 @@ export function CategoryViewWid({
       style={{
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '1500px',
+        marginTop: '1300px',
         position: 'fixed',
         width: '100%',
       }}
