@@ -76,12 +76,14 @@ export function NodeViewPage() {
     <>
       <NodeSearchFeat onSearch={onSearch} nodesData={nodesData} />
 
-      <NodeView
-        searchTerm={searchTerm}
-        setLoading={setLoading}
-        setNodesData={setNodesData}
-        setPageDataProp={setPageDataProp}
-      />
+      <div style={{ marginTop: '100px', width: '100%', position: 'fixed' }}>
+        <NodeView
+          searchTerm={searchTerm}
+          setLoading={setLoading}
+          setNodesData={setNodesData}
+          setPageDataProp={setPageDataProp}
+        />
+      </div>
 
       {loading ? (
         <_Background>
